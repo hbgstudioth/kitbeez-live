@@ -746,9 +746,9 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
    ① ตั้งค่าการเชื่อมต่อ Firebase (ดูคู่มือในแอป: “วิธีเปิดใช้ Login Gmail”)
    - ถ้า FIREBASE_CONFIG = null ระบบจะทำงานใน “โหมดทดลอง” (เก็บข้อมูลในเครื่องนี้เท่านั้น)
    ===================================================================== */
-const FIREBASE_CONFIG = null;
+const FIREBASE_CONFIG = { apiKey:"AIzaSyBa758UYlbEuUqt9pKJVKfUCsLCg4iVQz4", authDomain:"kitbeez-live.firebaseapp.com", projectId:"kitbeez-live", storageBucket:"kitbeez-live.firebasestorage.app", messagingSenderId:"257938898525", appId:"1:257938898525:web:2d8b3e0a5ac489f05d97b4" };
 // ตัวอย่าง: { apiKey:"...", authDomain:"xxx.firebaseapp.com", projectId:"xxx", appId:"..." }
-const OWNER_EMAILS = [];   // อีเมลเจ้าของ (แบรนด์สูงสุด) เช่น ['brand@gmail.com'] ต้องตรงกับในไฟล์ firestore.rules
+const OWNER_EMAILS = ['nalisa.pts@gmail.com'];   // อีเมลเจ้าของ (แบรนด์สูงสุด) เช่น ['brand@gmail.com'] ต้องตรงกับในไฟล์ firestore.rules
 
 /* ---------------- ไอคอนเวกเตอร์ (stroke) ---------------- */
 const P={
