@@ -733,6 +733,14 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
 @keyframes stamp{0%{transform:scale(2.2) rotate(-20deg);opacity:0}60%{transform:scale(.9) rotate(4deg);opacity:1}100%{transform:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 @media print{.top,.tabs,.cart,.demo,.hdact,.btn,.sbtn,.wkslider{display:none!important}main{padding:0}body{background:#fff}.card,.wday,.wk{box-shadow:none}.wrow{flex-wrap:wrap;overflow:visible}}
+
+/* หน้าจองคิว: โมชั่นแบบเบา */
+.seat{animation:fade .2s ease both;animation-delay:0s;transition:box-shadow .15s,background-color .15s,border-color .15s,color .15s}
+.seat:hover:not(:disabled),.seat.x.dc[data-act]:hover{transform:none;box-shadow:0 2px 8px rgba(16,60,140,.12)}
+.seat:active:not(:disabled){transform:none;filter:brightness(.96)}
+.seat.sel{animation:none}
+.dchip{transition:background-color .15s,border-color .15s,box-shadow .15s,color .15s}
+.dchip:hover:not(:disabled),.dchip.on{transform:none}
 </style>
 </head>
 <body>
