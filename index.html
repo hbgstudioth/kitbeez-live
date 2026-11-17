@@ -885,6 +885,47 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
   body:has(.cart.show) main{padding-bottom:250px}
   .cart:has(select) .btn:not(.light){flex:0 0 auto;padding:9px 12px}
 }
+
+/* ===== หน้าจองคิว มือถือ: หน้าตาเหมือนการ์ด 1 วันในหน้าตาราง ===== */
+.bkdh{display:none}
+@media(max-width:600px){
+  .hall{background:#fff;border-radius:16px;border:1px solid #edf3fc;padding:10px}
+  .bkdh{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .bkdh .big{width:46px;height:46px;border-radius:13px;background:var(--sky);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;flex:none}
+  .bkdh .big b{font-size:19px;color:var(--navy)}.bkdh .big small{font-size:10.5px;color:var(--muted)}
+  .bkdh .ttl{flex:1;min-width:0}.bkdh .ttl>b{color:var(--navy);font-size:15px}
+  .bkdh .ttl>div{font-size:11.5px;color:var(--muted);display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:2px}
+  .bkdh .nt3{font-size:11.5px;background:#fff8e6;color:#7a5600;border-radius:8px;padding:2px 7px;display:inline-flex;gap:4px;align-items:center}
+  .notebar{display:none}
+  .seats{grid-template-columns:50px repeat(var(--rooms),minmax(0,1fr));gap:3px}
+  .rhead,.rhead.pick{font-size:11px;font-weight:700;color:var(--navy);background:var(--sky);border-radius:9px;padding:5px 1px;white-space:nowrap;overflow:hidden}
+  .rowlab,.rowlab.pick{flex-direction:column;align-items:flex-start;justify-content:center;gap:0;padding-left:2px;font-size:10.5px;line-height:1.15;color:var(--muted)}
+  .rowlab .ic{display:block;width:13px;height:13px;color:var(--blue2);margin-bottom:1px}
+  .rowlab>div{display:block}
+  .rowlab b{font-size:13px;color:var(--text);letter-spacing:0}
+  .rowlab .to{display:inline}.rowlab .to .tw{display:none}.rowlab .to::before{content:'–'}
+  .seat{height:auto;min-height:40px;border-radius:7px;border:0;padding:2px;font-size:11.5px;line-height:1.12;font-weight:600;box-shadow:none}
+  .seat::after{display:none}
+  .seat.free{background:#fbfdff;box-shadow:inset 0 0 0 1.5px #d9e5f6;color:#b0c2dc;font-weight:500;font-size:11.5px;border:0}
+  .seat.free .ic{display:none}
+  .seat.free.sel{background:var(--navy);box-shadow:none;color:#fff}
+  .seat.free.sel .ic{display:block;width:17px;height:17px}
+  .seat.x{background:repeating-linear-gradient(45deg,#f2f5f9 0 5px,#fff 5px 10px);color:#c5cfdd;border:0}
+  .seat.x.dc{background:repeating-linear-gradient(45deg,#ffeded 0 5px,#fff 5px 10px);color:#c2474c;border:0}
+  .seat.mine{box-shadow:0 0 0 2.5px var(--blue)}
+  .seat.pending{outline:2px dashed var(--warn);outline-offset:-2px;border:0}
+  .seat.cancelreq{outline:2px dashed var(--bad);outline-offset:-2px;border:0}
+  .seat.movereq{outline:2px dashed var(--violet);outline-offset:-2px;border:0}
+  .seat.timereq{outline:2px dashed #0891b2;outline-offset:-2px;border:0}
+  .seat.trial{border:2px solid #f2c14e}
+  .seat .st{width:14px;height:14px;top:2px;right:2px}
+  .seat .st .ic{width:9px;height:9px}
+  .seat:hover:not(:disabled){transform:none;box-shadow:inherit}
+  .seat.free:hover:not(:disabled){box-shadow:inset 0 0 0 1.5px var(--blue);color:var(--blue)}
+  .seat:active:not(:disabled){transform:scale(.96)}
+  .seat.x:not(.dc) .ic,.seat.x:not(.dc) small{display:none}
+  .seat.x:not(.dc)::before{content:'ปิด';font-size:11px;font-weight:400}
+}
 </style>
 </head>
 <body>
@@ -1284,8 +1325,9 @@ function vBook(){
   if(note||isBrand())h+=`<div class="notebar ${note?'':'nonote'}">${ic('pin',18)}${note?esc(note):'<span class="muted">ไม่มีโน้ตสำหรับวันนี้</span>'}${isBrand()?`<button class="link" style="margin-left:auto;display:inline-flex;gap:4px;align-items:center" data-act="note" data-d="${d}">${ic('edit',14)}${note?'แก้ไข':'เพิ่มโน้ต'}</button>`:''}</div>`;
   const R=ROOMS();let i=0;
   if(isBrand())h+=`<div class="admtool">${icb('tag','navy',16)}<div class="grow"><b>เครื่องมือแอดมิน</b><small>แตะช่องว่างเพื่อเลือก · แตะ <b>หัวห้อง</b> หรือ <b>เวลา</b> เพื่อเลือกทั้งแถว · แล้วกด <b>ใส่ชื่อ</b> หรือ <b>ปิดช่อง</b> ที่แถบด้านล่าง</small><small class="ms">แตะ หัวห้อง / เวลา = เลือกทั้งแถว</small></div><button class="btn sm" data-act="selDay" data-d="${d}">${ic('grid',14)}เลือกทั้งวัน</button>${Object.keys(S.d.closures||{}).some(k=>k.startsWith(d+'_'))?`<button class="btn sm" data-act="openDay" data-d="${d}">${ic('door',14)}เปิดทุกช่องที่ปิดวันนี้</button>`:''}</div>`;
-  h+=`<div class="hall"><div class="screen">${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[M_.getUTCMonth()]}</div><div class="seats" style="--rooms:${R.length}"><div></div>${R.map(r=>isBrand()?`<button class="rhead pick" data-act="selCol" data-d="${d}" data-r="${r}" title="เลือกทุกช่องว่างของห้องนี้">${ic('door',15)}ห้อง ${r}</button>`:`<div class="rhead">${ic('door',15)}ห้อง ${r}</div>`).join('')}
-  ${C().slots.map((t,s)=>`<${isBrand()?`button class="rowlab pick" data-act="selRow" data-d="${d}" data-s="${s}" title="เลือกทุกช่องว่างของรอบนี้"`:'div class="rowlab"'}>${ic(slotIcon(s),18)}<div><b>${t.split('–')[0]}</b><span class="to">ถึง ${t.split('–')[1]||''}</span></div></${isBrand()?'button':'div'}>`+R.map(r=>seat(d,r,s,i++)).join('')).join('')}</div>
+  const _st=dayStats(d);
+  h+=`<div class="hall"><div class="screen">${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[M_.getUTCMonth()]}</div><header class="bkdh"><div class="big"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></div><div class="ttl"><b>${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[D(d).getUTCMonth()]}</b><div>${ic('grid',12)}ลงแล้ว ${_st.f}/${_st.a} · ว่าง ${_st.a-_st.f}${d===TODAY?' · <b style="color:var(--blue)">วันนี้</b>':''}${note?`<span class="nt3">${ic('pin',12)}${esc(note)}</span>`:''}</div></div></header><div class="seats" style="--rooms:${R.length}"><div></div>${R.map(r=>isBrand()?`<button class="rhead pick" data-act="selCol" data-d="${d}" data-r="${r}" title="เลือกทุกช่องว่างของห้องนี้">${ic('door',15)}ห้อง ${r}</button>`:`<div class="rhead">${ic('door',15)}ห้อง ${r}</div>`).join('')}
+  ${C().slots.map((t,s)=>`<${isBrand()?`button class="rowlab pick" data-act="selRow" data-d="${d}" data-s="${s}" title="เลือกทุกช่องว่างของรอบนี้"`:'div class="rowlab"'}>${ic(slotIcon(s),18)}<div><b>${t.split('–')[0]}</b><span class="to"><span class="tw">ถึง </span>${t.split('–')[1]||''}</span></div></${isBrand()?'button':'div'}>`+R.map(r=>seat(d,r,s,i++)).join('')).join('')}</div>
   <div class="legend"><span><i style="background:#fff;border-color:#c7dbf7"></i>ว่าง</span><span><i style="background:var(--navy)"></i>ที่เลือก</span><span><i style="background:#ffe1c2;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--blue)"></i>คิวของฉัน</span><span>${ic('hour',13)} รอยืนยัน</span><span>${ic('undo',13)} ขอยกเลิก</span><span>${ic('swap',13)} ขอย้ายห้อง</span><span>${ic('clock',13)} ขอเปลี่ยนเวลา</span><span><i style="background:repeating-linear-gradient(45deg,#f1f4f9 0 4px,#fff 4px 8px)"></i>ปิด</span><span><i style="background:repeating-linear-gradient(45deg,#ffe9e9 0 4px,#fff 4px 8px);border-color:#f6c4c6"></i>ปิดเฉพาะวันนี้</span></div></div>`;
   return h;
 }
