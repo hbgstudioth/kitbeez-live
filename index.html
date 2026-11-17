@@ -734,13 +734,14 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 @media print{.top,.tabs,.cart,.demo,.hdact,.btn,.sbtn,.wkslider{display:none!important}main{padding:0}body{background:#fff}.card,.wday,.wk{box-shadow:none}.wrow{flex-wrap:wrap;overflow:visible}}
 
-/* หน้าจองคิว: โมชั่นแบบเบา */
-.seat{animation:fade .2s ease both;animation-delay:0s;transition:box-shadow .15s,background-color .15s,border-color .15s,color .15s}
-.seat:hover:not(:disabled),.seat.x.dc[data-act]:hover{transform:none;box-shadow:0 2px 8px rgba(16,60,140,.12)}
-.seat:active:not(:disabled){transform:none;filter:brightness(.96)}
-.seat.sel{animation:none}
-.dchip{transition:background-color .15s,border-color .15s,box-shadow .15s,color .15s}
-.dchip:hover:not(:disabled),.dchip.on{transform:none}
+/* หน้าจองคิว: โมชั่นแบบเบา ไม่กระพริบ */
+.seat,.seat.sel{animation:none!important}
+.seat{transition:transform .22s cubic-bezier(.25,.8,.35,1),box-shadow .22s ease,background-color .2s ease,border-color .2s ease,color .2s ease}
+.seat:hover:not(:disabled),.seat.x.dc[data-act]:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(16,60,140,.12)}
+.seat:active:not(:disabled){transform:translateY(0) scale(.97);transition-duration:.1s}
+.dchip{transition:transform .22s cubic-bezier(.25,.8,.35,1),background-color .2s,border-color .2s,box-shadow .2s,color .2s}
+.dchip:hover:not(:disabled){transform:translateY(-1px)}
+.dchip.on{transform:none}
 </style>
 </head>
 <body>
