@@ -848,32 +848,7 @@ const ROLE_L = { brand:'แบรนด์', streamer:'Live Streamer' };
 const RT={book:{l:'ขอจองคิว',i:'ticket',c:''},cancel:{l:'ขอยกเลิก',i:'undo',c:'bad'},move:{l:'ขอย้ายห้อง',i:'swap',c:'violet'},time:{l:'ขอเปลี่ยนเวลา',i:'clock',c:'teal'}};
 const RS={pending:{l:'รอแบรนด์',i:'hour'},approved:{l:'อนุมัติแล้ว',i:'checkc'},rejected:{l:'ไม่อนุมัติ',i:'x'},withdrawn:{l:'ถอนคำขอแล้ว',i:'history'}};
 
-/* ---------------- ข้อมูลตั้งต้น พ.ย. 2026 ---------------- */
 const _='';
-const RAW={
-'2026-10-29':{2:[_,'Cartoon','Baitoey','Phi',_,'Phi'],4:[_,_,'Cream',_,_,_],5:[_,'Fahz',_,'Shin',_,_]},
-'2026-10-30':{1:['Film','Shin','Baimint','Shin','Lookaew','Lookaew'],2:['Baimint','Phi','Film','Phi',_,_],3:[_,_,'Baitoey',"p'mai",_,_],5:[_,'Fahz',"p'mai",'Fahz',_,_]},
-'2026-10-31':{1:['Pocky','Shin','Baimint','Fahz','Lookaew','Lookaew'],2:['Phi','Baimint','Min','Phi',_,_],3:[_,_,'Baitoey',_,"p'mai",_],5:[_,'Fahz','Pocky','Shin',_,_]},
-'2026-11-01':{1:['Baimint','Baimint','Min','Fahz','Lookaew','Lookaew'],2:[_,'Pocky',_,'Baimint',"p'mai",'Ploy'],3:[_,_,_,'Pocky','Ploy',_],4:[_,'Fahz',_,_,_,_]},
-'2026-11-05':{2:['Phi',_,'Phi','Cartoon','Ploy',_],3:[_,_,'Ploy',_,_,_],4:[_,_,_,_,'Wanyen',_],5:['Baimint','Baimint','Shin','Baimint',_,_]},
-'2026-11-06':{1:[_,'Pocky','Shin','Baimint','Fahz','Lookaew'],2:['Phi',_,'Phi','Cartoon','Shin','Ploy'],3:[_,_,_,'Meaw',_,_],4:[_,_,_,_,'Wanyen',_],5:['Baimint','Baimint','Fahz','Pocky','Meaw',_]},
-'2026-11-07':{1:['Film','Film','Fahz','Tong','Pocky','Lookaew'],2:[_,'Warm','Shin',_,'Shin','Phi'],4:[_,_,_,_,'Wanyen',_],5:['Baimint','Baimint','Pocky','Phi','Fahz',_]},
-'2026-11-08':{1:['Film','Min','Pocky','Lookaew','Fahz','Lookaew'],2:[_,'Cartoon','Fahz',_,_,_],4:[_,'Wanyen',_,_,'Wanyen',_],5:['Baimint','Baimint','Film','Baimint','Pocky',_]},
-'2026-11-12':{2:['Kannita',_,'Warm','Fahz',_,'Shin'],3:[_,_,'Benz','Peet','Tong',_],4:[_,"p'mai","p'mai",_,"p'mai",_],5:['Baimint','Baimint','Min','Baimint',_,_]},
-'2026-11-13':{1:[_,'Nari','Lookaew','Shin','Lookaew','Fahz'],2:[_,_,"p'mai",'Fahz',_,'Shin'],3:[_,_,'Peet',"p'mai",_,_],4:[_,_,'Chicha',_,'Chicha',_],5:['Baimint','Baimint','Pocky','Baimint','Pocky',_]},
-'2026-11-14':{1:['Phi','Baimint','Min','Baimint','Lookaew','Shin'],2:['Warm','Min','Phi',"p'mai",_,'Fahz'],3:[_,_,_,'Shin',"p'mai",_],4:[_,_,'Wanyen',_,_,_],5:['Baimint','Film','Film','Fahz',_,_]},
-'2026-11-15':{1:['Phi','Baimint','Pocky','Fahz','Lookaew','Fahz'],2:[_,_,'Min','Cartoon','Pocky',"p'mai"],3:[_,_,'Peet','Phi',"p'mai",_],4:[_,_,'Wanyen',_,_,_],5:['Baimint','Film','Film','Baimint','Baimint',_]},
-'2026-11-19':{2:['Phi','Shin','Phi','Lookaew',_,_],3:[_,_,"p'mai",_,'Tong',_],4:[_,"p'mai",'Warm',_,'Wanyen',_],5:['Baimint','Baimint',_,'Fahz',_,_]},
-'2026-11-20':{1:[_,'Fahz','Min','Fahz','Lookaew','Min'],2:['Pocky','Shin','Warm','Lookaew',_,_],3:[_,_,"p'mai",'Min',_,_],4:[_,'Warm',_,_,"p'mai",_],5:['Baimint','Baimint','Pocky','Shin',_,_]},
-'2026-11-21':{1:[_,'Fahz','Min','Shin','Lookaew','Pocky'],2:['Phi','Shin','Warm','Lookaew',_,_],3:[_,_,'Phi','Pocky',_,_],5:['Baimint','Baimint','Film','Fahz','Film',_]},
-'2026-11-22':{1:[_,'Fahz','Min','Pocky','Lookaew','Pocky'],2:[_,'Shin','Warm','Lookaew',_,_],3:[_,_,"p'mai",'Shin','Tong',_],4:[_,"p'mai",_,_,_,_],5:['Baimint','Baimint','Film','Fahz','Film',_]},
-'2026-11-26':{2:[_,'Min','Lookaew',_,_,_],3:[_,_,'Warm',"p'mai",_,_],4:[_,_,"p'mai",_,_,_],5:[_,_,'Fahz','Phi','Shin',_]},
-'2026-11-27':{1:['Baimint','Baimint','Fahz','Pocky','Shin','Lookaew'],2:[_,_,'Warm','Lookaew',_,_],3:[_,_,'Min',"p'mai",'Tong',_],4:[_,'Pocky',"p'mai",_,_,_],5:['Film','Film','Shin','Baimint','Fahz',_]},
-'2026-11-28':{1:[_,'Film','Fahz','Phi','Shin','Lookaew'],2:[_,'Phi','Min','Lookaew',_,_],3:[_,_,'Shin',"p'mai",'Tong',_],4:[_,'Pocky','Wanyen',_,"p'mai",_],5:['Baimint','Baimint','Film','Pocky','Fahz',_]},
-'2026-11-29':{1:[_,'Film','Film','Pocky','Lookaew',_],2:[_,'Min','Fahz','Lookaew',_,_],3:[_,_,'Warm',"p'mai",_,_],4:[_,_,'Wanyen',_,"p'mai",_],5:['Baimint','Pocky','Baimint','Baimint','Fahz',_]}
-};
-const NOTES0={'2026-11-01':'วันตัดยอด 2','2026-11-06':'แม่บ้านเข้าทำความสะอาด','2026-11-08':'วันตัดยอด 2','2026-11-15':'วันตัดยอด 2','2026-11-22':'วันตัดยอด 4','2026-11-29':'วันตัดยอด 5'};
-const ROSTER=['Baimint','Fahz','Lookaew','Pocky','Shin','Phi','Film','Min',"p'mai",'Warm','Cartoon','Ploy','Tong','Meaw','Nari','Cream','Wanyen','Baitoey','Kannita','Benz','Peet','Chicha','Samui','Ratchaya P','Fah','Dear','Khawn','Frost'];
 const mid=n=>'m_'+n.toLowerCase().replace(/[^a-z0-9]+/g,'');
 
 /* ---------------- สีประจำตัว (ไม่ซ้ำกัน 32 สี) ---------------- */
@@ -923,6 +898,7 @@ const isClosed=(d,r,s)=>isClosedWeekly(d,r,s)||!!dayClosure(d,r,s);
 const isClosedRoom=(d,r)=>closedOfDow(dow(d),r)==='all';
 const canBookDate=d=>isBrand()||!C().bookLimit||(C().bookDates||[]).includes(d);
 const slotOf=(d,r,s)=>S.d.slots[sid(d,r,s)];
+const isOwnerMe=()=>!!S.user&&OWNER_EMAILS.map(e=>e.toLowerCase()).includes((S.user.email||'').toLowerCase());
 const TRIAL='__trial',TRIAL_COL={bg:'#fff1cc',fg:'#7a4b00'};
 const M=id=>id===TRIAL?{name:'ทดลองไลฟ์',c:-2}:(S.d.members[id]||{name:'(ลบแล้ว)',c:-1});
 const hexFg=h=>{const n=parseInt((h||'#ffffff').slice(1),16),r=n>>16,g=n>>8&255,b=n&255;return(0.299*r+0.587*g+0.114*b)>150?'#10233f':'#ffffff'};
@@ -948,13 +924,7 @@ const inApp=()=>/Line\/|FBAN|FBAV|Instagram|; wv\)/i.test(navigator.userAgent);
    STORE
    ===================================================================== */
 const EMPTY=()=>({config:{},members:{},access:{},notes:{},slots:{},logs:{},reqs:{},requests:{},closures:{}});
-function seedOps(){
-  const ops=[['set','config','main',DEFAULT_CONFIG]];
-  ROSTER.forEach((n,i)=>ops.push(['set','members',mid(n),{name:n,c:i,active:true}]));
-  for(const d in NOTES0)ops.push(['set','notes',d,{text:NOTES0[d]}]);
-  for(const d in RAW)for(const r in RAW[d])RAW[d][r].forEach((n,s)=>{if(n)ops.push(['set','slots',sid(d,+r,s),{date:d,room:+r,slot:s,who:mid(n),status:'ok',at:Date.now(),by:'import'}])});
-  return ops;
-}
+function seedOps(){return[['set','config','main',DEFAULT_CONFIG]]}
 const demoEmail=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,'')+'@demo.live';
 function makeLocal(){
   const KEY='kbz-live-v2';let raw=null;
@@ -967,18 +937,6 @@ function makeLocal(){
   if(!Object.keys(db.access).length){ // บัญชีตัวอย่างสำหรับโหมดทดลอง
     db.access['brand@demo.live']={memberId:null,role:'brand',active:true};
     Object.entries(db.members).forEach(([id,m])=>db.access[demoEmail(m.name)]={memberId:id,role:'streamer',active:true});
-  }
-  if(!Object.values(db.access).some(a=>a.role==='brand'&&a.name)){ // ตัวอย่าง Admin หลายคน (โหมดทดลอง)
-    db.access['brand@demo.live']={...(db.access['brand@demo.live']||{}),memberId:null,role:'brand',active:true,name:'เจ้าของแบรนด์',addedAt:1};
-    db.access['nok@demo.live']={memberId:null,role:'brand',active:true,name:'Nok (แอดมิน)',addedBy:'เจ้าของแบรนด์',addedAt:2};
-    db.access['mew@demo.live']={memberId:null,role:'brand',active:true,name:'Mew (แอดมิน)',addedBy:'เจ้าของแบรนด์',addedAt:3};
-  }
-  if(!raw||!raw.requests){ // ตัวอย่างประวัติคำขอ (เฉพาะโหมดทดลอง)
-    const T=s=>Date.parse(s+'+07:00');
-    db.requests.r_demo1={type:'book',who:mid('Pocky'),slotKey:sid('2026-11-21',3,4),date:'2026-11-21',room:3,slot:4,status:'withdrawn',createdAt:T('2026-11-13T20:10:00'),withdrawnAt:T('2026-11-13T21:02:00'),ack:false};
-    db.requests.r_demo2={type:'cancel',who:mid('Lookaew'),slotKey:sid('2026-11-20',1,4),date:'2026-11-20',room:1,slot:4,reason:'ป่วย / ไม่สบาย',status:'withdrawn',createdAt:T('2026-11-14T07:40:00'),withdrawnAt:T('2026-11-14T08:15:00'),ack:false};
-    db.requests.r_demo3={type:'cancel',who:mid('Shin'),slotKey:sid('2026-11-14',1,5),date:'2026-11-14',room:1,slot:5,reason:'ติดธุระด่วน',status:'rejected',note:'ไม่มีคนแทน รบกวนไลฟ์ตามเดิม',createdAt:T('2026-11-12T10:00:00'),decidedAt:T('2026-11-12T12:30:00'),decidedBy:'แบรนด์'};
-    db.requests.r_demo4={type:'book',who:mid('Fahz'),slotKey:sid('2026-11-14',2,5),date:'2026-11-14',room:2,slot:5,status:'approved',createdAt:T('2026-11-10T09:00:00'),decidedAt:T('2026-11-10T11:00:00'),decidedBy:'แบรนด์'};
   }
   return{demo:true,data:db,
     start(fn){cb=fn;const e=sessionStorage.getItem('kbz-demo-email');if(e)this.loginEmail(e,true);else fn()},
@@ -1053,6 +1011,7 @@ async function makeFirebase(cfg){
       slotUnsub=listen('slots',F.query(F.collection(db,'slots'),F.where('date','>=',f),F.where('date','<=',t)));closUnsub?.();
       closUnsub=listen('closures',F.query(F.collection(db,'closures'),F.where('date','>=',f),F.where('date','<=',t)))},
     async batch(ops){for(let i=0;i<ops.length;i+=400){const b=F.writeBatch(db);ops.slice(i,i+400).forEach(([t,c,id,v])=>{const ref=F.doc(db,c,id);t==='set'?b.set(ref,v):t==='patch'?b.update(ref,v):b.delete(ref)});await b.commit()}},
+    async wipeAll(){let n=0;for(const c of ['slots','requests','closures','notes','access','members','logs','config']){const sn=await F.getDocs(F.collection(db,c));const ids=sn.docs.map(d=>d.id);n+=ids.length;await this.batch(ids.map(id=>['del',c,id]))}return n},
     async log(text){try{await F.addDoc(F.collection(db,'logs'),{at:Date.now(),uid:S.user.uid,by:myName(),text})}catch(e){console.warn(e)}}
   };
 }
@@ -1150,8 +1109,8 @@ function vDenied(){
 }
 function vSetupFirst(){
   $('#app').innerHTML=`<div class="login"><div class="lwrap" style="grid-template-columns:1fr;max-width:480px"><div class="lform" style="text-align:center;align-items:center">${icb('rocket','',28)}<h2>เริ่มต้นระบบ</h2>
-  ${isBrand()?`<p class="muted">ยังไม่มีข้อมูลในระบบ เลือกวิธีเริ่มต้น</p>
-  <button class="btn primary big" style="width:100%" data-act="seed">${ic('download',18)}นำเข้าตารางเดิม พ.ย. 2026 + รายชื่อ 28 คน</button><button class="btn" style="width:100%" data-act="seedEmpty">${ic('plus',16)}เริ่มจากว่างเปล่า</button>`
+  ${isBrand()?`<p class="muted">ยังไม่มีข้อมูลในระบบ กดเริ่มใช้งาน แล้วไปเพิ่มรายชื่อ Live Streamer ที่หน้าตั้งค่า</p>
+  <button class="btn primary big" style="width:100%" data-act="seedEmpty">${ic('rocket',18)}เริ่มใช้งานระบบ</button>`
   :`<p class="muted">แบรนด์ยังไม่ได้ตั้งค่าระบบ กรุณารอสักครู่</p>`}
   <button class="btn ghost" data-act="logout">${ic('logout',16)}ออกจากระบบ</button></div></div></div>`;
 }
@@ -1406,7 +1365,7 @@ function vSet(){
   <div class="grid2" style="margin-top:16px">
    <div class="card"><h3>${icb('save')}ข้อมูล</h3><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start">
     <button class="btn" data-act="backup">${ic('download',16)}สำรองข้อมูล (.json)</button>
-    ${!Object.keys(S.d.members).length?`<button class="btn" data-act="seed">${ic('download',16)}นำเข้าตารางเดิม พ.ย. 2026</button>`:''}
+    ${!S.store.demo&&isOwnerMe()?`<button class="btn" data-act="resetAll" style="color:var(--bad)">${ic('trash',16)}รีเซ็ตระบบ (ลบข้อมูลทั้งหมด)</button>`:''}
     ${S.store.demo?`<button class="btn" data-act="resetDemo" style="color:var(--bad)">${ic('history',16)}ล้างข้อมูลโหมดทดลอง</button>`:''}
     <button class="btn" data-act="guide">${ic('book',16)}วิธีติดตั้ง / Login Gmail</button></div></div>
    <div class="card"><h3>${icb('history')}ประวัติการใช้งาน</h3>${(()=>{const by=[...new Set(Object.values(S.d.logs).map(l=>l.by))].sort();return`<div class="ftr">${ic('filter',14)}<select data-logby="1"><option value="">ทุกคน</option>${by.map(b=>`<option ${S.logBy===b?'selected':''}>${esc(b)}</option>`).join('')}</select></div>`})()}<div class="logs">${Object.values(S.d.logs).filter(l=>!S.logBy||l.by===S.logBy).sort((a,b)=>b.at-a.at).slice(0,150).map(l=>`<div><time>${timeAgo(l.at)}</time><b>${esc(l.by)}</b> ${esc(l.text)}</div>`).join('')||'<p class="muted">ยังไม่มีประวัติ</p>'}</div></div>
@@ -1920,7 +1879,12 @@ const acts={
   logout:()=>{S.sel.clear();S.store.logout();$('#shell')?.remove();S.lastView=null},
   guide:guideDlg,
   copyEmail:()=>copyText(S.user.email),
-  seed:async()=>{if(await write(seedOps(),'นำเข้าตารางเดิม พ.ย. 2026'))toast('นำเข้าข้อมูลแล้ว')},
+  resetAll:()=>modal(`<div class="mhead">${icb('alert','bad')}<div><h3>รีเซ็ตระบบทั้งหมด?</h3><span class="muted">ลบคิว คำขอ สมาชิก Gmail ที่ผูกไว้ Admin คนอื่น โน้ต ห้องที่ปิด ประวัติ และการตั้งค่า</span></div></div>
+   <div class="warnbox" style="margin-top:10px">${ic('alert',18)}<div>กู้คืนไม่ได้ · เหลือแค่ <b>${esc(OWNER_EMAILS.join(', '))}</b> เป็น Admin หลัก · แนะนำกด “สำรองข้อมูล (.json)” ก่อน</div></div>
+   <input class="inp" id="rsc" placeholder="พิมพ์ RESET เพื่อยืนยัน" autocomplete="off" style="margin-top:10px">
+   <div class="mact"><button class="btn bad" data-d="go">${ic('trash',16)}ลบข้อมูลทั้งหมด</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,
+  async a=>{if(a!=='go')return closeM();if(($('#rsc')?.value||'').trim().toUpperCase()!=='RESET'){toast('พิมพ์ RESET ให้ถูกก่อน',1);return}
+    closeM();toast('กำลังลบข้อมูล…');try{const n=await S.store.wipeAll();toast(`รีเซ็ตเรียบร้อย (ลบ ${n} รายการ)`)}catch(e){console.error(e);toast('รีเซ็ตไม่สำเร็จ: '+(e.code||e.message),1)}}),
   seedEmpty:()=>write([['set','config','main',DEFAULT_CONFIG]],'เริ่มระบบใหม่'),
   resetDemo:()=>modal(`<div class="mhead">${icb('alert','bad')}<h3>ล้างข้อมูลโหมดทดลอง?</h3></div><p class="muted">จะกลับไปเป็นตารางตั้งต้น</p><div class="mact"><button class="btn bad" data-d="y">ล้างข้อมูล</button><button class="btn" data-d="close">ยกเลิก</button></div>`,a=>a==='y'?S.store.reset():closeM()),
   backup:()=>download(`kitbeez-live-backup-${TODAY}.json`,JSON.stringify(S.d,null,1),'application/json'),
