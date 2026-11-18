@@ -1740,12 +1740,12 @@ function vSet(){
    <div class="warnbox" style="margin-top:12px;background:#f3f8ff;border-color:#cfe0fb;color:#1d3f74">${ic('info',18)}<div><b>สวิตช์ “สถานะ”</b> ใช้เมื่อคนนั้นลาออกหรือพักงาน · ปิด = <b>ระงับการใช้งาน</b>: Login เข้าระบบไม่ได้ และไม่แสดงในรายชื่อให้เลือก/จอง · <b>ประวัติคิวและชั่วโมงเดิมยังอยู่ครบ</b> · เปิดกลับได้ทุกเมื่อ<br>คนที่ระงับแล้วจะมีปุ่ม ${ic('trash',13)} <b>ลบออกจากรายชื่อ</b> (ลบแล้วกู้คืนได้ด้านล่าง)</div></div>
    ${(()=>{const del=Object.entries(S.d.members).filter(([,m])=>m.deleted);return del.length?`<details class="deld"><summary>${ic('trash',14)}สมาชิกที่ลบแล้ว (${del.length})</summary>${del.map(([id,m])=>`<div class="win">${nameChip(id)}<div class="grow"><small>ลบโดย ${esc(m.deletedBy||'')} · ${m.deletedAt?timeAgo(m.deletedAt):''}</small></div><button class="btn sm" data-act="restoreMember" data-id="${id}">${ic('history',14)}กู้คืน</button></div>`).join('')}</details>`:''})()}
   </div>
-  <div class="grid2" style="margin-top:16px">
-   <div class="card"><h3>${icb('save')}ข้อมูล</h3><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start">
+  <div class="${isOwnerMe()||S.store.demo?'grid2':''}" style="margin-top:16px">
+   ${isOwnerMe()||S.store.demo?`<div class="card"><h3>${icb('save')}ข้อมูล <span class="own" style="font-size:11px;vertical-align:middle">${ic('lock',11)} เฉพาะเจ้าของ</span></h3><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start">
     <button class="btn" data-act="backup">${ic('download',16)}สำรองข้อมูล (.json)</button>
     ${!S.store.demo&&isOwnerMe()?`<button class="btn" data-act="resetAll" style="color:var(--bad)">${ic('trash',16)}รีเซ็ตระบบ (ลบข้อมูลทั้งหมด)</button>`:''}
     ${S.store.demo?`<button class="btn" data-act="resetDemo" style="color:var(--bad)">${ic('history',16)}ล้างข้อมูลโหมดทดลอง</button>`:''}
-    <button class="btn" data-act="guide">${ic('book',16)}วิธีติดตั้ง / Login Gmail</button></div></div>
+    <button class="btn" data-act="guide">${ic('book',16)}วิธีติดตั้ง / Login Gmail</button></div></div>`:''}
    <div class="card"><h3>${icb('history')}ประวัติการใช้งาน</h3>${(()=>{const by=[...new Set(Object.values(S.d.logs).map(l=>l.by))].sort();return`<div class="ftr">${ic('filter',14)}<select data-logby="1"><option value="">ทุกคน</option>${by.map(b=>`<option ${S.logBy===b?'selected':''}>${esc(b)}</option>`).join('')}</select></div>`})()}<div class="logs">${Object.values(S.d.logs).filter(l=>!S.logBy||l.by===S.logBy).sort((a,b)=>b.at-a.at).slice(0,150).map(l=>`<div><time>${timeAgo(l.at)}</time><b>${esc(l.by)}</b> ${esc(l.text)}</div>`).join('')||'<p class="muted">ยังไม่มีประวัติ</p>'}</div></div>
   </div>`;
 }
@@ -2332,7 +2332,7 @@ const acts={
     closeM();toast('กำลังลบข้อมูล…');try{const n=await S.store.wipeAll();toast(`รีเซ็ตเรียบร้อย (ลบ ${n} รายการ)`)}catch(e){console.error(e);toast('รีเซ็ตไม่สำเร็จ: '+(e.code||e.message),1)}}),
   seedEmpty:()=>write([['set','config','main',DEFAULT_CONFIG]],'เริ่มระบบใหม่'),
   resetDemo:()=>modal(`<div class="mhead">${icb('alert','bad')}<h3>ล้างข้อมูลโหมดทดลอง?</h3></div><p class="muted">จะกลับไปเป็นตารางตั้งต้น</p><div class="mact"><button class="btn bad" data-d="y">ล้างข้อมูล</button><button class="btn" data-d="close">ยกเลิก</button></div>`,a=>a==='y'?S.store.reset():closeM()),
-  backup:()=>download(`kitbeez-live-backup-${TODAY}.json`,JSON.stringify(S.d,null,1),'application/json'),
+  backup:()=>!(isOwnerMe()||S.store.demo)?toast('เฉพาะเจ้าของระบบเท่านั้น',1):download(`kitbeez-live-backup-${TODAY}.json`,JSON.stringify(S.d,null,1),'application/json'),
   print:()=>window.print(),
   toggleDay:b=>{const d=+b.dataset.d,o=C().openDays;saveCfg({openDays:o.includes(d)?o.filter(x=>x!==d):[...o,d]},`เปลี่ยนวันไลฟ์`)},
   toggleRoom:b=>{const d=b.dataset.d,r=+b.dataset.r,cl={...C().closed},cur=cl[d]||[];cl[d]=cur.includes(r)?cur.filter(x=>x!==r):[...cur,r];saveCfg({closed:cl},`${cur.includes(r)?'เปิด':'ปิด'}ห้อง ${r} วัน${DOW_L[d]}`)},
