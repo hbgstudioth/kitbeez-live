@@ -1113,6 +1113,13 @@ main.enter{animation:softIn .28s ease-out both}
 .acc .aic.person{background:var(--sky);color:var(--blue)}.acc .aic.person svg{width:22px;height:22px}
 .acc .aic.logo{background:#fff;box-shadow:0 0 0 1px var(--line)}.acc .aic.logo img{width:86%;height:86%;object-fit:contain}
 .acc.on .aic.person{background:var(--blue);color:#fff}
+
+.lform .adminchips{flex-wrap:nowrap;overflow-x:auto;min-height:30px;scrollbar-width:none}.lform .adminchips::-webkit-scrollbar{display:none}.lform .adminchips>*{flex:none}
+
+.lform .hint{min-height:36px}
+@media(max-width:600px){.acc small{min-height:3em}}
+
+.lwrap>*,.lform,.lform>*{min-width:0}.lform .adminchips{max-width:100%}
 </style>
 </head>
 <body>
@@ -1340,8 +1347,8 @@ function makeLocal(){
       S.suspended=!!(a&&a.active===false);S.adminName=a?.name||null;if(a&&a.active!==false){S.role=a.role;S.meId=a.memberId||null;S.denied=false;sessionStorage.setItem('kbz-demo-email',email)}else{S.role=null;S.meId=null;S.denied=true}
       cb()},
     login(mode){
-      if(S.loginType==='brand')return this.loginEmail(mode==='google'?'brand@demo.live':$('#lemail')?.value);
-      const id=S.loginPick;if(!id)return toast('เลือกชื่อของคุณก่อน',1);
+      if(mode!=='google'||S.loginType==='brand')return this.loginEmail(mode==='google'?'brand@demo.live':$('#lemail')?.value);
+      const id=S.loginPick||Object.values(db.access).find(a=>a.memberId)?.memberId;if(!id)return toast('ยังไม่มี Live Streamer ในระบบ',1);
       const e=Object.keys(db.access).find(x=>db.access[x].memberId===id);
       if(!e){S.user={email:`(ยังไม่ได้ตั้ง Gmail ให้ ${db.members[id]?.name})`};S.denied=true;S.role=null;cb();return}
       this.loginEmail(e)},
@@ -1395,7 +1402,7 @@ async function makeFirebase(cfg){
       });
     },
     async login(mode){
-      const hint=mode!=='google'&&S.loginType==='brand'?($('#lemail')?.value||'').trim().toLowerCase():'';
+      const hint=mode!=='google'?($('#lemail')?.value||'').trim().toLowerCase():'';
       const prov=new A.GoogleAuthProvider();prov.setCustomParameters(hint?{login_hint:hint,prompt:'select_account'}:{prompt:'select_account'});
       try{await A.signInWithPopup(auth,prov)}
       catch(e){if(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment')return A.signInWithRedirect(auth,prov);
@@ -1473,7 +1480,7 @@ function vLogin(){
    <div class="lside"><div class="logo-card"><img src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv">LIVE</span></div><h1 class="lsys">LIVE BOOKING SYSTEM</h1>
     <ul class="lsteps">
      <li style="--i:0">${icb('users')}<div><b>เลือกประเภทบัญชี</b><small>แบรนด์ หรือ Live Streamer</small></div></li>
-     <li style="--i:1">${icb('user')}<div><b>เลือกชื่อของคุณ</b><small>จากรายชื่อที่แบรนด์ลงทะเบียนไว้</small></div></li>
+     <li style="--i:1">${icb('mail')}<div><b>ใส่อีเมลของคุณ</b><small>อีเมลที่แบรนด์ลงทะเบียนไว้ให้</small></div></li>
      <li style="--i:2">${icb('tap')}<div><b>กดเข้าสู่ระบบด้วย Google</b><small>ใช้ Gmail ที่ Login ไว้ในเครื่องนี้</small></div></li>
     </ul>
     <div class="lbadges"><span>${ic('user',14)}ไม่ต้องสมัครสมาชิก</span><span>${ic('key',14)}ไม่ต้องตั้งรหัสผ่าน</span></div>
@@ -1485,13 +1492,14 @@ function vLogin(){
      <button type="button" class="acc ${t==='streamer'?'on':''}" data-act="loginType" data-t="streamer"><span class="ck">${ic('check',13)}</span><span class="aic person"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.9-3.9 3.9-6 7.5-6s6.6 2.1 7.5 6"/></svg></span><b>Live Streamer</b><small>จองคิว · ดูตาราง · ติดตามคำขอ</small></button>
      <button type="button" class="acc ${t==='brand'?'on':''}" data-act="loginType" data-t="brand"><span class="ck">${ic('check',13)}</span><span class="aic logo"><img src="${KIT_BADGE}" alt="kitBEEZ"></span><b>แบรนด์</b><small>จัดการตาราง · อนุมัติ · ตั้งค่า</small></button>
     </div>
-    <div class="lvar"><div class="lv1 ${t==='streamer'?'on':''}" ${t==='streamer'?'':'aria-hidden="true"'}><span class="lbl">ชื่อของคุณ</span>
-     <button type="button" class="pickbtn ${pk?'has':''}" data-act="pickName">${pk?`<span class="avatar" style="background:${pc.bg};color:${pc.fg}">${esc(M(pk).name[0])}</span><span class="grow"><b>${esc(M(pk).name)}</b><small>แตะเพื่อเปลี่ยนชื่อ</small></span>`:`${icb('users')}<span class="grow"><b>เลือกชื่อของคุณ</b><small>แตะเพื่อเปิดรายชื่อ Live Streamer</small></span>`}${ic('right',18)}</button></div><div class="lv1 ${t==='brand'?'on':''}" ${t==='brand'?'':'aria-hidden="true"'}><span class="lbl">อีเมลของแบรนด์</span><label class="field">${ic('mail',18)}<input id="lemail" type="email" inputmode="email" autocomplete="email" placeholder="name@gmail.com หรืออีเมลบริษัท" value="${esc(S.lemail??(demo?'brand@demo.live':''))}"></label>${demo?`<div class="adminchips">${Object.entries(S.d.access).filter(([,a])=>a.role==='brand'&&!a.memberId&&a.active!==false).map(([e,a])=>`<button type="button" data-act="fillEmail" data-e="${e}">${ic('tag',12)}${esc(a.name||e)}</button>`).join('')}</div>`:''}</div></div>
-    ${(()=>{const ev=demo?'brand@demo.live':'',ok=t==='brand'?okEmail(S.lemail??ev):!!pk;
-     return`<div class="lbtns"><button class="gbtn" type="submit" id="lgo" ${ok?'':'disabled'}>${ic('login',18)}${t==='streamer'&&pk?`เข้าสู่ระบบในชื่อ ${esc(M(pk).name)}`:'เข้าสู่ระบบ'}</button>
+    ${(()=>{const ev=S.lemail??(demo?(t==='brand'?'brand@demo.live':''):''),ok=okEmail(ev);
+     const chips=demo?(t==='brand'?Object.entries(S.d.access).filter(([,a])=>a.role==='brand'&&!a.memberId&&a.active!==false).map(([e,a])=>[e,a.name||e]):Object.entries(S.d.access).filter(([,a])=>a.memberId&&a.active!==false&&S.d.members[a.memberId]).slice(0,6).map(([e,a])=>[e,S.d.members[a.memberId].name])):[];
+     return`<span class="lbl">${t==='brand'?'อีเมลของแบรนด์':'อีเมลของคุณ'}</span><label class="field ${ev&&!ok?'bad':''}">${ic('mail',18)}<input id="lemail" type="email" inputmode="email" autocomplete="email" placeholder="name@gmail.com หรืออีเมลบริษัท" value="${esc(ev)}"></label>
+     <div class="adminchips">${chips.length?chips.map(([e,n])=>`<button type="button" data-act="fillEmail" data-e="${esc(e)}">${ic(t==='brand'?'tag':'user',12)}${esc(n)}</button>`).join('')+'<small class="muted" style="align-self:center">(ทดลอง)</small>':''}</div>
+     <div class="lbtns"><button class="gbtn" type="submit" id="lgo" ${ok?'':'disabled'}>${ic('login',18)}เข้าสู่ระบบ</button>
      <div class="lor"><span>หรือ</span></div>
      <button type="button" class="ggbtn" data-act="loginGoogle"><span class="g">${GOOGLE}</span>Login ด้วย Google</button>
-     <small class="lnote" id="lnote">${t==='brand'?(ok?'':'กรอกอีเมลให้ถูกต้องก่อน แล้วกด “เข้าสู่ระบบ”'):(pk?'':'เลือกชื่อของคุณก่อน แล้วกด “เข้าสู่ระบบ”')}</small></div>`})()}
+     <small class="lnote" id="lnote">${ok?'':'กรอกอีเมลให้ถูกต้องก่อน แล้วกด “เข้าสู่ระบบ”'}</small></div>`})()}
     <p class="hint">${ic('shield',15)}ไม่ต้องสมัครสมาชิก ไม่ต้องตั้งรหัสผ่าน · ยืนยันตัวตนด้วย Gmail ที่ Login ไว้ในเครื่องนี้ (ระบบไม่เก็บรหัสผ่าน)</p>
     ${demo?`<p class="hint">${ic('flask',15)}<span>โหมดทดลอง: กดเข้าสู่ระบบได้ทันทีโดยไม่ผ่าน Google · <button type="button" class="link" data-act="guide">วิธีเปิดใช้ Login Gmail จริง</button></span></p>`:''}
    </form></div><div class="lfoot">LIVE BOOKING SYSTEM<span>SOFTWARE ENGINEERING &amp; DEVELOPMENT</span></div></div>`;
@@ -2417,8 +2425,7 @@ const acts={
 };
 document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.closest('dialog'))return;const f=acts[b.dataset.act];if(f){if(!(b.tagName==='INPUT'&&b.type==='checkbox'))e.preventDefault();f(b)}});
 document.addEventListener('submit',e=>{if(e.target.id==='loginForm'){e.preventDefault();
-  if(S.loginType==='brand'&&!okEmail($('#lemail')?.value)){toast('กรอกอีเมลให้ถูกต้องก่อน',1);$('#lemail')?.focus();return}
-  if(S.loginType!=='brand'&&!S.loginPick){toast('เลือกชื่อของคุณก่อน',1);return}
+  if(!okEmail($('#lemail')?.value)){toast('กรอกอีเมลให้ถูกต้องก่อน',1);$('#lemail')?.focus();return}
   S.store.login('email')}});
 document.addEventListener('input',e=>{if(e.target.id!=='lemail')return;S.lemail=e.target.value;const ok=okEmail(e.target.value),b=$('#lgo'),n=$('#lnote');
   if(b)b.disabled=!ok;if(n)n.textContent=ok?'':'กรอกอีเมลให้ถูกต้องก่อน แล้วกด “เข้าสู่ระบบ”';e.target.closest('.field')?.classList.toggle('bad',!!e.target.value&&!ok)});
