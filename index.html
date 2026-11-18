@@ -1126,7 +1126,7 @@ main.enter{animation:softIn .28s ease-out both}
 .why.hrs.req{background:#f3f0ff;color:#4c1d95}
 .btn.ok{background:#22a85a;border-color:#22a85a;color:#fff}.btn.ok:hover{background:#1c934e}
 
-/* ประเภทสมาชิก */
+/* พนักงานสมาชิก */
 .emptag{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;border-radius:999px;padding:1px 7px;white-space:nowrap;letter-spacing:.2px}
 .emptag.fulltime{background:#e6efff;color:#1d4ed8}.emptag.freelance{background:#fff1e0;color:#c2410c}
 .nmc{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -1909,9 +1909,9 @@ function vSet(){
   ${windowsCard()}
   ${adminsCard()}
   <div class="card" style="margin-top:16px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="margin:0">${icb('users')}สมาชิก Live Streamer (${ms.length})</h3><span class="muted" style="font-size:13px">ลาก ${ic('grip',13)} หรือกด ${ic('up',13)}${ic('down',13)} เพื่อจัดลำดับ · ลำดับนี้ใช้ในหน้า Login และตอนเลือกใส่ชื่อ</span><button class="btn sm" data-act="sortAZ" title="เรียงตามชื่อ A–Z">${ic('list',14)}เรียง A–Z</button><button class="btn primary sm" style="margin-left:auto" data-act="addMember">${ic('plus',14)}เพิ่มคน</button></div>
-   <div class="mrow h"><span>ลำดับ</span><span>${ic('palette',13)}</span><span>ชื่อ</span><span>ประเภท</span><span>Gmail (ใช้ Login)</span><span>สิทธิ์</span><span>สถานะ</span></div>
+   <div class="mrow h"><span>ลำดับ</span><span>${ic('palette',13)}</span><span>ชื่อ</span><span>พนักงาน</span><span>Gmail (ใช้ Login)</span><span>สิทธิ์</span><span>สถานะ</span></div>
    ${ms.map((m,mi)=>{const cc=colOf(m.id),em=emailOf(m.id),role=S.d.access[em]?.role||'streamer';return`<div class="mrow ${m.active===false?'off':''}" data-mid="${m.id}"><div class="ord"><span class="grip" data-grip="${m.id}" title="ลากเพื่อย้าย">${ic('grip',16)}</span><span class="no">${mi+1}</span><span class="ab"><button data-act="mvUp" data-id="${m.id}" ${mi?'':'disabled'} title="เลื่อนขึ้น">${ic('up',13)}</button><button data-act="mvDown" data-id="${m.id}" ${mi<ms.length-1?'':'disabled'} title="เลื่อนลง">${ic('down',13)}</button></span></div><button class="swatch" style="background:${cc.bg};color:${cc.fg}" data-act="pickColor" data-id="${m.id}" title="ตั้งสีพื้นหลังชื่อ">${ic('palette',14)}</button>
-    <input value="${esc(m.name)}" data-mname="${m.id}"><select data-memp="${m.id}" class="${m.emp||'none'}"><option value="" ${m.emp?'':'selected'}>— ระบุประเภท —</option><option value="fulltime" ${m.emp==='fulltime'?'selected':''}>Full-Time</option><option value="freelance" ${m.emp==='freelance'?'selected':''}>Freelance</option></select><input type="email" value="${esc(em)}" placeholder="name@gmail.com" data-memail="${m.id}">
+    <input value="${esc(m.name)}" data-mname="${m.id}"><select data-memp="${m.id}" class="${m.emp||'none'}"><option value="" ${m.emp?'':'selected'}>— ระบุ —</option><option value="fulltime" ${m.emp==='fulltime'?'selected':''}>Full-Time</option><option value="freelance" ${m.emp==='freelance'?'selected':''}>Freelance</option></select><input type="email" value="${esc(em)}" placeholder="name@gmail.com" data-memail="${m.id}">
     <span class="mrole">${ic('mic',13)}Live Streamer</span>
     <label class="mst ${m.active!==false?'on':'off'}" title="${m.active!==false?'ปิดสวิตช์ = ระงับการใช้งาน (เช่น ลาออก)':'เปิดสวิตช์ = กลับมาใช้งาน'}"><span class="sw"><input type="checkbox" data-mactive="${m.id}" ${m.active!==false?'checked':''}><span></span></span><b>${m.active!==false?'ใช้งาน':'ระงับแล้ว'}</b></label>${m.active===false?`<button class="btn icon ghost mdel" data-act="delMember" data-id="${m.id}" title="ลบออกจากรายชื่อ">${ic('trash',16)}</button>`:''}</div>`}).join('')}
    <div class="warnbox" style="margin-top:12px;background:#f3f8ff;border-color:#cfe0fb;color:#1d3f74">${ic('info',18)}<div><b>สวิตช์ “สถานะ”</b> ใช้เมื่อคนนั้นลาออกหรือพักงาน · ปิด = <b>ระงับการใช้งาน</b>: Login เข้าระบบไม่ได้ และไม่แสดงในรายชื่อให้เลือก/จอง · <b>ประวัติคิวและชั่วโมงเดิมยังอยู่ครบ</b> · เปิดกลับได้ทุกเมื่อ<br>คนที่ระงับแล้วจะมีปุ่ม ${ic('trash',13)} <b>ลบออกจากรายชื่อ</b> (ลบแล้วกู้คืนได้ด้านล่าง)</div></div>
@@ -2195,7 +2195,7 @@ function profileDlg(){
     ${row('user','ชื่อ',esc(nm))}
     ${row('mail','อีเมล',`<span style="word-break:break-all">${esc(em||'-')}</span>`)}
     ${row(isBrand()?'tag':'mic','สิทธิ์',`<span class="pfchip ${isBrand()?'brand':''}">${role}</span>`)}
-    ${S.meId?row('users','ประเภท',m?.emp?`<span class="emptag ${m.emp}">${EMP[m.emp]}</span>`:'<span class="muted">ยังไม่ระบุ</span>'):''}
+    ${S.meId?row('users','พนักงาน',m?.emp?`<span class="emptag ${m.emp}">${EMP[m.emp]}</span>`:'<span class="muted">ยังไม่ระบุ</span>'):''}
     ${row('checkc','สถานะ',`<span class="pfok">${ic('check',13)}ใช้งาน</span>`)}
     ${S.store.demo?row('flask','โหมด','<span class="muted">ทดลอง (ข้อมูลในเครื่องนี้)</span>'):''}
    </div>
@@ -2549,16 +2549,16 @@ const acts={
   print:()=>window.print(),
   toggleDay:b=>{const d=+b.dataset.d,o=C().openDays;saveCfg({openDays:o.includes(d)?o.filter(x=>x!==d):[...o,d]},`เปลี่ยนวันไลฟ์`)},
   toggleRoom:b=>{const d=b.dataset.d,r=+b.dataset.r,cl={...C().closed},cur=cl[d]||[];cl[d]=cur.includes(r)?cur.filter(x=>x!==r):[...cur,r];saveCfg({closed:cl},`${cur.includes(r)?'เปิด':'ปิด'}ห้อง ${r} วัน${DOW_L[d]}`)},
-  addMember:()=>{S._newEmp=null;modal(`<div class="mhead">${icb('user')}<h3>เพิ่ม Live Streamer</h3></div><input class="inp" id="nm" placeholder="ชื่อเล่น"><input class="inp" id="em" type="email" placeholder="อีเมล (ใส่ทีหลังได้)" style="margin-top:8px"><div class="sec"><b>${ic('tag',14)}ประเภท</b><div class="emppick"><button data-d="e:fulltime">${ic('user',15)}Full-Time<small>พนักงานประจำ</small></button><button data-d="e:freelance">${ic('zap',15)}Freelance<small>ฟรีแลนซ์</small></button></div></div><div class="mact"><button class="btn primary" data-d="ok">${ic('plus',16)}เพิ่ม</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,
+  addMember:()=>{S._newEmp=null;modal(`<div class="mhead">${icb('user')}<h3>เพิ่ม Live Streamer</h3></div><input class="inp" id="nm" placeholder="ชื่อเล่น"><input class="inp" id="em" type="email" placeholder="อีเมล (ใส่ทีหลังได้)" style="margin-top:8px"><div class="sec"><b>${ic('tag',14)}พนักงาน</b><div class="emppick"><button data-d="e:fulltime">${ic('user',15)}Full-Time<small>พนักงานประจำ</small></button><button data-d="e:freelance">${ic('zap',15)}Freelance<small>ฟรีแลนซ์</small></button></div></div><div class="mact"><button class="btn primary" data-d="ok">${ic('plus',16)}เพิ่ม</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,
     async (a,b)=>{if(a==='close')return closeM();if(a.startsWith('e:')){S._newEmp=a.slice(2);document.querySelectorAll('.emppick button').forEach(x=>x.classList.toggle('on',x===b));return}
-      const n=$('#nm').value.trim(),em=$('#em').value.trim();if(!n)return toast('ใส่ชื่อก่อน',1);if(!S._newEmp)return toast('เลือกประเภท Full-Time หรือ Freelance',1);
+      const n=$('#nm').value.trim(),em=$('#em').value.trim();if(!n)return toast('ใส่ชื่อก่อน',1);if(!S._newEmp)return toast('เลือก Full-Time หรือ Freelance ก่อน',1);
       const used=new Set(Object.values(S.d.members).map(m=>m.c));let c=0;while(used.has(c))c++;
       const id='m_'+Date.now().toString(36);const emp=S._newEmp;S._newEmp=null;if(await write([['set','members',id,{name:n,c,active:true,emp}]],`เพิ่มสมาชิก ${n} (${EMP[emp]})`)){if(em)await saveEmail(id,em);closeM()}});setTimeout(()=>$('#nm')?.focus(),50)},
   pickColor:b=>colorDlg(b.dataset.id),
   copyMine:()=>{const t=myTickets().filter(([k])=>{const p=parseSid(k);return!isPast(p.d,p.s)});const byW={};t.forEach(([k,v])=>(byW[monday(v.date)]??=[]).push([k,v]));
     copyText(`คิวไลฟ์ของ ${M(S.meId).name}\n`+Object.keys(byW).sort().map(ws=>`\n— สัปดาห์ ${fmtRange(ws,add(ws,6))} —\n`+byW[ws].map(([k,v])=>{const p=parseSid(k);return`${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}${v.status!=='ok'?' '+STXT[v.status]+moveTxt(v):''}`}).join('\n')).join('\n'))},
-  copyPay:()=>{const P=S._pay;copyText(`สรุปชั่วโมงไลฟ์ ${P.title}${P.pe&&P.pe!=='all'?' · '+(EMP[P.pe]||'ยังไม่ระบุประเภท'):''}\n`+P.ids.map(id=>`${M(id).name}${empOf(id)?' ['+EMP[empOf(id)]+']':''}: ${fmtHM(P.rows[id].tot)} (${P.rows[id].n} Slot${P.rows[id].short?` · ไม่ครบ ${P.rows[id].short}`:''})`).join('\n')+`\nรวม ${fmtHM(P.ids.reduce((a,id)=>a+P.rows[id].tot,0))}`)},
-  csvPay:()=>{const P=S._pay;let t='\ufeffชื่อ,ประเภท,'+P.cols.map(c=>c.from===c.to?c.from:`${c.from} ถึง ${c.to}`).join(',')+',รวมชั่วโมง,Slot\n';
+  copyPay:()=>{const P=S._pay;copyText(`สรุปชั่วโมงไลฟ์ ${P.title}${P.pe&&P.pe!=='all'?' · '+(EMP[P.pe]||'ยังไม่ระบุ'):''}\n`+P.ids.map(id=>`${M(id).name}${empOf(id)?' ['+EMP[empOf(id)]+']':''}: ${fmtHM(P.rows[id].tot)} (${P.rows[id].n} Slot${P.rows[id].short?` · ไม่ครบ ${P.rows[id].short}`:''})`).join('\n')+`\nรวม ${fmtHM(P.ids.reduce((a,id)=>a+P.rows[id].tot,0))}`)},
+  csvPay:()=>{const P=S._pay;let t='\ufeffชื่อ,พนักงาน,'+P.cols.map(c=>c.from===c.to?c.from:`${c.from} ถึง ${c.to}`).join(',')+',รวมชั่วโมง,Slot\n';
     P.ids.forEach(id=>t+=`"${M(id).name}",${EMP[empOf(id)]||''},${P.rows[id].cols.map(fmtH).join(',')},${fmtH(P.rows[id].tot)},${P.rows[id].n}\n`);
     if(P.shorts?.length){t+=`\nSlot ที่ไลฟ์ไม่ครบ\nชื่อ,วันที่,เวลา,ห้อง,ชั่วโมงจริง,เหตุผล,บันทึกโดย\n`;P.shorts.forEach(([k,v])=>{const p=parseSid(k);t+=`"${M(v.who).name}",${p.d},${C().slots[p.s]},${p.r},${fmtH(hrsOf(v))},"${(v.actReason||'').replace(/"/g,'""')}","${(v.actBy||'').replace(/"/g,'""')}"\n`})}
     t+='\nรายละเอียดรายคิว\nวันที่,เวลา,ห้อง,ชื่อ,สถานะ\n';Object.values(S.d.slots).filter(v=>v.date>=P.from&&v.date<=P.to).sort((a,b)=>(a.date+a.slot+a.room).localeCompare(b.date+b.slot+b.room)).forEach(v=>t+=`${v.date},${C().slots[v.slot]},${v.room},"${whoName(v)}",${STATUS[v.status]}\n`);
@@ -2574,7 +2574,7 @@ document.addEventListener('change',async e=>{const t=e.target;
   if(t.dataset.perm!==undefined)return saveCfg({perms:{...C().perms,[t.dataset.perm]:t.checked}},`${t.checked?'เปิด':'ปิด'}สิทธิ์: ${PERM_INFO.find(x=>x[0]===t.dataset.perm)[2]}`);
   if(t.dataset.permnum)return saveCfg({perms:{...C().perms,[t.dataset.permnum]:+t.value||0}},`ตั้งยกเลิกล่วงหน้า ${t.value} ชม.`);
   if(t.dataset.cfgnum){const v=+t.value;if(!(v>0))return render();return saveCfg({[t.dataset.cfgnum]:t.dataset.cfgnum==='rooms'?Math.min(12,Math.round(v)):v},`ตั้ง ${t.dataset.cfgnum} = ${v}`)}
-  if(t.dataset.memp!==undefined){const v=t.value||null;write([['patch','members',t.dataset.memp,{emp:v}]],`ตั้งประเภท ${M(t.dataset.memp).name} เป็น ${v?EMP[v]:'ไม่ระบุ'}`);return}
+  if(t.dataset.memp!==undefined){const v=t.value||null;write([['patch','members',t.dataset.memp,{emp:v}]],`ตั้ง ${M(t.dataset.memp).name} เป็นพนักงาน ${v?EMP[v]:'ไม่ระบุ'}`);return}
   if(t.dataset.mname){const n=t.value.trim();if(n)write([['patch','members',t.dataset.mname,{name:n}]],`เปลี่ยนชื่อเป็น ${n}`);return}
   if(t.dataset.memail!==undefined&&t.dataset.memail)return saveEmail(t.dataset.memail,t.value);
   if(t.dataset.mrole&&!isOwnerMe()&&t.value==='brand'){toast('ให้สิทธิ์แบรนด์ได้เฉพาะเจ้าของระบบ',1);render();return}
