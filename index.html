@@ -2187,7 +2187,7 @@ function actReqLine(v){const r=v?.actReq;if(!r)return'';return`<div class="why h
 function profileDlg(){
   const u=S.user||{},nm=myName(),em=(u.email||'').toLowerCase(),own=isOwnerMe(),m=S.meId?S.d.members[S.meId]:null;
   const c=S.meId?colOf(S.meId):{bg:'var(--navy)',fg:'#fff'},acc=S.d.access?.[em];
-  const role=own?'เจ้าของระบบ (แอดมินสูงสุด)':isBrand()?'แอดมินแบรนด์':'Live Streamer';
+  const role=own?'เจ้าของระบบ (แอดมินสูงสุด)':isBrand()?'KITBEEZ_ADMIN':'Live Streamer';
   const row=(i,l,v)=>`<div class="pfr"><span class="pfl">${ic(i,15)}${l}</span><span class="pfv">${v}</span></div>`;
   const P=C().perms||{};
   modal(`<div class="pfh"><div class="pfav" style="background:${c.bg};color:${c.fg}">${u.photo?`<img src="${esc(u.photo)}" alt="">`:S.meId?esc([...nm][0]||'?'):ic('tag',30)}</div><div><h3>${esc(nm)}</h3><span class="muted">${esc(em||'-')}</span></div></div>
