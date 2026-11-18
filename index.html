@@ -1972,7 +1972,7 @@ function adminsCard(){
   const cnt=n=>Object.values(S.d.requests||{}).filter(q=>q.decidedBy===n&&(q.status==='approved'||q.status==='rejected')).length;
   const mng=isOwnerMe();
   return`<div class="card" style="margin-top:16px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="margin:0">${icb('tag','navy')}ผู้ดูแลแบรนด์ (Admin) ${list.length} คน</h3><span class="muted" style="font-size:13px">แต่ละคน Login ด้วย Gmail ของตัวเอง · ทุกการอนุมัติจะบันทึกชื่อผู้กด</span>${mng?`<button class="btn primary sm" style="margin-left:auto" data-act="addAdmin">${ic('plus',14)}เพิ่ม Admin</button>`:''}</div>
-   ${mng?'':`<div class="warnbox" style="margin-top:10px">${ic('lock',18)}<div>เฉพาะ <b>เจ้าของระบบ</b> (${esc(OWNER_EMAILS.join(', '))}) เท่านั้นที่เพิ่ม แก้ไข ระงับ หรือลบ Admin ได้</div></div>`}
+
    <div class="arow h"><span></span><span>ชื่อที่แสดง</span><span>Gmail (ใช้ Login)</span><span>ดำเนินการแล้ว</span><span>สถานะ</span><span></span></div>
    ${list.map(([e,a])=>{const nm=a.name||e.split('@')[0],self=e===me,own=a.owner||owners.includes(e),ro=own||self||!mng;return`<div class="arow ${a.active===false?'off':''}"><div class="avatar">${esc([...nm].find(c=>!/[เแโใไ\s(]/.test(c))||'A')}</div>
     ${own?`<div><b>${esc(nm)}</b> <span class="own">เจ้าของ</span></div>`:ro?`<div><b>${esc(nm)}</b></div>`:`<input value="${esc(nm)}" data-aname="${esc(e)}" placeholder="ชื่อที่แสดง">`}
