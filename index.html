@@ -1004,6 +1004,20 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
 .hmsum{flex:1 1 100%;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px}
 .hmsum.ok{color:#0f7a43}.hmsum.bad{color:var(--bad)}
 .hpick button{font-weight:600;font-size:13.5px}
+
+/* แจ้งเตือนคิวที่แบรนด์เพิ่มให้ */
+.newbar{width:100%;display:flex;align-items:center;gap:12px;text-align:left;font:inherit;cursor:pointer;margin:0 0 14px;padding:12px 14px;border-radius:16px;border:1.5px solid #f7c873;background:linear-gradient(90deg,#fff6e3,#fffaf0);color:#7a4b00;box-shadow:0 6px 18px rgba(245,158,11,.12);transition:box-shadow .2s,transform .2s var(--ease)}
+.newbar:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(245,158,11,.18)}
+.newbar .bl{width:38px;height:38px;border-radius:12px;background:#f59e0b;color:#fff;display:grid;place-items:center;flex:none;animation:bellRing 2.4s ease-in-out infinite}
+.newbar .tx{flex:1;min-width:0}.newbar .tx b{display:block;font-size:15px;color:#6b3f00}.newbar .tx small{font-size:12.5px;color:#9a6a1c}
+@keyframes bellRing{0%,60%,100%{transform:rotate(0)}65%{transform:rotate(14deg)}72%{transform:rotate(-12deg)}79%{transform:rotate(8deg)}86%{transform:rotate(-5deg)}}
+@media(prefers-reduced-motion:reduce){.newbar .bl{animation:none}}
+.nalist{display:flex;flex-direction:column;gap:8px;max-height:52vh;overflow:auto;margin:4px 0}
+.na{display:flex;gap:12px;align-items:center;border:1px solid #e3ecf8;border-radius:14px;padding:10px 12px;background:#fff}
+.na .d{width:52px;flex:none;text-align:center;background:var(--sky);border-radius:12px;padding:5px 0;line-height:1.1}.na .d b{display:block;font-size:20px;color:var(--navy)}.na .d small{font-size:10.5px;color:var(--muted)}
+.na .i{display:flex;flex-direction:column;gap:2px;min-width:0}.na .i>b{display:flex;gap:6px;align-items:center;color:var(--navy);font-size:15px}
+.na .i span,.na .i small{display:flex;gap:5px;align-items:center;color:var(--muted);font-size:12.5px}.na .i small b{color:var(--text)}
+.newtag{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;color:#b45309;background:#fff1d6;border-radius:999px;padding:1px 8px}
 </style>
 </head>
 <body>
@@ -1034,7 +1048,7 @@ const P={
  settings:'M4 21v-7 M4 10V3 M12 21v-9 M12 8V3 M20 21v-5 M20 12V3 M1 14h6 M9 8h6 M17 16h6',
  logout:'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4 M16 17l5-5-5-5 M21 12H9',
  login:'M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4 M10 17l5-5-5-5 M15 12H3',
- search:'M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z M21 21l-4.35-4.35', left:'M15 18l-6-6 6-6', side:'M3 4h18v16H3z M9 4v16 M14 10l2 2-2 2', right:'M9 18l6-6-6-6', arrow:'M5 12h14 M12 5l7 7-7 7',
+ bell:'M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9 M13.73 21a2 2 0 0 1-3.46 0', search:'M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z M21 21l-4.35-4.35', left:'M15 18l-6-6 6-6', side:'M3 4h18v16H3z M9 4v16 M14 10l2 2-2 2', right:'M9 18l6-6-6-6', arrow:'M5 12h14 M12 5l7 7-7 7',
  check:'M20 6 9 17l-5-5', x:'M18 6 6 18 M6 6l12 12', plus:'M12 5v14 M5 12h14',
  checkc:'M22 11.08V12a10 10 0 1 1-5.93-9.14 M22 4 12 14.01l-3-3',
  clock:'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M12 6v6l4 2',
@@ -1168,6 +1182,7 @@ const fmtHM=h=>{const[a,b]=hm(h);return a&&b?`${a} ชม. ${b} นาที`:b?
 const fmtHMc=h=>{const[a,b]=hm(h);return a&&b?`${a}ชม.${b}น.`:b?`${b}น.`:`${a}ชม.`};
 const fmtHMs=h=>{const[a,b]=hm(h);return b?`${a}:${String(b).padStart(2,'0')}`:String(a)};
 const fmtH=h=>{h=Math.round(h*100)/100;return Number.isInteger(h)?String(h):h.toFixed(h*10%1?2:1).replace(/0$/,'')};
+const newAdds=()=>S.meId&&!isBrand()?Object.entries(S.d.slots||{}).filter(([,v])=>v.who===S.meId&&v.seen===false).sort(([a],[b])=>a.localeCompare(b)):[];
 const canHrs=v=>!!v&&!isTrial(v)&&COUNTED.includes(v.status)&&(isBrand()||(v.who===S.meId&&C().perms.reportHours!==false&&v.date<=TODAY));
 const ROOMS=()=>[...Array(C().rooms)].map((_,i)=>i+1);
 const isOpen=d=>C().openDays.includes(dow(d));
@@ -1308,7 +1323,7 @@ async function write(ops,logText){
    ===================================================================== */
 function tabs(){
   const t=[{id:'book',i:'ticket',l:'จองคิว'},{id:'week',i:'calweek',l:'ตาราง'}];
-  if(S.meId)t.push({id:'mine',i:'queue',l:'คิวของฉัน'});
+  if(S.meId)t.push({id:'mine',i:'queue',l:'คิวของฉัน',b:newAdds().length});
   if(S.meId&&!isBrand())t.push({id:'track',i:'inbox',l:'ติดตามคำขอ',b:Object.values(S.d.requests||{}).filter(q=>q.who===S.meId&&q.status==='pending').length});
   if(isBrand()||C().perms.seePay)t.push({id:'pay',i:'clock',l:'สรุปชั่วโมง'});
   if(isBrand()){t.push({id:'req',i:'inbox',l:'อนุมัติ',b:Object.keys(reqs()||{}).length+Object.values(S.d.requests||{}).filter(q=>q.status==='withdrawn'&&!q.ack).length});t.push({id:'set',i:'settings',l:'ตั้งค่า'})}
@@ -1339,7 +1354,9 @@ function render(){
   const main=$('#main');const views={book:vBook,week:vWeek,mine:vMine,track:vTrack,pay:vPay,req:vReq,set:vSet};
   main.classList.remove('wide');
   const y=window.scrollY;const wrowX=$('#wrow')?.scrollLeft,keep=S._keepRow;
-  main.innerHTML=views[S.view]();
+  const NA=newAdds();
+  main.innerHTML=(NA.length&&(S.view==='book'||S.view==='mine')?`<button class="newbar" data-act="newAdds"><span class="bl">${ic('bell',18)}</span><span class="tx"><b>แบรนด์เพิ่มคิวให้คุณ ${NA.length} Slot</b><small>${esc([...new Set(NA.map(([,v])=>v.addedBy||v.by).filter(Boolean))].join(', '))} · แตะเพื่อดูรายละเอียด</small></span>${ic('right',18)}</button>`:'')+views[S.view]();
+  if(NA.length&&!S._newShown&&!$('#dlg').open){S._newShown=true;setTimeout(()=>{if(!$('#dlg').open)newAddsDlg()},500)}
   if(S.lastView!==S.view){main.classList.remove('enter');void main.offsetWidth;main.classList.add('enter');S.lastView=S.view}else{main.classList.remove('enter');window.scrollTo(0,y)}
   const wr=$('#wrow');if(wr){wr.style.scrollBehavior='auto';if(keep&&wrowX!=null)wr.scrollLeft=wrowX;else{const t=$('.wday.tdy')||$('.wday:not(.off)');if(t)wr.scrollLeft=t.offsetLeft-4}wr.style.scrollBehavior=''}
   S._keepRow=true;
@@ -1552,7 +1569,7 @@ function vMine(){
     h+=`<details class="wk" open style="--i:${wi}"><summary class="wkh">${ic('right',16,'chev')}${icb('calendar','',16)}<div><b>${label}</b> <span class="muted">${fmtRange(ws,add(ws,6))}</span></div>${ws===ws0?'<span class="tag">ตอนนี้</span>':''}<span class="r"><span class="pill room">${ic('clock',12)}${fmtHM(cnt)}</span><span class="pill ok">${ic('ticket',12)}${items.length} Slot</span></span></summary>`;
     Object.keys(byW[ws]).sort().forEach(d=>{
       h+=`<div class="drow ${d===TODAY?'tdy':''}"><div class="dbad"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></div><div class="dslots">${byW[ws][d].map(([k,v],j)=>{const p=parseSid(k),past=isPast(p.d,p.s);
-        return`<button class="sc st-${v.status} ${past?'past':''}" style="animation-delay:${j*40}ms" data-act="ticket" data-k="${k}"><span class="sci">${ic(slotIcon(p.s),16)}</span><b>${C().slots[p.s]}</b><span class="rm">${ic('door',13)}ห้อง ${p.r}${v.moveTo?` ${ic('arrow',12)} ${esc(moveTxt(v).replace(' → ',''))}`:''}</span>${isShort(v)?`<span class="hb" title="${esc(v.actReason||'')}">${ic('hour',11)}${fmtHM(hrsOf(v))} จาก ${C().hours} ชม.</span>`:''}<span class="stx" title="${STATUS[v.status]}">${ic(SIC[v.status],15)}${v.status!=='ok'?`&nbsp;${stLabel(v)}`:''}</span></button>`}).join('')}</div></div>`});
+        return`<button class="sc st-${v.status} ${past?'past':''}" style="animation-delay:${j*40}ms" data-act="ticket" data-k="${k}"><span class="sci">${ic(slotIcon(p.s),16)}</span><b>${C().slots[p.s]}</b><span class="rm">${ic('door',13)}ห้อง ${p.r}${v.moveTo?` ${ic('arrow',12)} ${esc(moveTxt(v).replace(' → ',''))}`:''}</span>${v.seen===false?`<span class="newtag">${ic('bell',11)}ใหม่ · ${esc(v.addedBy||v.by||'แบรนด์')}</span>`:''}${isShort(v)?`<span class="hb" title=""${esc(v.actReason||'')}">${ic('hour',11)}${fmtHM(hrsOf(v))} จาก ${C().hours} ชม.</span>`:''}<span class="stx" title="${STATUS[v.status]}">${ic(SIC[v.status],15)}${v.status!=='ok'?`&nbsp;${stLabel(v)}`:''}</span></button>`}).join('')}</div></div>`});
     h+='</details>';
   });
   return h;
@@ -1925,6 +1942,14 @@ function ticketDlg(k){
     if(a==='withdraw'){if(await write([['patch','slots',k,{status:'ok',reason:null,moveTo:null,reqAt:null,reqId:null}],...reqOp(v,WD())],`ถอนคำขอ ${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}`)){closeM();toast('ถอนคำขอแล้ว คิวกลับเป็นปกติ')}}
   });
 }
+function newAddsDlg(){
+  const L=newAdds();if(!L.length)return;
+  modal(`<div class="mhead">${icb('bell','warn')}<div><h3>แบรนด์เพิ่มคิวให้คุณ ${L.length} Slot</h3><span class="muted">ตรวจสอบวัน เวลา และห้อง แล้วกดรับทราบ</span></div></div>
+   <div class="nalist">${L.map(([k,v])=>{const p=parseSid(k);return`<div class="na"><div class="d"><small>${DOW_S[dow(p.d)]}</small><b>${dnum(p.d)}</b><small>${MON_S[D(p.d).getUTCMonth()]}</small></div><div class="i"><b>${ic(slotIcon(p.s),15)}${C().slots[p.s]}</b><span>${ic('door',13)}ห้อง ${p.r}${v.status!=='ok'?` · ${STATUS[v.status]}`:''}</span><small>${ic('user',12)}เพิ่มโดย <b>${esc(v.addedBy||v.by||'แบรนด์')}</b>${v.addedAt?' · '+timeAgo(v.addedAt):''}</small></div></div>`}).join('')}</div>
+   <div class="mact"><button class="btn primary" data-d="ack">${ic('check',16)}รับทราบ</button><button class="btn" data-d="mine">${ic('queue',16)}ดูในคิวของฉัน</button><button class="btn ghost" data-d="close">ไว้ทีหลัง</button></div>`,
+  async a=>{if(a==='close')return closeM();
+    if(await write(L.map(([k])=>['patch','slots',k,{seen:true,seenAt:Date.now()}]),`รับทราบคิวที่แบรนด์เพิ่มให้ ${L.length} Slot`)){closeM();toast('รับทราบแล้ว');if(a==='mine'){S.view='mine';S.mineFilter='up';render()}}});
+}
 function hrsLine(v){return isShort(v)?`<div class="why hrs">${ic('hour',15)}<div><b>ไลฟ์จริง ${fmtHM(hrsOf(v))} จาก ${C().hours} ชม.</b>${v.actReason?` · ${esc(v.actReason)}`:''}${v.actBy?`<small>บันทึกโดย ${esc(v.actBy)}${v.actAt?' · '+timeAgo(v.actAt):''}</small>`:''}</div></div>`:''}
 function hoursDlg(k,back){
   const v=S.d.slots[k];if(!canHrs(v))return toast('แก้ชั่วโมงของรอบนี้ไม่ได้',1);
@@ -2023,7 +2048,7 @@ function adminDlg(k){
     if(a==='trial')return trialDlg([k],()=>adminDlg(k));
     if(a.startsWith('mv:')){if(await moveSlot(k,+a.slice(3),override))closeM();return}
     if(a.startsWith('set:')){const id=a.slice(4);if(busy.has(id)){toast(`${M(id).name} มีคิวห้องอื่นเวลานี้อยู่แล้ว`,1);return}
-      if(await write([['set','slots',k,{date:p.d,room:p.r,slot:p.s,who:id,status:'ok',at:Date.now(),by:myName()}],...override],`ใส่ ${M(id).name} ${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}`)){closeM();toast('บันทึกแล้ว')}}
+      if(await write([['set','slots',k,{date:p.d,room:p.r,slot:p.s,who:id,status:'ok',at:Date.now(),by:myName(),seen:false,addedBy:myName(),addedAt:Date.now()}],...override],`ใส่ ${M(id).name} ${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}`)){closeM();toast('บันทึกแล้ว')}}
   });
 }
 async function moveSlot(k,room,extra=[]){
@@ -2130,7 +2155,7 @@ async function doAssign(id){
   if(id===TRIAL)return trialDlg([...S.sel].sort().filter(k=>!S.d.slots[k]));
   const ops=[],skip=[];
   for(const k of [...S.sel].sort()){const p=parseSid(k);if(S.d.slots[k]||ROOMS().some(r=>slotOf(p.d,r,p.s)?.who===id)||ops.some(o=>o[3].date===p.d&&o[3].slot===p.s)){skip.push(k);continue}
-    ops.push(['set','slots',k,{date:p.d,room:p.r,slot:p.s,who:id,status:'ok',at:Date.now(),by:myName()}])}
+    ops.push(['set','slots',k,{date:p.d,room:p.r,slot:p.s,who:id,status:'ok',at:Date.now(),by:myName(),seen:false,addedBy:myName(),addedAt:Date.now()}])}
   if(ops.length&&await write(ops,`ใส่ ${M(id).name} ${ops.length} Slot`)){S.sel.clear();render();toast(`ใส่ ${M(id).name} ${ops.length} Slot แล้ว${skip.length?` · ข้าม ${skip.length} (ชนเวลา/ไม่ว่าง)`:''}`)}
   else if(!ops.length)toast('ใส่ไม่ได้: ชนเวลาหรือช่องไม่ว่าง',1);
 }
@@ -2164,6 +2189,7 @@ async function saveEmail(id,email){
   if(await write(ops,`ตั้ง Gmail ของ ${M(id).name}: ${email||'(ลบ)'}`))toast('บันทึก Gmail แล้ว');
 }
 const acts={
+  newAdds:()=>newAddsDlg(),
   hrs:b=>hoursDlg(b.dataset.k),
   side:()=>{const sh=$('#shell');const off=sh.classList.toggle('nos');try{localStorage.setItem('kbz-side',off?'off':'on')}catch(e){}},
   view:b=>{S.view=b.dataset.v;S.sel.clear();S._keepRow=false;S._wkInit=false;render();window.scrollTo({top:0,behavior:'smooth'})},
