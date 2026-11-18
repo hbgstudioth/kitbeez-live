@@ -1018,6 +1018,10 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
 .na .i{display:flex;flex-direction:column;gap:2px;min-width:0}.na .i>b{display:flex;gap:6px;align-items:center;color:var(--navy);font-size:15px}
 .na .i span,.na .i small{display:flex;gap:5px;align-items:center;color:var(--muted);font-size:12.5px}.na .i small b{color:var(--text)}
 .newtag{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;color:#b45309;background:#fff1d6;border-radius:999px;padding:1px 8px}
+
+.hmbox input{font:inherit;font-size:22px;font-weight:700;color:var(--navy);width:92px;padding:8px 10px;border:1.5px solid var(--line);border-radius:12px;background:#fff;text-align:center}
+.hmbox input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,111,235,.15)}
+.hmhint{flex:1 1 100%;font-size:12px;color:var(--muted);margin-top:-2px}
 </style>
 </head>
 <body>
@@ -1961,8 +1965,9 @@ function hoursDlg(k,back){
   const tot=()=>hh==null?null:hh*60+(mm||0);
   modal(`<div class="mhead">${icb('hour','warn')}<div><h3>ชั่วโมงไลฟ์จริง</h3><span class="muted">ใช้เมื่อไลฟ์ไม่ครบ ${H} ชั่วโมง · ระบบจะนับเวลาตามนี้ในหน้าสรุป</span></div></div>${miniTicket(k,v)}
    <div class="sec"><b>${ic('clock',14)}ไลฟ์ไปนานเท่าไร</b>
-    <div class="hmbox"><label><select id="hh"><option value="">–</option>${[...Array(H).keys()].map(x=>`<option value="${x}" ${hh===x?'selected':''}>${x}</option>`).join('')}</select><span>ชั่วโมง</span></label>
-    <label><select id="mm">${[...Array(12).keys()].map(x=>x*5).map(x=>`<option value="${x}" ${mm===x?'selected':''}>${String(x).padStart(2,'0')}</option>`).join('')}</select><span>นาที</span></label>
+    <div class="hmbox"><label><input id="hh" type="number" inputmode="numeric" min="0" max="${H-1}" step="1" list="hhl" placeholder="0" value="${hh??''}" autocomplete="off"><datalist id="hhl">${[...Array(H).keys()].map(x=>`<option value="${x}">`).join('')}</datalist><span>ชั่วโมง</span></label>
+    <label><input id="mm" type="number" inputmode="numeric" min="0" max="59" step="1" list="mml" placeholder="00" value="${mm??''}" autocomplete="off"><datalist id="mml">${[...Array(60).keys()].map(x=>`<option value="${x}">`).join('')}</datalist><span>นาที</span></label>
+    <div class="hmhint">พิมพ์ตัวเลขได้เลย หรือแตะช่องเพื่อเลือกจากรายการ · ชั่วโมง 0–${H-1} · นาที 0–59</div>
     <div class="hmsum" id="hmsum"></div></div>
     <div class="hpick"><span class="muted" style="font-size:12.5px;width:100%">หรือแตะเลือกเร็ว</span>${quick.map(m=>`<button data-d="q:${m}" class="${tot()===m?'on':''}">${lab(m)}</button>`).join('')}</div></div>
    <div class="sec"><b>${ic('msg',14)}เหตุผล</b><div class="rsn">${SH_REASONS.map(([r,i])=>`<button data-d="r:${esc(r)}" class="${pick===r?'on':''}">${ic(i,14)}${esc(r)}</button>`).join('')}</div>
@@ -1975,7 +1980,8 @@ function hoursDlg(k,back){
     const t=`${M(v.who).name} ${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}`;
     if(a==='full'){if(await write([['patch','slots',k,{act:null,actReason:null,actBy:myName(),actAt:Date.now()}]],`ตั้งชั่วโมงกลับเป็นเต็ม ${H} ชม. · ${t}`)){closeM();toast('นับเต็ม '+H+' ชม. แล้ว')}return}
     if(a==='save'){const m=tot();
-      if(m==null){toast('เลือกจำนวนชั่วโมงที่ไลฟ์จริงก่อน',1);$('#hh').focus();return}
+      if(m==null){toast('ใส่ชั่วโมงหรือนาทีที่ไลฟ์จริงก่อน',1);$('#hh').focus();return}
+      if(!Number.isInteger(hh)||!Number.isInteger(mm)||hh<0||mm<0||mm>59){toast('ชั่วโมงและนาทีต้องเป็นจำนวนเต็ม · นาที 0–59',1);return}
       if(m>=H*60){toast(`ต้องน้อยกว่า ${H} ชั่วโมง (ถ้าไลฟ์ครบไม่ต้องบันทึก)`,1);return}
       const val=Math.round(m/60*10000)/10000;
       const reason=[pick,$('#hwhy').value.trim()].filter(Boolean).join(' · ');
@@ -1985,10 +1991,11 @@ function hoursDlg(k,back){
   function sync(){const m=tot(),el=$('#hmsum');
     document.querySelectorAll('.hpick button').forEach(x=>x.classList.toggle('on',x.dataset.d==='q:'+m));
     if(m==null){el.className='hmsum';el.innerHTML='เลือกชั่วโมงและนาที';return}
-    const over=m>=H*60;el.className='hmsum '+(over?'bad':'ok');
+    const bad=hh<0||hh>=H||mm<0||mm>59||!Number.isInteger(hh)||!Number.isInteger(mm),over=m>=H*60;el.className='hmsum '+(over||bad?'bad':'ok');
+    if(bad){el.innerHTML=`${ic('alert',14)}ชั่วโมงใส่ได้ 0–${H-1} · นาทีใส่ได้ 0–59`;return}
     el.innerHTML=over?`${ic('alert',14)}ต้องน้อยกว่า ${H} ชั่วโมง`:`${ic('check',14)}ไลฟ์จริง <b>${m?fmtHM(m/60):'0 นาที'}</b> · ขาดไป ${fmtHM(H-m/60)}`}
-  $('#hh').onchange=e=>{hh=e.target.value===''?null:+e.target.value;if(hh!=null&&mm==null)mm=0;sync()};
-  $('#mm').onchange=e=>{mm=+e.target.value;if(hh==null){hh=0;$('#hh').value=0}sync()};
+  const rd=()=>{const a=$('#hh').value.trim(),b=$('#mm').value.trim();hh=a===''&&b===''?null:(a===''?0:+a);mm=b===''?0:+b;sync()};
+  $('#hh').oninput=rd;$('#mm').oninput=rd;
   sync();
 }
 function cancelForm(k){
