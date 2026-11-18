@@ -1552,7 +1552,7 @@ function render(){
   if(on){if(prevRect){ink.style.transition='none';ink.style.left=prevRect.l+'px';ink.style.width=prevRect.w+'px';void ink.offsetWidth;ink.style.transition=''}
     requestAnimationFrame(()=>{ink.style.left=on.offsetLeft+'px';ink.style.width=on.offsetWidth+'px'})}
   const nm=myName();
-  $('#user').innerHTML=`<button class="ubtn" data-act="profile" title="ข้อมูลของฉัน"><div class="avatar" style="background:${c.bg};color:${c.fg}">${u.photo?`<img src="${esc(u.photo)}" alt="">`:(S.meId?esc(nm[0]):ic('tag',17))}</div><div class="uname"><b>${esc(nm)}</b><span class="role ${isBrand()?'brand':''}">${ic(isBrand()?'tag':'mic',11)}${ROLE_L[S.role]}</span></div></button><button class="btn icon ghost" data-act="logout" title="ออกจากระบบ">${ic('logout',18)}</button>`;
+  $('#user').innerHTML=`<button class="ubtn" data-act="profile" title="ข้อมูลของฉัน"><div class="avatar" style="background:${c.bg};color:${c.fg}">${u.photo?`<img src="${esc(u.photo)}" alt="">`:(S.meId?esc(nm[0]):ic('tag',17))}</div><div class="uname"><b>${esc(nm)}</b><span class="role ${isBrand()?'brand':''}">${ic(isBrand()?'tag':'mic',11)}${isBrand()?'KITBEEZ_ADMIN':ROLE_L[S.role]}</span></div></button><button class="btn icon ghost" data-act="logout" title="ออกจากระบบ">${ic('logout',18)}</button>`;
   $('#demo').innerHTML=S.store.demo?`<div class="demo">${ic('flask',16)} <b>โหมดทดลอง</b> ข้อมูลเก็บในเครื่องนี้เท่านั้น · <button class="link" data-act="guide">วิธีเปิดใช้ Login Gmail ให้ทุกคนใช้ร่วมกัน</button></div>`:'';
   const main=$('#main');const views={book:vBook,week:vWeek,mine:vMine,track:vTrack,pay:vPay,req:vReq,set:vSet};
   main.classList.remove('wide');
