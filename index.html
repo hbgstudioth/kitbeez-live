@@ -947,6 +947,15 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
   main{max-width:calc(1180px + var(--sw));padding-left:calc(20px + var(--sw));transition:padding-left .35s var(--ease),max-width .35s var(--ease)}
   .cart{left:calc(50% + var(--sw)/2);transition:transform .5s var(--ease),left .35s var(--ease)}
 }
+
+/* ป้าย LIVE สีแดง + กำลังไลฟ์ */
+.brand .lv,.logo-card .lv{position:relative;display:inline-flex;align-items:center;gap:5px;background:#e5232f;color:#fff;animation:liveRing 1.8s ease-out infinite}
+.brand .lv::before,.logo-card .lv::before{content:'';width:6px;height:6px;border-radius:50%;background:#fff;flex:none;animation:liveDot 1.2s ease-in-out infinite}
+@keyframes liveRing{0%{box-shadow:0 0 0 0 rgba(229,35,47,.55)}70%{box-shadow:0 0 0 7px rgba(229,35,47,0)}100%{box-shadow:0 0 0 0 rgba(229,35,47,0)}}
+@keyframes liveDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.7)}}
+@media(prefers-reduced-motion:reduce){.brand .lv,.logo-card .lv,.brand .lv::before,.logo-card .lv::before{animation:none}}
+/* การ์ดจองคิว: เอาเส้นโค้งสีฟ้าเหนือวันที่ออก */
+.screen{border-top:0;box-shadow:none;border-radius:0;padding-top:0;margin-bottom:16px;letter-spacing:.5px;font-size:15px;font-weight:600;color:var(--navy)}
 </style>
 </head>
 <body>
