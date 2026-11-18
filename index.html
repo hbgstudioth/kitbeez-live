@@ -1036,6 +1036,26 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
 .rqwho{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:3px 10px 3px 4px;cursor:pointer;font:inherit;color:var(--muted)}
 .rqfsum{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}.rqfsum b{color:var(--navy)}
 @media(max-width:600px){.rqfrow .lb{min-width:0;width:100%}.rqf .seg.sm{width:100%;display:flex}.rqf .seg.sm button{flex:1;padding:6px 2px;font-size:12px;min-width:0}.rqdates{width:100%}.rqdates .inp{flex:1;min-width:0}}
+
+/* ตั้งค่า: ห้องปิดประจำ = ไฟสถานะเขียว/แดงแบบนุ่ม */
+.rcc{transition:background-color .3s ease,border-color .3s ease,color .3s ease,transform .2s var(--ease),box-shadow .3s ease}
+.rcc small{display:inline-flex;align-items:center;gap:5px}
+.rcc small::before{content:'';width:8px;height:8px;border-radius:50%;flex:none}
+.daychips button.rcc.on,.rcc.on{background:#effbf4;border-color:#b9e6cb;color:#0f6b3a}.daychips .rcc.on small,.rcc.on small{color:#15803d}
+.rcc.on small::before{background:#22c55e;animation:lampG 2.6s ease-in-out infinite}
+.daychips button.rcc.all,.rcc.all{background:#fff2f2;border-color:#f7c6c8;color:#b42318}.rcc.all small{color:#d92d20}
+.rcc.all small::before{background:#ef4444;animation:lampR 2.6s ease-in-out infinite}
+.rcc.some small::before{background:#f59e0b;animation:lampA 2.6s ease-in-out infinite}
+.rcc.on:hover{box-shadow:0 4px 12px rgba(34,197,94,.18)}.rcc.all:hover{box-shadow:0 4px 12px rgba(239,68,68,.16)}
+.daychips button.rcc.some{background:#fff8e6;border-color:#f8d98a;color:#9a6200}
+@keyframes lampG{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.45);opacity:1}50%{box-shadow:0 0 0 5px rgba(34,197,94,0);opacity:.75}}
+@keyframes lampR{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.45);opacity:1}50%{box-shadow:0 0 0 5px rgba(239,68,68,0);opacity:.75}}
+@keyframes lampA{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.45);opacity:1}50%{box-shadow:0 0 0 5px rgba(245,158,11,0);opacity:.75}}
+@media(prefers-reduced-motion:reduce){.rcc small::before{animation:none!important}}
+/* ตั้งค่า: วันที่มีไลฟ์ เปิด = เขียว ปิด = ขาว */
+.daychips button[data-act=toggleDay]{background:#fff;border-color:#dfe7f2;color:var(--muted);transition:background-color .3s ease,border-color .3s ease,color .3s ease,box-shadow .3s ease,transform .2s var(--ease)}
+.daychips button[data-act=toggleDay]:hover{transform:translateY(-1px);border-color:#9fd8b4}
+.daychips button[data-act=toggleDay].on{background:#22a85a;border-color:#22a85a;color:#fff;box-shadow:0 4px 12px rgba(34,168,90,.25)}
 </style>
 </head>
 <body>
