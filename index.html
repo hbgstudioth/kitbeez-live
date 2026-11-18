@@ -1091,6 +1091,8 @@ const isClosed=(d,r,s)=>isClosedWeekly(d,r,s)||!!dayClosure(d,r,s);
 const isClosedRoom=(d,r)=>closedOfDow(dow(d),r)==='all';
 const canBookDate=d=>isBrand()||!C().bookLimit||(C().bookDates||[]).includes(d);
 const slotOf=(d,r,s)=>S.d.slots[sid(d,r,s)];
+const isOwnerEmail=e=>OWNER_EMAILS.map(x=>x.toLowerCase()).includes((e||'').toLowerCase());
+const ownerOnly=()=>{if(isOwnerMe())return true;toast('เฉพาะเจ้าของระบบเท่านั้นที่จัดการ Admin ได้',1);render();return false};
 const isOwnerMe=()=>!!S.user&&OWNER_EMAILS.map(e=>e.toLowerCase()).includes((S.user.email||'').toLowerCase());
 const TRIAL='__trial',TRIAL_COL={bg:'#fff1cc',fg:'#7a4b00'};
 const M=id=>id===TRIAL?{name:'ทดลองไลฟ์',c:-2}:(S.d.members[id]||{name:'(ลบแล้ว)',c:-1});
@@ -1552,7 +1554,7 @@ function vSet(){
    <div class="mrow h"><span>ลำดับ</span><span>${ic('palette',13)}</span><span>ชื่อ</span><span>Gmail (ใช้ Login)</span><span>สิทธิ์</span><span>สถานะ</span></div>
    ${ms.map((m,mi)=>{const cc=colOf(m.id),em=emailOf(m.id),role=S.d.access[em]?.role||'streamer';return`<div class="mrow ${m.active===false?'off':''}" data-mid="${m.id}"><div class="ord"><span class="grip" data-grip="${m.id}" title="ลากเพื่อย้าย">${ic('grip',16)}</span><span class="no">${mi+1}</span><span class="ab"><button data-act="mvUp" data-id="${m.id}" ${mi?'':'disabled'} title="เลื่อนขึ้น">${ic('up',13)}</button><button data-act="mvDown" data-id="${m.id}" ${mi<ms.length-1?'':'disabled'} title="เลื่อนลง">${ic('down',13)}</button></span></div><button class="swatch" style="background:${cc.bg};color:${cc.fg}" data-act="pickColor" data-id="${m.id}" title="ตั้งสีพื้นหลังชื่อ">${ic('palette',14)}</button>
     <input value="${esc(m.name)}" data-mname="${m.id}"><input type="email" value="${esc(em)}" placeholder="name@gmail.com" data-memail="${m.id}">
-    <select data-mrole="${m.id}" ${em?'':'disabled'}><option value="streamer" ${role==='streamer'?'selected':''}>Live Streamer</option><option value="brand" ${role==='brand'?'selected':''}>แบรนด์</option></select>
+    <select data-mrole="${m.id}" ${em&&(isOwnerMe()||role!=='brand')?'':'disabled'} title="${isOwnerMe()?'':'ให้สิทธิ์แบรนด์ได้เฉพาะเจ้าของระบบ'}"><option value="streamer" ${role==='streamer'?'selected':''}>Live Streamer</option><option value="brand" ${role==='brand'?'selected':''} ${isOwnerMe()?'':'disabled'}>แบรนด์</option></select>
     <label class="mst ${m.active!==false?'on':'off'}" title="${m.active!==false?'ปิดสวิตช์ = ระงับการใช้งาน (เช่น ลาออก)':'เปิดสวิตช์ = กลับมาใช้งาน'}"><span class="sw"><input type="checkbox" data-mactive="${m.id}" ${m.active!==false?'checked':''}><span></span></span><b>${m.active!==false?'ใช้งาน':'ระงับแล้ว'}</b></label>${m.active===false?`<button class="btn icon ghost mdel" data-act="delMember" data-id="${m.id}" title="ลบออกจากรายชื่อ">${ic('trash',16)}</button>`:''}</div>`}).join('')}
    <div class="warnbox" style="margin-top:12px;background:#f3f8ff;border-color:#cfe0fb;color:#1d3f74">${ic('info',18)}<div><b>สวิตช์ “สถานะ”</b> ใช้เมื่อคนนั้นลาออกหรือพักงาน · ปิด = <b>ระงับการใช้งาน</b>: Login เข้าระบบไม่ได้ และไม่แสดงในรายชื่อให้เลือก/จอง · <b>ประวัติคิวและชั่วโมงเดิมยังอยู่ครบ</b> · เปิดกลับได้ทุกเมื่อ<br>คนที่ระงับแล้วจะมีปุ่ม ${ic('trash',13)} <b>ลบออกจากรายชื่อ</b> (ลบแล้วกู้คืนได้ด้านล่าง)</div></div>
    ${(()=>{const del=Object.entries(S.d.members).filter(([,m])=>m.deleted);return del.length?`<details class="deld"><summary>${ic('trash',14)}สมาชิกที่ลบแล้ว (${del.length})</summary>${del.map(([id,m])=>`<div class="win">${nameChip(id)}<div class="grow"><small>ลบโดย ${esc(m.deletedBy||'')} · ${m.deletedAt?timeAgo(m.deletedAt):''}</small></div><button class="btn sm" data-act="restoreMember" data-id="${id}">${ic('history',14)}กู้คืน</button></div>`).join('')}</details>`:''})()}
@@ -1623,14 +1625,16 @@ function adminsCard(){
   const list=Object.entries(S.d.access).filter(([e,a])=>a.role==='brand'&&!a.memberId).sort(([,a],[,b])=>(b.active!==false)-(a.active!==false)||(a.addedAt||0)-(b.addedAt||0));
   owners.forEach(o=>{if(!list.some(([e])=>e===o))list.unshift([o,{role:'brand',name:'เจ้าของระบบ',active:true,owner:true}])});
   const cnt=n=>Object.values(S.d.requests||{}).filter(q=>q.decidedBy===n&&(q.status==='approved'||q.status==='rejected')).length;
-  return`<div class="card" style="margin-top:16px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="margin:0">${icb('tag','navy')}ผู้ดูแลแบรนด์ (Admin) ${list.length} คน</h3><span class="muted" style="font-size:13px">แต่ละคน Login ด้วย Gmail ของตัวเอง · ทุกการอนุมัติจะบันทึกชื่อผู้กด</span><button class="btn primary sm" style="margin-left:auto" data-act="addAdmin">${ic('plus',14)}เพิ่ม Admin</button></div>
+  const mng=isOwnerMe();
+  return`<div class="card" style="margin-top:16px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="margin:0">${icb('tag','navy')}ผู้ดูแลแบรนด์ (Admin) ${list.length} คน</h3><span class="muted" style="font-size:13px">แต่ละคน Login ด้วย Gmail ของตัวเอง · ทุกการอนุมัติจะบันทึกชื่อผู้กด</span>${mng?`<button class="btn primary sm" style="margin-left:auto" data-act="addAdmin">${ic('plus',14)}เพิ่ม Admin</button>`:''}</div>
+   ${mng?'':`<div class="warnbox" style="margin-top:10px">${ic('lock',18)}<div>เฉพาะ <b>เจ้าของระบบ</b> (${esc(OWNER_EMAILS.join(', '))}) เท่านั้นที่เพิ่ม แก้ไข ระงับ หรือลบ Admin ได้</div></div>`}
    <div class="arow h"><span></span><span>ชื่อที่แสดง</span><span>Gmail (ใช้ Login)</span><span>ดำเนินการแล้ว</span><span>สถานะ</span><span></span></div>
-   ${list.map(([e,a])=>{const nm=a.name||e.split('@')[0],self=e===me,own=a.owner||owners.includes(e);return`<div class="arow ${a.active===false?'off':''}"><div class="avatar">${esc([...nm].find(c=>!/[เแโใไ\s(]/.test(c))||'A')}</div>
-    ${own?`<div><b>${esc(nm)}</b> <span class="own">เจ้าของ</span></div>`:`<input value="${esc(nm)}" data-aname="${esc(e)}" placeholder="ชื่อที่แสดง">`}
+   ${list.map(([e,a])=>{const nm=a.name||e.split('@')[0],self=e===me,own=a.owner||owners.includes(e),ro=own||self||!mng;return`<div class="arow ${a.active===false?'off':''}"><div class="avatar">${esc([...nm].find(c=>!/[เแโใไ\s(]/.test(c))||'A')}</div>
+    ${own?`<div><b>${esc(nm)}</b> <span class="own">เจ้าของ</span></div>`:ro?`<div><b>${esc(nm)}</b></div>`:`<input value="${esc(nm)}" data-aname="${esc(e)}" placeholder="ชื่อที่แสดง">`}
     <div class="em">${ic('mail',13)} ${esc(e)}${self?' <b style="color:var(--blue)">(คุณ)</b>':''}</div>
     <div class="st2">${ic('checkc',13)}อนุมัติ/ไม่อนุมัติ ${cnt(nm)} รายการ</div>
-    ${own||self?`<span class="st2">${ic('lock',13)}${own?'เปลี่ยนไม่ได้':'บัญชีของคุณ'}</span>`:`<label class="mst ${a.active!==false?'on':'off'}"><span class="sw"><input type="checkbox" data-aactive="${esc(e)}" ${a.active!==false?'checked':''}><span></span></span><b>${a.active!==false?'ใช้งาน':'ระงับแล้ว'}</b></label>`}
-    ${own||self?'<span></span>':`<button class="btn icon ghost" data-act="delAdmin" data-e="${esc(e)}" title="ลบ Admin" style="color:var(--bad)">${ic('trash',16)}</button>`}</div>`}).join('')}
+    ${ro?`<span class="st2">${ic('lock',13)}${own?'เจ้าของสูงสุด':self?'บัญชีของคุณ':a.active!==false?'ใช้งาน':'ระงับแล้ว'}</span>`:`<label class="mst ${a.active!==false?'on':'off'}"><span class="sw"><input type="checkbox" data-aactive="${esc(e)}" ${a.active!==false?'checked':''}><span></span></span><b>${a.active!==false?'ใช้งาน':'ระงับแล้ว'}</b></label>`}
+    ${ro?'<span></span>':`<button class="btn icon ghost" data-act="delAdmin" data-e="${esc(e)}" title="ลบ Admin" style="color:var(--bad)">${ic('trash',16)}</button>`}</div>`}).join('')}
   </div>`;
 }
 function addAdminDlg(){
@@ -1640,7 +1644,7 @@ function addAdminDlg(){
    <div class="mact"><button class="btn primary" data-d="ok">${ic('plus',16)}เพิ่ม Admin</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,
   async a=>{if(a==='close')return closeM();const n=$('#anm').value.trim(),e=$('#aem').value.trim().toLowerCase();
     if(!n)return toast('ใส่ชื่อก่อน',1);if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e))return toast('รูปแบบอีเมลไม่ถูกต้อง',1);
-    if(S.d.access[e])return toast('อีเมลนี้มีในระบบแล้ว',1);
+    if(isOwnerEmail(e))return toast('อีเมลนี้เป็นเจ้าของระบบอยู่แล้ว',1);if(S.d.access[e])return toast('อีเมลนี้มีในระบบแล้ว',1);
     if(await write([['set','access',e,{memberId:null,role:'brand',active:true,name:n,addedBy:myName(),addedAt:Date.now()}]],`เพิ่ม Admin ${n} (${e})`)){closeM();toast(`เพิ่ม ${n} เป็น Admin แล้ว`)}});
   setTimeout(()=>$('#anm')?.focus(),50);
 }
@@ -1998,6 +2002,8 @@ async function saveCfg(patch,log){await write([['set','config','main',{...C(),..
 async function saveEmail(id,email){
   email=email.trim().toLowerCase();const old=Object.entries(S.d.access).find(([,a])=>a.memberId===id)?.[0];
   if(email===old)return;if(email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){toast('รูปแบบอีเมลไม่ถูกต้อง',1);render();return}
+  if(email&&isOwnerEmail(email)){toast('อีเมลนี้เป็นเจ้าของระบบ ใช้กับสมาชิกไม่ได้',1);render();return}
+  if(old&&S.d.access[old]?.role==='brand'&&!isOwnerMe()){toast('สมาชิกที่มีสิทธิ์แบรนด์ แก้ Gmail ได้เฉพาะเจ้าของระบบ',1);render();return}
   if(email&&S.d.access[email]&&S.d.access[email].memberId!==id){toast('อีเมลนี้ถูกใช้กับคนอื่นแล้ว',1);render();return}
   const ops=[];const prev=old?S.d.access[old]:null;if(old)ops.push(['del','access',old]);
   if(email)ops.push(['set','access',email,{memberId:id,role:prev?.role||'streamer',active:M(id).active!==false}]);
@@ -2038,8 +2044,8 @@ const acts={
   ackReq:b=>write([['patch','requests',b.dataset.id,{ack:true,ackBy:myName(),ackAt:Date.now()}]]),
   ackAll:()=>{const ops=Object.entries(S.d.requests).filter(([,q])=>q.status==='withdrawn'&&!q.ack).map(([id])=>['patch','requests',id,{ack:true,ackBy:myName(),ackAt:Date.now()}]);if(ops.length)write(ops,`รับทราบคำขอที่ถูกยกเลิก ${ops.length} รายการ`).then(()=>toast('รับทราบทั้งหมดแล้ว'))},
   rejectReq:b=>rejectDlg(b.dataset.k),
-  addAdmin:()=>addAdminDlg(),
-  delAdmin:b=>{const e=b.dataset.e,a=S.d.access[e];modal(`<div class="mhead">${icb('trash','bad')}<div><h3>ลบ Admin ${esc(a?.name||e)}?</h3><span class="muted">${esc(e)} จะ Login ไม่ได้อีก · ประวัติการอนุมัติเดิมยังอยู่</span></div></div><div class="mact"><button class="btn bad" data-d="y">${ic('trash',16)}ลบ Admin</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,async x=>{if(x!=='y')return closeM();if(await write([['del','access',e]],`ลบ Admin ${a?.name||e}`)){closeM();toast('ลบ Admin แล้ว')}})},
+  addAdmin:()=>{if(ownerOnly())addAdminDlg()},
+  delAdmin:b=>{if(!ownerOnly())return;const e=b.dataset.e;if(isOwnerEmail(e))return toast('ลบเจ้าของระบบไม่ได้',1);const a=S.d.access[e];modal(`<div class="mhead">${icb('trash','bad')}<div><h3>ลบ Admin ${esc(a?.name||e)}?</h3><span class="muted">${esc(e)} จะ Login ไม่ได้อีก · ประวัติการอนุมัติเดิมยังอยู่</span></div></div><div class="mact"><button class="btn bad" data-d="y">${ic('trash',16)}ลบ Admin</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,async x=>{if(x!=='y')return closeM();if(await write([['del','access',e]],`ลบ Admin ${a?.name||e}`)){closeM();toast('ลบ Admin แล้ว')}})},
   roomClose:b=>roomCloseDlg(+b.dataset.d,+b.dataset.r),
   addWin:()=>{const f=$('#wFrom').value,t=$('#wTo').value,l=$('#wLabel').value.trim();if(!f||!t)return toast('เลือกวันที่ให้ครบ',1);if(t<f)return toast('วันที่ “ถึง” ต้องไม่ก่อน “ตั้งแต่”',1);
     saveWindows([...(C().bookWindows||[]),{id:'w'+Date.now().toString(36),from:f,to:t,label:l}],`เปิดรอบจอง ${l?l+' ':''}${fmtRange(f,t)}`).then(()=>toast('เพิ่มรอบเปิดจองแล้ว'))},
@@ -2107,12 +2113,14 @@ document.addEventListener('change',async e=>{const t=e.target;
   if(t.dataset.cfgnum){const v=+t.value;if(!(v>0))return render();return saveCfg({[t.dataset.cfgnum]:t.dataset.cfgnum==='rooms'?Math.min(12,Math.round(v)):v},`ตั้ง ${t.dataset.cfgnum} = ${v}`)}
   if(t.dataset.mname){const n=t.value.trim();if(n)write([['patch','members',t.dataset.mname,{name:n}]],`เปลี่ยนชื่อเป็น ${n}`);return}
   if(t.dataset.memail!==undefined&&t.dataset.memail)return saveEmail(t.dataset.memail,t.value);
+  if(t.dataset.mrole&&!isOwnerMe()&&t.value==='brand'){toast('ให้สิทธิ์แบรนด์ได้เฉพาะเจ้าของระบบ',1);render();return}
   if(t.dataset.mrole){const em=Object.entries(S.d.access).find(([,a])=>a.memberId===t.dataset.mrole)?.[0];if(em)write([['patch','access',em,{role:t.value}]],`ตั้งสิทธิ์ ${M(t.dataset.mrole).name} = ${ROLE_L[t.value]}`);return}
   if(t.dataset.mactive)return toggleActive(t.dataset.mactive,t.checked);
   if(t.dataset.focus){S.focus=t.value||null;render();return}
   if(t.dataset.booklimit){if(t.checked&&!(C().bookWindows||[]).length)toast('อย่าลืมเพิ่มรอบเปิดจองด้านล่าง ไม่งั้น Live Streamer จะจองไม่ได้เลย',1);return saveCfg({bookLimit:t.checked},`${t.checked?'เปิด':'ปิด'}การจำกัดวันจอง`)}
   if(t.dataset.logby){S.logBy=t.value||null;render();return}
   if(t.dataset.reqby){S.reqBy=t.value||null;render();return}
+  if((t.dataset.aname||t.dataset.aactive)&&(!ownerOnly()||isOwnerEmail(t.dataset.aname||t.dataset.aactive)))return;
   if(t.dataset.aname){const n=t.value.trim();if(n)write([['patch','access',t.dataset.aname,{name:n}]],`เปลี่ยนชื่อ Admin เป็น ${n}`);return}
   if(t.dataset.aactive){write([['patch','access',t.dataset.aactive,{active:t.checked}]],`${t.checked?'เปิด':'ระงับ'}การใช้งาน Admin ${S.d.access[t.dataset.aactive]?.name||t.dataset.aactive}`);return}
 });
