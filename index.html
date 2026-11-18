@@ -926,6 +926,27 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
   .seat.x:not(.dc) .ic,.seat.x:not(.dc) small{display:none}
   .seat.x:not(.dc)::before{content:'ปิด';font-size:11px;font-weight:400}
 }
+
+/* ===== PC: เมนูด้านซ้าย ซ่อน/แสดงได้ ===== */
+.sidetg{display:none}
+@media(min-width:861px){
+  #shell{--sw:228px;--toph:66px}
+  #shell.nos{--sw:0px}
+  .sidetg{display:inline-flex;margin-right:-6px}
+  .top .user{margin-left:auto}
+  .top{backdrop-filter:none;background:#fff}
+  .tabs{position:fixed;top:var(--toph);left:0;bottom:0;width:228px;z-index:25;margin:0;flex-direction:column;align-items:stretch;gap:4px;background:#fff;border-radius:0;border-right:1px solid var(--line);padding:18px 14px 20px;overflow-y:auto;transition:transform .35s var(--ease),box-shadow .35s;box-shadow:4px 0 24px rgba(16,60,140,.04)}
+  #shell.nos .tabs{transform:translateX(-102%);box-shadow:none}
+  .tabs button{width:100%;justify-content:flex-start;gap:12px;padding:11px 14px;border-radius:12px;font-size:15px;transition:background-color .2s,color .2s}
+  .tabs button:hover{background:#f4f8ff}
+  .tabs button.on{background:var(--sky);color:var(--blue)}
+  .tabs button.on::before{content:'';position:absolute;left:-14px;top:9px;bottom:9px;width:4px;border-radius:0 4px 4px 0;background:var(--blue)}
+  .tabs .ink{display:none}
+  .tabs em{margin-left:auto}
+  #demo{padding-left:var(--sw);transition:padding-left .35s var(--ease)}
+  main{max-width:calc(1180px + var(--sw));padding-left:calc(20px + var(--sw));transition:padding-left .35s var(--ease),max-width .35s var(--ease)}
+  .cart{left:calc(50% + var(--sw)/2);transition:transform .5s var(--ease),left .35s var(--ease)}
+}
 </style>
 </head>
 <body>
@@ -956,7 +977,7 @@ const P={
  settings:'M4 21v-7 M4 10V3 M12 21v-9 M12 8V3 M20 21v-5 M20 12V3 M1 14h6 M9 8h6 M17 16h6',
  logout:'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4 M16 17l5-5-5-5 M21 12H9',
  login:'M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4 M10 17l5-5-5-5 M15 12H3',
- left:'M15 18l-6-6 6-6', right:'M9 18l6-6-6-6', arrow:'M5 12h14 M12 5l7 7-7 7',
+ left:'M15 18l-6-6 6-6', side:'M3 4h18v16H3z M9 4v16 M14 10l2 2-2 2', right:'M9 18l6-6-6-6', arrow:'M5 12h14 M12 5l7 7-7 7',
  check:'M20 6 9 17l-5-5', x:'M18 6 6 18 M6 6l12 12', plus:'M12 5v14 M5 12h14',
  checkc:'M22 11.08V12a10 10 0 1 1-5.93-9.14 M22 4 12 14.01l-3-3',
  clock:'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z M12 6v6l4 2',
@@ -1237,9 +1258,11 @@ function render(){
   const anchor=S.view==='pay'?(S.payMode==='week'?S.payStart:S.payMonth+'-15'):(S.view==='mine'||S.view==='track'?TODAY:(S.view==='week'&&S.calMode==='month'?S.calMonth+'-15':S.date));
   S.store.setRange(add(monday(anchor),-14),add(monday(anchor),40));
   const u=S.user,c=S.meId?colOf(S.meId):{bg:'var(--sky)',fg:'var(--blue)'};
-  if(!$('#shell')){app.innerHTML=`<div id="shell"><header class="top"><div class="brand"><div class="bw"><div><img class="wordmark" src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv">LIVE</span></div><small>ระบบจองคิวไลฟ์</small></div></div><nav class="tabs" id="tabs"></nav><div class="user" id="user"></div></header><div id="demo"></div><main id="main"></main></div>`}
+  if(!$('#shell')){let so=false;try{so=localStorage.getItem('kbz-side')==='off'}catch(e){}
+    app.innerHTML=`<div id="shell" class="${so?'nos':''}"><header class="top"><button class="btn icon ghost sidetg" data-act="side" title="ซ่อน / แสดงเมนู" aria-label="ซ่อน / แสดงเมนู">${ic('side',20)}</button><div class="brand"><div class="bw"><div><img class="wordmark" src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv">LIVE</span></div><small>ระบบจองคิวไลฟ์</small></div></div><nav class="tabs" id="tabs"></nav><div class="user" id="user"></div></header><div id="demo"></div><main id="main"></main></div>`;
+    const fh=()=>{const t=$('.top');if(t)$('#shell').style.setProperty('--toph',t.offsetHeight+'px')};fh();addEventListener('resize',fh)}
   const prevOn=$('#tabs .on');const prevRect=prevOn?{l:prevOn.offsetLeft,w:prevOn.offsetWidth}:null;
-  $('#tabs').innerHTML=T.map(t=>`<button data-act="view" data-v="${t.id}" class="${S.view===t.id?'on':''}">${ic(t.i,19)}<span>${t.l}</span>${t.b?`<em>${t.b}</em>`:''}</button>`).join('')+'<b class="ink"></b>';
+  $('#tabs').innerHTML=T.map(t=>`<button data-act="view" data-v="${t.id}" class="${S.view===t.id?'on':''}" title="${t.l}">${ic(t.i,19)}<span>${t.l}</span>${t.b?`<em>${t.b}</em>`:''}</button>`).join('')+'<b class="ink"></b>';
   const ink=$('#tabs .ink'),on=$('#tabs .on');
   if(on){if(prevRect){ink.style.transition='none';ink.style.left=prevRect.l+'px';ink.style.width=prevRect.w+'px';void ink.offsetWidth;ink.style.transition=''}
     requestAnimationFrame(()=>{ink.style.left=on.offsetLeft+'px';ink.style.width=on.offsetWidth+'px'})}
@@ -2010,6 +2033,7 @@ async function saveEmail(id,email){
   if(await write(ops,`ตั้ง Gmail ของ ${M(id).name}: ${email||'(ลบ)'}`))toast('บันทึก Gmail แล้ว');
 }
 const acts={
+  side:()=>{const sh=$('#shell');const off=sh.classList.toggle('nos');try{localStorage.setItem('kbz-side',off?'off':'on')}catch(e){}},
   view:b=>{S.view=b.dataset.v;S.sel.clear();S._keepRow=false;S._wkInit=false;render();window.scrollTo({top:0,behavior:'smooth'})},
   date:b=>{S.date=b.dataset.d;render()},
   goDate:b=>{S.date=b.dataset.d;S.view='book';render();window.scrollTo({top:0,behavior:'smooth'})},
