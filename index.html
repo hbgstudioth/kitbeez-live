@@ -945,7 +945,11 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
   .tabs em{margin-left:auto}
   #demo{padding-left:var(--sw);transition:padding-left .35s var(--ease)}
   main{max-width:calc(1180px + var(--sw));padding-left:calc(20px + var(--sw));transition:padding-left .35s var(--ease),max-width .35s var(--ease)}
-  .cart{left:calc(50% + var(--sw)/2);transition:transform .5s var(--ease),left .35s var(--ease)}
+  .cart{left:50%;transition:transform .5s var(--ease),left .35s var(--ease),opacity .3s}
+  body:has(#shell:not(.nos)) .cart{left:calc(50% + 114px)}
+  .cart{max-width:calc(100vw - 40px)}
+  body:has(#shell:not(.nos)) .cart{max-width:calc(100vw - 268px)}
+  body:has(.cart.show) main{padding-bottom:140px}
 }
 
 /* ป้าย LIVE สีแดง + กำลังไลฟ์ */
