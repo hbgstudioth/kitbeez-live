@@ -1189,6 +1189,11 @@ main.enter{animation:softIn .28s ease-out both}
 
 .rcc em{display:block;font-style:normal;font-size:10px;font-weight:600;opacity:.85;margin-top:1px;white-space:nowrap}
 .rgseg{display:flex;width:100%}.rgseg button{flex:1;justify-content:center}
+
+.prole.bad{background:#fee2e2;color:#b42318}
+.orph{border:1.5px solid #f8d98a;background:#fffcf3}
+.orow{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px dashed var(--line);flex-wrap:wrap}
+.orow .oi{flex:1;min-width:160px;line-height:1.3}.orow .oi b{display:block;font-size:14px;word-break:break-all}.orow .oi small{font-size:12px;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -1378,18 +1383,19 @@ const empOf=id=>S.d.members[id]?.emp||'';
 const empTag=id=>{const e=empOf(id);return e?`<span class="emptag ${e}">${EMP[e]}</span>`:''};
 const PRES_MS=150000,VIEW_L={book:'จองคิว',week:'ตาราง',mine:'คิวของฉัน',track:'ติดตามคำขอ',pay:'สรุปชั่วโมง',req:'อนุมัติ',set:'ตั้งค่า'};
 const presOn=p=>Date.now()-p.at<PRES_MS&&!p.out;
-function presAv(p){const c=p.memberId&&S.d.members[p.memberId]?colOf(p.memberId):{bg:'#0b2e6b',fg:'#fff'};return`<span class="pav" style="background:${c.bg};color:${c.fg}">${esc([...(p.name||p.email||'?')][0]||'?')}</span>`}
+function presAv(p){const mm=p.memberId&&S.d.members[p.memberId],c=mm&&!mm.deleted?colOf(p.memberId):p.role==='brand'?{bg:'#0b2e6b',fg:'#fff'}:{bg:'#fee2e2',fg:'#b42318'};const nm=mm&&!mm.deleted?mm.name:p.role==='brand'?p.name:p.email;return`<span class="pav" style="background:${c.bg};color:${c.fg}">${esc([...(nm||'?')][0].toUpperCase())}</span>`}
 const relT=t=>{const m=Math.round((Date.now()-t)/60000);return m<1?'เมื่อสักครู่':m<60?`${m} นาทีที่แล้ว`:`${Math.floor(m/60)} ชม.ที่แล้ว`};
 function presInner(){
   const P=Object.values(S.d.presence||{}).filter(p=>p&&p.at&&p.email!==(S.user?.email||'').toLowerCase()),on=P.filter(presOn).sort((a,b)=>b.at-a.at);
   const rec=P.filter(p=>!presOn(p)&&Date.now()-p.at<86400e3).sort((a,b)=>b.at-a.at);
-  const row=p=>`<div class="prow2 ${presOn(p)?'on':''}">${presAv(p)}<div class="pi"><b>${esc(p.name||p.email)}${p.role==='brand'?' <span class="prole">แอดมิน</span>':''}</b><small>${presOn(p)?`${ic(p.device==='mobile'?'phone':'grid',11)}${VIEW_L[p.view]||''}`:relT(p.at)}</small></div><i class="pdot"></i></div>`;
+  const orph=p=>p.role==='streamer'&&p.memberId&&(!S.d.members[p.memberId]||S.d.members[p.memberId].deleted);
+  const row=p=>`<div class="prow2 ${presOn(p)?'on':''}" title="${esc(p.email)}">${presAv(p)}<div class="pi"><b>${esc(orph(p)?p.email:(p.name||p.email))}${p.role==='brand'?' <span class="prole">แอดมิน</span>':''}${orph(p)?' <span class="prole bad">ไม่มีโปรไฟล์</span>':''}</b><small>${presOn(p)?`${ic(p.device==='mobile'?'phone':'grid',11)}${VIEW_L[p.view]||''}`:relT(p.at)}</small></div><i class="pdot"></i></div>`;
   return`<button class="phead" data-act="presToggle"><i class="pdot ${on.length?'live':''}"></i><span><b>ออนไลน์ ${on.length} คน</b>${on.length&&!S.presOpen?`<span class="pavs">${on.slice(0,6).map(presAv).join('')}${on.length>6?`<em>+${on.length-6}</em>`:''}</span>`:`<small>${on.length?'ใช้งานอยู่ตอนนี้':'ไม่มีใครใช้งานอยู่'}</small>`}</span>${ic(S.presOpen?'up':'down',14)}</button>
    ${S.presErr?`<div class="psec" style="color:var(--bad)">อ่านข้อมูลออนไลน์ไม่ได้ (${esc(S.presErr)}) · ตรวจ Rules</div>`:''}${S.presOpen?`<div class="plist">${on.length?on.map(row).join(''):''}${rec.length?`<div class="psec">ใช้งานใน 24 ชม.</div>${rec.slice(0,12).map(row).join('')}`:''}${!on.length&&!rec.length?'<div class="psec">ยังไม่มีข้อมูล</div>':''}</div>`:''}`;
 }
 function presWidget(){return isBrand()?`<div class="pres" id="pres">${presInner()}</div>`:''}
 function updatePres(){const el=document.getElementById('pres');if(el)el.innerHTML=presInner()}
-function beat(away){if(!S.user||!S.role||S.denied||!S.store?.presence)return;const em=(S.user.email||'').toLowerCase();if(!em||em.startsWith('('))return;
+function beat(away){if(!S.user||!S.role||S.denied||S.orphan||!S.store?.presence)return;const em=(S.user.email||'').toLowerCase();if(!em||em.startsWith('('))return;
   S.store.presence({email:em,name:myName(),role:S.role,memberId:S.meId||null,view:S.view,device:matchMedia('(pointer:coarse)').matches?'mobile':'desktop',at:Date.now(),out:!!away})}
 setInterval(()=>{if(document.visibilityState==='visible')beat()},45000);
 setInterval(updatePres,30000);
@@ -1543,6 +1549,8 @@ function render(){
   if(S.booting&&!S.store?.demo&&S.user){app.innerHTML=`<div class="login"><div class="lform" style="text-align:center;align-items:center">${icb('live','navy',26)}<p class="muted">กำลังโหลด…</p></div></div>`;renderCart();return}
   if(!S.user)return vLogin();
   if(S.denied)return vDenied();
+  S.orphan=!!(S.role==='streamer'&&S.meId&&Object.keys(S.d.members||{}).length&&(!S.d.members[S.meId]||S.d.members[S.meId].deleted));
+  if(S.orphan){$('#shell')?.remove();S.lastView=null;return vDenied()}
   if(!S.d.config.main&&!S.store.demo)return vSetupFirst();
   const T=tabs();if(!T.some(x=>x.id===S.view))S.view='book';
   const anchor=S.view==='pay'?(S.payMode==='week'?S.payStart:S.payMonth+'-15'):(S.view==='mine'||S.view==='track'?TODAY:(S.view==='week'&&S.calMode==='month'?S.calMonth+'-15':S.date));
@@ -1615,8 +1623,8 @@ function nameGrid(list,opt={}){
   return L.map((m,i)=>{const c=colOf(m.id),on=opt.sel===m.id,bz=opt.busy?.has(m.id);
     return`<button class="nc ${on?'on':''} ${bz?'bz':''}" data-d="${m.id}" style="--c:${c.bg};--cf:${c.fg};animation-delay:${Math.min(i,24)*12}ms"><span class="av">${esc([...m.name][0]||'?')}</span><span class="nm">${esc(m.name)}${bz?'<small>มีคิวเวลานี้แล้ว</small>':''}</span>${on?`<span class="ck">${ic('check',14)}</span>`:''}</button>`}).join('');
 }
-function pickNameDlg({title,sub,icon='users',sel,busy,trial,onPick,onTrial}){
-  const list=membersList();let q='';
+function pickNameDlg({title,sub,icon='users',sel,busy,trial,onPick,onTrial,only}){
+  const list=membersList().filter(m=>!only||only(m));let q='';
   modal(`<div class="mhead">${icb(icon)}<div><h3>${title}</h3><span class="muted">${sub||`Live Streamer ${list.length} คน`}</span></div></div>
    <label class="field nsearch">${ic('search',18)}<input id="nsearch" placeholder="พิมพ์ค้นหาชื่อ..." autocomplete="off"></label>
    ${trial?`<button class="nc trial" data-d="__trialpick">${icb('mic','warn',16)}<span class="nm">ทดลองไลฟ์<small>ใส่ชื่อคนมาทดลอง + โน้ต</small></span></button>`:''}
@@ -1637,7 +1645,7 @@ function assignPickDlg(){
 }
 function vDenied(){
   $('#app').innerHTML=`<div class="login"><div class="lwrap" style="grid-template-columns:1fr;max-width:460px"><div class="lform" style="text-align:center;align-items:center">${icb('lock','warn',28).replace('icb','icb" style="width:72px;height:72px;border-radius:22px')}
-  <h2>${S.suspended?'บัญชีนี้ถูกระงับการใช้งาน':'ยังไม่มีสิทธิ์เข้าใช้'}</h2><p class="muted">${S.suspended?'แบรนด์ระงับการใช้งานบัญชีนี้แล้ว (เช่น ลาออก) หากคิดว่าผิดพลาด กรุณาติดต่อแบรนด์':'อีเมลนี้ยังไม่ได้ลงทะเบียน ส่งอีเมลให้แบรนด์เพื่อเพิ่มชื่อคุณในระบบ'}</p>
+  <h2>${S.orphan?'บัญชีนี้ไม่มีโปรไฟล์ Live Streamer แล้ว':S.suspended?'บัญชีนี้ถูกระงับการใช้งาน':'ยังไม่มีสิทธิ์เข้าใช้'}</h2><p class="muted">${S.orphan?'รายชื่อที่อีเมลนี้ผูกไว้ถูกลบออกจากระบบแล้ว กรุณาติดต่อแบรนด์เพื่อผูกอีเมลกับรายชื่อใหม่':S.suspended?'แบรนด์ระงับการใช้งานบัญชีนี้แล้ว (เช่น ลาออก) หากคิดว่าผิดพลาด กรุณาติดต่อแบรนด์':'อีเมลนี้ยังไม่ได้ลงทะเบียน ส่งอีเมลให้แบรนด์เพื่อเพิ่มชื่อคุณในระบบ'}</p>
   <div class="mini-ticket" style="justify-content:center;width:100%">${ic('mail',18)}<b>${esc(S.user.email)}</b></div>
   <div class="mact" style="width:100%"><button class="btn primary" data-act="copyEmail">${ic('copy',16)}คัดลอกอีเมล</button><button class="btn" data-act="logout">${ic('logout',16)}ใช้บัญชีอื่น</button></div></div></div></div>`;
 }
@@ -1913,6 +1921,7 @@ function vSet(){
   </div>
   ${closuresCard()}
   ${windowsCard()}
+  ${orphanCard()}
   ${adminsCard()}
   <div class="card" style="margin-top:16px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="margin:0">${icb('users')}Live Streamer (${ms.length})</h3><span class="muted" style="font-size:13px">ลาก ${ic('grip',13)} หรือกด ${ic('up',13)}${ic('down',13)} เพื่อจัดลำดับ · ลำดับนี้ใช้ในหน้า Login และตอนเลือกใส่ชื่อ</span><button class="btn sm" data-act="sortAZ" title="เรียงตามชื่อ A–Z">${ic('list',14)}เรียง A–Z</button><button class="btn primary sm" style="margin-left:auto" data-act="addMember">${ic('plus',14)}เพิ่มคน</button></div>
    <div class="mrow h"><span>ลำดับ</span><span>${ic('palette',13)}</span><span>ชื่อ</span><span>พนักงาน</span><span>Gmail (ใช้ Login)</span><span>สิทธิ์</span><span>สถานะ</span></div>
@@ -1984,6 +1993,12 @@ async function moveSlotTo(k,to,extra=[]){
 }
 const byline=v=>{if(!v)return'';const a=[];if(v.approvedBy)a.push(`${ic('shield',12)}ยืนยันโดย <b>${esc(v.approvedBy)}</b> · ${timeAgo(v.approvedAt)}`);else if(v.by&&v.by!=='import'&&v.by!==v.who)a.push(`${ic('tag',12)}ใส่ชื่อโดย <b>${esc(v.by)}</b>${v.at?' · '+timeAgo(v.at):''}`);return a.length?`<div class="byline">${a.join(' · ')}</div>`:''};
 
+function orphanCard(){
+  const L=Object.entries(S.d.access||{}).filter(([e,a])=>a.memberId&&a.role!=='brand'&&(!S.d.members[a.memberId]||S.d.members[a.memberId].deleted));
+  if(!L.length)return'';
+  return`<div class="card orph" style="margin-top:16px"><h3 style="margin:0 0 4px">${icb('alert','warn')}อีเมลที่ไม่ได้ผูกกับใคร (${L.length})</h3><p class="muted" style="margin:0 0 10px;font-size:13px">รายชื่อที่อีเมลเหล่านี้ผูกไว้ถูกลบไปแล้ว จึงเข้าระบบไม่ได้ · ลบสิทธิ์ทิ้ง หรือผูกกับ Live Streamer ที่ยังไม่มีอีเมล</p>
+   ${L.map(([e,a])=>`<div class="orow"><span class="pav" style="background:#fee2e2;color:#b42318">${esc(e[0].toUpperCase())}</span><div class="oi"><b>${esc(e)}</b><small>เคยผูกกับ: ${S.d.members[a.memberId]?esc(S.d.members[a.memberId].name)+' (ลบแล้ว)':'รายชื่อที่ไม่มีในระบบ'}</small></div><button class="btn sm" data-act="orphBind" data-e="${esc(e)}">${ic('user',14)}ผูกกับรายชื่อ</button><button class="btn sm bad" data-act="orphDel" data-e="${esc(e)}">${ic('trash',14)}ลบสิทธิ์</button></div>`).join('')}</div>`;
+}
 function adminsCard(){
   const me=S.user?.email,owners=OWNER_EMAILS.map(e=>e.toLowerCase());
   const list=Object.entries(S.d.access).filter(([e,a])=>a.role==='brand'&&!a.memberId).sort(([,a],[,b])=>(b.active!==false)-(a.active!==false)||(a.addedAt||0)-(b.addedAt||0));
@@ -2471,6 +2486,10 @@ async function saveEmail(id,email){
   if(await write(ops,`ตั้ง Gmail ของ ${M(id).name}: ${email||'(ลบ)'}`))toast('บันทึก Gmail แล้ว');
 }
 const acts={
+  orphDel:b=>{const e=b.dataset.e;modal(`<div class="mhead">${icb('trash','bad')}<div><h3>ลบสิทธิ์เข้าระบบ?</h3><span class="muted">${esc(e)}</span></div></div><p class="muted">อีเมลนี้จะเข้าระบบไม่ได้อีก · ประวัติคิวเดิมยังอยู่</p><div class="mact"><button class="btn bad" data-d="go">${ic('trash',16)}ลบสิทธิ์</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,
+    async a=>{if(a!=='go')return closeM();if(await write([['del','access',e]],`ลบสิทธิ์อีเมลที่ไม่ได้ผูกกับใคร ${e}`)){closeM();toast('ลบสิทธิ์แล้ว')}})},
+  orphBind:b=>{const e=b.dataset.e,has=new Set(Object.values(S.d.access).map(a=>a.memberId).filter(Boolean));
+    pickNameDlg({title:'ผูกอีเมลกับรายชื่อ',sub:`${e} · แสดงเฉพาะคนที่ยังไม่มีอีเมล`,only:m=>!has.has(m.id),onPick:async id=>{if(await write([['patch','access',e,{memberId:id,role:'streamer',active:true}]],`ผูกอีเมล ${e} กับ ${M(id).name}`)){closeM();toast(`ผูกกับ ${M(id).name} แล้ว`)}}})},
   profile:()=>profileDlg(),
   presToggle:()=>{S.presOpen=!S.presOpen;updatePres()},
   payEmp:b=>{S.payEmp=b.dataset.e;render()},
