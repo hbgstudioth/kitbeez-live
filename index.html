@@ -1097,6 +1097,17 @@ main.enter{animation:softIn .28s ease-out both}
 .lvar{display:grid}
 .lvar>.lv1{grid-area:1/1;display:flex;flex-direction:column;gap:12px;visibility:hidden;opacity:0;transition:opacity .2s ease}
 .lvar>.lv1.on{visibility:visible;opacity:1}
+
+/* หน้าเข้าระบบ: 2 ปุ่ม */
+.lbtns{display:flex;flex-direction:column;gap:10px}
+.lbtns .gbtn .ic{width:18px;height:18px}
+.lbtns .gbtn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.lor{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px}.lor::before,.lor::after{content:'';flex:1;height:1px;background:var(--line)}
+.ggbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px 16px;border-radius:16px;border:1.5px solid var(--line);background:#fff;font:inherit;font-weight:600;font-size:15px;color:var(--text);cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .2s var(--ease)}
+.ggbtn:hover{border-color:#b9cbe6;box-shadow:0 6px 16px rgba(16,60,140,.08);transform:translateY(-1px)}
+.ggbtn .g{display:grid;place-items:center;width:22px;height:22px}.ggbtn .g svg{width:20px;height:20px}
+.lnote{height:18px;line-height:18px;text-align:center;font-size:12px;color:var(--muted);overflow:hidden}
+.field.bad{border-color:var(--bad)!important}
 </style>
 </head>
 <body>
@@ -1275,6 +1286,7 @@ const canBookDate=d=>isBrand()||!C().bookLimit||(C().bookDates||[]).includes(d);
 const slotOf=(d,r,s)=>S.d.slots[sid(d,r,s)];
 const isOwnerEmail=e=>OWNER_EMAILS.map(x=>x.toLowerCase()).includes((e||'').toLowerCase());
 const ownerOnly=()=>{if(isOwnerMe())return true;toast('เฉพาะเจ้าของระบบเท่านั้นที่จัดการ Admin ได้',1);render();return false};
+const okEmail=e=>/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test((e||'').trim());
 const isOwnerMe=()=>!!S.user&&OWNER_EMAILS.map(e=>e.toLowerCase()).includes((S.user.email||'').toLowerCase());
 const TRIAL='__trial',TRIAL_COL={bg:'#fff1cc',fg:'#7a4b00'};
 const M=id=>id===TRIAL?{name:'ทดลองไลฟ์',c:-2}:(S.d.members[id]||{name:'(ลบแล้ว)',c:-1});
@@ -1321,8 +1333,8 @@ function makeLocal(){
       const a=db.access[email];S.user={email,name:a?.memberId?db.members[a.memberId]?.name:'แบรนด์ (ทดลอง)'};
       S.suspended=!!(a&&a.active===false);S.adminName=a?.name||null;if(a&&a.active!==false){S.role=a.role;S.meId=a.memberId||null;S.denied=false;sessionStorage.setItem('kbz-demo-email',email)}else{S.role=null;S.meId=null;S.denied=true}
       cb()},
-    login(){
-      if(S.loginType==='brand')return this.loginEmail($('#lemail')?.value||'brand@demo.live');
+    login(mode){
+      if(S.loginType==='brand')return this.loginEmail(mode==='google'?'brand@demo.live':$('#lemail')?.value);
       const id=S.loginPick;if(!id)return toast('เลือกชื่อของคุณก่อน',1);
       const e=Object.keys(db.access).find(x=>db.access[x].memberId===id);
       if(!e){S.user={email:`(ยังไม่ได้ตั้ง Gmail ให้ ${db.members[id]?.name})`};S.denied=true;S.role=null;cb();return}
@@ -1376,8 +1388,8 @@ async function makeFirebase(cfg){
         },()=>{S.role=owners.includes(email)?'brand':null;S.denied=!S.role;S.booting=false;if(S.role)startData();cb()}));
       });
     },
-    async login(){
-      const hint=S.loginType==='brand'?($('#lemail')?.value||'').trim():'';
+    async login(mode){
+      const hint=mode!=='google'&&S.loginType==='brand'?($('#lemail')?.value||'').trim().toLowerCase():'';
       const prov=new A.GoogleAuthProvider();prov.setCustomParameters(hint?{login_hint:hint,prompt:'select_account'}:{prompt:'select_account'});
       try{await A.signInWithPopup(auth,prov)}
       catch(e){if(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment')return A.signInWithRedirect(auth,prov);
@@ -1468,8 +1480,12 @@ function vLogin(){
      <button type="button" class="acc ${t==='brand'?'on':''}" data-act="loginType" data-t="brand"><span class="ck">${ic('check',13)}</span>${icb('tag','navy')}<b>แบรนด์</b><small>จัดการตาราง · อนุมัติ · ตั้งค่า</small></button>
     </div>
     <div class="lvar"><div class="lv1 ${t==='streamer'?'on':''}" ${t==='streamer'?'':'aria-hidden="true"'}><span class="lbl">ชื่อของคุณ</span>
-     <button type="button" class="pickbtn ${pk?'has':''}" data-act="pickName">${pk?`<span class="avatar" style="background:${pc.bg};color:${pc.fg}">${esc(M(pk).name[0])}</span><span class="grow"><b>${esc(M(pk).name)}</b><small>แตะเพื่อเปลี่ยนชื่อ</small></span>`:`${icb('users')}<span class="grow"><b>เลือกชื่อของคุณ</b><small>แตะเพื่อเปิดรายชื่อ Live Streamer</small></span>`}${ic('right',18)}</button></div><div class="lv1 ${t==='brand'?'on':''}" ${t==='brand'?'':'aria-hidden="true"'}><span class="lbl">Gmail ของแบรนด์</span><label class="field">${ic('mail',18)}<input id="lemail" type="email" inputmode="email" autocomplete="email" placeholder="brand@gmail.com" value="${demo?'brand@demo.live':''}"></label>${demo?`<div class="adminchips">${Object.entries(S.d.access).filter(([,a])=>a.role==='brand'&&!a.memberId&&a.active!==false).map(([e,a])=>`<button type="button" data-act="fillEmail" data-e="${e}">${ic('tag',12)}${esc(a.name||e)}</button>`).join('')}</div>`:''}</div></div>
-    <button class="gbtn" type="submit" ${demo&&t==='streamer'&&!pk?'disabled':''}><span class="g">${GOOGLE}</span>${t==='streamer'&&pk?`เข้าสู่ระบบในชื่อ ${esc(M(pk).name)}`:'เข้าสู่ระบบ'}</button>
+     <button type="button" class="pickbtn ${pk?'has':''}" data-act="pickName">${pk?`<span class="avatar" style="background:${pc.bg};color:${pc.fg}">${esc(M(pk).name[0])}</span><span class="grow"><b>${esc(M(pk).name)}</b><small>แตะเพื่อเปลี่ยนชื่อ</small></span>`:`${icb('users')}<span class="grow"><b>เลือกชื่อของคุณ</b><small>แตะเพื่อเปิดรายชื่อ Live Streamer</small></span>`}${ic('right',18)}</button></div><div class="lv1 ${t==='brand'?'on':''}" ${t==='brand'?'':'aria-hidden="true"'}><span class="lbl">อีเมลของแบรนด์</span><label class="field">${ic('mail',18)}<input id="lemail" type="email" inputmode="email" autocomplete="email" placeholder="name@gmail.com หรืออีเมลบริษัท" value="${esc(S.lemail??(demo?'brand@demo.live':''))}"></label>${demo?`<div class="adminchips">${Object.entries(S.d.access).filter(([,a])=>a.role==='brand'&&!a.memberId&&a.active!==false).map(([e,a])=>`<button type="button" data-act="fillEmail" data-e="${e}">${ic('tag',12)}${esc(a.name||e)}</button>`).join('')}</div>`:''}</div></div>
+    ${(()=>{const ev=demo?'brand@demo.live':'',ok=t==='brand'?okEmail(S.lemail??ev):!!pk;
+     return`<div class="lbtns"><button class="gbtn" type="submit" id="lgo" ${ok?'':'disabled'}>${ic('login',18)}${t==='streamer'&&pk?`เข้าสู่ระบบในชื่อ ${esc(M(pk).name)}`:'เข้าสู่ระบบ'}</button>
+     <div class="lor"><span>หรือ</span></div>
+     <button type="button" class="ggbtn" data-act="loginGoogle"><span class="g">${GOOGLE}</span>Login ด้วย Google</button>
+     <small class="lnote" id="lnote">${t==='brand'?(ok?'':'กรอกอีเมลให้ถูกต้องก่อน แล้วกด “เข้าสู่ระบบ”'):(pk?'':'เลือกชื่อของคุณก่อน แล้วกด “เข้าสู่ระบบ”')}</small></div>`})()}
     <p class="hint">${ic('shield',15)}ไม่ต้องสมัครสมาชิก ไม่ต้องตั้งรหัสผ่าน · ยืนยันตัวตนด้วย Gmail ที่ Login ไว้ในเครื่องนี้ (ระบบไม่เก็บรหัสผ่าน)</p>
     ${demo?`<p class="hint">${ic('flask',15)}<span>โหมดทดลอง: กดเข้าสู่ระบบได้ทันทีโดยไม่ผ่าน Google · <button type="button" class="link" data-act="guide">วิธีเปิดใช้ Login Gmail จริง</button></span></p>`:''}
    </form></div><div class="lfoot">LIVE BOOKING SYSTEM<span>SOFTWARE ENGINEERING &amp; DEVELOPMENT</span></div></div>`;
@@ -2361,7 +2377,8 @@ const acts={
   approveAll:async b=>{const vis=new Set(S._reqVis||[]);const ks=Object.entries(reqs()).filter(([k,v])=>v.status===b.dataset.st&&vis.has(k)).map(([k])=>k);for(const k of ks)await approve(k);toast(`อนุมัติ ${ks.length} รายการ`)},
   note:b=>{const d=b.dataset.d;modal(`<div class="mhead">${icb('pin','warn')}<h3>โน้ตวัน${DOW_L[dow(d)]} ${dnum(d)} ${MON_S[D(d).getUTCMonth()]}</h3></div><input class="inp" id="noteIn" value="${esc(S.d.notes[d]?.text||'')}" placeholder="เช่น วันตัดยอด 2, แม่บ้านเข้าทำความสะอาด"><div class="mact"><button class="btn primary" data-d="save">${ic('save',16)}บันทึก</button><button class="btn" data-d="clear">${ic('trash',16)}ลบโน้ต</button><button class="btn ghost" data-d="close">ปิด</button></div>`,
     async a=>{if(a==='close')return closeM();const t=a==='save'?$('#noteIn').value.trim():'';await write([t?['set','notes',d,{text:t}]:['del','notes',d]],`โน้ต ${fmtD(d)}: ${t||'(ลบ)'}`);closeM()});setTimeout(()=>$('#noteIn')?.focus(),50)},
-  fillEmail:b=>{const i=$('#lemail');i.value=b.dataset.e;i.parentElement.animate([{transform:'scale(1)'},{transform:'scale(1.03)'},{transform:'scale(1)'}],{duration:300});i.focus()},
+  loginGoogle:()=>S.store.login('google'),
+  fillEmail:b=>{const i=$('#lemail');i.value=b.dataset.e;S.lemail=b.dataset.e;i.dispatchEvent(new Event('input',{bubbles:true}));i.parentElement.animate([{transform:'scale(1)'},{transform:'scale(1.03)'},{transform:'scale(1)'}],{duration:300});i.focus()},
   openExt:()=>{const u=new URL(location.href);u.searchParams.set('openExternalBrowser','1');location.href=u.toString()},
   logout:()=>{S.sel.clear();S.store.logout();$('#shell')?.remove();S.lastView=null},
   guide:guideDlg,
@@ -2393,7 +2410,12 @@ const acts={
     download(`สรุปชั่วโมง-${P.from}_${P.to}.csv`,t,'text/csv')},
 };
 document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.closest('dialog'))return;const f=acts[b.dataset.act];if(f){if(!(b.tagName==='INPUT'&&b.type==='checkbox'))e.preventDefault();f(b)}});
-document.addEventListener('submit',e=>{if(e.target.id==='loginForm'){e.preventDefault();S.store.login()}});
+document.addEventListener('submit',e=>{if(e.target.id==='loginForm'){e.preventDefault();
+  if(S.loginType==='brand'&&!okEmail($('#lemail')?.value)){toast('กรอกอีเมลให้ถูกต้องก่อน',1);$('#lemail')?.focus();return}
+  if(S.loginType!=='brand'&&!S.loginPick){toast('เลือกชื่อของคุณก่อน',1);return}
+  S.store.login('email')}});
+document.addEventListener('input',e=>{if(e.target.id!=='lemail')return;S.lemail=e.target.value;const ok=okEmail(e.target.value),b=$('#lgo'),n=$('#lnote');
+  if(b)b.disabled=!ok;if(n)n.textContent=ok?'':'กรอกอีเมลให้ถูกต้องก่อน แล้วกด “เข้าสู่ระบบ”';e.target.closest('.field')?.classList.toggle('bad',!!e.target.value&&!ok)});
 document.addEventListener('change',async e=>{const t=e.target;
   if(t.dataset.perm!==undefined)return saveCfg({perms:{...C().perms,[t.dataset.perm]:t.checked}},`${t.checked?'เปิด':'ปิด'}สิทธิ์: ${PERM_INFO.find(x=>x[0]===t.dataset.perm)[2]}`);
   if(t.dataset.permnum)return saveCfg({perms:{...C().perms,[t.dataset.permnum]:+t.value||0}},`ตั้งยกเลิกล่วงหน้า ${t.value} ชม.`);
