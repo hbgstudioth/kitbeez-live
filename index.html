@@ -1147,6 +1147,28 @@ main.enter{animation:softIn .28s ease-out both}
   .mrow>.mdel{grid-column:4!important;grid-row:3!important;justify-self:end!important}
   .empf button{flex:1;min-width:0;padding:7px 10px}
 }
+
+/* ใครใช้งานอยู่ (เมนูซ้าย · แบรนด์) */
+.pres{display:none}
+@media(min-width:861px){.tabs .pres{display:block;margin-top:auto;border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+ .tabs .pres+.sidefoot{margin-top:12px}}
+.phead{width:100%;display:flex;align-items:center;gap:9px;padding:10px 12px;border:0;background:none;font:inherit;cursor:pointer;text-align:left;color:var(--navy)}
+.phead>span:not(.pavs){flex:1;min-width:0;line-height:1.25}.phead b{display:block;font-size:13.5px}.phead small{font-size:11px;color:var(--muted)}
+.pdot{width:9px;height:9px;border-radius:50%;background:#cbd5e1;flex:none}
+.pdot.live,.prow2.on .pdot{background:#22c55e;animation:lampG 2.6s ease-in-out infinite}
+.pavs{display:flex}.pavs .pav{margin-left:-6px;box-shadow:0 0 0 2px #fff}
+.pav{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;font-size:11.5px;font-weight:700;flex:none}
+.plist{border-top:1px solid var(--line);max-height:300px;overflow:auto;padding:4px 6px 6px}
+.psec{font-size:10.5px;color:var(--muted);padding:8px 6px 2px;letter-spacing:.3px}
+.prow2{display:flex;align-items:center;gap:8px;padding:6px;border-radius:10px}.prow2:not(.on){opacity:.7}
+.prow2 .pi{flex:1;min-width:0;line-height:1.25}.prow2 .pi b{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.prow2 .pi small{display:flex;align-items:center;gap:3px;font-size:11px;color:var(--muted)}
+.prole{font-size:9.5px;font-weight:700;background:#e6efff;color:#1d4ed8;border-radius:999px;padding:0 5px;vertical-align:middle}
+.prow2 .pdot{width:7px;height:7px}
+
+.pavs .pav:first-child{margin-left:0}.phead>span:not(.pavs) b,.phead>span:not(.pavs) small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.phead .pavs{display:flex;margin-top:4px}.phead .pavs .pav{width:20px;height:20px;font-size:10px;border-radius:7px}.phead .pavs em{font-style:normal;font-size:11px;color:var(--muted);margin-left:4px;align-self:center}
 </style>
 </head>
 <body>
@@ -1332,6 +1354,25 @@ const okEmail=e=>/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test((e||'').trim());
 const EMP={fulltime:'Full-Time',freelance:'Freelance'};
 const empOf=id=>S.d.members[id]?.emp||'';
 const empTag=id=>{const e=empOf(id);return e?`<span class="emptag ${e}">${EMP[e]}</span>`:''};
+const PRES_MS=150000,VIEW_L={book:'จองคิว',week:'ตาราง',mine:'คิวของฉัน',track:'ติดตามคำขอ',pay:'สรุปชั่วโมง',req:'อนุมัติ',set:'ตั้งค่า'};
+const presOn=p=>Date.now()-p.at<PRES_MS&&!p.away;
+function presAv(p){const c=p.memberId&&S.d.members[p.memberId]?colOf(p.memberId):{bg:'#0b2e6b',fg:'#fff'};return`<span class="pav" style="background:${c.bg};color:${c.fg}">${esc([...(p.name||p.email||'?')][0]||'?')}</span>`}
+const relT=t=>{const m=Math.round((Date.now()-t)/60000);return m<1?'เมื่อสักครู่':m<60?`${m} นาทีที่แล้ว`:`${Math.floor(m/60)} ชม.ที่แล้ว`};
+function presInner(){
+  const P=Object.values(S.d.presence||{}).filter(p=>p&&p.at&&p.email!==(S.user?.email||'').toLowerCase()),on=P.filter(presOn).sort((a,b)=>b.at-a.at);
+  const rec=P.filter(p=>!presOn(p)&&Date.now()-p.at<86400e3).sort((a,b)=>b.at-a.at);
+  const row=p=>`<div class="prow2 ${presOn(p)?'on':''}">${presAv(p)}<div class="pi"><b>${esc(p.name||p.email)}${p.role==='brand'?' <span class="prole">แอดมิน</span>':''}</b><small>${presOn(p)?`${ic(p.device==='mobile'?'phone':'grid',11)}${VIEW_L[p.view]||''}`:relT(p.at)}</small></div><i class="pdot"></i></div>`;
+  return`<button class="phead" data-act="presToggle"><i class="pdot ${on.length?'live':''}"></i><span><b>ออนไลน์ ${on.length} คน</b>${on.length&&!S.presOpen?`<span class="pavs">${on.slice(0,6).map(presAv).join('')}${on.length>6?`<em>+${on.length-6}</em>`:''}</span>`:`<small>${on.length?'ใช้งานอยู่ตอนนี้':'ไม่มีใครใช้งานอยู่'}</small>`}</span>${ic(S.presOpen?'up':'down',14)}</button>
+   ${S.presOpen?`<div class="plist">${on.length?on.map(row).join(''):''}${rec.length?`<div class="psec">ใช้งานใน 24 ชม.</div>${rec.slice(0,12).map(row).join('')}`:''}${!on.length&&!rec.length?'<div class="psec">ยังไม่มีข้อมูล</div>':''}</div>`:''}`;
+}
+function presWidget(){return isBrand()?`<div class="pres" id="pres">${presInner()}</div>`:''}
+function updatePres(){const el=document.getElementById('pres');if(el)el.innerHTML=presInner()}
+function beat(away){if(!S.user||!S.role||S.denied||!S.store?.presence)return;const em=(S.user.email||'').toLowerCase();if(!em||em.startsWith('('))return;
+  S.store.presence({email:em,name:myName(),role:S.role,memberId:S.meId||null,view:S.view,device:matchMedia('(pointer:coarse)').matches?'mobile':'desktop',at:Date.now(),away:!!away})}
+setInterval(()=>{if(document.visibilityState==='visible')beat()},60000);
+setInterval(updatePres,30000);
+document.addEventListener('visibilitychange',()=>beat(document.visibilityState!=='visible'));
+addEventListener('pagehide',()=>beat(true));
 const isOwnerMe=()=>!!S.user&&OWNER_EMAILS.map(e=>e.toLowerCase()).includes((S.user.email||'').toLowerCase());
 const TRIAL='__trial',TRIAL_COL={bg:'#fff1cc',fg:'#7a4b00'};
 const M=id=>id===TRIAL?{name:'ทดลองไลฟ์',c:-2}:(S.d.members[id]||{name:'(ลบแล้ว)',c:-1});
@@ -1357,7 +1398,7 @@ const inApp=()=>/Line\/|FBAN|FBAV|Instagram|; wv\)/i.test(navigator.userAgent);
 /* =====================================================================
    STORE
    ===================================================================== */
-const EMPTY=()=>({actq:{},config:{},members:{},access:{},notes:{},slots:{},logs:{},reqs:{},requests:{},reqRange:{},closures:{}});
+const EMPTY=()=>({presence:{},actq:{},config:{},members:{},access:{},notes:{},slots:{},logs:{},reqs:{},requests:{},reqRange:{},closures:{}});
 function seedOps(){return[['set','config','main',DEFAULT_CONFIG]]}
 const demoEmail=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,'')+'@demo.live';
 function makeLocal(){
@@ -1373,7 +1414,10 @@ function makeLocal(){
     Object.entries(db.members).forEach(([id,m])=>db.access[demoEmail(m.name)]={memberId:id,role:'streamer',active:true});
   }
   return{demo:true,data:db,
-    start(fn){cb=fn;const e=sessionStorage.getItem('kbz-demo-email');if(e)this.loginEmail(e,true);else fn()},
+    presence(p){db.presence=db.presence||{};db.presence[p.email]=p;persist();updatePres()},
+    start(fn){cb=fn;if(!Object.keys(db.presence||{}).length){const now=Date.now(),ac=Object.entries(db.access).filter(([,a])=>a.memberId).slice(0,5);db.presence={};
+        ac.forEach(([e,a],i)=>{db.presence[e]={email:e,name:db.members[a.memberId]?.name||e,role:'streamer',memberId:a.memberId,view:['book','mine','track','book','pay'][i],device:i%2?'desktop':'mobile',at:now-[20e3,60e3,9*60e3,3*3600e3,26*3600e3][i],away:false}})}
+      const e=sessionStorage.getItem('kbz-demo-email');if(e)this.loginEmail(e,true);else fn()},
     loginEmail(email){email=(email||'').trim().toLowerCase();if(!email){toast('กรอก Gmail ก่อน',1);return}
       const a=db.access[email];S.user={email,name:a?.memberId?db.members[a.memberId]?.name:'แบรนด์ (ทดลอง)'};
       S.suspended=!!(a&&a.active===false);S.adminName=a?.name||null;if(a&&a.active!==false){S.role=a.role;S.meId=a.memberId||null;S.denied=false;sessionStorage.setItem('kbz-demo-email',email)}else{S.role=null;S.meId=null;S.denied=true}
@@ -1407,6 +1451,7 @@ async function makeFirebase(cfg){
     dataUnsub.push(listen('notes',F.collection(db,'notes')));
     if(S.role==='brand'){
       dataUnsub.push(listen('access',F.collection(db,'access')));
+      dataUnsub.push(F.onSnapshot(F.collection(db,'presence'),snap=>{const o={};snap.forEach(d=>o[d.id]=d.data());data.presence=o;updatePres()},()=>{}));
       dataUnsub.push(listen('logs',F.query(F.collection(db,'logs'),F.orderBy('at','desc'),F.limit(300))));
       dataUnsub.push(listen('slots',F.query(F.collection(db,'slots'),F.where('status','in',['pending','cancelreq','movereq','timereq'])),'reqs'));
       dataUnsub.push(listen('requests',F.query(F.collection(db,'requests'),F.orderBy('createdAt','desc'),F.limit(400))));
@@ -1449,6 +1494,7 @@ async function makeFirebase(cfg){
       closUnsub=listen('closures',F.query(F.collection(db,'closures'),F.where('date','>=',f),F.where('date','<=',t)))},
     async batch(ops){for(let i=0;i<ops.length;i+=400){const b=F.writeBatch(db);ops.slice(i,i+400).forEach(([t,c,id,v])=>{const ref=F.doc(db,c,id);t==='set'?b.set(ref,v):t==='patch'?b.update(ref,v):b.delete(ref)});await b.commit()}},
     async wipeAll(){let n=0;for(const c of ['slots','requests','closures','notes','access','members','logs','config']){const sn=await F.getDocs(F.collection(db,c));const ids=sn.docs.map(d=>d.id);n+=ids.length;await this.batch(ids.map(id=>['del',c,id]))}return n},
+    presence(p){F.setDoc(F.doc(db,'presence',p.email),p).catch(()=>{})},
     async log(text){try{await F.addDoc(F.collection(db,'logs'),{at:Date.now(),uid:S.user.uid,by:myName(),text})}catch(e){console.warn(e)}}
   };
 }
@@ -1483,7 +1529,7 @@ function render(){
     app.innerHTML=`<div id="shell" class="${so?'nos':''}"><header class="top"><button class="btn icon ghost sidetg" data-act="side" title="ซ่อน / แสดงเมนู" aria-label="ซ่อน / แสดงเมนู">${ic('side',20)}</button><div class="brand"><div class="bw"><div><img class="wordmark" src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv">LIVE</span></div><small class="sys">LIVE BOOKING SYSTEM : HS DEVELOPMENT</small></div></div><nav class="tabs" id="tabs"></nav><div class="user" id="user"></div></header><div id="demo"></div><main id="main"></main></div>`;
     const fh=()=>{const t=$('.top');if(t)$('#shell').style.setProperty('--toph',t.offsetHeight+'px')};fh();addEventListener('resize',fh)}
   const prevOn=$('#tabs .on');const prevRect=prevOn?{l:prevOn.offsetLeft,w:prevOn.offsetWidth}:null;
-  $('#tabs').innerHTML=T.map(t=>`<button data-act="view" data-v="${t.id}" class="${S.view===t.id?'on':''}" title="${t.l}">${ic(t.i,19)}<span>${t.l}</span>${t.b?`<em>${t.b}</em>`:''}</button>`).join('')+'<b class="ink"></b><div class="sidefoot"><span>SOFTWARE ENGINEERING<br>&amp; DEVELOPMENT</span></div>';
+  $('#tabs').innerHTML=T.map(t=>`<button data-act="view" data-v="${t.id}" class="${S.view===t.id?'on':''}" title="${t.l}">${ic(t.i,19)}<span>${t.l}</span>${t.b?`<em>${t.b}</em>`:''}</button>`).join('')+'<b class="ink"></b>'+presWidget()+'<div class="sidefoot"><span>SOFTWARE ENGINEERING<br>&amp; DEVELOPMENT</span></div>';
   const ink=$('#tabs .ink'),on=$('#tabs .on');
   if(on){if(prevRect){ink.style.transition='none';ink.style.left=prevRect.l+'px';ink.style.width=prevRect.w+'px';void ink.offsetWidth;ink.style.transition=''}
     requestAnimationFrame(()=>{ink.style.left=on.offsetLeft+'px';ink.style.width=on.offsetWidth+'px'})}
@@ -1493,6 +1539,7 @@ function render(){
   const main=$('#main');const views={book:vBook,week:vWeek,mine:vMine,track:vTrack,pay:vPay,req:vReq,set:vSet};
   main.classList.remove('wide');
   const y=window.scrollY;const wrowX=$('#wrow')?.scrollLeft,keep=S._keepRow;
+  if(S.user&&S.role&&S._beatView!==S.view){S._beatView=S.view;beat()}
   const NA=newAdds();
   const FOOT=`<footer class="mfoot"><b>LIVE BOOKING SYSTEM : HS DEVELOPMENT</b><span>SOFTWARE ENGINEERING &amp; DEVELOPMENT</span></footer>`;
   main.innerHTML=(NA.length&&(S.view==='book'||S.view==='mine')?`<button class="newbar" data-act="newAdds"><span class="bl">${ic('bell',18)}</span><span class="tx"><b>แบรนด์เพิ่มคิวให้คุณ ${NA.length} Slot</b><small>${esc([...new Set(NA.map(([,v])=>v.addedBy||v.by).filter(Boolean))].join(', '))} · แตะเพื่อดูรายละเอียด</small></span>${ic('right',18)}</button>`:'')+views[S.view]()+FOOT;
@@ -2372,6 +2419,7 @@ async function saveEmail(id,email){
   if(await write(ops,`ตั้ง Gmail ของ ${M(id).name}: ${email||'(ลบ)'}`))toast('บันทึก Gmail แล้ว');
 }
 const acts={
+  presToggle:()=>{S.presOpen=!S.presOpen;updatePres()},
   payEmp:b=>{S.payEmp=b.dataset.e;render()},
   rqMode:b=>{S.rqF={...(S.rqF||{}),mode:b.dataset.m};if(b.dataset.m==='custom'&&!S.rqF.from){S.rqF.from=TODAY;S.rqF.to=add(TODAY,6)}render()},
   rqWho:()=>pickNameDlg({title:'ดูคำขอของใคร',sub:'เลือก Live Streamer เพื่อกรองรายการ',sel:S.rqF?.who,onPick:id=>{S.rqF={...(S.rqF||{}),who:id};closeM();render()}}),
