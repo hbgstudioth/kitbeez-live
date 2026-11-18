@@ -1186,6 +1186,9 @@ main.enter{animation:softIn .28s ease-out both}
 .pfok{display:inline-flex;align-items:center;gap:4px;color:#15803d;font-size:13px}
 .pfperm{display:flex;flex-direction:column;gap:6px}.pfperm span{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}.pfperm span .ic{color:#cbd5e1}.pfperm span.on{color:var(--text)}.pfperm span.on .ic{color:#16a34a}
 @media(max-width:600px){.ubtn{padding:2px}.ubtn .uname{display:none}}
+
+.rcc em{display:block;font-style:normal;font-size:10px;font-weight:600;opacity:.85;margin-top:1px;white-space:nowrap}
+.rgseg{display:flex;width:100%}.rgseg button{flex:1;justify-content:center}
 </style>
 </head>
 <body>
@@ -1357,12 +1360,14 @@ const actQ=()=>{const o={};Object.entries(S.d.actq||{}).forEach(([k,v])=>{if(v.a
 const canHrs=v=>!!v&&!isTrial(v)&&COUNTED.includes(v.status)&&(isBrand()||(v.who===S.meId&&C().perms.reportHours!==false&&v.date<=TODAY));
 const ROOMS=()=>[...Array(C().rooms)].map((_,i)=>i+1);
 const isOpen=d=>C().openDays.includes(dow(d));
-const closedOfDow=(dw,r)=>{const c=C(),k=String(dw);if((c.closed[k]||[]).includes(r))return'all';const p=(c.closedSlots?.[k]||{})[r];return p&&p.length?p:null};
-const closedOf2=closedOfDow;
-const isClosedWeekly=(d,r,s)=>{const x=closedOfDow(dow(d),r);return x==='all'||(Array.isArray(x)&&x.includes(s))};
+const crng=(dw,r)=>C().closedRange?.[`${dw}_${r}`]||null;
+const crngOn=(rg,d)=>!rg||((!rg.from||d>=rg.from)&&(!rg.to||d<=rg.to));
+const closedOfDow=(dw,r,d)=>{const c=C(),k=String(dw);if(d&&!crngOn(crng(dw,r),d))return null;if((c.closed[k]||[]).includes(r))return'all';const p=(c.closedSlots?.[k]||{})[r];return p&&p.length?p:null};
+const closedOf2=(dw,r)=>{const rg=crng(dw,r);if(rg?.to&&rg.to<TODAY)return null;return closedOfDow(dw,r)};
+const isClosedWeekly=(d,r,s)=>{const x=closedOfDow(dow(d),r,d);return x==='all'||(Array.isArray(x)&&x.includes(s))};
 const dayClosure=(d,r,s)=>S.d?.closures?.[sid(d,r,s)];
 const isClosed=(d,r,s)=>isClosedWeekly(d,r,s)||!!dayClosure(d,r,s);
-const isClosedRoom=(d,r)=>closedOfDow(dow(d),r)==='all';
+const isClosedRoom=(d,r)=>closedOfDow(dow(d),r,d)==='all';
 const canBookDate=d=>isBrand()||!C().bookLimit||(C().bookDates||[]).includes(d);
 const slotOf=(d,r,s)=>S.d.slots[sid(d,r,s)];
 const isOwnerEmail=e=>OWNER_EMAILS.map(x=>x.toLowerCase()).includes((e||'').toLowerCase());
@@ -2056,26 +2061,35 @@ function chgForm(k,admin){
 function roomCloseDlg(d,r){
   const c=C(),k=String(d),cur=(c.closed[k]||[]).includes(r)?'all':((c.closedSlots?.[k]||{})[r]||[]);
   let mode=cur==='all'?'all':cur.length?'some':'open',sel=new Set(cur==='all'?[]:cur);
+  const rg0=crng(d,r);let rmode=rg0?'range':'forever',rf=rg0?.from||TODAY,rt=rg0?.to||add(TODAY,6);
+  const cap=()=>{const f=$('#crf'),t=$('#crt');if(f)rf=f.value;if(t)rt=t.value};
   const body=()=>`<div class="ccopt">${[['open','door','เปิดทั้งวัน','ทุกรอบจองได้ตามปกติ'],['all','lock','ปิดทั้งวัน','ห้องนี้ไม่ใช้ทั้งวัน'],['some','clock','ปิดบางรอบ','เลือกรอบเวลาที่ปิด']].map(([m,i,t,s])=>`<button data-d="m:${m}" class="${mode===m?'on':''}">${icb(i,m==='all'?'bad':m==='some'?'warn':'ok')}<b>${t}</b><small>${s}</small></button>`).join('')}</div>
-   ${mode==='some'?`<div class="sec"><b>${ic('clock',14)}แตะรอบเวลาที่ต้องการปิด</b><div class="tpick">${c.slots.map((t,s)=>`<button data-d="s:${s}" class="${sel.has(s)?'on cl':''}">${ic(sel.has(s)?'lock':slotIcon(s),15)}<b>${t}</b><small>${sel.has(s)?'ปิด':'เปิด'}</small></button>`).join('')}</div></div>`:''}`;
+   ${mode==='some'?`<div class="sec"><b>${ic('clock',14)}แตะรอบเวลาที่ต้องการปิด</b><div class="tpick">${c.slots.map((t,s)=>`<button data-d="s:${s}" class="${sel.has(s)?'on cl':''}">${ic(sel.has(s)?'lock':slotIcon(s),15)}<b>${t}</b><small>${sel.has(s)?'ปิด':'เปิด'}</small></button>`).join('')}</div></div>`:''}
+   ${mode!=='open'?`<div class="sec"><b>${ic('calendar',14)}ระยะเวลาที่ปิด</b><div class="seg sm rgseg"><button data-d="r:forever" class="${rmode==='forever'?'on':''}">ตลอดไป (จนกว่าจะเปิดเอง)</button><button data-d="r:range" class="${rmode==='range'?'on':''}">กำหนดช่วงวันที่</button></div>
+    ${rmode==='range'?`<div class="rqdates" style="margin-top:10px"><input type="date" class="inp" id="crf" value="${rf}"><span>ถึง</span><input type="date" class="inp" id="crt" value="${rt}"></div><p class="muted" style="font-size:12.5px;margin:8px 0 0">${ic('info',13)} ปิดเฉพาะวัน${DOW_L[d]}ในช่วงนี้ · พ้นวันสุดท้ายแล้ว ห้องจะกลับมาเปิดให้จองอัตโนมัติ</p>`:''}</div>`:''}`;
   modal(`<div class="mhead">${icb('door')}<div><h3>ห้อง ${r} · ทุกวัน${DOW_L[d]}</h3><span class="muted">ตั้งค่าห้องปิดประจำ (มีผลทุกสัปดาห์)</span></div></div><div id="ccbody">${body()}</div>
    <div class="mact"><button class="btn primary" data-d="save">${ic('save',16)}บันทึก</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,
   async a=>{
     if(a==='close')return closeM();
-    if(a.startsWith('m:')){mode=a.slice(2);$('#ccbody').innerHTML=body();return}
-    if(a.startsWith('s:')){const s=+a.slice(2);sel.has(s)?sel.delete(s):sel.add(s);$('#ccbody').innerHTML=body();return}
+    if(a.startsWith('m:')){cap();mode=a.slice(2);$('#ccbody').innerHTML=body();return}
+    if(a.startsWith('r:')){cap();rmode=a.slice(2);$('#ccbody').innerHTML=body();return}
+    if(a.startsWith('s:')){cap();const s=+a.slice(2);sel.has(s)?sel.delete(s):sel.add(s);$('#ccbody').innerHTML=body();return}
     if(a==='save'){
-      if(mode==='some'&&!sel.size)mode='open';
+      cap();if(mode==='some'&&!sel.size)mode='open';
+      if(mode!=='open'&&rmode==='range'){if(!rf||!rt)return toast('เลือกวันเริ่มและวันสิ้นสุดให้ครบ',1);if(rf>rt)[rf,rt]=[rt,rf];if(rt<TODAY)return toast('วันสิ้นสุดต้องไม่ใช่วันที่ผ่านมาแล้ว',1)}
+      const cr={...(c.closedRange||{})};Object.keys(cr).forEach(x=>{if(cr[x]?.to&&cr[x].to<TODAY)delete cr[x]});delete cr[`${d}_${r}`];
+      if(mode!=='open'&&rmode==='range')cr[`${d}_${r}`]={from:rf,to:rt};
       const cl={...c.closed},cs=JSON.parse(JSON.stringify(c.closedSlots||{}));
       cl[k]=(cl[k]||[]).filter(x=>x!==r);(cs[k]??={});delete cs[k][r];
       if(mode==='all')cl[k].push(r);if(mode==='some')cs[k][r]=[...sel].sort((x,y)=>x-y);
-      const txt=mode==='all'?'ปิดทั้งวัน':mode==='some'?`ปิด ${[...sel].sort().map(s=>c.slots[s].split('–')[0]).join(', ')}`:'เปิดทั้งวัน';
-      await saveCfg({closed:cl,closedSlots:cs},`ห้อง ${r} วัน${DOW_L[d]}: ${txt}`);closeM();
+      const txt=(mode==='all'?'ปิดทั้งวัน':mode==='some'?`ปิด ${[...sel].sort().map(s=>c.slots[s].split('–')[0]).join(', ')}`:'เปิดทั้งวัน')+(mode!=='open'&&rmode==='range'?` (${fmtD(rf)} – ${fmtD(rt)})`:'');
+      await saveCfg({closed:cl,closedSlots:cs,closedRange:cr},`ห้อง ${r} วัน${DOW_L[d]}: ${txt}`);closeM();
       const hit=Object.values(S.d.slots).filter(v=>dow(v.date)===d&&v.room===r&&!isPast(v.date,v.slot)&&isClosed(v.date,r,v.slot)).length;
       toast(hit?`บันทึกแล้ว · มีคิวล่วงหน้า ${hit} Slot อยู่ในช่วงที่ปิด ตรวจสอบในตารางด้วย`:'บันทึกแล้ว',hit?1:0)}
   });
 }
-function roomChip(d,r){const x=closedOf2(d,r);return`<button class="rcc ${x==='all'?'all':x?'some':'on'}" data-act="roomClose" data-d="${d}" data-r="${r}">${ic(x==='all'?'lock':x?'clock':'door',13)}ห้อง ${r}<small>${x==='all'?'ปิดทั้งวัน':x?`ปิด ${x.length} Slot`:'เปิด'}</small></button>`}
+function roomChip(d,r){const x=closedOf2(d,r),rg=x?crng(d,r):null,fut=rg?.from&&rg.from>TODAY;return`<button class="rcc ${x==='all'?'all':x?'some':'on'} ${rg?'rg':''}" data-act="roomClose" data-d="${d}" data-r="${r}">${ic(x==='all'?'lock':x?'clock':'door',13)}ห้อง ${r}<small>${x==='all'?'ปิดทั้งวัน':x?`ปิด ${x.length} Slot`:'เปิด'}</small>${rg?`<em>${fut?'เริ่ม '+fmtDs(rg.from):''}${rg.to?(fut?' · ':'')+'ถึง '+fmtDs(rg.to):''}</em>`:''}</button>`}
+const fmtDs=d=>`${dnum(d)} ${MON_S[D(d).getUTCMonth()]}`;
 /* ---------- รอบเปิดให้จองคิว ---------- */
 function expandDates(ws){const set=new Set();ws.forEach(w=>{for(let d=w.from;d<=w.to;d=add(d,1))set.add(d)});return[...set].sort()}
 function winStatus(w){return w.to<TODAY?['ผ่านแล้ว','pay-unpaid']:w.from<=TODAY?['กำลังเปิดจอง','ok']:['เปิดล่วงหน้า','room']}
