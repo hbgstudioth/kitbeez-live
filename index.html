@@ -960,6 +960,27 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
 @media(prefers-reduced-motion:reduce){.brand .lv,.logo-card .lv,.brand .lv::before,.logo-card .lv::before{animation:none}}
 /* การ์ดจองคิว: เอาเส้นโค้งสีฟ้าเหนือวันที่ออก */
 .screen{border-top:0;box-shadow:none;border-radius:0;padding-top:0;margin-bottom:16px;letter-spacing:.5px;font-size:15px;font-weight:600;color:var(--navy)}
+
+/* ชั่วโมงไลฟ์จริง */
+.seat .hb,.cell .hb{position:absolute;left:3px;top:3px;font-style:normal;font-size:9.5px;font-weight:700;line-height:14px;padding:0 5px;border-radius:999px;background:#fff;color:#b45309;box-shadow:0 0 0 1px #f5c27a}
+.sc .hb{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;color:#b45309;background:#fff4e0;border-radius:999px;padding:1px 7px}
+.why.hrs{background:#fff6e6;color:#7a4b00;display:flex;gap:8px;align-items:flex-start}
+.why.hrs small{display:block;color:#a07a3a;font-size:11.5px;margin-top:2px}
+.hpick{display:flex;flex-wrap:wrap;gap:6px}
+.hpick button{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:8px 12px;min-width:56px;font:inherit;font-weight:700;color:var(--navy);cursor:pointer;display:flex;align-items:baseline;gap:3px;justify-content:center;transition:background-color .15s,border-color .15s}
+.hpick button small{font-weight:400;font-size:11px;color:var(--muted)}
+.hpick button.on{background:#f59e0b;border-color:#f59e0b;color:#fff}.hpick button.on small{color:#fff}
+.hcustom{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap;font-size:13px}
+.hcustom .inp{width:110px}
+.btn.warn{background:#f59e0b;color:#fff;border-color:#f59e0b}.btn.warn:hover{background:#e08e06}
+.shtag{display:inline-flex;align-items:center;gap:2px;margin-left:5px;font-size:10px;font-weight:700;color:#b45309;background:#fff4e0;border-radius:999px;padding:0 5px;vertical-align:middle}
+.shlist{display:flex;flex-direction:column;gap:6px}
+.shrow{display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"n t h" "r r r";gap:4px 10px;align-items:center;text-align:left;border:1px solid #f5dcae;background:#fffaf0;border-radius:14px;padding:10px 12px;font:inherit;cursor:pointer;transition:background-color .15s}
+.shrow:hover{background:#fff3dc}
+.shrow>.namechip{grid-area:n}.shrow .sht{grid-area:t;font-size:12.5px;color:var(--muted);display:flex;gap:4px;align-items:center}
+.shrow .shh{grid-area:h;font-size:18px;color:#b45309}.shrow .shh small{font-size:11px;font-weight:500;color:var(--muted)}
+.shrow .shr{grid-area:r;font-size:13px;color:#7a4b00;display:flex;gap:5px;align-items:center;flex-wrap:wrap}.shrow .shr small{color:var(--muted)}
+@media(max-width:600px){.shrow{grid-template-areas:"n h" "t t" "r r";grid-template-columns:1fr auto}.seat .hb,.cell .hb{font-size:8.5px;padding:0 3px;left:2px;top:2px}}
 </style>
 </head>
 <body>
@@ -1053,7 +1074,7 @@ const DEFAULT_CONFIG = {
   hours: 3,
   openDays: [4,5,6,0],
   closed: { '4': [1] },
-  perms: { book:true, autoConfirm:false, requestCancel:true, requestMove:true, requestTime:true, seeOthers:true, seePay:true, cancelBeforeH:0 }
+  perms: { book:true, autoConfirm:false, requestCancel:true, requestMove:true, requestTime:true, seeOthers:true, seePay:true, reportHours:true, cancelBeforeH:0 }
 };
 const PERM_INFO = [
   ['book','ticket','จองช่องว่างเองได้','Live Streamer เลือกช่องว่างแล้วกดจองได้เอง'],
@@ -1062,6 +1083,7 @@ const PERM_INFO = [
   ['requestMove','swap','ส่งคำขอย้ายห้องได้','เลือกห้องว่างในเวลาเดียวกัน แล้วรอแบรนด์อนุมัติ'],
   ['requestTime','clock','ส่งคำขอเปลี่ยนเวลาได้','เลือกวัน เวลา และห้องใหม่ที่ว่าง แล้วรอแบรนด์อนุมัติ'],
   
+  ['reportHours','hour','แจ้งชั่วโมงไลฟ์จริงได้','กรณีไลฟ์ไม่ครบ Slot · ใส่จำนวนชั่วโมงจริงและเหตุผล (แบรนด์แก้ไขได้)'],
   ['seeOthers','eye','เห็นชื่อคนอื่นในตาราง','ปิด = เห็นแค่ “ไม่ว่าง”'],
   ['seePay','clock','ดูสรุปชั่วโมงของตัวเอง','ในหน้า “สรุปชั่วโมง” (เห็นเฉพาะของตัวเอง)'],
 ];
@@ -1115,6 +1137,11 @@ const S={store:null,d:null,user:null,role:null,meId:null,denied:false,view:'book
 const C=()=>{const m=S.d?.config?.main||{};return{...DEFAULT_CONFIG,...m,perms:{...DEFAULT_CONFIG.perms,...(m.perms||{})},closed:m.closed||DEFAULT_CONFIG.closed,openDays:m.openDays||DEFAULT_CONFIG.openDays}};
 const isBrand=()=>S.role==='brand';
 const can=p=>isBrand()||!!C().perms[p];
+const SH_REASONS=[['ระบบ / แอปมีปัญหา','alert'],['เน็ตหลุด / ไฟดับ','zap'],['ป่วย / ไม่สบาย','alert'],['สินค้าหมด','tag'],['เริ่มช้า','clock'],['เลิกก่อนเวลา','arrow'],['แบรนด์สั่งหยุด','user']];
+const hrsOf=v=>v&&v.act!=null&&v.act!==''&&!isNaN(+v.act)?Math.max(0,Math.min(+v.act,C().hours)):C().hours;
+const isShort=v=>!!v&&v.act!=null&&v.act!==''&&+v.act<C().hours;
+const fmtH=h=>{h=Math.round(h*100)/100;return Number.isInteger(h)?String(h):h.toFixed(h*10%1?2:1).replace(/0$/,'')};
+const canHrs=v=>!!v&&!isTrial(v)&&COUNTED.includes(v.status)&&(isBrand()||(v.who===S.meId&&C().perms.reportHours!==false&&v.date<=TODAY));
 const ROOMS=()=>[...Array(C().rooms)].map((_,i)=>i+1);
 const isOpen=d=>C().openDays.includes(dow(d));
 const closedOfDow=(dw,r)=>{const c=C(),k=String(dw);if((c.closed[k]||[]).includes(r))return'all';const p=(c.closedSlots?.[k]||{})[r];return p&&p.length?p:null};
@@ -1379,7 +1406,7 @@ function seat(d,r,s,i){
   if(!v){const sel=S.sel.has(k);return`<button class="seat free ${sel?'sel':''} ${past?'past':''}" data-act="seat" data-k="${k}" ${past&&!isBrand()?'disabled':''} ${st}">${sel?ic('check',15)+'<span class="sl">เลือกแล้ว</span>':past?'—':ic('plus',14)+'ว่าง'}</button>`}
   const mine=v.who===S.meId,show=mine||isBrand()||C().perms.seeOthers,c=colOf(v.who);
   const cls=['seat',v.status!=='ok'?v.status:'',mine?'mine':'',show?'':'hid',past?'past':'',isTrial(v)&&show?'trial':''].join(' ');
-  return`<button class="${cls}" data-act="seat" data-k="${k}" ${st};${show?`background-color:${c.bg};color:${c.fg}`:''}" title="${show?esc(whoName(v))+(v.note?' · '+esc(v.note):'')+' · ':''}${STATUS[v.status]}">${v.status!=='ok'?`<span class="st">${ic(SIC[v.status],11)}</span>`:''}${isTrial(v)&&show?'<small class="tg">ทดลองไลฟ์</small>':''}<span class="n">${show?esc(isTrial(v)?(v.guest||'ไม่ระบุชื่อ'):M(v.who).name):'ไม่ว่าง'}</span>${mine?'<small>คิวของฉัน</small>':''}${isTrial(v)&&show&&v.note?`<small class="nt">${esc(v.note)}</small>`:''}</button>`;
+  return`<button class="${cls}" data-act="seat" data-k="${k}" ${st};${show?`background-color:${c.bg};color:${c.fg}`:''}" title="${show?esc(whoName(v))+(v.note?' · '+esc(v.note):'')+' · ':''}${STATUS[v.status]}">${v.status!=='ok'?`<span class="st">${ic(SIC[v.status],11)}</span>`:''}${isTrial(v)&&show?'<small class="tg">ทดลองไลฟ์</small>':''}${isShort(v)&&show?`<i class="hb" title="ไลฟ์จริง ${fmtH(hrsOf(v))} ชม.${v.actReason?' · '+esc(v.actReason):''}">${fmtH(hrsOf(v))}ชม.</i>`:''}<span class="n">${show?esc(isTrial(v)?(v.guest||'ไม่ระบุชื่อ'):M(v.who).name):'ไม่ว่าง'}</span>${mine?'<small>คิวของฉัน</small>':''}${isTrial(v)&&show&&v.note?`<small class="nt">${esc(v.note)}</small>`:''}</button>`;
 }
 function renderCart(){
   const el=$('#cart');if(!S.user||S.view!=='book'||!S.sel.size){el.classList.remove('show');return}
@@ -1394,7 +1421,7 @@ function renderCart(){
 /* ---------------- ตาราง: รายเดือน + รายสัปดาห์ ---------------- */
 /* ---------------- ตารางไลฟ์: ตามห้อง / ตามคน / ภาพรวมเดือน ---------------- */
 function calSeg(){return`<div class="seg">${[['room','door','ตามห้อง'],['person','users','ตามคน'],['month','calendar','ภาพรวมเดือน']].map(([k,i,l])=>`<button class="${S.calMode===k?'on':''}" data-act="calMode" data-m="${k}">${ic(i,14)}${l}</button>`).join('')}</div>`}
-function dayStats(d){let f=0,a=0,me=0,pd=0;ROOMS().forEach(r=>{C().slots.forEach((_,s)=>{if(isClosed(d,r,s))return;a++;const v=slotOf(d,r,s);if(v){f++;if(v.who===S.meId&&COUNTED.includes(v.status))me++;if(v.status!=='ok')pd++}})});return{f,a,me,pd}}
+function dayStats(d){let f=0,a=0,me=0,pd=0,fh=0,meh=0;ROOMS().forEach(r=>{C().slots.forEach((_,s)=>{if(isClosed(d,r,s))return;a++;const v=slotOf(d,r,s);if(v){f++;fh+=hrsOf(v);if(v.who===S.meId&&COUNTED.includes(v.status)){me++;meh+=hrsOf(v)}if(v.status!=='ok')pd++}})});return{f,a,me,pd,fh,meh}}
 function calTop(){const sub={room:'ดูว่าห้องไหน ใครไลฟ์ เวลาไหน',person:'ดูว่าแต่ละคน ไลฟ์วันไหน ห้องไหน',month:'ภาพรวมทั้งเดือน · แตะ “รอบ” เพื่อดูรายสัปดาห์ · แตะวันที่เพื่อจองคิว'}[S.calMode];
   return pageHd('calweek','ตารางไลฟ์','เลือกมุมมองด้านล่าง')+`<div class="modebar">${calSeg()}<span class="mbsub">${ic('info',14)}${sub}</span></div>`}
 function vWeek(){return calTop()+(S.calMode==='month'?vMonth():vSchedule())}
@@ -1404,10 +1431,10 @@ function focusSel(){
 }
 function vSchedule(){
   const ws=monday(S.date),days=[...Array(7)].map((_,i)=>add(ws,i)),od=days.filter(isOpen),H=C().hours;
-  let tot=0,free=0,mine=0;od.forEach(d=>{const st=dayStats(d);tot+=st.f;free+=st.a-st.f;mine+=st.me});
+  let tot=0,free=0,mine=0;od.forEach(d=>{const st=dayStats(d);tot+=st.fh;free+=st.a-st.f;mine+=st.meh});
   let h='';
   h+=`<div class="calbar"><div class="wknav"><button class="btn icon" data-act="weekJump" data-n="-1" title="สัปดาห์ก่อน">${ic('left',16)}</button><button class="btn wkbtn" data-act="weekPicker">${ic('calendar',16)}${fmtRange(ws,add(ws,6))}</button><button class="btn icon" data-act="weekJump" data-n="1" title="สัปดาห์ถัดไป">${ic('right',16)}</button><button class="btn" data-act="weekThis" title="สัปดาห์นี้">${ic('target',16)}<span>สัปดาห์นี้</span></button></div>${focusSel()}<button class="btn icon" data-act="print" title="พิมพ์">${ic('printer',17)}</button></div>`;
-  h+=`<div class="sumline"><span class="pill room">${ic('clock',13)}ไลฟ์รวม ${tot*H} ชม.</span><span class="pill ok">${ic('grid',13)}ช่องว่าง ${free}</span>${S.meId?`<span class="pill movereq">${ic('user',13)}ของฉัน ${mine*H} ชม.</span>`:''}<span class="pill pay-unpaid">${ic('calendar',13)}วันไลฟ์ ${od.length} วัน</span></div>`;
+  h+=`<div class="sumline"><span class="pill room">${ic('clock',13)}ไลฟ์รวม ${fmtH(tot)} ชม.</span><span class="pill ok">${ic('grid',13)}ช่องว่าง ${free}</span>${S.meId?`<span class="pill movereq">${ic('user',13)}ของฉัน ${fmtH(mine)} ชม.</span>`:''}<span class="pill pay-unpaid">${ic('calendar',13)}วันไลฟ์ ${od.length} วัน</span></div>`;
   if(!od.length)return h+`<div class="card empty">${icb('moon','',30)}<b>รอบนี้ไม่มีวันไลฟ์</b>เลือกสัปดาห์อื่น</div>`;
   return h+(S.calMode==='person'?vPerson(ws,od):vRooms(ws,days,od));
 }
@@ -1424,7 +1451,7 @@ function vRooms(ws,days,od){
       const v=slotOf(d,r,s);
       if(!v)return`<div class="cell e" data-act="goDate" data-d="${d}" title="ห้อง ${r} · ${t} · ว่าง">ว่าง</div>`;
       const me=v.who===S.meId,show=me||isBrand()||C().perms.seeOthers,c=show?colOf(v.who):{bg:'#eef2f8',fg:'#9aaac2'},nm=show?(isTrial(v)?`<small class="tg">ทดลอง</small>${esc(v.guest||'ไม่ระบุชื่อ')}`:esc(M(v.who).name)):'ไม่ว่าง';
-      return`<div class="cell ${isTrial(v)&&show?'trial':''} ${v.status!=='ok'?v.status:''} ${me?'me':''} ${f?(v.who===f?'hl':'dim'):''}" data-act="goDate" data-d="${d}" style="background:${c.bg};color:${c.fg}" title="ห้อง ${r} · ${t} · ${show?esc(whoName(v)):'ไม่ว่าง'}${v.note?' · '+esc(v.note):''}">${v.status!=='ok'?`<span class="si">${ic(SIC[v.status],10)}</span>`:''}${nm}</div>`}).join('')).join('')}</div></section>`;
+      return`<div class="cell ${isTrial(v)&&show?'trial':''} ${v.status!=='ok'?v.status:''} ${me?'me':''} ${f?(v.who===f?'hl':'dim'):''}" data-act="goDate" data-d="${d}" style="background:${c.bg};color:${c.fg}" title="ห้อง ${r} · ${t} · ${show?esc(whoName(v)):'ไม่ว่าง'}${v.note?' · '+esc(v.note):''}">${v.status!=='ok'?`<span class="si">${ic(SIC[v.status],10)}</span>`:''}${isShort(v)&&show?`<i class="hb" title="ไลฟ์จริง ${fmtH(hrsOf(v))} ชม.${v.actReason?' · '+esc(v.actReason):''}">${fmtH(hrsOf(v))}ชม.</i>`:''}${nm}</div>`}).join('')).join('')}</div></section>`;
   });
   const off=days.filter(d=>!isOpen(d));
   return h+`</div>${off.length?`<div class="offnote">${ic('moon',14)}ไม่มีไลฟ์: ${off.map(d=>`${DOW_S[dow(d)]} ${dnum(d)}`).join(', ')}</div>`:''}`;
@@ -1450,17 +1477,17 @@ function weekPicker(){
 }
 function vMonth(){
   const ym=S.calMonth,[y,m]=ym.split('-').map(Number),first=`${ym}-01`,last=isoOf(new Date(Date.UTC(y,m,0))),selW=monday(S.date),H=C().hours,meView=S.meId&&!isBrand();
-  let mf=0,ma=0,mm=0,i=0,cal='';
+  let mf=0,ma=0,mm=0,mfh=0,mmh=0,i=0,cal='';
   for(let ws=monday(first);ws<=last;ws=add(ws,7)){
     let wh=0;
     const cells=[...Array(7)].map((_,j)=>{const d=add(ws,j),out=d.slice(0,7)!==ym;
       if(!isOpen(d))return`<div class="mday off ${out?'out':''}" style="--i:${i++}"><div class="tp"><b>${dnum(d)}</b></div><small>ไม่มีไลฟ์</small></div>`;
-      const st=dayStats(d),note=S.d.notes[d]?.text;if(!out){mf+=st.f;ma+=st.a;mm+=st.me}wh+=meView?st.me:st.f;
+      const st=dayStats(d),note=S.d.notes[d]?.text;if(!out){mf+=st.f;ma+=st.a;mm+=st.me;mfh+=st.fh;mmh+=st.meh}wh+=meView?st.meh:st.fh;
       return`<div class="mday ${out?'out':''} ${d===TODAY?'tdy':''} ${ws===selW?'selw':''}" style="--i:${i++}" data-act="goDate" data-d="${d}" title="${note?esc(note):'แตะเพื่อจองคิววันนี้'}"><div class="tp"><b>${dnum(d)}</b>${note?ic('pin',13):''}</div><div class="bar"><i style="width:${st.a?Math.round(st.f/st.a*100):0}%"></i></div><small>${st.f}/${st.a} · ว่าง ${st.a-st.f}</small>${S.meId&&st.me?`<span class="tg me">${ic('user',11)}<span>ของฉัน ${st.me}</span></span>`:''}${isBrand()&&st.pd?`<span class="tg pd">${ic('hour',11)}<span>รอ ${st.pd}</span></span>`:''}${note?`<div class="nt">${esc(note)}</div>`:''}</div>`});
-    cal+=`<button class="mwk ${ws===selW?'on':''}" data-act="pickWeek" data-d="${ws}" title="ดูรายสัปดาห์"><small>รอบ</small><b>${dnum(ws)}–${dnum(add(ws,6))}</b><span>${ic('clock',11)}${wh*H}ชม.</span></button>`+cells.join('');
+    cal+=`<button class="mwk ${ws===selW?'on':''}" data-act="pickWeek" data-d="${ws}" title="ดูรายสัปดาห์"><small>รอบ</small><b>${dnum(ws)}–${dnum(add(ws,6))}</b><span>${ic('clock',11)}${fmtH(wh)}ชม.</span></button>`+cells.join('');
   }
   return`<div class="calbar"><div class="wknav"><button class="btn icon" data-act="calNav" data-n="-1" title="เดือนก่อน">${ic('left',16)}</button><span class="btn wkbtn" style="cursor:default">${ic('calendar',16)}${MON_L[m-1]} ${y}</span><button class="btn icon" data-act="calNav" data-n="1" title="เดือนถัดไป">${ic('right',16)}</button><button class="btn" data-act="calToday" title="เดือนนี้">${ic('target',16)}<span>เดือนนี้</span></button></div></div>`+
-  `<div class="stats"><div class="stat" style="--i:0">${icb('clock')}<div><span>ชั่วโมงไลฟ์ทั้งเดือน</span><b>${mf*H}</b></div></div><div class="stat" style="--i:1">${icb('grid','ok')}<div><span>ช่องว่างทั้งเดือน</span><b>${ma-mf}</b></div></div><div class="stat" style="--i:2">${icb('chart','warn')}<div><span>อัตราการลงคิว</span><b>${ma?Math.round(mf/ma*100):0}%</b></div></div>${S.meId?`<div class="stat" style="--i:3">${icb('user','violet')}<div><span>ของฉันทั้งเดือน</span><b>${mm*H} ชม.</b></div></div>`:''}</div>
+  `<div class="stats"><div class="stat" style="--i:0">${icb('clock')}<div><span>ชั่วโมงไลฟ์ทั้งเดือน</span><b>${fmtH(mfh)}</b></div></div><div class="stat" style="--i:1">${icb('grid','ok')}<div><span>ช่องว่างทั้งเดือน</span><b>${ma-mf}</b></div></div><div class="stat" style="--i:2">${icb('chart','warn')}<div><span>อัตราการลงคิว</span><b>${ma?Math.round(mf/ma*100):0}%</b></div></div>${S.meId?`<div class="stat" style="--i:3">${icb('user','violet')}<div><span>ของฉันทั้งเดือน</span><b>${fmtH(mmh)} ชม.</b></div></div>`:''}</div>
   <div class="card" style="padding:14px"><div class="mcal"><div class="hd">รอบ</div>${[1,2,3,4,5,6,0].map(d=>`<div class="hd">${DOW_S[d]}</div>`).join('')}${cal}</div>
   <div class="legend" style="justify-content:flex-start"><span><i style="background:linear-gradient(90deg,var(--blue),var(--blue2));height:6px"></i>สัดส่วนช่องที่ลงแล้ว</span>${S.meId?`<span>${ic('user',13)} คิวของฉัน</span>`:''}${isBrand()?`<span>${ic('hour',13)} มีคำขอรอ</span>`:''}<span>${ic('pin',13)} มีโน้ต</span><span><i style="background:repeating-linear-gradient(45deg,#f6f8fc 0 4px,#fff 4px 8px)"></i>ไม่มีไลฟ์</span></div></div>`;
 }
@@ -1468,7 +1495,7 @@ function vMonth(){
 function myTickets(){return Object.entries(S.d.slots).filter(([,v])=>v.who===S.meId).sort(([a],[b])=>{const A=parseSid(a),B=parseSid(b);return(A.d+A.s+A.r).localeCompare(B.d+B.s+B.r)})}
 function vMine(){
   const all=myTickets(),ws0=monday(TODAY),H=C().hours,f=S.mineFilter;
-  const wkH=ws=>all.filter(([,v])=>v.date>=ws&&v.date<=add(ws,6)&&COUNTED.includes(v.status)).length*H;
+  const wkH=ws=>fmtH(all.filter(([,v])=>v.date>=ws&&v.date<=add(ws,6)&&COUNTED.includes(v.status)).reduce((a,[,v])=>a+hrsOf(v),0));
   const reqN=all.filter(([,v])=>v.status!=='ok').length;
   const list=all.filter(([k,v])=>{const p=parseSid(k),past=isPast(p.d,p.s);return f==='up'?!past:f==='req'?v.status!=='ok':true});
   let h=pageHd('queue','คิวของฉัน','จัดกลุ่มเป็นสัปดาห์ (จ.–อา.) · แตะรายการเพื่อขอยกเลิก / ย้ายห้อง / เปลี่ยนเวลา',`<button class="btn" data-act="copyMine">${ic('copy',16)}คัดลอกส่ง LINE</button>`);
@@ -1477,12 +1504,12 @@ function vMine(){
   if(!list.length)return h+`<div class="card empty">${icb('ticket','',30)}<b>${f==='req'?'ไม่มีคำขอค้าง':'ยังไม่มีคิว'}</b>${f==='req'?'ทุกคิวยืนยันเรียบร้อย':'ไปที่ “จองคิว” เพื่อเลือกรอบไลฟ์'}</div>`;
   const byW={};list.forEach(([k,v])=>{const ws=monday(v.date);((byW[ws]??={})[v.date]??=[]).push([k,v])});
   Object.keys(byW).sort().forEach((ws,wi)=>{
-    const items=Object.values(byW[ws]).flat(),cnt=items.filter(([,v])=>COUNTED.includes(v.status)).length;
+    const items=Object.values(byW[ws]).flat(),cnt=items.filter(([,v])=>COUNTED.includes(v.status)).reduce((a,[,v])=>a+hrsOf(v),0);
     const label=ws===ws0?'สัปดาห์นี้':ws===add(ws0,7)?'สัปดาห์หน้า':ws===add(ws0,-7)?'สัปดาห์ที่แล้ว':'สัปดาห์';
-    h+=`<details class="wk" open style="--i:${wi}"><summary class="wkh">${ic('right',16,'chev')}${icb('calendar','',16)}<div><b>${label}</b> <span class="muted">${fmtRange(ws,add(ws,6))}</span></div>${ws===ws0?'<span class="tag">ตอนนี้</span>':''}<span class="r"><span class="pill room">${ic('clock',12)}${cnt*H} ชม.</span><span class="pill ok">${ic('ticket',12)}${items.length} Slot</span></span></summary>`;
+    h+=`<details class="wk" open style="--i:${wi}"><summary class="wkh">${ic('right',16,'chev')}${icb('calendar','',16)}<div><b>${label}</b> <span class="muted">${fmtRange(ws,add(ws,6))}</span></div>${ws===ws0?'<span class="tag">ตอนนี้</span>':''}<span class="r"><span class="pill room">${ic('clock',12)}${fmtH(cnt)} ชม.</span><span class="pill ok">${ic('ticket',12)}${items.length} Slot</span></span></summary>`;
     Object.keys(byW[ws]).sort().forEach(d=>{
       h+=`<div class="drow ${d===TODAY?'tdy':''}"><div class="dbad"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></div><div class="dslots">${byW[ws][d].map(([k,v],j)=>{const p=parseSid(k),past=isPast(p.d,p.s);
-        return`<button class="sc st-${v.status} ${past?'past':''}" style="animation-delay:${j*40}ms" data-act="ticket" data-k="${k}"><span class="sci">${ic(slotIcon(p.s),16)}</span><b>${C().slots[p.s]}</b><span class="rm">${ic('door',13)}ห้อง ${p.r}${v.moveTo?` ${ic('arrow',12)} ${esc(moveTxt(v).replace(' → ',''))}`:''}</span><span class="stx" title="${STATUS[v.status]}">${ic(SIC[v.status],15)}${v.status!=='ok'?`&nbsp;${stLabel(v)}`:''}</span></button>`}).join('')}</div></div>`});
+        return`<button class="sc st-${v.status} ${past?'past':''}" style="animation-delay:${j*40}ms" data-act="ticket" data-k="${k}"><span class="sci">${ic(slotIcon(p.s),16)}</span><b>${C().slots[p.s]}</b><span class="rm">${ic('door',13)}ห้อง ${p.r}${v.moveTo?` ${ic('arrow',12)} ${esc(moveTxt(v).replace(' → ',''))}`:''}</span>${isShort(v)?`<span class="hb" title="${esc(v.actReason||'')}">${ic('hour',11)}${fmtH(hrsOf(v))}/${C().hours} ชม.</span>`:''}<span class="stx" title="${STATUS[v.status]}">${ic(SIC[v.status],15)}${v.status!=='ok'?`&nbsp;${stLabel(v)}`:''}</span></button>`}).join('')}</div></div>`});
     h+='</details>';
   });
   return h;
@@ -1494,8 +1521,8 @@ function payData(from,to,cols){
   for(const v of Object.values(S.d.slots)){if(v.date<from||v.date>to)continue;
     if(isTrial(v)){rows.__t=(rows.__t||0)+C().hours;continue}
     if(v.status==='pending'){pend[v.who]=(pend[v.who]||0)+C().hours;continue}
-    const r=rows[v.who]||(rows[v.who]={cols:cols.map(()=>0),tot:0});const ci=cols.findIndex(c=>v.date>=c.from&&v.date<=c.to);
-    if(ci>=0)r.cols[ci]+=C().hours;r.tot+=C().hours}
+    const r=rows[v.who]||(rows[v.who]={cols:cols.map(()=>0),tot:0,n:0,short:0});const ci=cols.findIndex(c=>v.date>=c.from&&v.date<=c.to),hh=hrsOf(v);
+    if(ci>=0)r.cols[ci]+=hh;r.tot+=hh;r.n++;if(isShort(v))r.short++}
   return{rows,pend};
 }
 function vPay(){
@@ -1505,17 +1532,20 @@ function vPay(){
   const{rows,pend}=payData(from,to,cols);const trialH=rows.__t||0;delete rows.__t;
   let ids=Object.keys(rows).sort((a,b)=>rows[b].tot-rows[a].tot);
   if(!isBrand())ids=ids.filter(id=>id===S.meId);
-  const sumH=ids.reduce((a,id)=>a+rows[id].tot,0),avg=ids.length?Math.round(sumH/ids.length*10)/10:0;
+  const sumH=ids.reduce((a,id)=>a+rows[id].tot,0),sumN=ids.reduce((a,id)=>a+rows[id].n,0),avg=ids.length?Math.round(sumH/ids.length*10)/10:0;
+  const shorts=Object.entries(S.d.slots).filter(([,v])=>v.date>=from&&v.date<=to&&COUNTED.includes(v.status)&&!isTrial(v)&&isShort(v)&&(isBrand()||v.who===S.meId)).sort(([a],[b])=>a.localeCompare(b));
   const pendIds=Object.keys(pend).filter(id=>isBrand()||id===S.meId);
   let h=pageHd('clock','สรุปชั่วโมงไลฟ์','นับเฉพาะคิวที่ยืนยันแล้ว · รอบ จันทร์–อาทิตย์ · ชั่วโมงรายวัน / รายคน',
    `<div class="seg"><button class="${wk?'on':''}" data-act="payMode" data-m="week">${ic('calweek',14)}รายรอบ</button><button class="${!wk?'on':''}" data-act="payMode" data-m="month">${ic('calendar',14)}รายเดือน</button></div>
    <button class="btn icon" data-act="payNav" data-n="-1">${ic('left',16)}</button><b style="min-width:150px;text-align:center">${title}</b><button class="btn icon" data-act="payNav" data-n="1">${ic('right',16)}</button>`);
-  h+=`<div class="stats"><div class="stat" style="--i:0">${icb('clock')}<div><span>ชั่วโมงไลฟ์รวม</span><b>${sumH} ชม.</b></div></div><div class="stat" style="--i:1">${icb('ticket','violet')}<div><span>จำนวน Slot</span><b>${Math.round(sumH/H)} Slot</b></div></div>${isBrand()?`<div class="stat" style="--i:2">${icb('users','ok')}<div><span>จำนวนคน · เฉลี่ยต่อคน</span><b>${ids.length} คน · ${avg} ชม.</b></div></div>`:''}${isBrand()&&trialH?`<div class="stat" style="--i:3">${icb('mic','warn')}<div><span>ทดลองไลฟ์ (ไม่นับรวม)</span><b>${trialH} ชม.</b></div></div>`:''}${pendIds.length?`<div class="stat" style="--i:4">${icb('hour','warn')}<div><span>รอยืนยัน (ยังไม่นับ)</span><b>${pendIds.reduce((a,id)=>a+pend[id],0)} ชม.</b></div></div>`:''}</div>
+  h+=`<div class="stats"><div class="stat" style="--i:0">${icb('clock')}<div><span>ชั่วโมงไลฟ์รวม</span><b>${fmtH(sumH)} ชม.</b></div></div><div class="stat" style="--i:1">${icb('ticket','violet')}<div><span>จำนวน Slot</span><b>${sumN} Slot</b></div></div>${isBrand()?`<div class="stat" style="--i:2">${icb('users','ok')}<div><span>จำนวนคน · เฉลี่ยต่อคน</span><b>${ids.length} คน · ${fmtH(avg)} ชม.</b></div></div>`:''}${isBrand()&&trialH?`<div class="stat" style="--i:3">${icb('mic','warn')}<div><span>ทดลองไลฟ์ (ไม่นับรวม)</span><b>${trialH} ชม.</b></div></div>`:''}${pendIds.length?`<div class="stat" style="--i:4">${icb('hour','warn')}<div><span>รอยืนยัน (ยังไม่นับ)</span><b>${pendIds.reduce((a,id)=>a+pend[id],0)} ชม.</b></div></div>`:''}</div>
   <div class="card scroll"><table class="tbl"><thead><tr><th>ชื่อ</th>${cols.map(c=>`<th>${c.l}</th>`).join('')}<th>รวม ชม.</th><th>Slot</th></tr></thead><tbody>
-  ${ids.map((id,i)=>`<tr style="--i:${i}"><td>${nameChip(id)}</td>${rows[id].cols.map(x=>`<td class="${x?'':'z'}">${x||'–'}</td>`).join('')}<td><b>${rows[id].tot}</b></td><td>${Math.round(rows[id].tot/H)}</td></tr>`).join('')||`<tr><td colspan="${cols.length+3}" class="muted" style="text-align:center;padding:30px">ยังไม่มีคิวในช่วงนี้</td></tr>`}
-  </tbody>${ids.length?`<tfoot><tr><td>รวม</td>${cols.map((_,ci)=>`<td>${ids.reduce((a,id)=>a+rows[id].cols[ci],0)}</td>`).join('')}<td>${sumH}</td><td>${Math.round(sumH/H)}</td></tr></tfoot>`:''}</table></div>
+  ${ids.map((id,i)=>`<tr style="--i:${i}"><td>${nameChip(id)}</td>${rows[id].cols.map(x=>`<td class="${x?'':'z'}">${x?fmtH(x):'–'}</td>`).join('')}<td><b>${fmtH(rows[id].tot)}</b>${rows[id].short?`<small class="shtag" title="มี ${rows[id].short} Slot ที่ไลฟ์ไม่ครบ">${ic('hour',10)}${rows[id].short}</small>`:''}</td><td>${rows[id].n}</td></tr>`).join('')||`<tr><td colspan="${cols.length+3}" class="muted" style="text-align:center;padding:30px">ยังไม่มีคิวในช่วงนี้</td></tr>`}
+  </tbody>${ids.length?`<tfoot><tr><td>รวม</td>${cols.map((_,ci)=>`<td>${fmtH(ids.reduce((a,id)=>a+rows[id].cols[ci],0))}</td>`).join('')}<td>${fmtH(sumH)}</td><td>${sumN}</td></tr></tfoot>`:''}</table></div>
   <div class="mact" style="justify-content:flex-end"><button class="btn" data-act="copyPay">${ic('copy',16)}คัดลอกสรุปส่ง LINE</button><button class="btn" data-act="csvPay">${ic('sheet',16)}ส่งออก CSV</button><button class="btn" data-act="print">${ic('printer',16)}พิมพ์ / PDF</button></div>`;
-  S._pay={from,to,cols,ids,rows,title,wk};
+  h+=`<div class="card shcard" style="margin-top:16px"><h3 style="margin:0 0 4px">${icb('hour','warn')}Slot ที่ไลฟ์ไม่ครบ ${shorts.length?`(${shorts.length})`:''}</h3><p class="muted" style="margin:0 0 10px;font-size:13px">ชั่วโมงในตารางด้านบนนับตามชั่วโมงไลฟ์จริงแล้ว · แตะรายการเพื่อแก้ไข</p>
+   ${shorts.length?`<div class="shlist">${shorts.map(([k,v])=>{const p=parseSid(k);return`<button class="shrow" data-act="hrs" data-k="${k}">${nameChip(v.who)}<span class="sht">${ic('calendar',12)}${fmtD(p.d)} · ${C().slots[p.s]} · ห้อง ${p.r}</span><b class="shh">${fmtH(hrsOf(v))}<small>/${C().hours} ชม.</small></b><span class="shr">${ic('msg',12)}${esc(v.actReason||'ไม่ระบุเหตุผล')}${v.actBy?`<small> · บันทึกโดย ${esc(v.actBy)}</small>`:''}</span></button>`}).join('')}</div>`:`<div class="muted" style="font-size:13px;padding:6px 0">${ic('checkc',14)} ทุก Slot ในช่วงนี้ไลฟ์ครบ ${C().hours} ชั่วโมง</div>`}</div>`;
+  S._pay={from,to,cols,ids,rows,title,wk,shorts};
   return h;
 }
 /* ---------------- REQUESTS ---------------- */
@@ -1836,18 +1866,48 @@ function delMemberDlg(id){
 function ticketDlg(k){
   const v=S.d.slots[k];if(!v)return;const p=parseSid(k),past=isPast(p.d,p.s);
   let act='';
-  if(past)act=`<p class="muted" style="margin-top:12px">รอบนี้ผ่านไปแล้ว</p>`;
+  if(past)act=`<p class="muted" style="margin-top:12px;width:100%">รอบนี้ผ่านไปแล้ว</p>`;
   else if(v.status==='ok')act=`${can('requestCancel')?`<button class="btn bad" data-d="cancelForm">${ic('undo',16)}ขอยกเลิก</button>`:''}${can('requestMove')||can('requestTime')?`<button class="btn violet" data-d="chgForm">${ic('swap',16)}ขอเปลี่ยนคิว (ห้อง / เวลา)</button>`:''}${!can('requestCancel')&&!can('requestMove')&&!can('requestTime')?'<p class="muted">ถ้าต้องการเปลี่ยนแปลง กรุณาติดต่อแบรนด์</p>':''}`;
   else if(v.status==='pending')act=`<button class="btn bad" data-d="delPending">${ic('trash',16)}ถอนคำขอจองนี้</button>`;
   else act=`<button class="btn" data-d="withdraw">${ic('history',16)}ถอนคำขอ (ไลฟ์ตามเดิม)</button>`;
   const info=v.status==='pending'?'แบรนด์ยังไม่ยืนยัน · ถอนคำขอได้ทันที (แบรนด์จะเห็นในประวัติ)':v.status==='cancelreq'?'ส่งคำขอยกเลิกแล้ว รอแบรนด์อนุมัติ · ระหว่างรอ คิวยังเป็นของคุณ':v.status==='movereq'?`ขอย้ายไปห้อง ${v.moveTo?.room} รอแบรนด์อนุมัติ`:v.status==='timereq'?`ขอเปลี่ยนเป็น${moveTxt(v).replace(' →','')} รอแบรนด์อนุมัติ`:'คิวยืนยันแล้ว';
-  modal(`<div class="mhead">${icb('ticket')}<div><h3>ตั๋วของฉัน</h3><span class="muted">${info}</span></div></div>${miniTicket(k,v)}${byline(v)}${v.reason?`<div class="why ${v.status==='movereq'?'mv':v.status==='timereq'?'tm':''}">${ic('msg',15)}${esc(v.reason)}</div>`:''}<div class="mact">${act}<button class="btn ghost" data-d="close">ปิด</button></div>`,
+  if(canHrs(v))act+=`<button class="btn warn" data-d="hrs">${ic('hour',16)}${isShort(v)?'แก้ชั่วโมงไลฟ์จริง':'แจ้งไลฟ์ไม่ครบ'}</button>`;
+  modal(`<div class="mhead">${icb('ticket')}<div><h3>ตั๋วของฉัน</h3><span class="muted">${info}</span></div></div>${miniTicket(k,v)}${byline(v)}${hrsLine(v)}${v.reason?`<div class="why ${v.status==='movereq'?'mv':v.status==='timereq'?'tm':''}">${ic('msg',15)}${esc(v.reason)}</div>`:''}<div class="mact">${act}<button class="btn ghost" data-d="close">ปิด</button></div>`,
   async a=>{
     if(a==='close')return closeM();
+    if(a==='hrs')return hoursDlg(k,()=>ticketDlg(k));
     if(a==='cancelForm')return cancelForm(k);
     if(a==='chgForm'||a==='moveForm'||a==='timeForm')return chgForm(k);
     if(a==='delPending'){if(await write([['del','slots',k],...reqOp(v,WD())],`ถอนคำขอจอง ${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}`)){closeM();toast('ถอนคำขอจองแล้ว')}}
     if(a==='withdraw'){if(await write([['patch','slots',k,{status:'ok',reason:null,moveTo:null,reqAt:null,reqId:null}],...reqOp(v,WD())],`ถอนคำขอ ${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}`)){closeM();toast('ถอนคำขอแล้ว คิวกลับเป็นปกติ')}}
+  });
+}
+function hrsLine(v){return isShort(v)?`<div class="why hrs">${ic('hour',15)}<div><b>ไลฟ์จริง ${fmtH(hrsOf(v))} จาก ${C().hours} ชม.</b>${v.actReason?` · ${esc(v.actReason)}`:''}${v.actBy?`<small>บันทึกโดย ${esc(v.actBy)}${v.actAt?' · '+timeAgo(v.actAt):''}</small>`:''}</div></div>`:''}
+function hoursDlg(k,back){
+  const v=S.d.slots[k];if(!canHrs(v))return toast('แก้ชั่วโมงของรอบนี้ไม่ได้',1);
+  const p=parseSid(k),H=C().hours,opts=[];for(let x=0;x<H;x+=0.5)opts.push(x);
+  let hv=isShort(v)?hrsOf(v):null,pick='';
+  const cur=v.actReason||'',known=SH_REASONS.find(([r])=>cur.startsWith(r));if(known){pick=known[0]}
+  const extra=known?cur.slice(known[0].length).replace(/^ · /,''):cur;
+  modal(`<div class="mhead">${icb('hour','warn')}<div><h3>ชั่วโมงไลฟ์จริง</h3><span class="muted">ใช้เมื่อไลฟ์ไม่ครบ ${H} ชม. · ระบบจะนับชั่วโมงตามนี้ในหน้าสรุป</span></div></div>${miniTicket(k,v)}
+   <div class="sec"><b>${ic('clock',14)}ไลฟ์ไปกี่ชั่วโมง</b><div class="hpick">${opts.map(x=>`<button data-d="h:${x}" class="${hv===x?'on':''}">${fmtH(x)}<small>ชม.</small></button>`).join('')}</div>
+   <div class="hcustom"><span class="muted">หรือระบุเอง</span><input class="inp" id="hcus" type="number" min="0" max="${H}" step="0.25" inputmode="decimal" placeholder="เช่น 2.25" value="${hv!=null&&!opts.includes(hv)?hv:''}"><span class="muted">ชม. (ไม่เกิน ${H})</span></div></div>
+   <div class="sec"><b>${ic('msg',14)}เหตุผล</b><div class="rsn">${SH_REASONS.map(([r,i])=>`<button data-d="r:${esc(r)}" class="${pick===r?'on':''}">${ic(i,14)}${esc(r)}</button>`).join('')}</div>
+   <textarea id="hwhy" rows="2" placeholder="รายละเอียดเพิ่มเติม (เช่น ไลฟ์ 12:00–14:00 แล้วระบบล่ม)">${esc(extra)}</textarea></div>
+   <div class="mact"><button class="btn warn" data-d="save">${ic('check',16)}บันทึก</button>${isShort(v)?`<button class="btn" data-d="full">${ic('undo',16)}ไลฟ์ครบ ${H} ชม. (ล้างค่า)</button>`:''}<button class="btn ghost" data-d="back">${ic('left',16)}ย้อนกลับ</button></div>`,
+  async(a,b)=>{
+    if(a==='back')return back?back():closeM();
+    if(a.startsWith('h:')){hv=+a.slice(2);$('#hcus').value='';document.querySelectorAll('.hpick button').forEach(x=>x.classList.toggle('on',x===b));return}
+    if(a.startsWith('r:')){const r=a.slice(2);pick=pick===r?'':r;document.querySelectorAll('.rsn button').forEach(x=>x.classList.toggle('on',x===b&&pick===r));return}
+    const t=`${M(v.who).name} ${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}`;
+    if(a==='full'){if(await write([['patch','slots',k,{act:null,actReason:null,actBy:myName(),actAt:Date.now()}]],`ตั้งชั่วโมงกลับเป็นเต็ม ${H} ชม. · ${t}`)){closeM();toast('นับเต็ม '+H+' ชม. แล้ว')}return}
+    if(a==='save'){const c=$('#hcus').value.trim();let val=c!==''?+c:hv;
+      if(val==null||isNaN(val)){toast('เลือกจำนวนชั่วโมงที่ไลฟ์จริงก่อน',1);return}
+      if(val<0||val>=H){toast(`ชั่วโมงต้องอยู่ระหว่าง 0 ถึงน้อยกว่า ${H}`,1);return}
+      val=Math.round(val*100)/100;
+      const reason=[pick,$('#hwhy').value.trim()].filter(Boolean).join(' · ');
+      if(reason.length<2){toast('ใส่เหตุผลที่ไลฟ์ไม่ครบด้วย',1);$('#hwhy').focus();return}
+      if(await write([['patch','slots',k,{act:val,actReason:reason,actBy:myName(),actAt:Date.now()}]],`ไลฟ์ไม่ครบ ${fmtH(val)}/${H} ชม. · ${t} (${reason})`)){closeM();toast(`บันทึกไลฟ์จริง ${fmtH(val)} ชม. แล้ว`)}}
   });
 }
 function cancelForm(k){
@@ -1894,6 +1954,7 @@ function adminDlg(k){
   modal(`<div class="mhead">${icb('tag','navy')}<div><h3>จัดการรอบนี้</h3><span class="muted">${v?'แก้ไข / ย้ายห้อง / ลบ':'ใส่ชื่อ Live Streamer'}</span></div></div>${miniTicket(k,v)}${byline(v)}${top}
    <div class="sec"><b>${ic('user',14)}${v?'เปลี่ยนเป็นคนอื่น':'เลือก Live Streamer'} <span class="muted">(ขีดฆ่า = อยู่ห้องอื่นเวลานี้)</span></b><div class="chips">${membersList().map(m=>{const c=colOf(m.id);return`<button data-d="set:${m.id}" class="${v?.who===m.id?'on':''} ${busy.has(m.id)?'busy':''}" style="background:${c.bg};color:${c.fg}">${esc(m.name)}</button>`}).join('')}</div>
    <button class="trialbtn ${isTrial(v)?'on':''}" data-d="trial">${icb('mic','warn',16)}<span><b>${isTrial(v)?'แก้ไขข้อมูลทดลองไลฟ์':'ลงเป็น “ทดลองไลฟ์”'}</b><small>${isTrial(v)?esc(v.guest||'')+(v.note?' · '+esc(v.note):''):'สำหรับคนที่มาทดลองไลฟ์ · ใส่ชื่อและโน้ตได้'}</small></span>${ic('right',16)}</button></div>
+   ${canHrs(v)?`<div class="sec"><b>${ic('hour',14)}ชั่วโมงไลฟ์จริง</b>${hrsLine(v)||`<p class="muted" style="margin:0 0 8px;font-size:13px">ตอนนี้นับเต็ม ${C().hours} ชม.</p>`}<button class="btn warn" data-d="hrs" style="width:100%">${ic('hour',16)}${isShort(v)?'แก้ไขชั่วโมงไลฟ์จริง':'บันทึกว่าไลฟ์ไม่ครบ'}</button></div>`:''}
    ${v?`<div class="sec"><b>${ic('swap',14)}ย้ายห้อง / เปลี่ยนเวลา / เปลี่ยนวัน</b><button class="btn violet" data-d="chg" style="width:100%">${ic('swap',16)}เปลี่ยนคิวนี้</button></div>`:''}
    <div class="mact">${v?`<button class="btn" data-d="del" style="color:var(--bad)">${ic('trash',16)}ลบออก (ให้ว่าง)</button>`:''}<button class="btn ghost" data-d="close">ปิด</button></div>`,
   async a=>{
@@ -1902,6 +1963,7 @@ function adminDlg(k){
     if(a==='reject')return rejectDlg(k);
     if(a==='del'){if(await write([['del','slots',k],...override],`ลบ ${whoName(v)} ${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}`)){closeM();toast('ลบแล้ว')}return}
     if(a==='chg')return chgForm(k,true);
+    if(a==='hrs')return hoursDlg(k,()=>adminDlg(k));
     if(a==='trial')return trialDlg([k],()=>adminDlg(k));
     if(a.startsWith('mv:')){if(await moveSlot(k,+a.slice(3),override))closeM();return}
     if(a.startsWith('set:')){const id=a.slice(4);if(busy.has(id)){toast(`${M(id).name} มีคิวห้องอื่นเวลานี้อยู่แล้ว`,1);return}
@@ -1911,7 +1973,7 @@ function adminDlg(k){
 async function moveSlot(k,room,extra=[]){
   const v=S.d.slots[k]||reqs()[k],p=parseSid(k),nk=sid(p.d,room,p.s);
   if(S.d.slots[nk]){toast(`ห้อง ${room} ไม่ว่างแล้ว`,1);return false}
-  const ok=await write([['set','slots',nk,{...v,room,status:'ok',reason:null,moveTo:null,reqAt:null,reqId:null,at:Date.now(),approvedBy:myName(),approvedAt:Date.now()}],['del','slots',k],...extra],`ย้าย ${M(v.who).name} ${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r} → ${room}`);
+  const ok=await write([['set','slots',nk,{...v,room,status:'ok',reason:null,moveTo:null,reqAt:null,reqId:null,act:null,actReason:null,actBy:null,actAt:null,at:Date.now(),approvedBy:myName(),approvedAt:Date.now()}],['del','slots',k],...extra],`ย้าย ${M(v.who).name} ${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r} → ${room}`);
   if(ok)toast(`ย้ายไปห้อง ${room} แล้ว`);return ok;
 }
 async function approve(k){
@@ -2046,6 +2108,7 @@ async function saveEmail(id,email){
   if(await write(ops,`ตั้ง Gmail ของ ${M(id).name}: ${email||'(ลบ)'}`))toast('บันทึก Gmail แล้ว');
 }
 const acts={
+  hrs:b=>hoursDlg(b.dataset.k),
   side:()=>{const sh=$('#shell');const off=sh.classList.toggle('nos');try{localStorage.setItem('kbz-side',off?'off':'on')}catch(e){}},
   view:b=>{S.view=b.dataset.v;S.sel.clear();S._keepRow=false;S._wkInit=false;render();window.scrollTo({top:0,behavior:'smooth'})},
   date:b=>{S.date=b.dataset.d;render()},
@@ -2136,9 +2199,10 @@ const acts={
   pickColor:b=>colorDlg(b.dataset.id),
   copyMine:()=>{const t=myTickets().filter(([k])=>{const p=parseSid(k);return!isPast(p.d,p.s)});const byW={};t.forEach(([k,v])=>(byW[monday(v.date)]??=[]).push([k,v]));
     copyText(`คิวไลฟ์ของ ${M(S.meId).name}\n`+Object.keys(byW).sort().map(ws=>`\n— สัปดาห์ ${fmtRange(ws,add(ws,6))} —\n`+byW[ws].map(([k,v])=>{const p=parseSid(k);return`${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}${v.status!=='ok'?' '+STXT[v.status]+moveTxt(v):''}`}).join('\n')).join('\n'))},
-  copyPay:()=>{const P=S._pay;copyText(`สรุปชั่วโมงไลฟ์ ${P.title}\n`+P.ids.map(id=>`${M(id).name}: ${P.rows[id].tot} ชม. (${Math.round(P.rows[id].tot/C().hours)} Slot)`).join('\n')+`\nรวม ${P.ids.reduce((a,id)=>a+P.rows[id].tot,0)} ชม.`)},
+  copyPay:()=>{const P=S._pay;copyText(`สรุปชั่วโมงไลฟ์ ${P.title}\n`+P.ids.map(id=>`${M(id).name}: ${fmtH(P.rows[id].tot)} ชม. (${P.rows[id].n} Slot${P.rows[id].short?` · ไม่ครบ ${P.rows[id].short}`:''})`).join('\n')+`\nรวม ${P.ids.reduce((a,id)=>a+P.rows[id].tot,0)} ชม.`)},
   csvPay:()=>{const P=S._pay;let t='\ufeffชื่อ,'+P.cols.map(c=>c.from===c.to?c.from:`${c.from} ถึง ${c.to}`).join(',')+',รวมชั่วโมง,Slot\n';
-    P.ids.forEach(id=>t+=`"${M(id).name}",${P.rows[id].cols.join(',')},${P.rows[id].tot},${Math.round(P.rows[id].tot/C().hours)}\n`);
+    P.ids.forEach(id=>t+=`"${M(id).name}",${P.rows[id].cols.map(fmtH).join(',')},${fmtH(P.rows[id].tot)},${P.rows[id].n}\n`);
+    if(P.shorts?.length){t+=`\nSlot ที่ไลฟ์ไม่ครบ\nชื่อ,วันที่,เวลา,ห้อง,ชั่วโมงจริง,เหตุผล,บันทึกโดย\n`;P.shorts.forEach(([k,v])=>{const p=parseSid(k);t+=`"${M(v.who).name}",${p.d},${C().slots[p.s]},${p.r},${fmtH(hrsOf(v))},"${(v.actReason||'').replace(/"/g,'""')}","${(v.actBy||'').replace(/"/g,'""')}"\n`})}
     t+='\nรายละเอียดรายคิว\nวันที่,เวลา,ห้อง,ชื่อ,สถานะ\n';Object.values(S.d.slots).filter(v=>v.date>=P.from&&v.date<=P.to).sort((a,b)=>(a.date+a.slot+a.room).localeCompare(b.date+b.slot+b.room)).forEach(v=>t+=`${v.date},${C().slots[v.slot]},${v.room},"${whoName(v)}",${STATUS[v.status]}\n`);
     download(`สรุปชั่วโมง-${P.from}_${P.to}.csv`,t,'text/csv')},
 };
