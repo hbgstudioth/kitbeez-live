@@ -1026,6 +1026,16 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
 .hmbox{gap:8px 12px}
 .hmbox input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,111,235,.15)}
 .hmhint{flex:1 1 100%;font-size:12px;color:var(--muted);margin-top:-2px}
+
+/* ตัวกรองหน้าอนุมัติ */
+.rqf{margin-bottom:14px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.rqfrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rqfrow .lb{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--navy);min-width:112px}
+.seg.sm button{padding:6px 12px;font-size:13px}
+.rqdates{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.rqdates .inp{width:auto;padding:7px 10px;font-size:14px}.rqdates span{color:var(--muted);font-size:13px}
+.rqwho{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:3px 10px 3px 4px;cursor:pointer;font:inherit;color:var(--muted)}
+.rqfsum{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}.rqfsum b{color:var(--navy)}
+@media(max-width:600px){.rqfrow .lb{min-width:0;width:100%}.rqf .seg.sm{width:100%;display:flex}.rqf .seg.sm button{flex:1;padding:6px 2px;font-size:12px;min-width:0}.rqdates{width:100%}.rqdates .inp{flex:1;min-width:0}}
 </style>
 </head>
 <body>
@@ -1229,7 +1239,7 @@ const inApp=()=>/Line\/|FBAN|FBAV|Instagram|; wv\)/i.test(navigator.userAgent);
 /* =====================================================================
    STORE
    ===================================================================== */
-const EMPTY=()=>({config:{},members:{},access:{},notes:{},slots:{},logs:{},reqs:{},requests:{},closures:{}});
+const EMPTY=()=>({config:{},members:{},access:{},notes:{},slots:{},logs:{},reqs:{},requests:{},reqRange:{},closures:{}});
 function seedOps(){return[['set','config','main',DEFAULT_CONFIG]]}
 const demoEmail=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,'')+'@demo.live';
 function makeLocal(){
@@ -1257,7 +1267,7 @@ function makeLocal(){
       if(!e){S.user={email:`(ยังไม่ได้ตั้ง Gmail ให้ ${db.members[id]?.name})`};S.denied=true;S.role=null;cb();return}
       this.loginEmail(e)},
     logout(){sessionStorage.removeItem('kbz-demo-email');Object.assign(S,{user:null,role:null,meId:null,denied:false});cb()},
-    setRange(){},
+    setRange(){},reqRange(){},
     async batch(ops){apply(ops);persist()},
     async log(text){db.logs[Date.now()+'_'+Math.random().toString(36).slice(2,5)]={at:Date.now(),by:myName(),text};persist()},
     reset(){localStorage.removeItem(KEY);sessionStorage.removeItem('kbz-demo-email');location.reload()}
@@ -1267,11 +1277,11 @@ async function makeFirebase(cfg){
   const base='https://www.gstatic.com/firebasejs/10.12.2/';
   const [{initializeApp},A,F]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);
   const app=initializeApp(cfg),auth=A.getAuth(app),db=F.getFirestore(app);
-  const data=EMPTY();let cb=()=>{},authUnsub=[],dataUnsub=[],slotUnsub=null,closUnsub=null,range=null,startedRole=null;
+  const data=EMPTY();let cb=()=>{},authUnsub=[],dataUnsub=[],rrUnsub=null,rrKey=null,slotUnsub=null,closUnsub=null,range=null,startedRole=null;
   const owners=OWNER_EMAILS.map(e=>e.toLowerCase());
   const fail=(what)=>err=>{console.warn(what,err);toast(`โหลด ${what} ไม่ได้ (${err.code})`,1)};
   const listen=(col,q,into=col)=>F.onSnapshot(q,snap=>{const o={};snap.forEach(d=>o[d.id]=d.data());data[into]=o;cb()},fail(col));
-  const stopData=()=>{dataUnsub.forEach(u=>u());dataUnsub=[];slotUnsub?.();slotUnsub=null;closUnsub?.();closUnsub=null;range=null;Object.assign(data,EMPTY())};
+  const stopData=()=>{dataUnsub.forEach(u=>u());dataUnsub=[];rrUnsub?.();rrUnsub=null;rrKey=null;slotUnsub?.();slotUnsub=null;closUnsub?.();closUnsub=null;range=null;Object.assign(data,EMPTY())};
   function startData(){
     stopData();startedRole=S.role;
     dataUnsub.push(F.onSnapshot(F.doc(db,'config','main'),s=>{data.config=s.exists()?{main:s.data()}:{};cb()},fail('config')));
@@ -1313,6 +1323,8 @@ async function makeFirebase(cfg){
         if(e.code!=='auth/popup-closed-by-user'&&e.code!=='auth/cancelled-popup-request')toast('เข้าสู่ระบบไม่สำเร็จ: '+(e.code||e.message),1)}
     },
     logout(){A.signOut(auth)},
+    reqRange(from,to){const key=from&&to?from+'|'+to:null;if(key===rrKey)return;rrKey=key;rrUnsub?.();rrUnsub=null;data.reqRange={};
+      if(key&&S.role==='brand')rrUnsub=listen('requests',F.query(F.collection(db,'requests'),F.where('date','>=',from),F.where('date','<=',to)),'reqRange')},
     setRange(from,to){if(range&&from>=range[0]&&to<=range[1])return;const f=add(from,-21),t=add(to,28);range=[f,t];slotUnsub?.();
       slotUnsub=listen('slots',F.query(F.collection(db,'slots'),F.where('date','>=',f),F.where('date','<=',t)));closUnsub?.();
       closUnsub=listen('closures',F.query(F.collection(db,'closures'),F.where('date','>=',f),F.where('date','<=',t)))},
@@ -1636,19 +1648,34 @@ function reqCard(id,q,brand,i){
    ${isNew?`<div class="mact" style="justify-content:flex-end;margin-top:10px"><button class="btn sm primary" data-act="ackReq" data-id="${id}">${ic('check',14)}รับทราบ</button></div>`:''}
    ${brand&&q.ack?`<div class="meta" style="justify-content:flex-end;margin-top:8px">${ic('check',12)}รับทราบแล้ว ${q.ackBy?'โดย '+esc(q.ackBy):''} ${q.ackAt?timeAgo(q.ackAt):''}</div>`:''}</div>`;
 }
+function rqRange(){const f=S.rqF||{};const ws=monday(TODAY);
+  if(f.mode==='today')return[TODAY,TODAY];if(f.mode==='week')return[ws,add(ws,6)];
+  if(f.mode==='month'){const[y,m]=TODAY.split('-').map(Number);return[`${TODAY.slice(0,7)}-01`,isoOf(new Date(Date.UTC(y,m,0)))]}
+  if(f.mode==='custom'&&(f.from||f.to)){const a=f.from||f.to,b=f.to||f.from;return a<=b?[a,b]:[b,a]}return null}
+const rqPass=(date,who)=>{const r=rqRange(),w=S.rqF?.who;return(!r||(date>=r[0]&&date<=r[1]))&&(!w||who===w)};
+function rqFilterBar(n){
+  const f=S.rqF||{},r=rqRange(),w=f.who&&S.d.members[f.who]?f.who:null,mode=f.mode||'all';
+  return`<div class="card rqf"><div class="rqfrow"><span class="lb">${ic('calendar',15)}วันไลฟ์</span><div class="seg sm">${[['all','ทั้งหมด'],['today','วันนี้'],['week','สัปดาห์นี้'],['month','เดือนนี้'],['custom','เลือกวัน']].map(([k,l])=>`<button class="${mode===k?'on':''}" data-act="rqMode" data-m="${k}">${l}</button>`).join('')}</div>
+    ${mode==='custom'?`<div class="rqdates"><input type="date" class="inp" data-rqd="from" value="${f.from||''}"><span>ถึง</span><input type="date" class="inp" data-rqd="to" value="${f.to||''}"></div>`:''}</div>
+   <div class="rqfrow"><span class="lb">${ic('user',15)}Live Streamer</span>${w?`<button class="rqwho" data-act="rqWho">${nameChip(w)}${ic('edit',13)}</button><button class="btn sm ghost" data-act="rqWhoClear">${ic('x',13)}ทุกคน</button>`:`<button class="btn sm" data-act="rqWho">${ic('users',14)}ทุกคน · แตะเพื่อเลือก</button>`}</div>
+   <div class="rqfsum">${ic('filter',13)}${r?`${fmtD(r[0])}${r[1]!==r[0]?' – '+fmtD(r[1]):''}`:'ทุกวัน'} · ${w?esc(M(w).name):'ทุกคน'} · <b>พบ ${n} รายการ</b>${r||w?`<button class="link" data-act="rqClear">ล้างตัวกรอง</button>`:''}</div></div>`;
+}
 function vReq(){
   const tab=S.reqTab||'pending';
-  const all=Object.entries(reqs()||{}).sort(([a],[b])=>a.localeCompare(b));
+  const rr=rqRange();S.store.reqRange?.(rr?.[0],rr?.[1]);
+  const all=Object.entries(reqs()||{}).filter(([k,v])=>{const p=parseSid(k);return rqPass(p.d,v.who)}).sort(([a],[b])=>a.localeCompare(b));
+  S._reqVis=all.map(([k])=>k);
   const g={pending:[],cancelreq:[],movereq:[],timereq:[]};all.forEach(([k,v])=>g[v.status]?.push([k,v]));
-  const rq=Object.entries(S.d.requests||{}).sort(([,a],[,b])=>(b.withdrawnAt||b.createdAt)-(a.withdrawnAt||a.createdAt));
+  const rq=Object.entries({...(S.d.reqRange||{}),...(S.d.requests||{})}).filter(([,q])=>rqPass(q.date,q.who)).sort(([,a],[,b])=>(b.withdrawnAt||b.createdAt)-(a.withdrawnAt||a.createdAt));
   const wd=rq.filter(([,q])=>q.status==='withdrawn'),un=wd.filter(([,q])=>!q.ack).length;
   let h=pageHd('inbox','คำขอจาก Live Streamer','อนุมัติคำขอ · ดูคำขอที่ถูกยกเลิก · ประวัติย้อนหลัง')+
   `<div class="hdact" style="margin-bottom:14px"><div class="seg"><button class="${tab==='pending'?'on':''}" data-act="reqTab" data-t="pending">${ic('hour',14)}รออนุมัติ${all.length?`<em>${all.length}</em>`:''}</button><button class="${tab==='withdrawn'?'on':''}" data-act="reqTab" data-t="withdrawn">${ic('history',14)}คำขอที่ถูกยกเลิก${un?`<em>${un}</em>`:''}</button><button class="${tab==='history'?'on':''}" data-act="reqTab" data-t="history">${ic('list',14)}ประวัติคำขอทั้งหมด<b>${rq.length}</b></button></div></div>`;
+  h+=rqFilterBar(tab==='pending'?all.length:tab==='withdrawn'?wd.length:rq.filter(([,q])=>!S.reqBy||q.decidedBy===S.reqBy||q.ackBy===S.reqBy).length);
   if(tab==='pending'){
     const item=([k,v],i)=>{const p=parseSid(k);return`<div class="req" style="--i:${i}">${nameChip(v.who)}<div class="info"><b>${ic('calendar',14)}${fmtD(p.d)} · ${ic(slotIcon(p.s),14)}${C().slots[p.s]} · ${ic('door',14)}ห้อง ${p.r}${v.moveTo?` <span style="color:${v.status==='timereq'?'#0e7490':'var(--violet)'};display:inline-flex;gap:3px;align-items:center">${ic('arrow',14)}${esc(moveTxt(v).replace(' → ',''))}</span>`:''}</b>${v.reason?`<div class="why ${v.status==='movereq'?'mv':v.status==='timereq'?'tm':''}">${ic('msg',14)}${esc(v.reason)}</div>`:''}<div class="meta">${ic('clock',12)}ส่งเมื่อ ${timeAgo(v.reqAt||v.at)}</div></div>
       <button class="btn ok sm" data-act="approve" data-k="${k}">${ic('check',14)}${v.status==='pending'?'ยืนยันจอง':v.status==='cancelreq'?'อนุมัติยกเลิก':v.status==='timereq'||v.status==='movereq'?'อนุมัติเปลี่ยนคิว':'อนุมัติ'}</button><button class="btn sm" data-act="rejectReq" data-k="${k}">${ic('x',14)}ไม่อนุมัติ</button></div>`};
     const sec=(st,title,icon,cls)=>g[st].length?`<div class="card" style="margin-bottom:16px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">${icb(icon,cls)}<h3 style="margin:0">${title} <span class="pill ${st}">${g[st].length}</span></h3><button class="btn sm" style="margin-left:auto" data-act="approveAll" data-st="${st}">${ic('check',14)}อนุมัติทั้งหมด</button></div>${g[st].map(item).join('')}</div>`:'';
-    return h+(all.length?sec('pending','คำขอจองใหม่','hour','warn')+sec('cancelreq','คำขอยกเลิกคิว','undo','bad')+sec('movereq','คำขอย้ายห้อง (เวลาเดิม)','swap','violet')+sec('timereq','คำขอเปลี่ยนเวลา / วัน (+ ห้อง)','clock','teal'):`<div class="card empty">${icb('checkc','ok',30)}<b>ไม่มีรายการค้าง</b>ทุกคำขอได้รับการจัดการแล้ว</div>`);
+    return h+(all.length?sec('pending','คำขอจองใหม่','hour','warn')+sec('cancelreq','คำขอยกเลิกคิว','undo','bad')+sec('movereq','คำขอย้ายห้อง (เวลาเดิม)','swap','violet')+sec('timereq','คำขอเปลี่ยนเวลา / วัน (+ ห้อง)','clock','teal'):(rqRange()||S.rqF?.who?`<div class="card empty">${icb('filter','',30)}<b>ไม่พบคำขอรออนุมัติตามตัวกรอง</b>ลองเปลี่ยนช่วงวันหรือเลือก “ทุกคน”</div>`:`<div class="card empty">${icb('checkc','ok',30)}<b>ไม่มีรายการค้าง</b>ทุกคำขอได้รับการจัดการแล้ว</div>`));
   }
   if(tab==='withdrawn')return h+`<div class="card" style="margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">${icb('info')}<div style="flex:1;min-width:200px"><b>คำขอที่ Live Streamer ถอนเอง ก่อนแบรนด์ตัดสิน</b><div class="muted" style="font-size:13px">ระบบบันทึกไว้ให้แบรนด์รับทราบ · รายการที่ยังไม่รับทราบมีป้าย “ใหม่”</div></div>${un?`<button class="btn primary sm" data-act="ackAll">${ic('check',14)}รับทราบทั้งหมด (${un})</button>`:''}</div>`+
     (wd.map(([id,q],i)=>reqCard(id,q,true,i)).join('')||`<div class="card empty">${icb('history','',30)}<b>ยังไม่มีคำขอที่ถูกยกเลิก</b></div>`);
@@ -2200,6 +2227,10 @@ async function saveEmail(id,email){
   if(await write(ops,`ตั้ง Gmail ของ ${M(id).name}: ${email||'(ลบ)'}`))toast('บันทึก Gmail แล้ว');
 }
 const acts={
+  rqMode:b=>{S.rqF={...(S.rqF||{}),mode:b.dataset.m};if(b.dataset.m==='custom'&&!S.rqF.from){S.rqF.from=TODAY;S.rqF.to=add(TODAY,6)}render()},
+  rqWho:()=>pickNameDlg({title:'ดูคำขอของใคร',sub:'เลือก Live Streamer เพื่อกรองรายการ',sel:S.rqF?.who,onPick:id=>{S.rqF={...(S.rqF||{}),who:id};closeM();render()}}),
+  rqWhoClear:()=>{S.rqF={...(S.rqF||{}),who:null};render()},
+  rqClear:()=>{S.rqF={mode:'all'};render()},
   newAdds:()=>newAddsDlg(),
   hrs:b=>hoursDlg(b.dataset.k),
   side:()=>{const sh=$('#shell');const off=sh.classList.toggle('nos');try{localStorage.setItem('kbz-side',off?'off':'on')}catch(e){}},
@@ -2235,7 +2266,7 @@ const acts={
     const ops=q.type==='book'?[['del','slots',q.slotKey]]:[['patch','slots',q.slotKey,{status:'ok',reason:null,moveTo:null,reqAt:null,reqId:null}]];
     if(await write([...ops,['patch','requests',id,WD()]],`ถอน${RT[q.type].l} ${slotInfo(q)}`))toast('ถอนคำขอแล้ว')},
   ackReq:b=>write([['patch','requests',b.dataset.id,{ack:true,ackBy:myName(),ackAt:Date.now()}]]),
-  ackAll:()=>{const ops=Object.entries(S.d.requests).filter(([,q])=>q.status==='withdrawn'&&!q.ack).map(([id])=>['patch','requests',id,{ack:true,ackBy:myName(),ackAt:Date.now()}]);if(ops.length)write(ops,`รับทราบคำขอที่ถูกยกเลิก ${ops.length} รายการ`).then(()=>toast('รับทราบทั้งหมดแล้ว'))},
+  ackAll:()=>{const ops=Object.entries(S.d.requests).filter(([,q])=>q.status==='withdrawn'&&!q.ack&&rqPass(q.date,q.who)).map(([id])=>['patch','requests',id,{ack:true,ackBy:myName(),ackAt:Date.now()}]);if(ops.length)write(ops,`รับทราบคำขอที่ถูกยกเลิก ${ops.length} รายการ`).then(()=>toast('รับทราบทั้งหมดแล้ว'))},
   rejectReq:b=>rejectDlg(b.dataset.k),
   addAdmin:()=>{if(ownerOnly())addAdminDlg()},
   delAdmin:b=>{if(!ownerOnly())return;const e=b.dataset.e;if(isOwnerEmail(e))return toast('ลบเจ้าของระบบไม่ได้',1);const a=S.d.access[e];modal(`<div class="mhead">${icb('trash','bad')}<div><h3>ลบ Admin ${esc(a?.name||e)}?</h3><span class="muted">${esc(e)} จะ Login ไม่ได้อีก · ประวัติการอนุมัติเดิมยังอยู่</span></div></div><div class="mact"><button class="btn bad" data-d="y">${ic('trash',16)}ลบ Admin</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,async x=>{if(x!=='y')return closeM();if(await write([['del','access',e]],`ลบ Admin ${a?.name||e}`)){closeM();toast('ลบ Admin แล้ว')}})},
@@ -2265,7 +2296,7 @@ const acts={
   payNav:b=>{const n=+b.dataset.n;if(S.payMode==='week')S.payStart=add(S.payStart,7*n);else{const[y,m]=S.payMonth.split('-').map(Number);S.payMonth=isoOf(new Date(Date.UTC(y,m-1+n,1))).slice(0,7)}render()},
   approve:async b=>{const el=b.closest('.req');el.style.transform='translateX(40px)';el.style.opacity='.3';if(await approve(b.dataset.k))toast('อนุมัติแล้ว');else render()},
   reject:async b=>{const el=b.closest('.req');el.style.transform='translateX(-40px)';el.style.opacity='.3';if(await reject(b.dataset.k))toast('ไม่อนุมัติ · แจ้ง Live Streamer ด้วยนะ');else render()},
-  approveAll:async b=>{const ks=Object.entries(reqs()).filter(([,v])=>v.status===b.dataset.st).map(([k])=>k);for(const k of ks)await approve(k);toast(`อนุมัติ ${ks.length} รายการ`)},
+  approveAll:async b=>{const vis=new Set(S._reqVis||[]);const ks=Object.entries(reqs()).filter(([k,v])=>v.status===b.dataset.st&&vis.has(k)).map(([k])=>k);for(const k of ks)await approve(k);toast(`อนุมัติ ${ks.length} รายการ`)},
   note:b=>{const d=b.dataset.d;modal(`<div class="mhead">${icb('pin','warn')}<h3>โน้ตวัน${DOW_L[dow(d)]} ${dnum(d)} ${MON_S[D(d).getUTCMonth()]}</h3></div><input class="inp" id="noteIn" value="${esc(S.d.notes[d]?.text||'')}" placeholder="เช่น วันตัดยอด 2, แม่บ้านเข้าทำความสะอาด"><div class="mact"><button class="btn primary" data-d="save">${ic('save',16)}บันทึก</button><button class="btn" data-d="clear">${ic('trash',16)}ลบโน้ต</button><button class="btn ghost" data-d="close">ปิด</button></div>`,
     async a=>{if(a==='close')return closeM();const t=a==='save'?$('#noteIn').value.trim():'';await write([t?['set','notes',d,{text:t}]:['del','notes',d]],`โน้ต ${fmtD(d)}: ${t||'(ลบ)'}`);closeM()});setTimeout(()=>$('#noteIn')?.focus(),50)},
   fillEmail:b=>{const i=$('#lemail');i.value=b.dataset.e;i.parentElement.animate([{transform:'scale(1)'},{transform:'scale(1.03)'},{transform:'scale(1)'}],{duration:300});i.focus()},
@@ -2313,6 +2344,7 @@ document.addEventListener('change',async e=>{const t=e.target;
   if(t.dataset.focus){S.focus=t.value||null;render();return}
   if(t.dataset.booklimit){if(t.checked&&!(C().bookWindows||[]).length)toast('อย่าลืมเพิ่มรอบเปิดจองด้านล่าง ไม่งั้น Live Streamer จะจองไม่ได้เลย',1);return saveCfg({bookLimit:t.checked},`${t.checked?'เปิด':'ปิด'}การจำกัดวันจอง`)}
   if(t.dataset.logby){S.logBy=t.value||null;render();return}
+  if(t.dataset.rqd){S.rqF={...(S.rqF||{}),[t.dataset.rqd]:t.value||null};render();return}
   if(t.dataset.reqby){S.reqBy=t.value||null;render();return}
   if((t.dataset.aname||t.dataset.aactive)&&(!ownerOnly()||isOwnerEmail(t.dataset.aname||t.dataset.aactive)))return;
   if(t.dataset.aname){const n=t.value.trim();if(n)write([['patch','access',t.dataset.aname,{name:n}]],`เปลี่ยนชื่อ Admin เป็น ${n}`);return}
