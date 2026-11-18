@@ -2199,7 +2199,6 @@ function profileDlg(){
     ${row('checkc','สถานะ',`<span class="pfok">${ic('check',13)}ใช้งาน</span>`)}
     ${S.store.demo?row('flask','โหมด','<span class="muted">ทดลอง (ข้อมูลในเครื่องนี้)</span>'):''}
    </div>
-   ${!isBrand()?`<div class="sec"><b>${ic('shield',14)}สิ่งที่ทำได้</b><div class="pfperm">${PERM_INFO.map(([k,i,t])=>{const on=k==='reportHours'?P[k]!==false:!!P[k];return`<span class="${on?'on':''}">${ic(on?'check':'x',12)}${esc(t)}</span>`}).join('')}</div></div>`:''}
    <div class="mact"><button class="btn" data-d="logout">${ic('logout',16)}ออกจากระบบ</button><button class="btn ghost" data-d="close">ปิด</button></div>`,
   a=>{if(a==='logout'){closeM();acts.logout()}else closeM()});
 }
