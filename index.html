@@ -1202,6 +1202,8 @@ main.enter{animation:softIn .28s ease-out both}
 .crch button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:6px 12px;font:inherit;font-size:13.5px;font-weight:600;color:var(--navy);cursor:pointer;transition:background-color .15s,border-color .15s}
 .crch button.on{background:#e5232f;border-color:#e5232f;color:#fff}.crch button.ghost{color:var(--blue);border-style:dashed}
 .tipbox{display:flex;gap:8px;align-items:flex-start;margin-top:12px;background:var(--sky);color:var(--navy);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.55}.tipbox .link{font-weight:700}
+
+.prow2 .pi .pem{display:block;font-size:11px;color:#7c8aa3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 </style>
 </head>
 <body>
@@ -1397,7 +1399,7 @@ function presInner(){
   const P=Object.values(S.d.presence||{}).filter(p=>p&&p.at&&p.email!==(S.user?.email||'').toLowerCase()),on=P.filter(presOn).sort((a,b)=>b.at-a.at);
   const rec=P.filter(p=>!presOn(p)&&Date.now()-p.at<86400e3).sort((a,b)=>b.at-a.at);
   const orph=p=>p.role==='streamer'&&p.memberId&&(!S.d.members[p.memberId]||S.d.members[p.memberId].deleted);
-  const row=p=>`<div class="prow2 ${presOn(p)?'on':''}" title="${esc(p.email)}">${presAv(p)}<div class="pi"><b>${esc(orph(p)?p.email:(p.name||p.email))}${p.role==='brand'?' <span class="prole">แอดมิน</span>':''}${orph(p)?' <span class="prole bad">ไม่มีโปรไฟล์</span>':''}</b><small>${presOn(p)?`${ic(p.device==='mobile'?'phone':'grid',11)}${VIEW_L[p.view]||''}`:relT(p.at)}</small></div><i class="pdot"></i></div>`;
+  const row=p=>`<div class="prow2 ${presOn(p)?'on':''}" title="${esc(p.email)}">${presAv(p)}<div class="pi"><b>${esc(orph(p)?p.email:(p.name||p.email))}${p.role==='brand'?' <span class="prole">แอดมิน</span>':''}${orph(p)?' <span class="prole bad">ไม่มีโปรไฟล์</span>':''}</b><span class="pem">${esc(p.email)}</span><small>${presOn(p)?`${ic(p.device==='mobile'?'phone':'grid',11)}${VIEW_L[p.view]||''}`:relT(p.at)}</small></div><i class="pdot"></i></div>`;
   return`<button class="phead" data-act="presToggle"><i class="pdot ${on.length?'live':''}"></i><span><b>ออนไลน์ ${on.length} คน</b>${on.length&&!S.presOpen?`<span class="pavs">${on.slice(0,6).map(presAv).join('')}${on.length>6?`<em>+${on.length-6}</em>`:''}</span>`:`<small>${on.length?'ใช้งานอยู่ตอนนี้':'ไม่มีใครใช้งานอยู่'}</small>`}</span>${ic(S.presOpen?'up':'down',14)}</button>
    ${S.presErr?`<div class="psec" style="color:var(--bad)">อ่านข้อมูลออนไลน์ไม่ได้ (${esc(S.presErr)}) · ตรวจ Rules</div>`:''}${S.presOpen?`<div class="plist">${on.length?on.map(row).join(''):''}${rec.length?`<div class="psec">ใช้งานใน 24 ชม.</div>${rec.slice(0,12).map(row).join('')}`:''}${!on.length&&!rec.length?'<div class="psec">ยังไม่มีข้อมูล</div>':''}</div>`:''}`;
 }
