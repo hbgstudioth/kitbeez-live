@@ -1206,6 +1206,21 @@ main.enter{animation:softIn .28s ease-out both}
 .prow2 .pi .pem{display:block;font-size:11px;color:#7c8aa3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 
 .crbox{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;padding:12px 14px;border:1.5px dashed #f5b5b8;background:#fff6f6;border-radius:14px}.crbox .grow{flex:1;min-width:200px}.crbox b{display:flex;align-items:center;gap:6px;color:#b42318;font-size:14px}.crbox small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+
+/* ไฮไลต์เดือน */
+.mbig{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#1f6feb,#2f86ff);color:#fff;font-weight:700;font-size:15px;border-radius:12px;padding:5px 12px;box-shadow:0 6px 16px rgba(31,111,235,.25);white-space:nowrap;vertical-align:middle}
+.mbig em{font-style:normal;font-weight:500;opacity:.85}
+.mbig.xl{font-size:19px;padding:6px 14px;border-radius:14px}
+.pagehd p:has(.mbig){display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px}
+.mrng{font-size:14px;color:var(--muted)}
+.dchip{position:relative}
+.dchip .mo{position:absolute;top:-9px;left:50%;transform:translateX(-50%);font-style:normal;font-size:10.5px;font-weight:700;background:#0b2e6b;color:#fff;border-radius:999px;padding:0 8px;line-height:17px;white-space:nowrap;z-index:1}
+.dchip.om:not(.on){background:#f3f6fb}
+.dstrip{padding-top:10px}
+.bkbar .bkt .mbig{font-size:14px;padding:4px 10px}
+@media(max-width:600px){.mbig.xl{font-size:16px;padding:5px 11px}.dchip .mo{font-size:9px;padding:0 5px;line-height:14px;top:-7px}}
+
+.bkbar .bkt{display:flex;flex-direction:column;align-items:center;gap:3px}.bkbar .bkt small{white-space:nowrap;font-size:11px}
 </style>
 </head>
 <body>
@@ -1555,6 +1570,9 @@ function tabs(){
   if(isBrand()){S.store.actWatch?.();t.push({id:'req',i:'inbox',l:'อนุมัติ',b:actQ().length+Object.keys(reqs()||{}).length+Object.values(S.d.requests||{}).filter(q=>q.status==='withdrawn'&&!q.ack).length});t.push({id:'set',i:'settings',l:'ตั้งค่า'})}
   return t;
 }
+function monthBadge(a,b,big){const A=D(a),B=D(b||a),y1=A.getUTCFullYear(),y2=B.getUTCFullYear(),m1=A.getUTCMonth(),m2=B.getUTCMonth();
+  const txt=m1===m2&&y1===y2?`${MON_L[m1]} <em>${y1}</em>`:y1===y2?`${MON_L[m1]} – ${MON_L[m2]} <em>${y1}</em>`:`${MON_L[m1]} <em>${y1}</em> – ${MON_L[m2]} <em>${y2}</em>`;
+  return`<span class="mbig ${big?'xl':''}">${ic('calendar',big?20:16)}${txt}</span>`}
 function pageHd(icon,title,sub,actions=''){return`<div class="pagehd"><div class="t">${icb(icon,'',22)}<div><h2>${title}</h2><p>${sub}</p></div></div><div class="hdact">${actions}</div></div>`}
 function render(){
   const app=$('#app');
@@ -1677,10 +1695,10 @@ function winBar(d){const c=C();if(!c.bookLimit)return'';const ws=(c.bookWindows|
   return canBookDate(d)?`<div class="winbar">${ic('checkc',16)}<span>วันนี้เปิดให้จองแล้ว · รอบที่เปิด:</span>${list}</div>`:`<div class="winbar no">${ic('lock',16)}<span>วันนี้ยังไม่เปิดให้จอง</span>${list?`<span>· รอบที่เปิด:</span>${list}`:'<span>· รอแบรนด์ประกาศรอบถัดไป</span>'}</div>`}
 function vBook(){
   const d=S.date,ws=monday(d),days=[...Array(7)].map((_,i)=>add(ws,i)),M_=D(d);
-  let h=pageHd('ticket','เลือกรอบไลฟ์',`${MON_L[M_.getUTCMonth()]} ${M_.getUTCFullYear()} · รอบ ${fmtRange(ws,add(ws,6))}`,
+  let h=pageHd('ticket','เลือกรอบไลฟ์',`${monthBadge(d,null,true)}<span class="mrng">รอบ ${fmtRange(ws,add(ws,6))}</span>`,
     `<button class="btn" data-act="wk" data-n="-1">${ic('left',16)}<span class="mh">สัปดาห์ก่อน</span></button><button class="btn" data-act="today">${ic('target',16)}วันนี้</button><button class="btn" data-act="wk" data-n="1"><span class="mh">สัปดาห์ถัดไป</span>${ic('right',16)}</button>`).replace('class="pagehd"','class="pagehd bkhd"')+
-  `<div class="bkbar"><button class="btn icon" data-act="wk" data-n="-1" aria-label="สัปดาห์ก่อน">${ic('left',18)}</button><div class="bkt"><b>${MON_L[M_.getUTCMonth()]} ${M_.getUTCFullYear()}</b><small>รอบ ${fmtRange(ws,add(ws,6))}</small></div><button class="btn icon" data-act="wk" data-n="1" aria-label="สัปดาห์ถัดไป">${ic('right',18)}</button>${isBrand()&&isOpen(d)?`<button class="btn icon" data-act="note" data-d="${d}" aria-label="โน้ตวันนี้">${ic('pin',17)}</button>`:''}<button class="btn sm bktd" data-act="today">${ic('target',15)}วันนี้</button></div>`+
-  `<div class="dstrip">${days.map(x=>{const o=isOpen(x),fr=o?freeCount(x):0;return`<button class="dchip ${x===d?'on':''} ${o?'':'off'} ${x===TODAY?'tdy':''}" data-act="date" data-d="${x}" ${o?'':'disabled'}><small>${DOW_S[dow(x)]}</small><b>${dnum(x)}</b><span class="${o&&!fr?'full':''} ${o&&!canBookDate(x)?'nb':''}">${o?(!canBookDate(x)?'ยังไม่เปิดจอง':fr?`ว่าง ${fr}`:'เต็ม'):'ไม่มีไลฟ์'}</span><i class="sh ${o&&!fr?'full':''} ${o&&!canBookDate(x)?'nb':''}">${o?(!canBookDate(x)?'ปิดจอง':fr?`ว่าง ${fr}`:'เต็ม'):'–'}</i></button>`}).join('')}</div>${winBar(d)}`;
+  `<div class="bkbar"><button class="btn icon" data-act="wk" data-n="-1" aria-label="สัปดาห์ก่อน">${ic('left',18)}</button><div class="bkt">${monthBadge(d)}<small>รอบ ${fmtRange(ws,add(ws,6))}</small></div><button class="btn icon" data-act="wk" data-n="1" aria-label="สัปดาห์ถัดไป">${ic('right',18)}</button>${isBrand()&&isOpen(d)?`<button class="btn icon" data-act="note" data-d="${d}" aria-label="โน้ตวันนี้">${ic('pin',17)}</button>`:''}<button class="btn sm bktd" data-act="today">${ic('target',15)}วันนี้</button></div>`+
+  `<div class="dstrip">${days.map(x=>{const o=isOpen(x),fr=o?freeCount(x):0;const om=x.slice(0,7)!==d.slice(0,7);return`<button class="dchip ${x===d?'on':''} ${o?'':'off'} ${x===TODAY?'tdy':''} ${om?'om':''}" data-act="date" data-d="${x}" ${o?'':'disabled'}>${om||dnum(x)===1?`<em class="mo">${MON_S[D(x).getUTCMonth()]}</em>`:''}<small>${DOW_S[dow(x)]}</small><b>${dnum(x)}</b><span class="${o&&!fr?'full':''} ${o&&!canBookDate(x)?'nb':''}">${o?(!canBookDate(x)?'ยังไม่เปิดจอง':fr?`ว่าง ${fr}`:'เต็ม'):'ไม่มีไลฟ์'}</span><i class="sh ${o&&!fr?'full':''} ${o&&!canBookDate(x)?'nb':''}">${o?(!canBookDate(x)?'ปิดจอง':fr?`ว่าง ${fr}`:'เต็ม'):'–'}</i></button>`}).join('')}</div>${winBar(d)}`;
   if(!isOpen(d))return h+`<div class="card empty">${icb('calendar','',30)}<b>${DOW_L[dow(d)]}นี้ไม่มีรอบไลฟ์</b>เลือกวันอื่นจากแถบด้านบน</div>`;
   const note=S.d.notes[d]?.text;
   if(note||isBrand())h+=`<div class="notebar ${note?'':'nonote'}">${ic('pin',18)}${note?esc(note):'<span class="muted">ไม่มีโน้ตสำหรับวันนี้</span>'}${isBrand()?`<button class="link" style="margin-left:auto;display:inline-flex;gap:4px;align-items:center" data-act="note" data-d="${d}">${ic('edit',14)}${note?'แก้ไข':'เพิ่มโน้ต'}</button>`:''}</div>`;
@@ -1719,7 +1737,8 @@ function renderCart(){
 function calSeg(){return`<div class="seg">${[['room','door','ตามห้อง'],['person','users','ตามคน'],['month','calendar','ภาพรวมเดือน']].map(([k,i,l])=>`<button class="${S.calMode===k?'on':''}" data-act="calMode" data-m="${k}">${ic(i,14)}${l}</button>`).join('')}</div>`}
 function dayStats(d){let f=0,a=0,me=0,pd=0,fh=0,meh=0;ROOMS().forEach(r=>{C().slots.forEach((_,s)=>{if(isClosed(d,r,s))return;a++;const v=slotOf(d,r,s);if(v){f++;fh+=hrsOf(v);if(v.who===S.meId&&COUNTED.includes(v.status)){me++;meh+=hrsOf(v)}if(v.status!=='ok')pd++}})});return{f,a,me,pd,fh,meh}}
 function calTop(){const sub={room:'ดูว่าห้องไหน ใครไลฟ์ เวลาไหน',person:'ดูว่าแต่ละคน ไลฟ์วันไหน ห้องไหน',month:'ภาพรวมทั้งเดือน · แตะ “รอบ” เพื่อดูรายสัปดาห์ · แตะวันที่เพื่อจองคิว'}[S.calMode];
-  return pageHd('calweek','ตารางไลฟ์','เลือกมุมมองด้านล่าง')+`<div class="modebar">${calSeg()}<span class="mbsub">${ic('info',14)}${sub}</span></div>`}
+  const ws=monday(S.date);
+  return pageHd('calweek','ตารางไลฟ์',S.calMode==='month'?monthBadge(S.calMonth+'-01',null,true):`${monthBadge(ws,add(ws,6),true)}<span class="mrng">รอบ ${fmtRange(ws,add(ws,6))}</span>`)+`<div class="modebar">${calSeg()}<span class="mbsub">${ic('info',14)}${sub}</span></div>`}
 function vWeek(){return calTop()+(S.calMode==='month'?vMonth():vSchedule())}
 function focusSel(){
   const ms=membersList();
@@ -2197,7 +2216,7 @@ function closeRangeDlg(o){
 function closuresCard(){
   const up=Object.entries(S.d.closures||{}).filter(([,c])=>c.date>=TODAY).sort(([a],[b])=>a.localeCompare(b));
   const byDay={};up.forEach(([k,c])=>(byDay[c.date]??=[]).push([k,c]));
-  return`<div class="card" style="margin-top:16px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="margin:0">${icb('lock','bad')}ห้องที่ปิดเฉพาะวัน (ที่จะถึง)</h3><span class="muted" style="font-size:13px">ปิดชั่วคราวตามวันที่ · พ้นวันแล้วกลับมาเปิดเอง</span><button class="btn primary sm" style="margin-left:auto" data-act="closeRange">${ic('lock',14)}ปิดห้องตามวันที่</button></div>
+  return`<div class="card" style="margin-top:16px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="margin:0">${icb('lock','bad')}ห้องที่ปิดเฉพาะวัน (ที่จะถึง)</h3><span class="muted" style="font-size:13px">แตะช่องเพื่อเปิดคืน · เพิ่มได้ที่ “ปิดห้องตามวันที่” ในการ์ดวันไลฟ์และห้อง</span></div>
    ${Object.keys(byDay).length?Object.entries(byDay).map(([d,l],i)=>`<div class="win" style="--i:${i}">${icb('calendar','bad',16)}<div class="grow"><b>${fmtD(d)}</b><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">${l.sort(([,a],[,b])=>a.slot-b.slot||a.room-b.room).map(([k,c])=>`<button class="pill cancelreq" style="border:0;cursor:pointer" data-act="reopenOne" data-k="${k}" title="แตะเพื่อเปิด${c.reason?' · '+esc(c.reason):''}">${ic('lock',11)}${C().slots[c.slot].split('–')[0]} ห้อง ${c.room}${c.reason?' · '+esc(c.reason):''}</button>`).join('')}</div></div><button class="btn sm" data-act="openDay" data-d="${d}">${ic('door',14)}เปิดทั้งหมด</button></div>`).join(''):`<p class="muted" style="font-size:13px;margin:10px 0 0">ยังไม่มีการปิดห้องเฉพาะวัน</p>`}</div>`;
 }
 /* ---------- จัดลำดับรายชื่อ ---------- */
