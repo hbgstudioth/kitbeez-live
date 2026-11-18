@@ -1092,6 +1092,11 @@ main.enter{animation:softIn .28s ease-out both}
 /* ป้ายตัวเลขบนเมนู/คำขอใหม่: ไม่กะพริบ */
 .tabs em,.rq.new::before{animation:none!important}
 .empty .icb,.logo-card,.lside .logo{animation:none!important}
+
+/* หน้าเข้าระบบ: การ์ดขนาดคงที่ตอนสลับ แบรนด์/Live Streamer */
+.lvar{display:grid}
+.lvar>.lv1{grid-area:1/1;display:flex;flex-direction:column;gap:12px;visibility:hidden;opacity:0;transition:opacity .2s ease}
+.lvar>.lv1.on{visibility:visible;opacity:1}
 </style>
 </head>
 <body>
@@ -1462,9 +1467,8 @@ function vLogin(){
      <button type="button" class="acc ${t==='streamer'?'on':''}" data-act="loginType" data-t="streamer"><span class="ck">${ic('check',13)}</span>${icb('mic')}<b>Live Streamer</b><small>จองคิว · ดูตาราง · ติดตามคำขอ</small></button>
      <button type="button" class="acc ${t==='brand'?'on':''}" data-act="loginType" data-t="brand"><span class="ck">${ic('check',13)}</span>${icb('tag','navy')}<b>แบรนด์</b><small>จัดการตาราง · อนุมัติ · ตั้งค่า</small></button>
     </div>
-    ${t==='streamer'?`<span class="lbl">ชื่อของคุณ</span>
-     <button type="button" class="pickbtn ${pk?'has':''}" data-act="pickName">${pk?`<span class="avatar" style="background:${pc.bg};color:${pc.fg}">${esc(M(pk).name[0])}</span><span class="grow"><b>${esc(M(pk).name)}</b><small>แตะเพื่อเปลี่ยนชื่อ</small></span>`:`${icb('users')}<span class="grow"><b>เลือกชื่อของคุณ</b><small>แตะเพื่อเปิดรายชื่อ Live Streamer</small></span>`}${ic('right',18)}</button>`
-    :`<span class="lbl">Gmail ของแบรนด์</span><label class="field" style="animation:fadeUp .4s var(--ease) both">${ic('mail',18)}<input id="lemail" type="email" inputmode="email" autocomplete="email" placeholder="brand@gmail.com" value="${demo?'brand@demo.live':''}"></label>${demo?`<div class="adminchips">${Object.entries(S.d.access).filter(([,a])=>a.role==='brand'&&!a.memberId&&a.active!==false).map(([e,a])=>`<button type="button" data-act="fillEmail" data-e="${e}">${ic('tag',12)}${esc(a.name||e)}</button>`).join('')}</div>`:''}`}
+    <div class="lvar"><div class="lv1 ${t==='streamer'?'on':''}" ${t==='streamer'?'':'aria-hidden="true"'}><span class="lbl">ชื่อของคุณ</span>
+     <button type="button" class="pickbtn ${pk?'has':''}" data-act="pickName">${pk?`<span class="avatar" style="background:${pc.bg};color:${pc.fg}">${esc(M(pk).name[0])}</span><span class="grow"><b>${esc(M(pk).name)}</b><small>แตะเพื่อเปลี่ยนชื่อ</small></span>`:`${icb('users')}<span class="grow"><b>เลือกชื่อของคุณ</b><small>แตะเพื่อเปิดรายชื่อ Live Streamer</small></span>`}${ic('right',18)}</button></div><div class="lv1 ${t==='brand'?'on':''}" ${t==='brand'?'':'aria-hidden="true"'}><span class="lbl">Gmail ของแบรนด์</span><label class="field">${ic('mail',18)}<input id="lemail" type="email" inputmode="email" autocomplete="email" placeholder="brand@gmail.com" value="${demo?'brand@demo.live':''}"></label>${demo?`<div class="adminchips">${Object.entries(S.d.access).filter(([,a])=>a.role==='brand'&&!a.memberId&&a.active!==false).map(([e,a])=>`<button type="button" data-act="fillEmail" data-e="${e}">${ic('tag',12)}${esc(a.name||e)}</button>`).join('')}</div>`:''}</div></div>
     <button class="gbtn" type="submit" ${demo&&t==='streamer'&&!pk?'disabled':''}><span class="g">${GOOGLE}</span>${t==='streamer'&&pk?`เข้าสู่ระบบในชื่อ ${esc(M(pk).name)}`:'เข้าสู่ระบบด้วย Google'}</button>
     <p class="hint">${ic('shield',15)}ไม่ต้องสมัครสมาชิก ไม่ต้องตั้งรหัสผ่าน · ยืนยันตัวตนด้วย Gmail ที่ Login ไว้ในเครื่องนี้ (ระบบไม่เก็บรหัสผ่าน)</p>
     ${demo?`<p class="hint">${ic('flask',15)}<span>โหมดทดลอง: กดเข้าสู่ระบบได้ทันทีโดยไม่ผ่าน Google · <button type="button" class="link" data-act="guide">วิธีเปิดใช้ Login Gmail จริง</button></span></p>`:''}
