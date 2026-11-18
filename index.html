@@ -1359,7 +1359,7 @@ const EMP={fulltime:'Full-Time',freelance:'Freelance'};
 const empOf=id=>S.d.members[id]?.emp||'';
 const empTag=id=>{const e=empOf(id);return e?`<span class="emptag ${e}">${EMP[e]}</span>`:''};
 const PRES_MS=150000,VIEW_L={book:'จองคิว',week:'ตาราง',mine:'คิวของฉัน',track:'ติดตามคำขอ',pay:'สรุปชั่วโมง',req:'อนุมัติ',set:'ตั้งค่า'};
-const presOn=p=>Date.now()-p.at<PRES_MS&&!p.away;
+const presOn=p=>Date.now()-p.at<PRES_MS&&!p.out;
 function presAv(p){const c=p.memberId&&S.d.members[p.memberId]?colOf(p.memberId):{bg:'#0b2e6b',fg:'#fff'};return`<span class="pav" style="background:${c.bg};color:${c.fg}">${esc([...(p.name||p.email||'?')][0]||'?')}</span>`}
 const relT=t=>{const m=Math.round((Date.now()-t)/60000);return m<1?'เมื่อสักครู่':m<60?`${m} นาทีที่แล้ว`:`${Math.floor(m/60)} ชม.ที่แล้ว`};
 function presInner(){
@@ -1367,16 +1367,16 @@ function presInner(){
   const rec=P.filter(p=>!presOn(p)&&Date.now()-p.at<86400e3).sort((a,b)=>b.at-a.at);
   const row=p=>`<div class="prow2 ${presOn(p)?'on':''}">${presAv(p)}<div class="pi"><b>${esc(p.name||p.email)}${p.role==='brand'?' <span class="prole">แอดมิน</span>':''}</b><small>${presOn(p)?`${ic(p.device==='mobile'?'phone':'grid',11)}${VIEW_L[p.view]||''}`:relT(p.at)}</small></div><i class="pdot"></i></div>`;
   return`<button class="phead" data-act="presToggle"><i class="pdot ${on.length?'live':''}"></i><span><b>ออนไลน์ ${on.length} คน</b>${on.length&&!S.presOpen?`<span class="pavs">${on.slice(0,6).map(presAv).join('')}${on.length>6?`<em>+${on.length-6}</em>`:''}</span>`:`<small>${on.length?'ใช้งานอยู่ตอนนี้':'ไม่มีใครใช้งานอยู่'}</small>`}</span>${ic(S.presOpen?'up':'down',14)}</button>
-   ${S.presOpen?`<div class="plist">${on.length?on.map(row).join(''):''}${rec.length?`<div class="psec">ใช้งานใน 24 ชม.</div>${rec.slice(0,12).map(row).join('')}`:''}${!on.length&&!rec.length?'<div class="psec">ยังไม่มีข้อมูล</div>':''}</div>`:''}`;
+   ${S.presErr?`<div class="psec" style="color:var(--bad)">อ่านข้อมูลออนไลน์ไม่ได้ (${esc(S.presErr)}) · ตรวจ Rules</div>`:''}${S.presOpen?`<div class="plist">${on.length?on.map(row).join(''):''}${rec.length?`<div class="psec">ใช้งานใน 24 ชม.</div>${rec.slice(0,12).map(row).join('')}`:''}${!on.length&&!rec.length?'<div class="psec">ยังไม่มีข้อมูล</div>':''}</div>`:''}`;
 }
 function presWidget(){return isBrand()?`<div class="pres" id="pres">${presInner()}</div>`:''}
 function updatePres(){const el=document.getElementById('pres');if(el)el.innerHTML=presInner()}
 function beat(away){if(!S.user||!S.role||S.denied||!S.store?.presence)return;const em=(S.user.email||'').toLowerCase();if(!em||em.startsWith('('))return;
-  S.store.presence({email:em,name:myName(),role:S.role,memberId:S.meId||null,view:S.view,device:matchMedia('(pointer:coarse)').matches?'mobile':'desktop',at:Date.now(),away:!!away})}
-setInterval(()=>{if(document.visibilityState==='visible')beat()},60000);
+  S.store.presence({email:em,name:myName(),role:S.role,memberId:S.meId||null,view:S.view,device:matchMedia('(pointer:coarse)').matches?'mobile':'desktop',at:Date.now(),out:!!away})}
+setInterval(()=>{if(document.visibilityState==='visible')beat()},45000);
 setInterval(updatePres,30000);
-document.addEventListener('visibilitychange',()=>beat(document.visibilityState!=='visible'));
-addEventListener('pagehide',()=>beat(true));
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')beat()});
+addEventListener('focus',()=>beat());
 const isOwnerMe=()=>!!S.user&&OWNER_EMAILS.map(e=>e.toLowerCase()).includes((S.user.email||'').toLowerCase());
 const TRIAL='__trial',TRIAL_COL={bg:'#fff1cc',fg:'#7a4b00'};
 const M=id=>id===TRIAL?{name:'ทดลองไลฟ์',c:-2}:(S.d.members[id]||{name:'(ลบแล้ว)',c:-1});
@@ -1455,7 +1455,8 @@ async function makeFirebase(cfg){
     dataUnsub.push(listen('notes',F.collection(db,'notes')));
     if(S.role==='brand'){
       dataUnsub.push(listen('access',F.collection(db,'access')));
-      dataUnsub.push(F.onSnapshot(F.collection(db,'presence'),snap=>{const o={};snap.forEach(d=>o[d.id]=d.data());data.presence=o;updatePres()},()=>{}));
+      const pw=()=>{const u=F.onSnapshot(F.collection(db,'presence'),snap=>{const o={};snap.forEach(d=>o[d.id]=d.data());data.presence=o;S.presErr=null;updatePres()},e=>{S.presErr=e.code||'error';updatePres();setTimeout(()=>{if(S.role==='brand')dataUnsub.push(pw())},30000)});return u};
+      dataUnsub.push(pw());
       dataUnsub.push(listen('logs',F.query(F.collection(db,'logs'),F.orderBy('at','desc'),F.limit(300))));
       dataUnsub.push(listen('slots',F.query(F.collection(db,'slots'),F.where('status','in',['pending','cancelreq','movereq','timereq'])),'reqs'));
       dataUnsub.push(listen('requests',F.query(F.collection(db,'requests'),F.orderBy('createdAt','desc'),F.limit(400))));
@@ -1498,7 +1499,7 @@ async function makeFirebase(cfg){
       closUnsub=listen('closures',F.query(F.collection(db,'closures'),F.where('date','>=',f),F.where('date','<=',t)))},
     async batch(ops){for(let i=0;i<ops.length;i+=400){const b=F.writeBatch(db);ops.slice(i,i+400).forEach(([t,c,id,v])=>{const ref=F.doc(db,c,id);t==='set'?b.set(ref,v):t==='patch'?b.update(ref,v):b.delete(ref)});await b.commit()}},
     async wipeAll(){let n=0;for(const c of ['slots','requests','closures','notes','access','members','logs','config']){const sn=await F.getDocs(F.collection(db,c));const ids=sn.docs.map(d=>d.id);n+=ids.length;await this.batch(ids.map(id=>['del',c,id]))}return n},
-    presence(p){F.setDoc(F.doc(db,'presence',p.email),p).catch(()=>{})},
+    presence(p){F.setDoc(F.doc(db,'presence',p.email),p).catch(e=>console.warn('presence',e.code))},
     async log(text){try{await F.addDoc(F.collection(db,'logs'),{at:Date.now(),uid:S.user.uid,by:myName(),text})}catch(e){console.warn(e)}}
   };
 }
@@ -2500,7 +2501,7 @@ const acts={
   loginGoogle:()=>S.store.login('google'),
   fillEmail:b=>{const i=$('#lemail');i.value=b.dataset.e;S.lemail=b.dataset.e;i.dispatchEvent(new Event('input',{bubbles:true}));i.parentElement.animate([{transform:'scale(1)'},{transform:'scale(1.03)'},{transform:'scale(1)'}],{duration:300});i.focus()},
   openExt:()=>{const u=new URL(location.href);u.searchParams.set('openExternalBrowser','1');location.href=u.toString()},
-  logout:()=>{S.sel.clear();S.store.logout();$('#shell')?.remove();S.lastView=null},
+  logout:()=>{try{beat(true)}catch(e){}S.sel.clear();S.store.logout();$('#shell')?.remove();S.lastView=null},
   guide:guideDlg,
   copyEmail:()=>copyText(S.user.email),
   resetAll:()=>modal(`<div class="mhead">${icb('alert','bad')}<div><h3>รีเซ็ตระบบทั้งหมด?</h3><span class="muted">ลบคิว คำขอ สมาชิก Gmail ที่ผูกไว้ Admin คนอื่น โน้ต ห้องที่ปิด ประวัติ และการตั้งค่า</span></div></div>
