@@ -1194,6 +1194,9 @@ main.enter{animation:softIn .28s ease-out both}
 .orph{border:1.5px solid #f8d98a;background:#fffcf3}
 .orow{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px dashed var(--line);flex-wrap:wrap}
 .orow .oi{flex:1;min-width:160px;line-height:1.3}.orow .oi b{display:block;font-size:14px;word-break:break-all}.orow .oi small{font-size:12px;color:var(--muted)}
+
+.crhit{margin-top:10px;font-size:13px;line-height:1.7;background:#fff2f2;color:#9f1d1d;border-radius:12px;padding:8px 12px}.crhit b{display:inline-block;background:#fff;border-radius:8px;padding:0 6px;margin:0 2px;font-weight:700}
+.crhit.bad{background:#fff6e6;color:#7a4b00}
 </style>
 </head>
 <body>
@@ -2079,10 +2082,14 @@ function roomCloseDlg(d,r){
   let mode=cur==='all'?'all':cur.length?'some':'open',sel=new Set(cur==='all'?[]:cur);
   const rg0=crng(d,r);let rmode=rg0?'range':'forever',rf=rg0?.from||TODAY,rt=rg0?.to||add(TODAY,6);
   const cap=()=>{const f=$('#crf'),t=$('#crt');if(f)rf=f.value;if(t)rt=t.value};
+  const hits=()=>{const L=[];if(!rf||!rt)return L;let a=rf<=rt?rf:rt,b=rf<=rt?rt:rf;for(let x=a;x<=b&&L.length<60;x=add(x,1))if(dow(x)===d)L.push(x);return L};
+  const prev=()=>{const L=hits();return L.length?`<div class="crhit">${ic('lock',13)} จะปิดห้อง ${r} วันที่: ${L.slice(0,10).map(x=>`<b>${DOW_S[d]} ${fmtDs(x)}</b>`).join(' ')}${L.length>10?` และอีก ${L.length-10} วัน`:''}</div><p class="muted" style="font-size:12.5px;margin:6px 0 0">${ic('info',13)} พ้นวันสุดท้ายแล้ว ห้องจะกลับมาเปิดให้จองอัตโนมัติ</p>`:`<div class="crhit bad">${ic('alert',13)} ช่วงนี้ไม่มีวัน${DOW_L[d]}เลย จึงไม่มีผล · ถ้าจะปิดเฉพาะวันที่ ${rf?fmtDs(rf):''} ให้ไปที่หน้า “จองคิว” เลือกช่อง แล้วกด “ปิดช่อง”</div>`};
+  setTimeout(()=>{document.addEventListener('input',crIn)},0);
+  function crIn(e){if(!document.getElementById('crprev')){if(!$('#dlg')?.open)document.removeEventListener('input',crIn);return}if(e.target.id==='crf'||e.target.id==='crt'){cap();$('#crprev').innerHTML=prev()}}
   const body=()=>`<div class="ccopt">${[['open','door','เปิดทั้งวัน','ทุกรอบจองได้ตามปกติ'],['all','lock','ปิดทั้งวัน','ห้องนี้ไม่ใช้ทั้งวัน'],['some','clock','ปิดบางรอบ','เลือกรอบเวลาที่ปิด']].map(([m,i,t,s])=>`<button data-d="m:${m}" class="${mode===m?'on':''}">${icb(i,m==='all'?'bad':m==='some'?'warn':'ok')}<b>${t}</b><small>${s}</small></button>`).join('')}</div>
    ${mode==='some'?`<div class="sec"><b>${ic('clock',14)}แตะรอบเวลาที่ต้องการปิด</b><div class="tpick">${c.slots.map((t,s)=>`<button data-d="s:${s}" class="${sel.has(s)?'on cl':''}">${ic(sel.has(s)?'lock':slotIcon(s),15)}<b>${t}</b><small>${sel.has(s)?'ปิด':'เปิด'}</small></button>`).join('')}</div></div>`:''}
    ${mode!=='open'?`<div class="sec"><b>${ic('calendar',14)}ระยะเวลาที่ปิด</b><div class="seg sm rgseg"><button data-d="r:forever" class="${rmode==='forever'?'on':''}">ตลอดไป (จนกว่าจะเปิดเอง)</button><button data-d="r:range" class="${rmode==='range'?'on':''}">กำหนดช่วงวันที่</button></div>
-    ${rmode==='range'?`<div class="rqdates" style="margin-top:10px"><input type="date" class="inp" id="crf" value="${rf}"><span>ถึง</span><input type="date" class="inp" id="crt" value="${rt}"></div><p class="muted" style="font-size:12.5px;margin:8px 0 0">${ic('info',13)} ปิดเฉพาะวัน${DOW_L[d]}ในช่วงนี้ · พ้นวันสุดท้ายแล้ว ห้องจะกลับมาเปิดให้จองอัตโนมัติ</p>`:''}</div>`:''}`;
+    ${rmode==='range'?`<div class="rqdates" style="margin-top:10px"><input type="date" class="inp" id="crf" value="${rf}"><span>ถึง</span><input type="date" class="inp" id="crt" value="${rt}"></div><div id="crprev">${prev()}</div>`:''}</div>`:''}`;
   modal(`<div class="mhead">${icb('door')}<div><h3>ห้อง ${r} · ทุกวัน${DOW_L[d]}</h3><span class="muted">ตั้งค่าห้องปิดประจำ (มีผลทุกสัปดาห์)</span></div></div><div id="ccbody">${body()}</div>
    <div class="mact"><button class="btn primary" data-d="save">${ic('save',16)}บันทึก</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,
   async a=>{
@@ -2092,7 +2099,7 @@ function roomCloseDlg(d,r){
     if(a.startsWith('s:')){cap();const s=+a.slice(2);sel.has(s)?sel.delete(s):sel.add(s);$('#ccbody').innerHTML=body();return}
     if(a==='save'){
       cap();if(mode==='some'&&!sel.size)mode='open';
-      if(mode!=='open'&&rmode==='range'){if(!rf||!rt)return toast('เลือกวันเริ่มและวันสิ้นสุดให้ครบ',1);if(rf>rt)[rf,rt]=[rt,rf];if(rt<TODAY)return toast('วันสิ้นสุดต้องไม่ใช่วันที่ผ่านมาแล้ว',1)}
+      if(mode!=='open'&&rmode==='range'){if(!rf||!rt)return toast('เลือกวันเริ่มและวันสิ้นสุดให้ครบ',1);if(rf>rt)[rf,rt]=[rt,rf];if(rt<TODAY)return toast('วันสิ้นสุดต้องไม่ใช่วันที่ผ่านมาแล้ว',1);if(!hits().length)return toast(`ช่วงวันที่นี้ไม่มีวัน${DOW_L[d]} · ปิดเฉพาะวันให้ใช้หน้า “จองคิว” → “ปิดช่อง”`,1)}
       const cr={...(c.closedRange||{})};Object.keys(cr).forEach(x=>{if(cr[x]?.to&&cr[x].to<TODAY)delete cr[x]});delete cr[`${d}_${r}`];
       if(mode!=='open'&&rmode==='range')cr[`${d}_${r}`]={from:rf,to:rt};
       const cl={...c.closed},cs=JSON.parse(JSON.stringify(c.closedSlots||{}));
