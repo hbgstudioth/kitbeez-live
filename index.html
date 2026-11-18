@@ -1173,6 +1173,19 @@ main.enter{animation:softIn .28s ease-out both}
 .mrole{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:var(--blue);background:var(--sky);border-radius:9px;padding:6px 10px;white-space:nowrap;justify-self:start}
 @media(max-width:700px){.mrow>.mrole{grid-column:3}}
 @media(max-width:600px){.mrow>.mrole{grid-column:4;grid-row:2;justify-self:stretch;justify-content:center;font-size:12px;padding:6px 4px}}
+
+/* โปรไฟล์ */
+.ubtn{display:flex;align-items:center;gap:10px;border:0;background:none;padding:4px 8px 4px 4px;border-radius:14px;cursor:pointer;font:inherit;color:inherit;text-align:left;transition:background-color .2s}
+.ubtn:hover{background:var(--sky)}
+.pfh{display:flex;align-items:center;gap:14px;margin-bottom:14px}.pfh h3{margin:0 0 2px;font-size:20px}
+.pfav{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;font-size:28px;font-weight:700;flex:none;overflow:hidden}.pfav img{width:100%;height:100%;object-fit:cover}
+.pfbox{border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.pfr{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px;font-size:14px}.pfr+.pfr{border-top:1px solid var(--line)}
+.pfl{display:flex;align-items:center;gap:7px;color:var(--muted);flex:none}.pfv{text-align:right;font-weight:600;color:var(--navy);min-width:0}
+.pfchip{display:inline-flex;font-size:12.5px;font-weight:700;border-radius:999px;padding:2px 10px;background:var(--sky);color:var(--blue)}.pfchip.brand{background:var(--navy);color:#fff}
+.pfok{display:inline-flex;align-items:center;gap:4px;color:#15803d;font-size:13px}
+.pfperm{display:flex;flex-direction:column;gap:6px}.pfperm span{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}.pfperm span .ic{color:#cbd5e1}.pfperm span.on{color:var(--text)}.pfperm span.on .ic{color:#16a34a}
+@media(max-width:600px){.ubtn{padding:2px}.ubtn .uname{display:none}}
 </style>
 </head>
 <body>
@@ -1539,7 +1552,7 @@ function render(){
   if(on){if(prevRect){ink.style.transition='none';ink.style.left=prevRect.l+'px';ink.style.width=prevRect.w+'px';void ink.offsetWidth;ink.style.transition=''}
     requestAnimationFrame(()=>{ink.style.left=on.offsetLeft+'px';ink.style.width=on.offsetWidth+'px'})}
   const nm=myName();
-  $('#user').innerHTML=`<div class="avatar" style="background:${c.bg};color:${c.fg}">${u.photo?`<img src="${esc(u.photo)}" alt="">`:(S.meId?esc(nm[0]):ic('tag',17))}</div><div class="uname"><b>${esc(nm)}</b><span class="role ${isBrand()?'brand':''}">${ic(isBrand()?'tag':'mic',11)}${ROLE_L[S.role]}</span></div><button class="btn icon ghost" data-act="logout" title="ออกจากระบบ">${ic('logout',18)}</button>`;
+  $('#user').innerHTML=`<button class="ubtn" data-act="profile" title="ข้อมูลของฉัน"><div class="avatar" style="background:${c.bg};color:${c.fg}">${u.photo?`<img src="${esc(u.photo)}" alt="">`:(S.meId?esc(nm[0]):ic('tag',17))}</div><div class="uname"><b>${esc(nm)}</b><span class="role ${isBrand()?'brand':''}">${ic(isBrand()?'tag':'mic',11)}${ROLE_L[S.role]}</span></div></button><button class="btn icon ghost" data-act="logout" title="ออกจากระบบ">${ic('logout',18)}</button>`;
   $('#demo').innerHTML=S.store.demo?`<div class="demo">${ic('flask',16)} <b>โหมดทดลอง</b> ข้อมูลเก็บในเครื่องนี้เท่านั้น · <button class="link" data-act="guide">วิธีเปิดใช้ Login Gmail ให้ทุกคนใช้ร่วมกัน</button></div>`:'';
   const main=$('#main');const views={book:vBook,week:vWeek,mine:vMine,track:vTrack,pay:vPay,req:vReq,set:vSet};
   main.classList.remove('wide');
@@ -2171,6 +2184,25 @@ function newAddsDlg(){
 }
 function actChip(v){if(!isShort(v)&&!v?.actReq)return'';return v.actReq?`<span class="achip req">${ic('edit',11)}มีคำขอแก้ไข</span>`:v.actStatus==='pending'?`<span class="achip wait">${ic('hour',11)}รอแอดมินรับทราบ</span>`:`<span class="achip ok">${ic('check',11)}รับทราบแล้ว${v.ackBy?' · '+esc(v.ackBy):''}</span>`}
 function actReqLine(v){const r=v?.actReq;if(!r)return'';return`<div class="why hrs req">${ic('edit',15)}<div><b>${esc(r.by||M(v.who).name)} ขอแก้เป็น ${r.act==null?`ไลฟ์ครบ ${C().hours} ชม.`:fmtHM(r.act)}</b>${r.reason?` · ${esc(r.reason)}`:''}<small>${r.at?timeAgo(r.at):''}</small></div></div>`}
+function profileDlg(){
+  const u=S.user||{},nm=myName(),em=(u.email||'').toLowerCase(),own=isOwnerMe(),m=S.meId?S.d.members[S.meId]:null;
+  const c=S.meId?colOf(S.meId):{bg:'var(--navy)',fg:'#fff'},acc=S.d.access?.[em];
+  const role=own?'เจ้าของระบบ (แอดมินสูงสุด)':isBrand()?'แอดมินแบรนด์':'Live Streamer';
+  const row=(i,l,v)=>`<div class="pfr"><span class="pfl">${ic(i,15)}${l}</span><span class="pfv">${v}</span></div>`;
+  const P=C().perms||{};
+  modal(`<div class="pfh"><div class="pfav" style="background:${c.bg};color:${c.fg}">${u.photo?`<img src="${esc(u.photo)}" alt="">`:S.meId?esc([...nm][0]||'?'):ic('tag',30)}</div><div><h3>${esc(nm)}</h3><span class="muted">${esc(em||'-')}</span></div></div>
+   <div class="pfbox">
+    ${row('user','ชื่อ',esc(nm))}
+    ${row('mail','อีเมล',`<span style="word-break:break-all">${esc(em||'-')}</span>`)}
+    ${row(isBrand()?'tag':'mic','สิทธิ์',`<span class="pfchip ${isBrand()?'brand':''}">${role}</span>`)}
+    ${S.meId?row('users','ประเภท',m?.emp?`<span class="emptag ${m.emp}">${EMP[m.emp]}</span>`:'<span class="muted">ยังไม่ระบุ</span>'):''}
+    ${row('checkc','สถานะ',`<span class="pfok">${ic('check',13)}ใช้งาน</span>`)}
+    ${S.store.demo?row('flask','โหมด','<span class="muted">ทดลอง (ข้อมูลในเครื่องนี้)</span>'):''}
+   </div>
+   ${!isBrand()?`<div class="sec"><b>${ic('shield',14)}สิ่งที่ทำได้</b><div class="pfperm">${PERM_INFO.map(([k,i,t])=>{const on=k==='reportHours'?P[k]!==false:!!P[k];return`<span class="${on?'on':''}">${ic(on?'check':'x',12)}${esc(t)}</span>`}).join('')}</div></div>`:''}
+   <div class="mact"><button class="btn" data-d="logout">${ic('logout',16)}ออกจากระบบ</button><button class="btn ghost" data-d="close">ปิด</button></div>`,
+  a=>{if(a==='logout'){closeM();acts.logout()}else closeM()});
+}
 function hrsLine(v){return(isShort(v)?`<div class="why hrs">${ic('hour',15)}<div><b>ไลฟ์จริง ${fmtHM(hrsOf(v))} จาก ${C().hours} ชม.</b> ${actChip(v)}${v.actReason?`<br>${esc(v.actReason)}`:''}${v.actBy?`<small>แจ้งโดย ${esc(v.actBy)}${v.actAt?' · '+timeAgo(v.actAt):''}${v.ackBy&&v.actStatus!=='pending'?` · รับทราบโดย ${esc(v.ackBy)}`:''}</small>`:''}</div></div>`:'')+actReqLine(v)}
 function hoursDlg(k,back){
   const v=S.d.slots[k];if(!canHrs(v))return toast('แก้ชั่วโมงของรอบนี้ไม่ได้',1);
@@ -2424,6 +2456,7 @@ async function saveEmail(id,email){
   if(await write(ops,`ตั้ง Gmail ของ ${M(id).name}: ${email||'(ลบ)'}`))toast('บันทึก Gmail แล้ว');
 }
 const acts={
+  profile:()=>profileDlg(),
   presToggle:()=>{S.presOpen=!S.presOpen;updatePres()},
   payEmp:b=>{S.payEmp=b.dataset.e;render()},
   rqMode:b=>{S.rqF={...(S.rqF||{}),mode:b.dataset.m};if(b.dataset.m==='custom'&&!S.rqF.from){S.rqF.from=TODAY;S.rqF.to=add(TODAY,6)}render()},
