@@ -1563,6 +1563,7 @@ function render(){
   main.classList.remove('wide');
   const y=window.scrollY;const wrowX=$('#wrow')?.scrollLeft,keep=S._keepRow;
   if(S.user&&S.role&&S._beatView!==S.view){S._beatView=S.view;beat()}
+  if(S.sel?.size)[...S.sel].forEach(k=>{const p=parseSid(k);if(!S.d.slots[k]&&isClosed(p.d,p.r,p.s))S.sel.delete(k)});
   const NA=newAdds();
   const FOOT=`<footer class="mfoot"><b>LIVE BOOKING SYSTEM : HS DEVELOPMENT</b><span>SOFTWARE ENGINEERING &amp; DEVELOPMENT</span></footer>`;
   main.innerHTML=(NA.length&&(S.view==='book'||S.view==='mine')?`<button class="newbar" data-act="newAdds"><span class="bl">${ic('bell',18)}</span><span class="tx"><b>แบรนด์เพิ่มคิวให้คุณ ${NA.length} Slot</b><small>${esc([...new Set(NA.map(([,v])=>v.addedBy||v.by).filter(Boolean))].join(', '))} · แตะเพื่อดูรายละเอียด</small></span>${ic('right',18)}</button>`:'')+views[S.view]()+FOOT;
@@ -2405,6 +2406,7 @@ async function doBook(){
     if(S.d.slots[k]){errs.push(`${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}: มีคนจองไปแล้ว`);continue}
     if(isPast(p.d,p.s)){errs.push(`${fmtD(p.d)} ${C().slots[p.s]}: เลยเวลาแล้ว`);continue}
     if(!canBookDate(p.d)){errs.push(`${fmtD(p.d)}: ยังไม่เปิดให้จอง`);continue}
+    if(isClosed(p.d,p.r,p.s)){errs.push(`${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}: ห้องปิด`);continue}
     if(taken.has(t)||ROOMS().some(r=>slotOf(p.d,r,p.s)?.who===S.meId)){errs.push(`${fmtD(p.d)} ${C().slots[p.s]}: คุณมีคิวเวลานี้แล้ว`);continue}
     taken.add(t);const id=rid()+ops.length;
     ops.push(['set','slots',k,{date:p.d,room:p.r,slot:p.s,who:S.meId,status:st,at:Date.now(),reqAt:Date.now(),by:S.meId,...(st==='pending'?{reqId:id}:{})}]);
