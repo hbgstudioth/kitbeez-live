@@ -1083,6 +1083,15 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
 .lside h1.lsys{font-size:17px!important;letter-spacing:1.2px!important;line-height:1.45;font-weight:500!important;margin:14px 0 4px!important;opacity:1}
 .mfoot b,.mfoot span,.lfoot,.lfoot span{font-size:10px!important;letter-spacing:1.2px!important}
 @media(max-width:600px){.lside h1.lsys{font-size:14px!important;letter-spacing:1px!important}}
+
+/* ===== ไม่กระพริบ: ปิดเอฟเฟกต์ไล่ทีละการ์ด ให้ทั้งหน้าค่อย ๆ จางเข้าครั้งเดียวตอนเปลี่ยนหน้า ===== */
+:is(.admtool,.dayb,.lsteps li,.mday,.mday .bar i,.notebar,.paylist .pr,.pickbtn,.prow,.req,.rq,.sc,.stat,.tbl tr,.tfsum,.tpick button,.wday,.win,.winbar,.wk,.nc,.npick button,.cchips span,.seat,.lwrap){animation:none!important}
+main.enter{animation:softIn .28s ease-out both}
+@keyframes softIn{from{opacity:0}to{opacity:1}}
+.login .lwrap.first{animation:softIn .35s ease-out both!important}
+/* ป้ายตัวเลขบนเมนู/คำขอใหม่: ไม่กะพริบ */
+.tabs em,.rq.new::before{animation:none!important}
+.empty .icb,.logo-card,.lside .logo{animation:none!important}
 </style>
 </head>
 <body>
@@ -1436,8 +1445,9 @@ function render(){
 /* ---------------- LOGIN ---------------- */
 function vLogin(){
   const demo=S.store.demo,t=S.loginType||'streamer',pk=S.loginPick&&S.d.members[S.loginPick]?S.loginPick:null,pc=pk?colOf(pk):null;
-  $('#app').innerHTML=`<div class="login"><div class="lwrap">
-   <div class="lside"><div class="logo-card"><img src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv">LIVE</span></div><h1 class="lsys">LIVE BOOKING SYSTEM</h1><p>สำหรับ Live Streamer และแบรนด์</p>
+  const lfirst=!S._loginShown;S._loginShown=true;
+  $('#app').innerHTML=`<div class="login"><div class="lwrap ${lfirst?'first':''}">
+   <div class="lside"><div class="logo-card"><img src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv">LIVE</span></div><h1 class="lsys">LIVE BOOKING SYSTEM</h1>
     <ul class="lsteps">
      <li style="--i:0">${icb('users')}<div><b>เลือกประเภทบัญชี</b><small>แบรนด์ หรือ Live Streamer</small></div></li>
      <li style="--i:1">${icb('user')}<div><b>เลือกชื่อของคุณ</b><small>จากรายชื่อที่แบรนด์ลงทะเบียนไว้</small></div></li>
