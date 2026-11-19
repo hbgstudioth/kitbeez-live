@@ -1309,7 +1309,12 @@ main.enter{animation:softIn .28s ease-out both}
 .wkr{display:flex;align-items:center;gap:10px;border:0;background:none;font:inherit;cursor:pointer;padding:2px 4px;border-radius:12px;min-width:0}
 .wkr .mbig{font-size:15px;padding:6px 12px}.wkr>span:not(.mbig){display:inline-flex;align-items:center;gap:5px;color:var(--muted);font-size:13.5px;white-space:nowrap}
 .wkr:hover .mbig{filter:brightness(1.06)}
-@media(min-width:861px){.wkr{width:430px;flex:none;justify-content:flex-start}}
+
+.wkgrp{display:flex;align-items:center;gap:2px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:3px;box-shadow:0 2px 10px rgba(16,60,140,.05)}
+.wkgrp>.btn.icon{border:0;background:none;box-shadow:none;width:36px;height:36px;border-radius:10px}.wkgrp>.btn.icon:hover{background:#eef4ff}
+.wkr{justify-content:center}.wkr .mbig{box-shadow:none}.wkr .wkrr{color:var(--muted);font-size:13px;white-space:nowrap}
+@media(min-width:861px){.wkr{width:330px;flex:none}}
+@media(max-width:860px){.wkgrp{flex:1;min-width:0}.wkr{flex:1;min-width:0}}
 .wkx{margin-left:auto;display:flex;gap:6px;align-items:center}
 .modebar{position:static!important;margin:0 0 10px;padding:0;background:none;backdrop-filter:none;box-shadow:none}
 .sumline{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.sumline .sp{flex:1}.sumline .focus{margin:0}
@@ -1810,7 +1815,9 @@ function winBar(d){const c=C();if(!c.bookLimit)return'';const ws=(c.bookWindows|
   if(isBrand())return`<div class="winbar">${ic('calendar',16)}<span>Live Streamer จองได้เฉพาะรอบที่เปิด:</span>${list||'<b>ยังไม่มีรอบเปิด</b>'}</div>`;
   return canBookDate(d)?`<div class="winbar">${ic('checkc',16)}<span>วันนี้เปิดให้จองแล้ว · รอบที่เปิด:</span>${list}</div>`:`<div class="winbar no">${ic('lock',16)}<span>วันนี้ยังไม่เปิดให้จอง</span>${list?`<span>· รอบที่เปิด:</span>${list}`:'<span>· รอแบรนด์ประกาศรอบถัดไป</span>'}</div>`}
 
-function weekBar(o){return`<div class="wkb"><button class="btn icon" data-act="${o.act}" data-n="-1" title="สัปดาห์ก่อน" aria-label="สัปดาห์ก่อน">${ic('left',17)}</button><button class="wkr" data-act="weekPicker" title="เลือกสัปดาห์">${monthBadge(o.md,o.me)}<span>${ic('calendar',13)}${fmtRange(o.ws,add(o.ws,6))}</span></button><button class="btn icon" data-act="${o.act}" data-n="1" title="สัปดาห์ถัดไป" aria-label="สัปดาห์ถัดไป">${ic('right',17)}</button><button class="btn wkt" data-act="${o.today}" title="${o.tl}">${ic('target',15)}<span>${o.tl}</span></button><div class="wkx">${o.extra||''}</div></div>`}
+function weekBar(o){const A=D(o.md),B=D(o.me||o.md),m1=A.getUTCMonth(),m2=B.getUTCMonth(),y1=A.getUTCFullYear(),y2=B.getUTCFullYear();
+  const mt=m1===m2&&y1===y2?`${MON_L[m1]} <em>${y1}</em>`:`${MON_S[m1]}${y1!==y2?' '+y1:''} – ${MON_S[m2]} <em>${y2}</em>`;
+  return`<div class="wkb"><div class="wkgrp"><button class="btn icon" data-act="${o.act}" data-n="-1" title="สัปดาห์ก่อน" aria-label="สัปดาห์ก่อน">${ic('left',17)}</button><button class="wkr" data-act="weekPicker" title="เลือกสัปดาห์"><span class="mbig">${ic('calendar',16)}<span>${mt}</span></span><span class="wkrr">${fmtRange(o.ws,add(o.ws,6))}</span></button><button class="btn icon" data-act="${o.act}" data-n="1" title="สัปดาห์ถัดไป" aria-label="สัปดาห์ถัดไป">${ic('right',17)}</button></div><button class="btn wkt" data-act="${o.today}" title="${o.tl}">${ic('target',15)}<span>${o.tl}</span></button><div class="wkx">${o.extra||''}</div></div>`}
 function vBook(){
   const d=S.date,ws=monday(d),days=[...Array(7)].map((_,i)=>add(ws,i)),M_=D(d);
   let h=pageHd('ticket','เลือกรอบไลฟ์','เลือกวันจากแถบด้านล่าง แล้วแตะช่องว่างเพื่อจอง',goRoundBtn(d))+
