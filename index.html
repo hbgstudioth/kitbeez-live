@@ -1201,6 +1201,7 @@ main.enter{animation:softIn .28s ease-out both}
 .crch{display:flex;gap:6px;flex-wrap:wrap}
 .crch button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:6px 12px;font:inherit;font-size:13.5px;font-weight:600;color:var(--navy);cursor:pointer;transition:background-color .15s,border-color .15s}
 .crch button.on{background:#e5232f;border-color:#e5232f;color:#fff}.crch button.ghost{color:var(--blue);border-style:dashed}
+.crmo{margin-top:10px}.crmo small{display:flex;align-items:center;gap:5px;color:var(--muted);font-size:12.5px;margin-bottom:6px}.crch button.mo{color:#1d4ed8;border-color:#cfe0fb;background:#f3f8ff}.crch button.mo.mon{background:#2563eb;border-color:#2563eb;color:#fff}
 .tipbox{display:flex;gap:8px;align-items:flex-start;margin-top:12px;background:var(--sky);color:var(--navy);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.55}.tipbox .link{font-weight:700}
 
 .prow2 .pi .pem{display:block;font-size:11px;color:#7c8aa3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
@@ -2182,6 +2183,7 @@ function reopenDlg(keys){
    <div class="mact"><button class="btn ok" data-d="go">${ic('door',16)}เปิดช่อง</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,
   async a=>{if(a!=='go')return closeM();if(await write(keys.map(k=>['del','closures',k]),`เปิดช่องที่ปิด ${keys.length} ช่อง: `+keys.map(k=>{const p=parseSid(k);return`${fmtD(p.d)} ${C().slots[p.s].split('–')[0]} ห้อง ${p.r}`}).join(', '))){closeM();toast('เปิดช่องแล้ว')}});
 }
+function crMonths(){const y0=+TODAY.slice(0,4),m0=+TODAY.slice(5,7)-1,out=[];for(let i=0;i<6;i++){const y=y0+Math.floor((m0+i)/12),m=(m0+i)%12,st=`${y}-${String(m+1).padStart(2,'0')}-01`,en=isoOf(new Date(Date.UTC(y,m+1,0)));out.push([st.slice(0,7),MON_S[m]+(y!==y0?' '+y:''),st<TODAY?TODAY:st,en])}return out}
 function closeRangeDlg(o){
   const R=ROOMS(),SL=C().slots;let rooms=new Set(o.rooms||[]),dows=new Set(o.dows||[0,1,2,3,4,5,6]),allDay=true,slots=new Set(),f=o.from||TODAY,t=o.to||o.from||TODAY,why='';
   const dates=()=>{const L=[];let a=f<=t?f:t,b=f<=t?t:f;for(let x=a;x<=b&&L.length<93;x=add(x,1))if(dows.has(dow(x))&&isOpen(x))L.push(x);return L};
@@ -2189,7 +2191,8 @@ function closeRangeDlg(o){
   const body=()=>{const D=dates(),K=keys(),bk=K.filter(k=>S.d.slots[k]).length;return`
    <div class="sec"><b>${ic('door',14)}ห้อง</b><div class="crch">${R.map(r=>`<button data-d="rm:${r}" class="${rooms.has(r)?'on':''}">ห้อง ${r}</button>`).join('')}<button data-d="rm:all" class="ghost">ทุกห้อง</button></div></div>
    <div class="sec"><b>${ic('calendar',14)}วันที่</b><div class="rqdates"><input type="date" class="inp" id="cr_f" value="${f}"><span>ถึง</span><input type="date" class="inp" id="cr_t" value="${t}"></div>
-     <div class="crch" style="margin-top:8px"><button data-d="q:0" class="ghost">วันนี้</button><button data-d="q:1" class="ghost">พรุ่งนี้</button><button data-d="q:7" class="ghost">7 วันข้างหน้า</button></div></div>
+     <div class="crch" style="margin-top:8px"><button data-d="q:0" class="ghost">วันนี้</button><button data-d="q:1" class="ghost">พรุ่งนี้</button><button data-d="q:7" class="ghost">7 วันข้างหน้า</button></div>
+     <div class="crmo"><small>${ic('calendar',13)}ทั้งเดือน (คลิกเดียว)</small><div class="crch">${crMonths().map(([k,lb,a,b],i)=>`<button data-d="m:${k}" class="mo ${f===a&&t===b?'mon':''}">${i===0?'เดือนนี้ · ':''}${lb}</button>`).join('')}</div></div></div>
    <div class="sec"><b>${ic('calendar',14)}เฉพาะวัน</b><div class="crch">${[1,2,3,4,5,6,0].map(w=>`<button data-d="dw:${w}" class="${dows.has(w)?'on':''}">${DOW_S[w]}</button>`).join('')}</div></div>
    <div class="sec"><b>${ic('clock',14)}รอบเวลา</b><div class="crch"><button data-d="ad:1" class="${allDay?'on':''}">ทั้งวัน</button><button data-d="ad:0" class="${!allDay?'on':''}">เลือกรอบ</button></div>
      ${!allDay?`<div class="crch" style="margin-top:8px">${SL.map((x,i)=>`<button data-d="sl:${i}" class="${slots.has(i)?'on':''}">${x}</button>`).join('')}</div>`:''}</div>
@@ -2206,6 +2209,7 @@ function closeRangeDlg(o){
     if(a.startsWith('dw:')){const w=+a.slice(3);dows.has(w)?dows.delete(w):dows.add(w);return re()}
     if(a.startsWith('ad:')){allDay=a==='ad:1';return re()}
     if(a.startsWith('sl:')){const i=+a.slice(3);slots.has(i)?slots.delete(i):slots.add(i);return re()}
+    if(a.startsWith('m:')){const r=crMonths().find(x=>x[0]===a.slice(2));if(r){f=r[2];t=r[3]}return re()}
     if(a.startsWith('q:')){const n=+a.slice(2);f=n===1?add(TODAY,1):TODAY;t=n===7?add(TODAY,6):f;return re()}
     if(a==='save'){if(t<TODAY&&f<TODAY)return toast('เลือกวันที่ยังไม่ผ่านมา',1);const K=keys().filter(k=>parseSid(k).d>=TODAY);if(!rooms.size)return toast('เลือกห้องก่อน',1);if(!allDay&&!slots.size)return toast('เลือกรอบเวลาที่จะปิด',1);if(!K.length)return toast('ไม่มีช่องที่จะปิดในช่วงนี้',1);
       const reason=why.trim(),ops=K.map(k=>{const p=parseSid(k);return['set','closures',k,{date:p.d,room:p.r,slot:p.s,reason,by:myName(),at:Date.now()}]});
