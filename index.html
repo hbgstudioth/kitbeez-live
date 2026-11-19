@@ -1219,14 +1219,14 @@ main.enter{animation:softIn .28s ease-out both}
 .dstrip,.daytabs{touch-action:pan-y;user-select:none;-webkit-user-select:none}
 @keyframes swl{from{transform:translateX(46px);opacity:.3}to{transform:none;opacity:1}}@keyframes swr{from{transform:translateX(-46px);opacity:.3}to{transform:none;opacity:1}}
 .dstrip.swl,.daytabs.swl{animation:swl .32s var(--ease)}.dstrip.swr,.daytabs.swr{animation:swr .32s var(--ease)}
-.setnav{position:sticky;top:calc(var(--toph,0px) + 6px);z-index:15;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:6px;margin:0 0 16px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px rgba(16,60,140,.06)}
+.setnav{position:sticky;top:calc(var(--hh,62px) + 6px);z-index:15;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:6px;margin:0 0 16px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px rgba(16,60,140,.06)}
 .setnav::-webkit-scrollbar{display:none}
 .setnav button{flex:none;display:inline-flex;align-items:center;gap:7px;border:0;background:none;border-radius:11px;padding:9px 14px;font:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:background-color .2s,color .2s}
 .setnav button:hover{background:#f2f6fd;color:var(--navy)}.setnav button.on{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.25)}
 .setnav em{font-style:normal;font-size:11px;font-weight:700;background:#e8eefb;color:var(--blue);border-radius:999px;padding:1px 7px}.setnav button.on em{background:rgba(255,255,255,.25);color:#fff}.setnav em.warn{background:#fee2e2;color:#b42318}
 .setlogb{}@media(max-width:860px){.setlogb{display:none!important}}
 .setsec>.card:first-child,.setsec>.lgcard:first-child{margin-top:0!important}
-@media(max-width:860px){.setnav{top:6px;border-radius:14px}.setnav button{padding:8px 11px;font-size:13px}}
+@media(max-width:860px){.setnav{top:calc(var(--hh,56px) + 4px);border-radius:14px}.setnav button{padding:8px 11px;font-size:13px}}
 .lgcard{margin-top:16px}.lghd{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.lghd .muted{font-size:12.5px}
 .lgcats{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.lgcats button{display:inline-flex;align-items:center;gap:5px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 11px;font:inherit;font-size:12.5px;font-weight:600;color:var(--c);cursor:pointer;transition:background-color .15s,border-color .15s}
 .lgcats button em{font-style:normal;font-size:11px;background:#f1f5f9;color:var(--muted);border-radius:999px;padding:0 6px}
@@ -1297,6 +1297,31 @@ main.enter{animation:softIn .28s ease-out both}
   .tabs button.on{color:#fff;background:rgba(255,255,255,.18);border-radius:12px;font-weight:700}
   .tabs .ink{background:#fff}
   .tabs em{box-shadow:0 0 0 2px #2563eb}
+}
+
+/* ===== ส่วนหัวหน้า: แถบสัปดาห์ตรึงด้านบน ===== */
+@media(min-width:861px){main:has(.stick .wkx .seg) .modebar{display:none}.wkx .seg{width:auto}.wkx .seg button{padding:7px 14px}}
+@media(max-width:860px){.wkx{display:none!important}.wkt{border:1.5px solid var(--line)!important;background:#fff!important;height:38px}.sumline [data-act=print]{display:none}}
+
+.stick{position:sticky;top:var(--hh,62px);z-index:16;margin:0 -8px 12px;padding:8px 8px 6px;background:rgba(244,248,254,.94);backdrop-filter:blur(10px);border-radius:0 0 18px 18px}
+.stick .daytabs,.stick .dstrip{position:static;margin:6px 0 0;padding-bottom:4px;background:none;backdrop-filter:none}
+.wkb{display:flex;align-items:center;gap:6px}
+.wkr{display:flex;align-items:center;gap:10px;border:0;background:none;font:inherit;cursor:pointer;padding:2px 4px;border-radius:12px;min-width:0}
+.wkr .mbig{font-size:15px;padding:6px 12px}.wkr>span:not(.mbig){display:inline-flex;align-items:center;gap:5px;color:var(--muted);font-size:13.5px;white-space:nowrap}
+.wkr:hover .mbig{filter:brightness(1.06)}
+.wkx{margin-left:auto;display:flex;gap:6px;align-items:center}
+.modebar{position:static!important;margin:0 0 10px;padding:0;background:none;backdrop-filter:none;box-shadow:none}
+.sumline{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.sumline .sp{flex:1}.sumline .focus{margin:0}
+.lgd{margin:8px 0 6px}.lgd summary{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--muted);cursor:pointer;list-style:none;padding:3px 8px;border-radius:8px}.lgd summary::-webkit-details-marker{display:none}.lgd summary:hover{background:#eef3fb}.lgd[open] summary{color:var(--navy)}.lgd .legend2{margin-top:6px}
+.bkbar,.gorbar{display:none!important}.pagehd.bkhd{display:flex!important}
+.pagehd{align-items:center}
+@media(max-width:860px){
+  .stick{margin:0 -14px 10px;padding:6px 10px 4px;border-radius:0 0 14px 14px}
+  .wkr{flex:1;flex-direction:column;gap:1px;padding:0}.wkr .mbig{font-size:14px;padding:4px 10px}.wkr>span:not(.mbig){font-size:11.5px}
+  .wkt span{display:none}.wkt{width:40px;padding:0;justify-content:center}
+  .pagehd{flex-wrap:nowrap;margin-bottom:10px}.pagehd h2{white-space:nowrap}.pagehd:has(.hdact .seg,.hdact>:nth-child(3)){flex-wrap:wrap}.pagehd:has(.hdact .seg) .hdact{width:100%}.pagehd p{display:none}.pagehd .hdact{width:auto}.pagehd h2{font-size:19px}
+  .pagehd .gornd span{font-size:13px}.pagehd .gornd{height:36px;padding:0 10px}
+  .sumline .sp{display:none}.sumline .focus{width:100%}
 }
 </style>
 </head>
@@ -1783,12 +1808,13 @@ function winBar(d){const c=C();if(!c.bookLimit)return'';const ws=(c.bookWindows|
   const list=ws.map(w=>`<span class="wtag">${esc(w.label||'รอบเปิดจอง')} · ${fmtRange(w.from,w.to,false)}</span>`).join('');
   if(isBrand())return`<div class="winbar">${ic('calendar',16)}<span>Live Streamer จองได้เฉพาะรอบที่เปิด:</span>${list||'<b>ยังไม่มีรอบเปิด</b>'}</div>`;
   return canBookDate(d)?`<div class="winbar">${ic('checkc',16)}<span>วันนี้เปิดให้จองแล้ว · รอบที่เปิด:</span>${list}</div>`:`<div class="winbar no">${ic('lock',16)}<span>วันนี้ยังไม่เปิดให้จอง</span>${list?`<span>· รอบที่เปิด:</span>${list}`:'<span>· รอแบรนด์ประกาศรอบถัดไป</span>'}</div>`}
+
+function weekBar(o){return`<div class="wkb"><button class="btn icon" data-act="${o.act}" data-n="-1" title="สัปดาห์ก่อน" aria-label="สัปดาห์ก่อน">${ic('left',17)}</button><button class="wkr" data-act="weekPicker" title="เลือกสัปดาห์">${monthBadge(o.md,o.me)}<span>${ic('calendar',13)}${fmtRange(o.ws,add(o.ws,6))}</span></button><button class="btn icon" data-act="${o.act}" data-n="1" title="สัปดาห์ถัดไป" aria-label="สัปดาห์ถัดไป">${ic('right',17)}</button><button class="btn wkt" data-act="${o.today}" title="${o.tl}">${ic('target',15)}<span>${o.tl}</span></button><div class="wkx">${o.extra||''}</div></div>`}
 function vBook(){
   const d=S.date,ws=monday(d),days=[...Array(7)].map((_,i)=>add(ws,i)),M_=D(d);
-  let h=pageHd('ticket','เลือกรอบไลฟ์',`${monthBadge(d,null,true)}<span class="mrng">รอบ ${fmtRange(ws,add(ws,6))}</span>`,
-    `<button class="btn" data-act="wk" data-n="-1">${ic('left',16)}<span class="mh">สัปดาห์ก่อน</span></button>${goRoundBtn(d)}<button class="btn" data-act="today">${ic('target',16)}วันนี้</button><button class="btn" data-act="wk" data-n="1"><span class="mh">สัปดาห์ถัดไป</span>${ic('right',16)}</button>`).replace('class="pagehd"','class="pagehd bkhd"')+
-  `<div class="bkbar"><button class="btn icon" data-act="wk" data-n="-1" aria-label="สัปดาห์ก่อน">${ic('left',18)}</button><div class="bkt">${monthBadge(d)}<small>รอบ ${fmtRange(ws,add(ws,6))}</small></div><button class="btn icon" data-act="wk" data-n="1" aria-label="สัปดาห์ถัดไป">${ic('right',18)}</button>${isBrand()&&isOpen(d)?`<button class="btn icon" data-act="note" data-d="${d}" aria-label="โน้ตวันนี้">${ic('pin',17)}</button>`:''}<button class="btn sm bktd" data-act="today">${ic('target',15)}วันนี้</button></div>${(()=>{const g=goRoundBtn(d,'sm');return g?`<div class="gorbar">${g}</div>`:''})()}`+
-  `<div class="dstrip">${days.map(x=>{const o=isOpen(x),fr=o?freeCount(x):0;const om=x.slice(0,7)!==d.slice(0,7);return`<button class="dchip ${x===d?'on':''} ${o?'':'off'} ${x===TODAY?'tdy':''} ${om?'om':''}" data-act="date" data-d="${x}" ${o?'':'disabled'}>${om||dnum(x)===1?`<em class="mo">${MON_S[D(x).getUTCMonth()]}</em>`:''}<small>${DOW_S[dow(x)]}</small><b>${dnum(x)}</b><span class="${o&&!fr?'full':''} ${o&&!canBookDate(x)?'nb':''}">${o?(!canBookDate(x)?'ยังไม่เปิดจอง':fr?`ว่าง ${fr}`:'เต็ม'):'ไม่มีไลฟ์'}</span><i class="sh ${o&&!fr?'full':''} ${o&&!canBookDate(x)?'nb':''}">${o?(!canBookDate(x)?'ปิดจอง':fr?`ว่าง ${fr}`:'เต็ม'):'–'}</i></button>`}).join('')}</div>${winBar(d)}`;
+  let h=pageHd('ticket','เลือกรอบไลฟ์','เลือกวันจากแถบด้านล่าง แล้วแตะช่องว่างเพื่อจอง',goRoundBtn(d))+
+  `<div class="stick">${weekBar({act:'wk',today:'today',tl:'วันนี้',md:d,ws})}`+
+  `<div class="dstrip">${days.map(x=>{const o=isOpen(x),fr=o?freeCount(x):0;const om=x.slice(0,7)!==d.slice(0,7);return`<button class="dchip ${x===d?'on':''} ${o?'':'off'} ${x===TODAY?'tdy':''} ${om?'om':''}" data-act="date" data-d="${x}" ${o?'':'disabled'}>${om||dnum(x)===1?`<em class="mo">${MON_S[D(x).getUTCMonth()]}</em>`:''}<small>${DOW_S[dow(x)]}</small><b>${dnum(x)}</b><span class="${o&&!fr?'full':''} ${o&&!canBookDate(x)?'nb':''}">${o?(!canBookDate(x)?'ยังไม่เปิดจอง':fr?`ว่าง ${fr}`:'เต็ม'):'ไม่มีไลฟ์'}</span><i class="sh ${o&&!fr?'full':''} ${o&&!canBookDate(x)?'nb':''}">${o?(!canBookDate(x)?'ปิดจอง':fr?`ว่าง ${fr}`:'เต็ม'):'–'}</i></button>`}).join('')}</div></div>${winBar(d)}`;
   if(!isOpen(d))return h+`<div class="card empty">${icb('calendar','',30)}<b>${DOW_L[dow(d)]}นี้ไม่มีรอบไลฟ์</b>เลือกวันอื่นจากแถบด้านบน</div>`;
   const note=S.d.notes[d]?.text;
   if(note||isBrand())h+=`<div class="notebar ${note?'':'nonote'}">${ic('pin',18)}${note?esc(note):'<span class="muted">ไม่มีโน้ตสำหรับวันนี้</span>'}${isBrand()?`<button class="link" style="margin-left:auto;display:inline-flex;gap:4px;align-items:center" data-act="note" data-d="${d}">${ic('edit',14)}${note?'แก้ไข':'เพิ่มโน้ต'}</button>`:''}</div>`;
@@ -1827,8 +1853,7 @@ function renderCart(){
 function calSeg(){return`<div class="seg">${[['room','door','ตามห้อง'],['person','users','ตามคน'],['month','calendar','ภาพรวมเดือน']].map(([k,i,l])=>`<button class="${S.calMode===k?'on':''}" data-act="calMode" data-m="${k}">${ic(i,14)}${l}</button>`).join('')}</div>`}
 function dayStats(d){let f=0,a=0,me=0,pd=0,fh=0,meh=0;ROOMS().forEach(r=>{C().slots.forEach((_,s)=>{if(isClosed(d,r,s))return;a++;const v=slotOf(d,r,s);if(v){f++;fh+=hrsOf(v);if(v.who===S.meId&&COUNTED.includes(v.status)){me++;meh+=hrsOf(v)}if(v.status!=='ok')pd++}})});return{f,a,me,pd,fh,meh}}
 function calTop(){const sub={room:'ดูว่าห้องไหน ใครไลฟ์ เวลาไหน',person:'ดูว่าแต่ละคน ไลฟ์วันไหน ห้องไหน',month:'ภาพรวมทั้งเดือน · แตะ “รอบ” เพื่อดูรายสัปดาห์ · แตะวันที่เพื่อจองคิว'}[S.calMode];
-  const ws=monday(S.date);
-  return pageHd('calweek','ตารางไลฟ์',S.calMode==='month'?monthBadge(S.calMonth+'-01',null,true):`${monthBadge(ws,add(ws,6),true)}<span class="mrng">รอบ ${fmtRange(ws,add(ws,6))}</span>`,goRoundBtn(S.date,'calgr'))+`<div class="modebar">${calSeg()}<span class="mbsub">${ic('info',14)}${sub}</span></div>`}
+  return pageHd('calweek','ตารางไลฟ์',sub,goRoundBtn(S.date,'calgr'))+`<div class="modebar">${calSeg()}</div>`}
 function vWeek(){return calTop()+(S.calMode==='month'?vMonth():vSchedule())}
 function focusSel(){
   const ms=membersList();
@@ -1838,15 +1863,17 @@ function vSchedule(){
   const ws=monday(S.date),days=[...Array(7)].map((_,i)=>add(ws,i)),od=days.filter(isOpen),H=C().hours;
   let tot=0,free=0,mine=0;od.forEach(d=>{const st=dayStats(d);tot+=st.fh;free+=st.a-st.f;mine+=st.meh});
   let h='';
-  h+=`<div class="calbar"><div class="wknav"><button class="btn icon" data-act="weekJump" data-n="-1" title="สัปดาห์ก่อน">${ic('left',16)}</button><button class="btn wkbtn" data-act="weekPicker">${ic('calendar',16)}${fmtRange(ws,add(ws,6))}</button><button class="btn icon" data-act="weekJump" data-n="1" title="สัปดาห์ถัดไป">${ic('right',16)}</button><button class="btn" data-act="weekThis" title="สัปดาห์นี้">${ic('target',16)}<span>สัปดาห์นี้</span></button></div>${focusSel()}<button class="btn icon" data-act="print" title="พิมพ์">${ic('printer',17)}</button></div>`;
-  h+=`<div class="sumline"><span class="pill room">${ic('clock',13)}ไลฟ์รวม ${fmtHM(tot)}</span><span class="pill ok">${ic('grid',13)}ช่องว่าง ${free}</span>${S.meId?`<span class="pill movereq">${ic('user',13)}ของฉัน ${fmtHM(mine)}</span>`:''}<span class="pill pay-unpaid">${ic('calendar',13)}วันไลฟ์ ${od.length} วัน</span></div>`;
+  h+=`<div class="stick">${weekBar({act:'weekJump',today:'weekThis',tl:'สัปดาห์นี้',md:ws,me:add(ws,6),ws,extra:calSeg()})}${S.calMode==='room'&&od.length?dayTabs(days):''}</div>`;
+  const tools=`<span class="sp"></span>${focusSel()}<button class="btn icon" data-act="print" title="พิมพ์">${ic('printer',17)}</button>`;
+  h+=`<div class="sumline"><span class="pill room">${ic('clock',13)}ไลฟ์รวม ${fmtHM(tot)}</span><span class="pill ok">${ic('grid',13)}ช่องว่าง ${free}</span>${S.meId?`<span class="pill movereq">${ic('user',13)}ของฉัน ${fmtHM(mine)}</span>`:''}<span class="pill pay-unpaid">${ic('calendar',13)}วันไลฟ์ ${od.length} วัน</span>${tools}</div>`;
   if(!od.length)return h+`<div class="card empty">${icb('moon','',30)}<b>รอบนี้ไม่มีวันไลฟ์</b>เลือกสัปดาห์อื่น</div>`;
   return h+(S.calMode==='person'?vPerson(ws,od):vRooms(ws,days,od));
 }
+function dayTabs(days){return`<div class="daytabs">${days.map(d=>{const o=isOpen(d),st=o?dayStats(d):null;return`<button class="dt ${d===TODAY?'tdy':''}" data-act="jumpDay" data-d="${d}" ${o?'':'disabled'}><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b><span class="${o&&!canBookDate(d)?'nb':''}">${o?(!canBookDate(d)?'ยังไม่เปิดจอง':`ว่าง ${st.a-st.f}`):'ไม่มีไลฟ์'}</span></button>`}).join('')}</div>`}
 function vRooms(ws,days,od){
   const R=ROOMS(),f=S.focus;
-  let h=`<div class="legend2"><span><i style="background:#ffd9d6"></i>ชื่อ = คนที่ไลฟ์ห้องนั้น</span><span><i style="box-shadow:inset 0 0 0 1.5px #d9e5f6;background:#fbfdff"></i>ว่าง (แตะเพื่อจอง)</span><span><i style="background:repeating-linear-gradient(45deg,#f2f5f9 0 4px,#fff 4px 8px)"></i>ห้องปิด</span>${S.meId?`<span><i style="box-shadow:inset 0 0 0 2.5px var(--blue)"></i>คิวของฉัน</span>`:''}<span>${ic('hour',13)}รอยืนยัน</span><span>${ic('undo',13)}ขอยกเลิก</span><span>${ic('swap',13)}ขอย้ายห้อง</span><span>${ic('clock',13)}ขอเปลี่ยนเวลา</span></div>`;
-  h+=`<div class="daytabs">${days.map(d=>{const o=isOpen(d),st=o?dayStats(d):null;return`<button class="dt ${d===TODAY?'tdy':''}" data-act="jumpDay" data-d="${d}" ${o?'':'disabled'}><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b><span class="${o&&!canBookDate(d)?'nb':''}">${o?(!canBookDate(d)?'ยังไม่เปิดจอง':`ว่าง ${st.a-st.f}`):'ไม่มีไลฟ์'}</span></button>`}).join('')}</div><div class="boards">`;
+  let h=`<details class="lgd"><summary>${ic('info',14)}คำอธิบายสัญลักษณ์</summary><div class="legend2"><span><i style="background:#ffd9d6"></i>ชื่อ = คนที่ไลฟ์ห้องนั้น</span><span><i style="box-shadow:inset 0 0 0 1.5px #d9e5f6;background:#fbfdff"></i>ว่าง (แตะเพื่อจอง)</span><span><i style="background:repeating-linear-gradient(45deg,#f2f5f9 0 4px,#fff 4px 8px)"></i>ห้องปิด</span>${S.meId?`<span><i style="box-shadow:inset 0 0 0 2.5px var(--blue)"></i>คิวของฉัน</span>`:''}<span>${ic('hour',13)}รอยืนยัน</span><span>${ic('undo',13)}ขอยกเลิก</span><span>${ic('swap',13)}ขอย้ายห้อง</span><span>${ic('clock',13)}ขอเปลี่ยนเวลา</span></div></details>`;
+  h+=`<div class="boards">`;
   od.forEach((d,di)=>{
     const st=dayStats(d),note=S.d.notes[d]?.text;
     h+=`<section class="dayb ${d===TODAY?'tdy':''}" id="day-${d}" style="--i:${di}"><header><div class="big"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></div><div class="ttl"><b>${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[D(d).getUTCMonth()]}</b><div>${ic('grid',12)}ลงแล้ว ${st.f}/${st.a}${canBookDate(d)?` · ว่าง ${st.a-st.f}`:''}${d===TODAY?' · <b style="color:var(--blue)">วันนี้</b>':''}${note?`<span class="nt3">${ic('pin',12)}${esc(note)}</span>`:''}</div></div>${canBookDate(d)?`<button class="btn sm bkgo" data-act="goDate" data-d="${d}">${ic('ticket',14)}จองวันนี้</button>`:`<span class="nbtag">${ic('lock',13)}ยังไม่เปิดจอง</span>`}</header>
@@ -2821,6 +2848,7 @@ const acts={
   document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
   document.addEventListener('click',e=>{if(Date.now()-blockClick<350&&e.target.closest(SEL)){e.stopPropagation();e.preventDefault()}},true);
 })();
+(()=>{const set=()=>{const t=document.querySelector('.top');if(t)document.documentElement.style.setProperty('--hh',t.offsetHeight+'px')};addEventListener('resize',set);setInterval(set,1500);setTimeout(set,300)})();
 document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.closest('dialog'))return;const f=acts[b.dataset.act];if(f){if(!(b.tagName==='INPUT'&&b.type==='checkbox'))e.preventDefault();f(b)}});
 document.addEventListener('submit',e=>{if(e.target.id==='loginForm'){e.preventDefault();
   if(!okEmail($('#lemail')?.value)){toast('กรอกอีเมลให้ถูกต้องก่อน',1);$('#lemail')?.focus();return}
