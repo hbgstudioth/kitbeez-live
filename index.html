@@ -1342,6 +1342,17 @@ main.enter{animation:softIn .28s ease-out both}
 .dchip.rnd:not(.on){background:#f3fdf6}.dt.rnd{background:#f3fdf6}
 .dchip.rnd.on{box-shadow:0 0 0 3px #22c55e,0 8px 20px rgba(37,99,235,.25)}
 .dt.rnd.on,.dt.rnd:focus-visible{border-color:#22c55e!important}
+
+/* เมนูย่อยตั้งค่า: เนื้อหาจางเข้าเบาๆ เฉพาะส่วนเนื้อหา */
+.setsec.tabin{animation:tabIn .22s ease-out both}@keyframes tabIn{from{opacity:.35}to{opacity:1}}
+/* ช่องว่าง: แสงเขียวอ่อนไหลผ่านช้าๆ บอกว่ายังจองได้ */
+.seat.free:not(:disabled):not(.past):not(.sel),.cell.e:not(.nb){background-image:linear-gradient(105deg,transparent 35%,rgba(34,197,94,.13) 50%,transparent 65%);background-size:260% 100%;background-repeat:no-repeat;animation:freeSheen 4.2s ease-in-out infinite!important;animation-delay:calc(var(--fd,0) * .35s)!important}
+.seat.free:not(:disabled):not(.past):not(.sel){border-color:#cfe9da}
+.cell.e:not(.nb){box-shadow:inset 0 0 0 1.5px #d3eadc}
+@keyframes freeSheen{0%{background-position:130% 0}55%,100%{background-position:-30% 0}}
+:is(.seat.free,.cell.e):nth-child(4n+2){--fd:1}:is(.seat.free,.cell.e):nth-child(4n+3){--fd:2}:is(.seat.free,.cell.e):nth-child(4n+4){--fd:3}
+.seat.free:hover,.cell.e:not(.nb):hover{animation-play-state:paused}
+@media(prefers-reduced-motion:reduce){.seat.free,.cell.e{animation:none!important}}
 </style>
 </head>
 <body>
@@ -2801,8 +2812,8 @@ const acts={
   logCat:b=>{S.logCat=b.dataset.c;S.logLim=150;render()},
   logMore:()=>{S.logLim=(S.logLim||150)+150;render()},
   logOlder:async b=>{const L=allLogs();const min=L.length?Math.min(...L.map(l=>l.at)):Date.now();b.disabled=true;try{const o=await S.store.moreLogs(min);if(!Object.keys(o).length){S.logEnd=1;toast('ไม่มีประวัติเก่ากว่านี้แล้ว')}else{S.oldLogs={...(S.oldLogs||{}),...o};S.logLim=(S.logLim||150)+Object.keys(o).length;toast(`โหลดเพิ่ม ${Object.keys(o).length} รายการ`)}}catch(e){toast('โหลดไม่สำเร็จ: '+(e.message||e),1)}render()},
-  setLog:()=>{S.logCat='set';S.logLim=150;S.setTab='log';render();{const m=document.querySelector('main');m.classList.remove('enter');void m.offsetWidth;m.classList.add('enter')}},
-  setTab:b=>{if(S.setTab===b.dataset.t)return;S.setTab=b.dataset.t;render();{const m=document.querySelector('main');m.classList.remove('enter');void m.offsetWidth;m.classList.add('enter')}const n=document.querySelector('.setnav');if(n&&n.getBoundingClientRect().top<0)n.scrollIntoView({block:'start'});document.querySelector('.setnav .on')?.scrollIntoView({inline:'center',block:'nearest'})},
+  setLog:()=>{S.logCat='set';S.logLim=150;S.setTab='log';render();{const sc=document.querySelector('.setsec');if(sc){sc.classList.remove('tabin');void sc.offsetWidth;sc.classList.add('tabin')}}},
+  setTab:b=>{if(S.setTab===b.dataset.t)return;S.setTab=b.dataset.t;render();{const sc=document.querySelector('.setsec');if(sc){sc.classList.remove('tabin');void sc.offsetWidth;sc.classList.add('tabin')}}const n=document.querySelector('.setnav');if(n&&n.getBoundingClientRect().top<0)n.scrollIntoView({block:'start'});document.querySelector('.setnav .on')?.scrollIntoView({inline:'center',block:'nearest'})},
 
   mvUp:b=>moveMember(b.dataset.id,-1),
   mvDown:b=>moveMember(b.dataset.id,1),
