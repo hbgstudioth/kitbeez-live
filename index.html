@@ -1366,6 +1366,18 @@ main.enter{animation:softIn .28s ease-out both}
 @keyframes bkGlow{0%,100%{box-shadow:0 2px 6px rgba(22,163,74,.18)}50%{box-shadow:0 0 0 4px rgba(34,197,94,.16),0 4px 14px rgba(22,163,74,.3)}}
 @keyframes bkNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
 @media(prefers-reduced-motion:reduce){.btn.bkgo,.btn.bkgo .bkar{animation:none}}
+
+/* มุมมองตามคน: ป้ายเวลา + ห้อง อ่านง่าย */
+.pc{flex-direction:column;flex-wrap:nowrap;gap:5px}
+.pc .pt{display:flex;align-items:center;gap:6px;width:100%;max-width:150px;padding:4px 5px 4px 9px;border-radius:9px;background:#f4f8ff;border:1px solid #e3ecf8;font-size:12px}
+.pc .pt:hover{border-color:var(--blue);background:#eef4ff}
+.pc .pt b{font-size:13.5px;color:var(--navy);font-variant-numeric:tabular-nums;letter-spacing:.2px}
+.pc .pt .rm{margin-left:auto;font-style:normal;font-size:11.5px;font-weight:600;padding:2px 7px;border-radius:6px;white-space:nowrap}
+.rm.r0{background:#dbeafe;color:#1d4ed8}.rm.r1{background:#ede9fe;color:#6d28d9}.rm.r2{background:#ccfbf1;color:#0f766e}.rm.r3{background:#fef3c7;color:#b45309}.rm.r4{background:#fce7f3;color:#be185d}.rm.r5{background:#e0f2fe;color:#0369a1}
+.pc .pt small{font-size:10.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis}
+.pc .pt .st{font-style:normal;display:inline-flex;color:#b45309}
+.pc .pt.pending{background:#fff8e6;border-color:#f6dfa0;border-style:dashed}.pc .pt.cancelreq{background:#fff1f1;border-color:#f6c9cb}.pc .pt.movereq{background:#f6f1ff;border-color:#ddd0fb}.pc .pt.timereq{background:#ecfafd;border-color:#b9e8f2}
+@media(max-width:860px){.pc{flex-direction:row;flex-wrap:wrap;position:relative;padding-left:58px;min-height:30px}.pc::before{position:absolute;left:0;top:8px}.pc .pt{width:auto;max-width:none;gap:8px}}
 </style>
 </head>
 <body>
@@ -1943,7 +1955,7 @@ function vPerson(ws,od){
   ids.sort((a,b)=>(b===f)-(a===f)||(b===S.meId)-(a===S.meId)||cnt(b)-cnt(a)||M(a).name.localeCompare(M(b).name));
   if(!ids.length)return`<div class="card empty">${icb('users','',30)}<b>ยังไม่มีคิวในรอบนี้</b></div>`;
   return`<div class="pgrid"><div class="prow hd" style="--n:${od.length}"><div>Live Streamer<small>${ids.length} คน</small></div>${od.map(d=>`<div>${DOW_S[dow(d)]} ${dnum(d)}<small>${MON_S[D(d).getUTCMonth()]}</small></div>`).join('')}<div style="text-align:right">รวม</div></div>
-  ${ids.map((id,i)=>`<div class="prow ${f?(id===f?'hl':'dim'):''}" style="--n:${od.length};--i:${i}"><div class="pn">${nameChip(id)}<small>${Object.values(ppl[id]).flat().length} Slot</small></div>${od.map(d=>{const L=(ppl[id][d]||[]).sort((a,b)=>a.s-b.s);return`<div class="pc ${L.length?'':'none'}" data-day="${DOW_S[dow(d)]} ${dnum(d)}">${L.map(x=>`<span class="pt ${x.v.status!=='ok'?x.v.status:''}" data-act="goDate" data-d="${d}" title="${C().slots[x.s]} · ห้อง ${x.r} · ${STATUS[x.v.status]}">${ic(slotIcon(x.s),12)}<b>${C().slots[x.s].split('–')[0]}</b>ห้อง ${x.r}${isTrial(x.v)?` · ${esc(x.v.guest||'')}`:''}${x.v.status!=='ok'?ic(SIC[x.v.status],11):''}</span>`).join('')}</div>`}).join('')}<div class="ph">${cnt(id)*H} ชม.</div></div>`).join('')}</div>`;
+  ${ids.map((id,i)=>`<div class="prow ${f?(id===f?'hl':'dim'):''}" style="--n:${od.length};--i:${i}"><div class="pn">${nameChip(id)}<small>${Object.values(ppl[id]).flat().length} Slot</small></div>${od.map(d=>{const L=(ppl[id][d]||[]).sort((a,b)=>a.s-b.s);return`<div class="pc ${L.length?'':'none'}" data-day="${DOW_S[dow(d)]} ${dnum(d)}">${L.map(x=>`<span class="pt ${x.v.status!=='ok'?x.v.status:''}" data-act="goDate" data-d="${d}" title="${C().slots[x.s]} · ห้อง ${x.r} · ${STATUS[x.v.status]}"><b>${C().slots[x.s].split('–')[0]}</b><em class="rm r${(x.r-1)%6}">ห้อง ${x.r}</em>${isTrial(x.v)?`<small>${esc(x.v.guest||'')}</small>`:''}${x.v.status!=='ok'?`<i class="st">${ic(SIC[x.v.status],11)}</i>`:''}</span>`).join('')}</div>`}).join('')}<div class="ph">${cnt(id)*H} ชม.</div></div>`).join('')}</div>`;
 }
 function weekPicker(){
   let ym=S.date.slice(0,7);
