@@ -1090,8 +1090,15 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
 @media(max-width:600px){.lside h1.lsys{font-size:14px!important;letter-spacing:1px!important}}
 
 /* ===== ไม่กระพริบ: ปิดเอฟเฟกต์ไล่ทีละการ์ด ให้ทั้งหน้าค่อย ๆ จางเข้าครั้งเดียวตอนเปลี่ยนหน้า ===== */
-:is(.admtool,.dayb,.lsteps li,.mday,.mday .bar i,.notebar,.paylist .pr,.pickbtn,.prow,.req,.rq,.sc,.stat,.tbl tr,.tfsum,.tpick button,.wday,.win,.winbar,.wk,.nc,.npick button,.cchips span,.seat,.lwrap){animation:none!important}
+:is(.dstrip,.daytabs,.wtag,.clday,.lgrow,.admtool,.dayb,.lsteps li,.mday,.mday .bar i,.notebar,.paylist .pr,.pickbtn,.prow,.req,.rq,.sc,.stat,.tbl tr,.tfsum,.tpick button,.wday,.win,.winbar,.wk,.nc,.npick button,.cchips span,.seat,.lwrap){animation:none!important}
 main.enter{animation:softIn .28s ease-out both}
+/* ไม่ให้หน้าขยับตอนเปลี่ยนรอบ */
+html{overflow-y:scroll;scrollbar-gutter:stable}
+.pgrid{min-height:420px}
+.dayb>header{flex-wrap:nowrap;min-height:52px}.dayb .ttl{min-width:0}.dayb .ttl b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dayb .ttl div{flex-wrap:nowrap;white-space:nowrap;overflow:hidden}.dayb .nt3{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;max-width:100%}
+.dayb>header .btn,.dayb>header .nbtag{height:32px;flex:none}
+.winbar{min-height:42px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.winbar>*{flex:none}
 @keyframes softIn{from{opacity:0}to{opacity:1}}
 .login .lwrap.first{animation:softIn .35s ease-out both!important}
 /* ป้ายตัวเลขบนเมนู/คำขอใหม่: ไม่กะพริบ */
@@ -1926,7 +1933,7 @@ function weekPicker(){
 function vMonth(){
   const ym=S.calMonth,[y,m]=ym.split('-').map(Number),first=`${ym}-01`,last=isoOf(new Date(Date.UTC(y,m,0))),selW=monday(S.date),H=C().hours,meView=S.meId&&!isBrand();
   let mf=0,ma=0,mm=0,mfh=0,mmh=0,i=0,cal='';
-  for(let ws=monday(first);ws<=last;ws=add(ws,7)){
+  for(let ws=monday(first),wn=0;wn<6;ws=add(ws,7),wn++){
     let wh=0;
     const cells=[...Array(7)].map((_,j)=>{const d=add(ws,j),out=d.slice(0,7)!==ym;
       if(!isOpen(d))return`<div class="mday off ${out?'out':''}" style="--i:${i++}"><div class="tp"><b>${dnum(d)}</b></div><small>ไม่มีไลฟ์</small></div>`;
