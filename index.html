@@ -1400,6 +1400,15 @@ main.enter{animation:softIn .28s ease-out both}
 /* แถบวันในหน้าตาราง: ซ่อนบนคอม · บนมือถือเตี้ยลง */
 @media(min-width:861px){.stick .daytabs{display:none}}
 @media(max-width:860px){.stick .daytabs{gap:4px;margin-top:5px;padding:0 0 2px}.stick .daytabs .dt{display:flex;align-items:baseline;justify-content:center;gap:3px;padding:6px 0;border-radius:9px}.stick .daytabs .dt small{display:inline;font-size:10.5px}.stick .daytabs .dt b{font-size:13.5px}.stick .daytabs .dt span{display:none!important}}
+
+/* หน้าจองคิว (คอม): การ์ดวันกะทัดรัด */
+@media(min-width:861px){
+  .stick .dstrip{gap:8px;padding:9px 2px 4px;margin:6px 0 0}
+  .stick .dchip{flex:1 0 0;border-width:1.5px;border-radius:12px;padding:6px 4px;display:grid;grid-template-columns:auto auto;justify-content:center;align-items:baseline;column-gap:5px;row-gap:0}
+  .stick .dchip small{font-size:12px}.stick .dchip b{font-size:18px;line-height:1.2}
+  .stick .dchip span,.stick .dchip i.sh{grid-column:1/-1;text-align:center;font-size:11px}
+  .stick .dchip.on{box-shadow:0 6px 14px rgba(31,111,235,.28)}.stick .dchip.on :is(small,span,b){color:#fff!important;opacity:1}.stick .dchip.on span{opacity:.85!important}
+}
 </style>
 </head>
 <body>
