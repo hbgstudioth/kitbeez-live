@@ -1247,6 +1247,26 @@ main.enter{animation:softIn .28s ease-out both}
 @media(max-width:600px){.mbig.xl{font-size:16px;padding:5px 11px}.dchip .mo{font-size:9px;padding:0 5px;line-height:14px;top:-7px}}
 
 .bkbar .bkt{display:flex;flex-direction:column;align-items:center;gap:3px}.bkbar .bkt small{white-space:nowrap;font-size:11px}
+
+/* เมนูซ้าย PC: พื้นฟ้า อักษรขาว */
+@media(min-width:861px){
+  .tabs{background:linear-gradient(180deg,#2563eb 0%,#1d4ed8 100%);border-right:0;box-shadow:4px 0 24px rgba(29,78,216,.18)}
+  .tabs button{color:rgba(255,255,255,.9)}
+  .tabs button svg{color:inherit}
+  .tabs button:hover{background:rgba(255,255,255,.14);color:#fff}
+  .tabs button.on{background:#fff;color:var(--blue);box-shadow:0 4px 14px rgba(10,30,90,.18)}
+  .tabs button.on::before{background:#fff}
+  .tabs em{box-shadow:0 0 0 2px rgba(255,255,255,.9)}
+  .tabs .sidefoot{color:rgba(255,255,255,.72);border-top-color:rgba(255,255,255,.22)}
+  .tabs .pres{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25)}
+  .tabs .phead,.tabs .phead b{color:#fff}.tabs .phead small,.tabs .phead .pavs em{color:rgba(255,255,255,.75)}
+  .tabs .pavs .pav{box-shadow:0 0 0 2px #1f55e0}
+  .tabs .plist{border-top-color:rgba(255,255,255,.22)}.tabs .psec{color:rgba(255,255,255,.7)}
+  .tabs .prow2 .pi b{color:#fff}.tabs .prow2 .pi small{color:rgba(255,255,255,.75)}
+  .tabs .prole{background:rgba(255,255,255,.2);color:#fff}
+  .tabs .phead svg{color:#fff}
+  .tabs .prow2 .pi .pem{color:rgba(255,255,255,.8)}.tabs .prow2:not(.on){opacity:.8}
+}
 </style>
 </head>
 <body>
