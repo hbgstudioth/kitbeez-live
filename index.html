@@ -1378,6 +1378,23 @@ main.enter{animation:softIn .28s ease-out both}
 .pc .pt .st{font-style:normal;display:inline-flex;color:#b45309}
 .pc .pt.pending{background:#fff8e6;border-color:#f6dfa0;border-style:dashed}.pc .pt.cancelreq{background:#fff1f1;border-color:#f6c9cb}.pc .pt.movereq{background:#f6f1ff;border-color:#ddd0fb}.pc .pt.timereq{background:#ecfafd;border-color:#b9e8f2}
 @media(max-width:860px){.pc{flex-direction:row;flex-wrap:wrap;position:relative;padding-left:58px;min-height:30px}.pc::before{position:absolute;left:0;top:8px}.pc .pt{width:auto;max-width:none;gap:8px}}
+
+/* ปุ่มกรองห้อง / ไฮไลต์ (popup) */
+.fbtn{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 12px;border:1.5px solid var(--line);background:#fff;border-radius:12px;font:inherit;font-size:13px;color:var(--muted);cursor:pointer;white-space:nowrap;transition:border-color .15s,background-color .15s}
+.fbtn b{color:var(--navy);font-weight:700;max-width:140px;overflow:hidden;text-overflow:ellipsis}.fbtn:hover{border-color:var(--blue)}
+.fbtn.on{background:#eef4ff;border-color:var(--blue)}.fbtn.on b{color:var(--blue)}
+.fbtn i{display:inline-flex;width:20px;height:20px;border-radius:6px;align-items:center;justify-content:center;background:#dbe7fb;color:var(--blue);margin-right:-4px}.fbtn i:hover{background:#c7d9f8}
+.rfgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-top:12px}
+.rfgrid button{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:6px;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:12px;font:inherit;cursor:pointer;text-align:left;transition:border-color .15s,background-color .15s}
+.rfgrid button:hover{border-color:var(--blue)}.rfgrid button.on{border-color:var(--blue);background:#eef4ff;box-shadow:0 0 0 3px #dce9ff}
+.rfgrid button .rm{font-style:normal;font-size:14px;font-weight:700;padding:3px 10px;border-radius:8px}.rfgrid small{font-size:11.5px;color:var(--muted)}
+.rfgrid button.all{color:var(--navy)}.rfgrid button.all b{font-size:14px}
+.rfgrid button i{position:absolute;left:0;bottom:0;height:3px;width:var(--w);background:linear-gradient(90deg,#22c55e,#16a34a)}
+.boards.one{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))!important}.boards.one .dayb>header .btn{font-size:0;width:34px;padding:0;justify-content:center;gap:0}.boards.one .dayb>header .btn .bkar{display:none}.boards.one .dayb>header .nbtag{font-size:0;padding:6px 8px;gap:0}.boards.one .dayb .ttl div{display:none}
+@media(max-width:860px){.boards.one{grid-template-columns:1fr 1fr!important;gap:8px}.boards.one .dayb{padding:10px}.boards.one .dayb>header .btn{font-size:0;width:34px;padding:0;justify-content:center}.boards.one .dayb>header .btn svg{font-size:14px}.boards.one .dayb .big{width:40px;height:40px}}
+.fqk{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 4px}.fqk button{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font:inherit;font-size:13px;font-weight:600;color:var(--navy);cursor:pointer}
+.fqk button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+@media(max-width:860px){.sumline .fbtn{flex:1;justify-content:center;min-width:0;padding:0 8px}.sumline .fbtn>span{display:none}.fbtn b{max-width:110px}}
 </style>
 </head>
 <body>
@@ -1913,10 +1930,25 @@ function dayStats(d){let f=0,a=0,me=0,pd=0,fh=0,meh=0;ROOMS().forEach(r=>{C().sl
 function calTop(){const sub={room:'ดูว่าห้องไหน ใครไลฟ์ เวลาไหน',person:'ดูว่าแต่ละคน ไลฟ์วันไหน ห้องไหน',month:'ภาพรวมทั้งเดือน · แตะ “รอบ” เพื่อดูรายสัปดาห์ · แตะวันที่เพื่อจองคิว'}[S.calMode];
   return pageHd('calweek','ตารางไลฟ์',sub,goRoundBtn(S.date,'calgr'))+`<div class="modebar">${calSeg()}</div>`}
 function vWeek(){return calTop()+(S.calMode==='month'?vMonth():vSchedule())}
-function focusSel(){
-  const ms=membersList();
-  return`<label class="focus">${ic('eye',16)}<span>ไฮไลต์</span><select data-focus="1"><option value="">ทุกคน</option>${isBrand()?`<option value="${TRIAL}" ${S.focus===TRIAL?'selected':''}>ทดลองไลฟ์</option>`:''}${S.meId?`<option value="${S.meId}" ${S.focus===S.meId?'selected':''}>เฉพาะของฉัน (${esc(M(S.meId).name)})</option>`:''}${(isBrand()||C().perms.seeOthers)?ms.filter(m=>m.id!==S.meId).map(m=>`<option value="${m.id}" ${S.focus===m.id?'selected':''}>${esc(m.name)}</option>`).join(''):''}</select></label>`;
-}
+function roomF(){return isBrand()&&S.roomF&&ROOMS().includes(S.roomF)?S.roomF:null}
+function focusSel(){const f=S.focus,rf=roomF();
+  const fl=!f?'ทุกคน':f===TRIAL?'ทดลองไลฟ์':f===S.meId?'ของฉัน':M(f).name;
+  const canOthers=isBrand()||C().perms.seeOthers;
+  return`${isBrand()&&S.calMode!=='month'?`<button class="fbtn ${rf?'on':''}" data-act="roomFDlg">${ic('door',15)}<span>ห้อง</span><b>${rf?'ห้อง '+rf:'ทุกห้อง'}</b>${rf?`<i data-act="roomFClear" title="ล้าง">${ic('x',12)}</i>`:ic('down',13)}</button>`:''}${canOthers||S.meId?`<button class="fbtn ${f?'on':''}" data-act="focusDlg">${ic('eye',15)}<span>ไฮไลต์</span><b>${esc(fl)}</b>${f?`<i data-act="focusClear" title="ล้าง">${ic('x',12)}</i>`:ic('down',13)}</button>`:''}`}
+function roomFDlg(){const ws=monday(S.date),od=[...Array(7)].map((_,i)=>add(ws,i)).filter(isOpen);
+  const cnt=r=>od.reduce((n,d)=>n+C().slots.filter((_,s)=>slotOf(d,r,s)).length,0),tot=od.length*C().slots.length;
+  modal(`<div class="mhead">${icb('door')}<div><h3>เลือกห้อง</h3><span class="muted">ดูว่าห้องนี้มีใครไลฟ์รอบไหนบ้าง · รอบ ${fmtRange(ws,add(ws,6))}</span></div></div>
+   <div class="rfgrid"><button data-d="r:0" class="all ${!roomF()?'on':''}">${ic('grid',18)}<b>ทุกห้อง</b><small>${ROOMS().length} ห้อง</small></button>${ROOMS().map(r=>{const n=cnt(r);return`<button data-d="r:${r}" class="${roomF()===r?'on':''}"><span class="rm r${(r-1)%6}">ห้อง ${r}</span><small>ลงแล้ว ${n}/${tot}</small><i style="--w:${tot?Math.round(n/tot*100):0}%"></i></button>`}).join('')}</div>
+   <div class="mact"><button class="btn ghost" data-d="close">ปิด</button></div>`,
+   a=>{if(a.startsWith('r:')){S.roomF=+a.slice(2)||null;closeM();render()}else closeM()})}
+function focusDlg(){const canOthers=isBrand()||C().perms.seeOthers,list=canOthers?membersList().filter(m=>m.id!==S.meId):[];let q='';
+  const quick=[['','users','ทุกคน'],...(S.meId?[[S.meId,'user','ของฉัน']]:[]),...(isBrand()?[[TRIAL,'mic','ทดลองไลฟ์']]:[])];
+  modal(`<div class="mhead">${icb('eye')}<div><h3>ไฮไลต์คน</h3><span class="muted">เลือกชื่อเพื่อเน้นคิวของคนนั้นในตาราง</span></div></div>
+   <div class="fqk">${quick.map(([v,i,l])=>`<button data-d="f:${v}" class="${(S.focus||'')===v?'on':''}">${ic(i,15)}${l}</button>`).join('')}</div>
+   ${list.length?`<label class="field nsearch">${ic('search',18)}<input id="nsearch" placeholder="พิมพ์ค้นหาชื่อ..." autocomplete="off"></label><div class="ngrid" id="npick">${nameGrid(list,{sel:S.focus})}</div>`:''}
+   <div class="mact"><button class="btn ghost" data-d="close">ปิด</button></div>`,
+   a=>{if(a==='close')return closeM();S.focus=a.startsWith('f:')?(a.slice(2)||null):a;closeM();render()});
+  const inp=$('#nsearch');if(inp){inp.oninput=()=>{q=inp.value;$('#npick').innerHTML=nameGrid(list,{sel:S.focus,q})};if(matchMedia('(pointer:fine)').matches)setTimeout(()=>inp.focus(),60)}}
 function vSchedule(){
   const ws=monday(S.date),days=[...Array(7)].map((_,i)=>add(ws,i)),od=days.filter(isOpen),H=C().hours;
   let tot=0,free=0,mine=0;od.forEach(d=>{const st=dayStats(d);tot+=st.fh;free+=st.a-st.f;mine+=st.meh});
@@ -1929,9 +1961,9 @@ function vSchedule(){
 }
 function dayTabs(days){return`<div class="daytabs">${days.map(d=>{const o=isOpen(d),st=o?dayStats(d):null;return`<button class="dt ${d===TODAY?'tdy':''} ${o&&inRound(d)?'rnd':''}" data-act="jumpDay" data-d="${d}" ${o?'':'disabled'}><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b><span class="${o&&!canBookDate(d)?'nb':''}">${o?(!canBookDate(d)?'ยังไม่เปิดจอง':`ว่าง ${st.a-st.f}`):'ไม่มีไลฟ์'}</span></button>`}).join('')}</div>`}
 function vRooms(ws,days,od){
-  const R=ROOMS(),f=S.focus;
+  const R=roomF()?[roomF()]:ROOMS(),f=S.focus;
   let h=`<details class="lgd"><summary>${ic('info',14)}คำอธิบายสัญลักษณ์</summary><div class="legend2"><span><i style="background:#ffd9d6"></i>ชื่อ = คนที่ไลฟ์ห้องนั้น</span><span><i style="box-shadow:inset 0 0 0 1.5px #d9e5f6;background:#fbfdff"></i>ว่าง (แตะเพื่อจอง)</span><span><i style="background:repeating-linear-gradient(45deg,#f2f5f9 0 4px,#fff 4px 8px)"></i>ห้องปิด</span>${S.meId?`<span><i style="box-shadow:inset 0 0 0 2.5px var(--blue)"></i>คิวของฉัน</span>`:''}<span>${ic('hour',13)}รอยืนยัน</span><span>${ic('undo',13)}ขอยกเลิก</span><span>${ic('swap',13)}ขอย้ายห้อง</span><span>${ic('clock',13)}ขอเปลี่ยนเวลา</span></div></details>`;
-  h+=`<div class="boards">`;
+  h+=`<div class="boards ${roomF()?'one':''}">`;
   od.forEach((d,di)=>{
     const st=dayStats(d),note=S.d.notes[d]?.text;
     h+=`<section class="dayb ${d===TODAY?'tdy':''}" id="day-${d}" style="--i:${di}"><header><div class="big"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></div><div class="ttl"><b>${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[D(d).getUTCMonth()]}</b><div>${ic('grid',12)}ลงแล้ว ${st.f}/${st.a}${canBookDate(d)?` · ว่าง ${st.a-st.f}`:''}${d===TODAY?' · <b style="color:var(--blue)">วันนี้</b>':''}${note?`<span class="nt3">${ic('pin',12)}${esc(note)}</span>`:''}</div></div>${canBookDate(d)?`<button class="btn sm bkgo" data-act="goDate" data-d="${d}">${ic('ticket',14)}ไปจองคิววันนี้<span class="bkar">${ic('right',14)}</span></button>`:`<span class="nbtag">${ic('lock',13)}ยังไม่เปิดจอง</span>`}</header>
@@ -1949,7 +1981,7 @@ function vRooms(ws,days,od){
 }
 function vPerson(ws,od){
   const H=C().hours,ppl={},f=S.focus;
-  od.forEach(d=>ROOMS().forEach(r=>C().slots.forEach((_,s)=>{const v=slotOf(d,r,s);if(!v)return;((ppl[v.who]??={})[d]??=[]).push({r,s,v})})));
+  od.forEach(d=>(roomF()?[roomF()]:ROOMS()).forEach(r=>C().slots.forEach((_,s)=>{const v=slotOf(d,r,s);if(!v)return;((ppl[v.who]??={})[d]??=[]).push({r,s,v})})));
   let ids=Object.keys(ppl);if(!isBrand()&&!C().perms.seeOthers)ids=ids.filter(id=>id===S.meId);
   const cnt=id=>Object.values(ppl[id]).flat().filter(x=>COUNTED.includes(x.v.status)).length;
   ids.sort((a,b)=>(b===f)-(a===f)||(b===S.meId)-(a===S.meId)||cnt(b)-cnt(a)||M(a).name.localeCompare(M(b).name));
@@ -2834,6 +2866,11 @@ const acts={
   openDay:b=>reopenDlg(Object.keys(S.d.closures||{}).filter(k=>k.startsWith(b.dataset.d+'_')).sort()),
   reopenOne:b=>reopenDlg([b.dataset.k]),
   closuresAll:()=>closuresDlg(),
+  roomFDlg:()=>roomFDlg(),
+  roomFClear:(b,e)=>{e?.stopPropagation?.();S.roomF=null;render()},
+  focusDlg:()=>focusDlg(),
+  focusClear:(b,e)=>{e?.stopPropagation?.();S.focus=null;render()},
+
   logCat:b=>{S.logCat=b.dataset.c;S.logLim=150;render()},
   logMore:()=>{S.logLim=(S.logLim||150)+150;render()},
   logOlder:async b=>{const L=allLogs();const min=L.length?Math.min(...L.map(l=>l.at)):Date.now();b.disabled=true;try{const o=await S.store.moreLogs(min);if(!Object.keys(o).length){S.logEnd=1;toast('ไม่มีประวัติเก่ากว่านี้แล้ว')}else{S.oldLogs={...(S.oldLogs||{}),...o};S.logLim=(S.logLim||150)+Object.keys(o).length;toast(`โหลดเพิ่ม ${Object.keys(o).length} รายการ`)}}catch(e){toast('โหลดไม่สำเร็จ: '+(e.message||e),1)}render()},
