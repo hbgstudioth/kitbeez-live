@@ -1267,6 +1267,16 @@ main.enter{animation:softIn .28s ease-out both}
   .tabs .phead svg{color:#fff}
   .tabs .prow2 .pi .pem{color:rgba(255,255,255,.8)}.tabs .prow2:not(.on){opacity:.8}
 }
+
+/* เมนูล่างมือถือ: พื้นฟ้า อักษรขาว */
+@media(max-width:860px){
+  .tabs{background:linear-gradient(180deg,#2563eb,#1d4ed8);border-top:0;box-shadow:0 -6px 24px rgba(29,78,216,.25)}
+  .tabs button{color:rgba(255,255,255,.78)}
+  .tabs button svg{color:inherit}
+  .tabs button.on{color:#fff;background:rgba(255,255,255,.18);border-radius:12px;font-weight:700}
+  .tabs .ink{background:#fff}
+  .tabs em{box-shadow:0 0 0 2px #2563eb}
+}
 </style>
 </head>
 <body>
