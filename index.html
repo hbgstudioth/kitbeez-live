@@ -1201,6 +1201,10 @@ main.enter{animation:softIn .28s ease-out both}
 .crch{display:flex;gap:6px;flex-wrap:wrap}
 .crch button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:6px 12px;font:inherit;font-size:13.5px;font-weight:600;color:var(--navy);cursor:pointer;transition:background-color .15s,border-color .15s}
 .crch button.on{background:#e5232f;border-color:#e5232f;color:#fff}.crch button.ghost{color:var(--blue);border-style:dashed}
+.gornd{gap:6px}.gornd small{font-size:12px;font-weight:700;background:rgba(255,255,255,.22);padding:2px 7px;border-radius:7px}
+.gornd:not(.here){background:linear-gradient(135deg,#16a34a,#15803d);border-color:#15803d;color:#fff}.gornd.here{background:#ecfdf3;border-color:#a6e3bd;color:#15803d}.gornd.here small{background:#d1fadf}
+.gorbar{display:none}
+@media(max-width:600px){.gorbar{display:block;margin:-2px 0 10px}.gorbar .gornd{width:100%;justify-content:center;height:40px;font-size:14px}}
 .crmo{margin-top:10px}.crmo small{display:flex;align-items:center;gap:5px;color:var(--muted);font-size:12.5px;margin-bottom:6px}.crch button.mo{color:#1d4ed8;border-color:#cfe0fb;background:#f3f8ff}.crch button.mo.mon{background:#2563eb;border-color:#2563eb;color:#fff}
 .tipbox{display:flex;gap:8px;align-items:flex-start;margin-top:12px;background:var(--sky);color:var(--navy);border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.55}.tipbox .link{font-weight:700}
 
@@ -1690,6 +1694,9 @@ function vSetupFirst(){
 
 /* ---------------- BOOK ---------------- */
 function freeCount(d){let n=0;ROOMS().forEach(r=>{C().slots.forEach((_,s)=>{if(!isClosed(d,r,s)&&!slotOf(d,r,s)&&!isPast(d,s))n++})});return n}
+function firstBookDay(){const c=C();if(!c.bookLimit)return null;const bd=new Set(c.bookDates||[]);const ws=(c.bookWindows||[]).filter(w=>w.to>=TODAY).sort((x,y)=>x.from.localeCompare(y.from));
+  for(const w of ws){let x=w.from<TODAY?TODAY:w.from;while(x<=w.to){if(isOpen(x)&&(!bd.size||bd.has(x))&&C().slots.some((_,s)=>!isPast(x,s)))return x;x=add(x,1)}}return null}
+function goRoundBtn(d,cls=''){const x=firstBookDay();if(!x)return'';return`<button class="btn ${cls} gornd ${x===d?'here':''}" data-act="goRound" data-d="${x}" title="ไปวันแรกที่เปิดให้ลงคิวของรอบ">${ic('ticket',16)}<span>ไปรอบลงคิว</span><small>${DOW_S[dow(x)]} ${dnum(x)} ${MON_S[D(x).getUTCMonth()]}</small></button>`}
 function winBar(d){const c=C();if(!c.bookLimit)return'';const ws=(c.bookWindows||[]).filter(w=>w.to>=TODAY);
   const list=ws.map(w=>`<button data-act="date" data-d="${w.from<TODAY?TODAY:w.from}">${esc(w.label||'รอบเปิดจอง')} · ${fmtRange(w.from,w.to,false)}</button>`).join('');
   if(isBrand())return`<div class="winbar">${ic('calendar',16)}<span>Live Streamer จองได้เฉพาะรอบที่เปิด:</span>${list||'<b>ยังไม่มีรอบเปิด</b>'}</div>`;
@@ -1697,8 +1704,8 @@ function winBar(d){const c=C();if(!c.bookLimit)return'';const ws=(c.bookWindows|
 function vBook(){
   const d=S.date,ws=monday(d),days=[...Array(7)].map((_,i)=>add(ws,i)),M_=D(d);
   let h=pageHd('ticket','เลือกรอบไลฟ์',`${monthBadge(d,null,true)}<span class="mrng">รอบ ${fmtRange(ws,add(ws,6))}</span>`,
-    `<button class="btn" data-act="wk" data-n="-1">${ic('left',16)}<span class="mh">สัปดาห์ก่อน</span></button><button class="btn" data-act="today">${ic('target',16)}วันนี้</button><button class="btn" data-act="wk" data-n="1"><span class="mh">สัปดาห์ถัดไป</span>${ic('right',16)}</button>`).replace('class="pagehd"','class="pagehd bkhd"')+
-  `<div class="bkbar"><button class="btn icon" data-act="wk" data-n="-1" aria-label="สัปดาห์ก่อน">${ic('left',18)}</button><div class="bkt">${monthBadge(d)}<small>รอบ ${fmtRange(ws,add(ws,6))}</small></div><button class="btn icon" data-act="wk" data-n="1" aria-label="สัปดาห์ถัดไป">${ic('right',18)}</button>${isBrand()&&isOpen(d)?`<button class="btn icon" data-act="note" data-d="${d}" aria-label="โน้ตวันนี้">${ic('pin',17)}</button>`:''}<button class="btn sm bktd" data-act="today">${ic('target',15)}วันนี้</button></div>`+
+    `<button class="btn" data-act="wk" data-n="-1">${ic('left',16)}<span class="mh">สัปดาห์ก่อน</span></button>${goRoundBtn(d)}<button class="btn" data-act="today">${ic('target',16)}วันนี้</button><button class="btn" data-act="wk" data-n="1"><span class="mh">สัปดาห์ถัดไป</span>${ic('right',16)}</button>`).replace('class="pagehd"','class="pagehd bkhd"')+
+  `<div class="bkbar"><button class="btn icon" data-act="wk" data-n="-1" aria-label="สัปดาห์ก่อน">${ic('left',18)}</button><div class="bkt">${monthBadge(d)}<small>รอบ ${fmtRange(ws,add(ws,6))}</small></div><button class="btn icon" data-act="wk" data-n="1" aria-label="สัปดาห์ถัดไป">${ic('right',18)}</button>${isBrand()&&isOpen(d)?`<button class="btn icon" data-act="note" data-d="${d}" aria-label="โน้ตวันนี้">${ic('pin',17)}</button>`:''}<button class="btn sm bktd" data-act="today">${ic('target',15)}วันนี้</button></div>${(()=>{const g=goRoundBtn(d,'sm');return g?`<div class="gorbar">${g}</div>`:''})()}`+
   `<div class="dstrip">${days.map(x=>{const o=isOpen(x),fr=o?freeCount(x):0;const om=x.slice(0,7)!==d.slice(0,7);return`<button class="dchip ${x===d?'on':''} ${o?'':'off'} ${x===TODAY?'tdy':''} ${om?'om':''}" data-act="date" data-d="${x}" ${o?'':'disabled'}>${om||dnum(x)===1?`<em class="mo">${MON_S[D(x).getUTCMonth()]}</em>`:''}<small>${DOW_S[dow(x)]}</small><b>${dnum(x)}</b><span class="${o&&!fr?'full':''} ${o&&!canBookDate(x)?'nb':''}">${o?(!canBookDate(x)?'ยังไม่เปิดจอง':fr?`ว่าง ${fr}`:'เต็ม'):'ไม่มีไลฟ์'}</span><i class="sh ${o&&!fr?'full':''} ${o&&!canBookDate(x)?'nb':''}">${o?(!canBookDate(x)?'ปิดจอง':fr?`ว่าง ${fr}`:'เต็ม'):'–'}</i></button>`}).join('')}</div>${winBar(d)}`;
   if(!isOpen(d))return h+`<div class="card empty">${icb('calendar','',30)}<b>${DOW_L[dow(d)]}นี้ไม่มีรอบไลฟ์</b>เลือกวันอื่นจากแถบด้านบน</div>`;
   const note=S.d.notes[d]?.text;
@@ -2574,6 +2581,7 @@ const acts={
   side:()=>{const sh=$('#shell');const off=sh.classList.toggle('nos');try{localStorage.setItem('kbz-side',off?'off':'on')}catch(e){}},
   view:b=>{S.view=b.dataset.v;S.sel.clear();S._keepRow=false;S._wkInit=false;render();window.scrollTo({top:0,behavior:'smooth'})},
   date:b=>{S.date=b.dataset.d;render()},
+  goRound:b=>{S.date=b.dataset.d;S.sel.clear();render();window.scrollTo({top:0,behavior:'smooth'});toast('ไปวันแรกที่ลงคิวได้ของรอบ')},
   goDate:b=>{S.date=b.dataset.d;S.view='book';render();window.scrollTo({top:0,behavior:'smooth'})},
   wk:b=>{S.date=firstOpen(add(monday(S.date),7*+b.dataset.n));render()},
   today:()=>{const ws=monday(TODAY);S.date=isOpen(TODAY)?TODAY:([...Array(7)].map((_,i)=>add(ws,i)).find(d=>d>=TODAY&&isOpen(d))||firstOpen(ws));render()},
