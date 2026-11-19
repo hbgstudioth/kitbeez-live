@@ -645,6 +645,7 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
 .dchip span.nb{color:var(--muted)}
 .winbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#effaf3;border:1px solid #c6ebd3;color:#0d6b37;border-radius:14px;padding:9px 14px;margin-bottom:12px;font-size:13.5px;animation:fadeUp .4s both}
 .winbar.no{background:#fff8e6;border-color:#f8e3a8;color:#7a5600}
+.winbar .wtag{border:1px solid currentColor;background:#fff;border-radius:999px;padding:2px 10px;font-size:12.5px;font-weight:600}
 .winbar button{border:1px solid currentColor;background:#fff;color:inherit;border-radius:999px;padding:2px 10px;font-size:12.5px;cursor:pointer;font-weight:600}
 .wins{margin-top:6px}
 .win{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #f0f4fa;animation:fadeUp .35s both;animation-delay:calc(var(--i,0)*40ms);flex-wrap:wrap}
@@ -1201,6 +1202,12 @@ main.enter{animation:softIn .28s ease-out both}
 .crch{display:flex;gap:6px;flex-wrap:wrap}
 .crch button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:6px 12px;font:inherit;font-size:13.5px;font-weight:600;color:var(--navy);cursor:pointer;transition:background-color .15s,border-color .15s}
 .crch button.on{background:#e5232f;border-color:#e5232f;color:#fff}.crch button.ghost{color:var(--blue);border-style:dashed}
+.rdgrp{margin-top:14px}.rdgrp>b{display:flex;align-items:center;gap:6px;font-size:13.5px;color:#15803d;margin-bottom:8px}
+.rdgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:7px}
+.rdgrid button{display:flex;flex-direction:column;align-items:center;gap:1px;border:1.5px solid #c6ebd3;background:#fff;border-radius:12px;padding:6px 2px;font:inherit;cursor:pointer;color:var(--navy);transition:background-color .15s,border-color .15s,transform .15s}
+.rdgrid button:hover{background:#effaf3;border-color:#16a34a;transform:translateY(-1px)}
+.rdgrid small{font-size:11.5px;color:var(--muted)}.rdgrid b{font-size:20px;line-height:1.1}.rdgrid em{font-style:normal;font-size:11px;color:#1d4ed8;font-weight:700}.rdgrid span{font-size:11px;color:#15803d;font-weight:600}
+.rdgrid button.full span{color:#b42318}.rdgrid button.on{background:#16a34a;border-color:#16a34a;color:#fff}.rdgrid button.on :is(small,em,span){color:#fff}
 .gornd{gap:6px}.gornd small{font-size:12px;font-weight:700;background:rgba(255,255,255,.22);padding:2px 7px;border-radius:7px}
 .gornd:not(.here){background:linear-gradient(135deg,#16a34a,#15803d);border-color:#15803d;color:#fff}.gornd.here{background:#ecfdf3;border-color:#a6e3bd;color:#15803d}.gornd.here small{background:#d1fadf}
 .gorbar{display:none}
@@ -1696,9 +1703,15 @@ function vSetupFirst(){
 function freeCount(d){let n=0;ROOMS().forEach(r=>{C().slots.forEach((_,s)=>{if(!isClosed(d,r,s)&&!slotOf(d,r,s)&&!isPast(d,s))n++})});return n}
 function firstBookDay(){const c=C();if(!c.bookLimit)return null;const bd=new Set(c.bookDates||[]);const ws=(c.bookWindows||[]).filter(w=>w.to>=TODAY).sort((x,y)=>x.from.localeCompare(y.from));
   for(const w of ws){let x=w.from<TODAY?TODAY:w.from;while(x<=w.to){if(isOpen(x)&&(!bd.size||bd.has(x))&&C().slots.some((_,s)=>!isPast(x,s)))return x;x=add(x,1)}}return null}
-function goRoundBtn(d,cls=''){const x=firstBookDay();if(!x)return'';return`<button class="btn ${cls} gornd ${x===d?'here':''}" data-act="goRound" data-d="${x}" title="ไปวันแรกที่เปิดให้ลงคิวของรอบ">${ic('ticket',16)}<span>ไปรอบลงคิว</span><small>${DOW_S[dow(x)]} ${dnum(x)} ${MON_S[D(x).getUTCMonth()]}</small></button>`}
+function roundDays(){const c=C();if(!c.bookLimit)return[];const bd=new Set(c.bookDates||[]);return(c.bookWindows||[]).filter(w=>w.to>=TODAY).sort((x,y)=>x.from.localeCompare(y.from)).map(w=>{const L=[];let x=w.from<TODAY?TODAY:w.from;while(x<=w.to){if(isOpen(x)&&(!bd.size||bd.has(x))&&C().slots.some((_,s)=>!isPast(x,s)))L.push(x);x=add(x,1)}return[w,L]}).filter(([,L])=>L.length)}
+function roundDlg(){const R=roundDays();
+  modal(`<div class="mhead">${icb('ticket','ok')}<div><h3>เลือกวันในรอบลงคิว</h3><span class="muted">แตะวันที่ต้องการเพื่อไปหน้าจองวันนั้น</span></div></div>
+   ${R.map(([w,L])=>`<div class="rdgrp"><b>${ic('calendar',14)}${esc(w.label||'รอบเปิดจอง')} · ${fmtRange(w.from,w.to,false)}</b><div class="rdgrid">${L.map(x=>{const fr=freeCount(x);return`<button data-d="g:${x}" class="${x===S.date?'on':''} ${fr?'':'full'}"><small>${DOW_S[dow(x)]}</small><b>${dnum(x)}</b><em>${MON_S[D(x).getUTCMonth()]}</em><span>${fr?'ว่าง '+fr:'เต็ม'}</span></button>`}).join('')}</div></div>`).join('')||'<p class="muted">ยังไม่มีรอบเปิดจอง</p>'}
+   <div class="mact"><button class="btn ghost" data-d="close">ปิด</button></div>`,
+  a=>{if(a.startsWith('g:')){S.date=a.slice(2);S.sel.clear();closeM();render();window.scrollTo({top:0,behavior:'smooth'})}else closeM()})}
+function goRoundBtn(d,cls=''){const x=firstBookDay();if(!x)return'';return`<button class="btn ${cls} gornd ${x===d?'here':''}" data-act="goRound" data-d="${x}" title="เลือกวันในรอบที่เปิดให้ลงคิว">${ic('ticket',16)}<span>ไปรอบลงคิว</span><small>${DOW_S[dow(x)]} ${dnum(x)} ${MON_S[D(x).getUTCMonth()]}</small></button>`}
 function winBar(d){const c=C();if(!c.bookLimit)return'';const ws=(c.bookWindows||[]).filter(w=>w.to>=TODAY);
-  const list=ws.map(w=>`<button data-act="date" data-d="${w.from<TODAY?TODAY:w.from}">${esc(w.label||'รอบเปิดจอง')} · ${fmtRange(w.from,w.to,false)}</button>`).join('');
+  const list=ws.map(w=>`<span class="wtag">${esc(w.label||'รอบเปิดจอง')} · ${fmtRange(w.from,w.to,false)}</span>`).join('');
   if(isBrand())return`<div class="winbar">${ic('calendar',16)}<span>Live Streamer จองได้เฉพาะรอบที่เปิด:</span>${list||'<b>ยังไม่มีรอบเปิด</b>'}</div>`;
   return canBookDate(d)?`<div class="winbar">${ic('checkc',16)}<span>วันนี้เปิดให้จองแล้ว · รอบที่เปิด:</span>${list}</div>`:`<div class="winbar no">${ic('lock',16)}<span>วันนี้ยังไม่เปิดให้จอง</span>${list?`<span>· รอบที่เปิด:</span>${list}`:'<span>· รอแบรนด์ประกาศรอบถัดไป</span>'}</div>`}
 function vBook(){
@@ -2581,7 +2594,7 @@ const acts={
   side:()=>{const sh=$('#shell');const off=sh.classList.toggle('nos');try{localStorage.setItem('kbz-side',off?'off':'on')}catch(e){}},
   view:b=>{S.view=b.dataset.v;S.sel.clear();S._keepRow=false;S._wkInit=false;render();window.scrollTo({top:0,behavior:'smooth'})},
   date:b=>{S.date=b.dataset.d;render()},
-  goRound:b=>{S.date=b.dataset.d;S.sel.clear();render();window.scrollTo({top:0,behavior:'smooth'});toast('ไปวันแรกที่ลงคิวได้ของรอบ')},
+  goRound:()=>roundDlg(),
   goDate:b=>{S.date=b.dataset.d;S.view='book';render();window.scrollTo({top:0,behavior:'smooth'})},
   wk:b=>{S.date=firstOpen(add(monday(S.date),7*+b.dataset.n));render()},
   today:()=>{const ws=monday(TODAY);S.date=isOpen(TODAY)?TODAY:([...Array(7)].map((_,i)=>add(ws,i)).find(d=>d>=TODAY&&isOpen(d))||firstOpen(ws));render()},
