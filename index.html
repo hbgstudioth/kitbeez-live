@@ -1353,6 +1353,19 @@ main.enter{animation:softIn .28s ease-out both}
 :is(.seat.free,.cell.e):nth-child(4n+2){--fd:1}:is(.seat.free,.cell.e):nth-child(4n+3){--fd:2}:is(.seat.free,.cell.e):nth-child(4n+4){--fd:3}
 .seat.free:hover,.cell.e:not(.nb):hover{animation-play-state:paused}
 @media(prefers-reduced-motion:reduce){.seat.free,.cell.e{animation:none!important}}
+
+/* คอลัมน์เวลาในตาราง: ไม่มีไอคอน จัดชิดขวา */
+.rb .t{align-items:flex-end;justify-content:center;padding:0 8px 0 0;gap:1px;border-right:2px solid #e3ecf8;margin-right:2px}
+.rb .t b{font-size:14px;color:var(--navy);font-variant-numeric:tabular-nums;letter-spacing:.2px}
+.rb .t small{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}.rb .t small i{font-style:normal}
+@media(max-width:600px){.rb .t small i{display:none}.rb .t small::before{content:'–'}.rb .t{padding-right:5px}}
+/* ปุ่มไปจองคิววันนี้: เรืองแสงเบาๆ + ลูกศรขยับชวนกด */
+.btn.bkgo{gap:6px;animation:bkGlow 2.8s ease-in-out infinite}
+.btn.bkgo .bkar{display:inline-flex;animation:bkNudge 1.4s ease-in-out infinite}
+.btn.bkgo:hover{animation-play-state:paused}.btn.bkgo:hover .bkar{transform:translateX(3px);animation:none}
+@keyframes bkGlow{0%,100%{box-shadow:0 2px 6px rgba(22,163,74,.18)}50%{box-shadow:0 0 0 4px rgba(34,197,94,.16),0 4px 14px rgba(22,163,74,.3)}}
+@keyframes bkNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(3px)}}
+@media(prefers-reduced-motion:reduce){.btn.bkgo,.btn.bkgo .bkar{animation:none}}
 </style>
 </head>
 <body>
@@ -1909,9 +1922,9 @@ function vRooms(ws,days,od){
   h+=`<div class="boards">`;
   od.forEach((d,di)=>{
     const st=dayStats(d),note=S.d.notes[d]?.text;
-    h+=`<section class="dayb ${d===TODAY?'tdy':''}" id="day-${d}" style="--i:${di}"><header><div class="big"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></div><div class="ttl"><b>${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[D(d).getUTCMonth()]}</b><div>${ic('grid',12)}ลงแล้ว ${st.f}/${st.a}${canBookDate(d)?` · ว่าง ${st.a-st.f}`:''}${d===TODAY?' · <b style="color:var(--blue)">วันนี้</b>':''}${note?`<span class="nt3">${ic('pin',12)}${esc(note)}</span>`:''}</div></div>${canBookDate(d)?`<button class="btn sm bkgo" data-act="goDate" data-d="${d}">${ic('ticket',14)}จองวันนี้</button>`:`<span class="nbtag">${ic('lock',13)}ยังไม่เปิดจอง</span>`}</header>
+    h+=`<section class="dayb ${d===TODAY?'tdy':''}" id="day-${d}" style="--i:${di}"><header><div class="big"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></div><div class="ttl"><b>${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[D(d).getUTCMonth()]}</b><div>${ic('grid',12)}ลงแล้ว ${st.f}/${st.a}${canBookDate(d)?` · ว่าง ${st.a-st.f}`:''}${d===TODAY?' · <b style="color:var(--blue)">วันนี้</b>':''}${note?`<span class="nt3">${ic('pin',12)}${esc(note)}</span>`:''}</div></div>${canBookDate(d)?`<button class="btn sm bkgo" data-act="goDate" data-d="${d}">${ic('ticket',14)}ไปจองคิววันนี้<span class="bkar">${ic('right',14)}</span></button>`:`<span class="nbtag">${ic('lock',13)}ยังไม่เปิดจอง</span>`}</header>
     <div class="rb" style="--rooms:${R.length}"><div></div>${R.map(r=>`<div class="h">${ic('door',13)}ห้อง ${r}</div>`).join('')}
-    ${C().slots.map((t,s)=>`<div class="t">${ic(slotIcon(s),14)}<b>${t.split('–')[0]}</b>–${t.split('–')[1]||''}</div>`+R.map(r=>{
+    ${C().slots.map((t,s)=>`<div class="t"><b>${t.split('–')[0]}</b><small><i>ถึง </i>${t.split('–')[1]||''}</small></div>`+R.map(r=>{
       if(isClosed(d,r,s)&&!slotOf(d,r,s)){const dc=dayClosure(d,r,s);return`<div class="cell x ${dc?'dc':''}" title="${dc?'ปิดเฉพาะวันนี้'+(dc.reason?' · '+esc(dc.reason):''):'ปิดประจำ'}">ปิด</div>`}
       const v=slotOf(d,r,s);
       if(!v&&!canBookDate(d)&&!isPast(d,s))return`<div class="cell e nb" title="ห้อง ${r} · ${t} · ยังไม่เปิดจอง">${ic('lock',11)}<span>ยังไม่เปิดจอง</span></div>`;
