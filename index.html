@@ -1392,6 +1392,7 @@ main.enter{animation:softIn .28s ease-out both}
 .rfgrid button i{position:absolute;left:0;bottom:0;height:3px;width:var(--w);background:linear-gradient(90deg,#22c55e,#16a34a)}
 .boards.one{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))!important}.boards.one .dayb>header .btn{font-size:0;width:34px;padding:0;justify-content:center;gap:0}.boards.one .dayb>header .btn .bkar{display:none}.boards.one .dayb>header .nbtag{font-size:0;padding:6px 8px;gap:0}.boards.one .dayb .ttl div{display:none}
 @media(max-width:860px){.boards.one{grid-template-columns:1fr 1fr!important;gap:8px}.boards.one .dayb{padding:10px}.boards.one .dayb>header .btn{font-size:0;width:34px;padding:0;justify-content:center}.boards.one .dayb>header .btn svg{font-size:14px}.boards.one .dayb .big{width:40px;height:40px}}
+.fbtn.mine b{max-width:none!important}@media(max-width:860px){.sumline .fbtn.mine{flex:1 1 100%}.sumline .fbtn.mine>span.tg{display:inline-block}}.fbtn.mine .tg{flex:none;width:30px;height:18px;border-radius:999px;background:#d5deea;position:relative;transition:background-color .2s}.fbtn.mine .tg i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s}.fbtn.mine.on .tg{background:#22c55e}.fbtn.mine.on .tg i{transform:translateX(12px)}
 .fqk{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 4px}.fqk button{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font:inherit;font-size:13px;font-weight:600;color:var(--navy);cursor:pointer}
 .fqk button.on{background:var(--blue);border-color:var(--blue);color:#fff}
 @media(max-width:860px){.sumline .fbtn{flex:1;justify-content:center;min-width:0;padding:0 8px}.sumline .fbtn>span{display:none}.fbtn b{max-width:110px}}
@@ -1930,11 +1931,12 @@ function dayStats(d){let f=0,a=0,me=0,pd=0,fh=0,meh=0;ROOMS().forEach(r=>{C().sl
 function calTop(){const sub={room:'ดูว่าห้องไหน ใครไลฟ์ เวลาไหน',person:'ดูว่าแต่ละคน ไลฟ์วันไหน ห้องไหน',month:'ภาพรวมทั้งเดือน · แตะ “รอบ” เพื่อดูรายสัปดาห์ · แตะวันที่เพื่อจองคิว'}[S.calMode];
   return pageHd('calweek','ตารางไลฟ์',sub,goRoundBtn(S.date,'calgr'))+`<div class="modebar">${calSeg()}</div>`}
 function vWeek(){return calTop()+(S.calMode==='month'?vMonth():vSchedule())}
+function focusOK(){if(!isBrand()&&S.focus&&S.focus!==S.meId)S.focus=null}
 function roomF(){return isBrand()&&S.roomF&&ROOMS().includes(S.roomF)?S.roomF:null}
-function focusSel(){const f=S.focus,rf=roomF();
+function focusSel(){focusOK();const f=S.focus,rf=roomF();
   const fl=!f?'ทุกคน':f===TRIAL?'ทดลองไลฟ์':f===S.meId?'ของฉัน':M(f).name;
   const canOthers=isBrand()||C().perms.seeOthers;
-  return`${isBrand()&&S.calMode!=='month'?`<button class="fbtn ${rf?'on':''}" data-act="roomFDlg">${ic('door',15)}<span>ห้อง</span><b>${rf?'ห้อง '+rf:'ทุกห้อง'}</b>${rf?`<i data-act="roomFClear" title="ล้าง">${ic('x',12)}</i>`:ic('down',13)}</button>`:''}${canOthers||S.meId?`<button class="fbtn ${f?'on':''}" data-act="focusDlg">${ic('eye',15)}<span>ไฮไลต์</span><b>${esc(fl)}</b>${f?`<i data-act="focusClear" title="ล้าง">${ic('x',12)}</i>`:ic('down',13)}</button>`:''}`}
+  return`${isBrand()&&S.calMode!=='month'?`<button class="fbtn ${rf?'on':''}" data-act="roomFDlg">${ic('door',15)}<span>ห้อง</span><b>${rf?'ห้อง '+rf:'ทุกห้อง'}</b>${rf?`<i data-act="roomFClear" title="ล้าง">${ic('x',12)}</i>`:ic('down',13)}</button>`:''}${!isBrand()&&S.meId?`<button class="fbtn mine ${f===S.meId?'on':''}" data-act="focusMine" title="เน้นเฉพาะคิวของฉัน">${ic('eye',15)}<b>${f===S.meId?'ไฮไลต์คิวของฉันอยู่':'ไฮไลต์คิวของฉัน'}</b><span class="tg"><i></i></span></button>`:''}${isBrand()?`<button class="fbtn ${f?'on':''}" data-act="focusDlg">${ic('eye',15)}<span>ไฮไลต์</span><b>${esc(fl)}</b>${f?`<i data-act="focusClear" title="ล้าง">${ic('x',12)}</i>`:ic('down',13)}</button>`:''}`}
 function roomFDlg(){const ws=monday(S.date),od=[...Array(7)].map((_,i)=>add(ws,i)).filter(isOpen);
   const cnt=r=>od.reduce((n,d)=>n+C().slots.filter((_,s)=>slotOf(d,r,s)).length,0),tot=od.length*C().slots.length;
   modal(`<div class="mhead">${icb('door')}<div><h3>เลือกห้อง</h3><span class="muted">ดูว่าห้องนี้มีใครไลฟ์รอบไหนบ้าง · รอบ ${fmtRange(ws,add(ws,6))}</span></div></div>
@@ -2869,6 +2871,7 @@ const acts={
   roomFDlg:()=>roomFDlg(),
   roomFClear:(b,e)=>{e?.stopPropagation?.();S.roomF=null;render()},
   focusDlg:()=>focusDlg(),
+  focusMine:()=>{S.focus=S.focus===S.meId?null:S.meId;render()},
   focusClear:(b,e)=>{e?.stopPropagation?.();S.focus=null;render()},
 
   logCat:b=>{S.logCat=b.dataset.c;S.logLim=150;render()},
