@@ -1216,6 +1216,14 @@ main.enter{animation:softIn .28s ease-out both}
 .rdgrid small{font-size:11.5px;color:var(--muted)}.rdgrid b{font-size:20px;line-height:1.1}.rdgrid em{font-style:normal;font-size:11px;color:#1d4ed8;font-weight:700}.rdgrid span{font-size:11px;color:#15803d;font-weight:600}
 .rdgrid button.full span{color:#b42318}.rdgrid button.on{background:#16a34a;border-color:#16a34a;color:#fff}.rdgrid button.on :is(small,em,span){color:#fff}
 .btn.bkgo{background:linear-gradient(135deg,#16a34a,#15803d);border-color:#15803d;color:#fff}.btn.bkgo:hover{background:linear-gradient(135deg,#15803d,#166534);color:#fff}
+.setnav{position:sticky;top:calc(var(--toph,0px) + 6px);z-index:15;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:6px;margin:0 0 16px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px rgba(16,60,140,.06)}
+.setnav::-webkit-scrollbar{display:none}
+.setnav button{flex:none;display:inline-flex;align-items:center;gap:7px;border:0;background:none;border-radius:11px;padding:9px 14px;font:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:background-color .2s,color .2s}
+.setnav button:hover{background:#f2f6fd;color:var(--navy)}.setnav button.on{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(37,99,235,.25)}
+.setnav em{font-style:normal;font-size:11px;font-weight:700;background:#e8eefb;color:var(--blue);border-radius:999px;padding:1px 7px}.setnav button.on em{background:rgba(255,255,255,.25);color:#fff}.setnav em.warn{background:#fee2e2;color:#b42318}
+.setlogb{}@media(max-width:860px){.setlogb{display:none!important}}
+.setsec>.card:first-child,.setsec>.lgcard:first-child{margin-top:0!important}
+@media(max-width:860px){.setnav{top:6px;border-radius:14px}.setnav button{padding:8px 11px;font-size:13px}}
 .lgcard{margin-top:16px}.lghd{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.lghd .muted{font-size:12.5px}
 .lgcats{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.lgcats button{display:inline-flex;align-items:center;gap:5px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 11px;font:inherit;font-size:12.5px;font-weight:600;color:var(--c);cursor:pointer;transition:background-color .15s,border-color .15s}
 .lgcats button em{font-style:normal;font-size:11px;background:#f1f5f9;color:var(--muted);border-radius:999px;padding:0 6px}
@@ -2014,27 +2022,20 @@ function vTrack(){
   (list.map(([id,q],i)=>reqCard(id,q,false,i)).join('')||`<div class="card empty">${icb('inbox','',30)}<b>ยังไม่มีคำขอ</b>เมื่อจองคิว ขอยกเลิก หรือขอย้ายห้อง สถานะจะแสดงที่นี่</div>`);
 }
 /* ---------------- SETTINGS ---------------- */
+function setNav(){const orph=Object.values(S.d.access||{}).filter(a=>a.memberId&&a.role!=='brand'&&(!S.d.members[a.memberId]||S.d.members[a.memberId].deleted)).length,cl=Object.values(S.d.closures||{}).filter(c=>c.date>=TODAY).length;
+  const T=[['room','door','ห้อง & วันไลฟ์',cl],['round','calendar','รอบเปิดจอง',(C().bookWindows||[]).filter(w=>w.to>=TODAY).length],['perm','shield','สิทธิ์ Live Streamer'],['member','users','Live Streamer',orph?'!'+orph:0],['admin','key','Admin'],['log','history','ประวัติการใช้งาน'],...(isOwnerMe()||S.store.demo?[['data','save','ข้อมูล']]:[])];
+  const cur=S.setTab||'room';
+  return`<nav class="setnav">${T.map(([k,i,l,n])=>`<button data-act="setTab" data-t="${k}" class="${cur===k?'on':''}">${ic(i,16)}<span>${l}</span>${n?`<em class="${String(n)[0]==='!'?'warn':''}">${String(n).replace('!','')}</em>`:''}</button>`).join('')}</nav>`}
 function vSet(){
   const c=C(),p=c.perms;
   const emailOf=id=>Object.entries(S.d.access).find(([,a])=>a.memberId===id)?.[0]||'';
   const ms=membersList(true).sort((a,b)=>(b.active!==false)-(a.active!==false)||memberOrder(a,b));
-  return pageHd('settings','ตั้งค่าระบบ','แบรนด์ทำได้ทุกอย่าง · กำหนดได้ว่า Live Streamer ทำอะไรได้บ้าง',`<button class="btn" data-act="setLog">${ic('history',16)}ประวัติการแก้ไขตั้งค่า</button>`)+`
-  <div class="grid2">
+  return pageHd('settings','ตั้งค่าระบบ','แบรนด์ทำได้ทุกอย่าง · กำหนดได้ว่า Live Streamer ทำอะไรได้บ้าง',`<button class="btn setlogb" data-act="setLog">${ic('history',16)}ประวัติการแก้ไขตั้งค่า</button>`)+setNav()+(()=>{switch(S.setTab||'room'){
+  case 'perm':return`<div class="setsec">
    <div class="card"><h3>${icb('shield')}สิทธิ์ของ Live Streamer</h3>${PERM_INFO.map(([k,i,t,s])=>`<label class="perm">${icb(i)}<div><b>${t}</b><small>${s}</small></div><span class="sw"><input type="checkbox" data-perm="${k}" ${p[k]?'checked':''}><span></span></span></label>`).join('')}
-    <label class="perm">${icb('clock','warn')}<div><b>ต้องขอยกเลิกล่วงหน้า</b><small>อย่างน้อยกี่ชั่วโมงก่อนเวลาไลฟ์ (0 = ไม่จำกัด)</small></div><input class="inp" style="width:80px;text-align:center" type="number" min="0" value="${p.cancelBeforeH||0}" data-permnum="cancelBeforeH"></label></div>
-   <div class="card"><h3>${icb('calendar')}วันไลฟ์และห้อง</h3><b class="muted" style="font-size:13px">วันที่มีไลฟ์</b>
-    <div class="daychips" style="margin:8px 0 14px">${[1,2,3,4,5,6,0].map(d=>`<button class="${c.openDays.includes(d)?'on':''}" data-act="toggleDay" data-d="${d}">${c.openDays.includes(d)?ic('check',13):''}${DOW_L[d]}</button>`).join('')}</div>
-    <label class="perm">${icb('door')}<div><b>จำนวนห้องไลฟ์</b></div><input class="inp" style="width:80px;text-align:center" type="number" min="1" max="12" value="${c.rooms}" data-cfgnum="rooms"></label>
-    <label class="perm">${icb('clock')}<div><b>ชั่วโมงต่อรอบ</b><small>ใช้คำนวณชั่วโมงไลฟ์</small></div><input class="inp" style="width:80px;text-align:center" type="number" min="0.5" step="0.5" value="${c.hours}" data-cfgnum="hours"></label>
-    <b class="muted" style="font-size:13px;display:block;margin-top:14px">ห้องปิดประจำทุกสัปดาห์ (ถาวร) · แตะห้องเพื่อเลือก ปิดทั้งวัน หรือ ปิดบางรอบ</b>
-    ${c.openDays.slice().sort((a,b)=>((a+6)%7)-((b+6)%7)).map(d=>`<div style="display:flex;gap:8px;align-items:center;margin-top:8px"><span style="width:70px">${DOW_L[d]}</span><div class="daychips">${ROOMS().map(r=>roomChip(d,r)).join('')}</div></div>`).join('')}
-    <div class="crbox"><div class="grow"><b>${ic('lock',15)}ปิดห้องชั่วคราวตามวันที่</b><small>เช่น ปิดห้อง 2 วันที่ 1–5 ธ.ค. · พ้นวันแล้วกลับมาเปิดให้จองเอง</small></div><button class="btn bad sm" data-act="closeRange">${ic('lock',14)}ปิดห้องตามวันที่</button></div>
-   </div>
-  </div>
-  ${closuresCard()}
-  ${windowsCard()}
-  ${orphanCard()}
-  ${adminsCard()}
+    <label class="perm">${icb('clock','warn')}<div><b>ต้องขอยกเลิกล่วงหน้า</b><small>อย่างน้อยกี่ชั่วโมงก่อนเวลาไลฟ์ (0 = ไม่จำกัด)</small></div><input class="inp" style="width:80px;text-align:center" type="number" min="0" value="${p.cancelBeforeH||0}" data-permnum="cancelBeforeH"></label></div></div>`;
+  case 'round':return`<div class="setsec">${windowsCard()}</div>`;
+  case 'member':return`<div class="setsec">${orphanCard()}
   <div class="card" style="margin-top:16px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="margin:0">${icb('users')}Live Streamer (${ms.length})</h3><span class="muted" style="font-size:13px">ลาก ${ic('grip',13)} หรือกด ${ic('up',13)}${ic('down',13)} เพื่อจัดลำดับ · ลำดับนี้ใช้ในหน้า Login และตอนเลือกใส่ชื่อ</span><button class="btn sm" data-act="sortAZ" title="เรียงตามชื่อ A–Z">${ic('list',14)}เรียง A–Z</button><button class="btn primary sm" style="margin-left:auto" data-act="addMember">${ic('plus',14)}เพิ่มคน</button></div>
    <div class="mrow h"><span>ลำดับ</span><span>${ic('palette',13)}</span><span>ชื่อ</span><span>พนักงาน</span><span>Gmail (ใช้ Login)</span><span>สิทธิ์</span><span>สถานะ</span></div>
    ${ms.map((m,mi)=>{const cc=colOf(m.id),em=emailOf(m.id),role=S.d.access[em]?.role||'streamer';return`<div class="mrow ${m.active===false?'off':''}" data-mid="${m.id}"><div class="ord"><span class="grip" data-grip="${m.id}" title="ลากเพื่อย้าย">${ic('grip',16)}</span><span class="no">${mi+1}</span><span class="ab"><button data-act="mvUp" data-id="${m.id}" ${mi?'':'disabled'} title="เลื่อนขึ้น">${ic('up',13)}</button><button data-act="mvDown" data-id="${m.id}" ${mi<ms.length-1?'':'disabled'} title="เลื่อนลง">${ic('down',13)}</button></span></div><button class="swatch" style="background:${cc.bg};color:${cc.fg}" data-act="pickColor" data-id="${m.id}" title="ตั้งสีพื้นหลังชื่อ">${ic('palette',14)}</button>
@@ -2043,15 +2044,26 @@ function vSet(){
     <label class="mst ${m.active!==false?'on':'off'}" title="${m.active!==false?'ปิดสวิตช์ = ระงับการใช้งาน (เช่น ลาออก)':'เปิดสวิตช์ = กลับมาใช้งาน'}"><span class="sw"><input type="checkbox" data-mactive="${m.id}" ${m.active!==false?'checked':''}><span></span></span><b>${m.active!==false?'ใช้งาน':'ระงับแล้ว'}</b></label>${m.active===false?`<button class="btn icon ghost mdel" data-act="delMember" data-id="${m.id}" title="ลบออกจากรายชื่อ">${ic('trash',16)}</button>`:''}</div>`}).join('')}
    <div class="warnbox" style="margin-top:12px;background:#f3f8ff;border-color:#cfe0fb;color:#1d3f74">${ic('info',18)}<div><b>สวิตช์ “สถานะ”</b> ใช้เมื่อคนนั้นลาออกหรือพักงาน · ปิด = <b>ระงับการใช้งาน</b>: Login เข้าระบบไม่ได้ และไม่แสดงในรายชื่อให้เลือก/จอง · <b>ประวัติคิวและชั่วโมงเดิมยังอยู่ครบ</b> · เปิดกลับได้ทุกเมื่อ<br>คนที่ระงับแล้วจะมีปุ่ม ${ic('trash',13)} <b>ลบออกจากรายชื่อ</b> (ลบแล้วกู้คืนได้ด้านล่าง)</div></div>
    ${(()=>{const del=Object.entries(S.d.members).filter(([,m])=>m.deleted);return del.length?`<details class="deld"><summary>${ic('trash',14)}สมาชิกที่ลบแล้ว (${del.length})</summary>${del.map(([id,m])=>`<div class="win">${nameChip(id)}<div class="grow"><small>ลบโดย ${esc(m.deletedBy||'')} · ${m.deletedAt?timeAgo(m.deletedAt):''}</small></div><button class="btn sm" data-act="restoreMember" data-id="${id}">${ic('history',14)}กู้คืน</button></div>`).join('')}</details>`:''})()}
-  </div>
-  <div class="${isOwnerMe()||S.store.demo?'grid2':''}" style="margin-top:16px">
+  </div></div>`;
+  case 'admin':return`<div class="setsec">${adminsCard()}</div>`;
+  case 'log':return`<div class="setsec">${logCard()}</div>`;
+  case 'data':return`<div class="setsec">
    ${isOwnerMe()||S.store.demo?`<div class="card"><h3>${icb('save')}ข้อมูล <span class="own" style="font-size:11px;vertical-align:middle">${ic('lock',11)} เฉพาะเจ้าของ</span></h3><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start">
     <button class="btn" data-act="backup">${ic('download',16)}สำรองข้อมูล (.json)</button>
     ${!S.store.demo&&isOwnerMe()?`<button class="btn" data-act="resetAll" style="color:var(--bad)">${ic('trash',16)}รีเซ็ตระบบ (ลบข้อมูลทั้งหมด)</button>`:''}
     ${S.store.demo?`<button class="btn" data-act="resetDemo" style="color:var(--bad)">${ic('history',16)}ล้างข้อมูลโหมดทดลอง</button>`:''}
-    <button class="btn" data-act="guide">${ic('book',16)}วิธีติดตั้ง / Login Gmail</button></div></div>`:''}
-   ${logCard()}
-  </div>`;
+    <button class="btn" data-act="guide">${ic('book',16)}วิธีติดตั้ง / Login Gmail</button></div></div>`:''}</div>`;
+  default:return`<div class="setsec">
+   <div class="card"><h3>${icb('calendar')}วันไลฟ์และห้อง</h3><b class="muted" style="font-size:13px">วันที่มีไลฟ์</b>
+    <div class="daychips" style="margin:8px 0 14px">${[1,2,3,4,5,6,0].map(d=>`<button class="${c.openDays.includes(d)?'on':''}" data-act="toggleDay" data-d="${d}">${c.openDays.includes(d)?ic('check',13):''}${DOW_L[d]}</button>`).join('')}</div>
+    <label class="perm">${icb('door')}<div><b>จำนวนห้องไลฟ์</b></div><input class="inp" style="width:80px;text-align:center" type="number" min="1" max="12" value="${c.rooms}" data-cfgnum="rooms"></label>
+    <label class="perm">${icb('clock')}<div><b>ชั่วโมงต่อรอบ</b><small>ใช้คำนวณชั่วโมงไลฟ์</small></div><input class="inp" style="width:80px;text-align:center" type="number" min="0.5" step="0.5" value="${c.hours}" data-cfgnum="hours"></label>
+    <b class="muted" style="font-size:13px;display:block;margin-top:14px">ห้องปิดประจำทุกสัปดาห์ (ถาวร) · แตะห้องเพื่อเลือก ปิดทั้งวัน หรือ ปิดบางรอบ</b>
+    ${c.openDays.slice().sort((a,b)=>((a+6)%7)-((b+6)%7)).map(d=>`<div style="display:flex;gap:8px;align-items:center;margin-top:8px"><span style="width:70px">${DOW_L[d]}</span><div class="daychips">${ROOMS().map(r=>roomChip(d,r)).join('')}</div></div>`).join('')}
+    <div class="crbox"><div class="grow"><b>${ic('lock',15)}ปิดห้องชั่วคราวตามวันที่</b><small>เช่น ปิดห้อง 2 วันที่ 1–5 ธ.ค. · พ้นวันแล้วกลับมาเปิดให้จองเอง</small></div><button class="btn bad sm" data-act="closeRange">${ic('lock',14)}ปิดห้องตามวันที่</button></div>
+   </div>
+   ${closuresCard()}</div>`;
+  }})();
 }
 
 
@@ -2737,7 +2749,8 @@ const acts={
   logCat:b=>{S.logCat=b.dataset.c;S.logLim=150;render()},
   logMore:()=>{S.logLim=(S.logLim||150)+150;render()},
   logOlder:async b=>{const L=allLogs();const min=L.length?Math.min(...L.map(l=>l.at)):Date.now();b.disabled=true;try{const o=await S.store.moreLogs(min);if(!Object.keys(o).length){S.logEnd=1;toast('ไม่มีประวัติเก่ากว่านี้แล้ว')}else{S.oldLogs={...(S.oldLogs||{}),...o};S.logLim=(S.logLim||150)+Object.keys(o).length;toast(`โหลดเพิ่ม ${Object.keys(o).length} รายการ`)}}catch(e){toast('โหลดไม่สำเร็จ: '+(e.message||e),1)}render()},
-  setLog:()=>{S.logCat='set';S.logLim=150;render();setTimeout(()=>document.getElementById('logcard')?.scrollIntoView({behavior:'smooth',block:'start'}),60)},
+  setLog:()=>{S.logCat='set';S.logLim=150;S.setTab='log';render()},
+  setTab:b=>{S.setTab=b.dataset.t;render();const n=document.querySelector('.setnav');if(n&&n.getBoundingClientRect().top<0)n.scrollIntoView({block:'start'});document.querySelector('.setnav .on')?.scrollIntoView({inline:'center',block:'nearest'})},
 
   mvUp:b=>moveMember(b.dataset.id,-1),
   mvDown:b=>moveMember(b.dataset.id,1),
