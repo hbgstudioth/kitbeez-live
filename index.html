@@ -1329,6 +1329,12 @@ main.enter{animation:softIn .28s ease-out both}
   .pagehd .gornd span{font-size:13px}.pagehd .gornd{height:36px;padding:0 10px}
   .sumline .sp{display:none}.sumline .focus{width:100%}
 }
+
+/* วันที่อยู่ในรอบเปิดจอง: ขอบเขียว */
+.dchip.rnd:not(.on),.dt.rnd,.mday.rnd{border-color:#22c55e!important;box-shadow:inset 0 0 0 1px #22c55e,0 4px 12px rgba(34,197,94,.12)}
+.dchip.rnd:not(.on){background:#f3fdf6}.dt.rnd{background:#f3fdf6}
+.dchip.rnd.on{box-shadow:0 0 0 3px #22c55e,0 8px 20px rgba(37,99,235,.25)}
+.dt.rnd.on,.dt.rnd:focus-visible{border-color:#22c55e!important}
 </style>
 </head>
 <body>
@@ -1815,6 +1821,7 @@ function winBar(d){const c=C();if(!c.bookLimit)return'';const ws=(c.bookWindows|
   if(isBrand())return`<div class="winbar">${ic('calendar',16)}<span>Live Streamer จองได้เฉพาะรอบที่เปิด:</span>${list||'<b>ยังไม่มีรอบเปิด</b>'}</div>`;
   return canBookDate(d)?`<div class="winbar">${ic('checkc',16)}<span>วันนี้เปิดให้จองแล้ว · รอบที่เปิด:</span>${list}</div>`:`<div class="winbar no">${ic('lock',16)}<span>วันนี้ยังไม่เปิดให้จอง</span>${list?`<span>· รอบที่เปิด:</span>${list}`:'<span>· รอแบรนด์ประกาศรอบถัดไป</span>'}</div>`}
 
+function inRound(d){const c=C();return!!c.bookLimit&&d>=TODAY&&(c.bookDates||[]).includes(d)}
 function weekBar(o){const A=D(o.md),B=D(o.me||o.md),m1=A.getUTCMonth(),m2=B.getUTCMonth(),y1=A.getUTCFullYear(),y2=B.getUTCFullYear();
   const mt=m1===m2&&y1===y2?`${MON_L[m1]} <em>${y1}</em>`:`${MON_S[m1]}${y1!==y2?' '+y1:''} – ${MON_S[m2]} <em>${y2}</em>`;
   return`<div class="wkb"><div class="wkgrp"><button class="btn icon" data-act="${o.act}" data-n="-1" title="${o.pv||'สัปดาห์ก่อน'}" aria-label="${o.pv||'สัปดาห์ก่อน'}">${ic('left',17)}</button><button class="wkr" ${o.pick===null?'style="cursor:default"':`data-act="${o.pick||'weekPicker'}"`} title="${o.pt||'เลือกสัปดาห์'}"><span class="mbig">${ic('calendar',16)}<span>${mt}</span></span><span class="wkrr">${o.rng||fmtRange(o.ws,add(o.ws,6))}</span></button><button class="btn icon" data-act="${o.act}" data-n="1" title="${o.nx||'สัปดาห์ถัดไป'}" aria-label="${o.nx||'สัปดาห์ถัดไป'}">${ic('right',17)}</button></div><button class="btn wkt" data-act="${o.today}" title="${o.tl}">${ic('target',15)}<span>${o.tl}</span></button><div class="wkx">${o.extra||''}</div></div>`}
@@ -1822,7 +1829,7 @@ function vBook(){
   const d=S.date,ws=monday(d),days=[...Array(7)].map((_,i)=>add(ws,i)),M_=D(d);
   let h=pageHd('ticket','เลือกรอบไลฟ์','เลือกวันจากแถบด้านล่าง แล้วแตะช่องว่างเพื่อจอง',goRoundBtn(d))+
   `<div class="stick">${weekBar({act:'wk',today:'today',tl:'วันนี้',md:d,ws})}`+
-  `<div class="dstrip">${days.map(x=>{const o=isOpen(x),fr=o?freeCount(x):0;const om=x.slice(0,7)!==d.slice(0,7);return`<button class="dchip ${x===d?'on':''} ${o?'':'off'} ${x===TODAY?'tdy':''} ${om?'om':''}" data-act="date" data-d="${x}" ${o?'':'disabled'}>${om||dnum(x)===1?`<em class="mo">${MON_S[D(x).getUTCMonth()]}</em>`:''}<small>${DOW_S[dow(x)]}</small><b>${dnum(x)}</b><span class="${o&&!fr?'full':''} ${o&&!canBookDate(x)?'nb':''}">${o?(!canBookDate(x)?'ยังไม่เปิดจอง':fr?`ว่าง ${fr}`:'เต็ม'):'ไม่มีไลฟ์'}</span><i class="sh ${o&&!fr?'full':''} ${o&&!canBookDate(x)?'nb':''}">${o?(!canBookDate(x)?'ปิดจอง':fr?`ว่าง ${fr}`:'เต็ม'):'–'}</i></button>`}).join('')}</div></div>${winBar(d)}`;
+  `<div class="dstrip">${days.map(x=>{const o=isOpen(x),fr=o?freeCount(x):0;const om=x.slice(0,7)!==d.slice(0,7);return`<button class="dchip ${x===d?'on':''} ${o&&inRound(x)?'rnd':''} ${o?'':'off'} ${x===TODAY?'tdy':''} ${om?'om':''}" data-act="date" data-d="${x}" ${o?'':'disabled'}>${om||dnum(x)===1?`<em class="mo">${MON_S[D(x).getUTCMonth()]}</em>`:''}<small>${DOW_S[dow(x)]}</small><b>${dnum(x)}</b><span class="${o&&!fr?'full':''} ${o&&!canBookDate(x)?'nb':''}">${o?(!canBookDate(x)?'ยังไม่เปิดจอง':fr?`ว่าง ${fr}`:'เต็ม'):'ไม่มีไลฟ์'}</span><i class="sh ${o&&!fr?'full':''} ${o&&!canBookDate(x)?'nb':''}">${o?(!canBookDate(x)?'ปิดจอง':fr?`ว่าง ${fr}`:'เต็ม'):'–'}</i></button>`}).join('')}</div></div>${winBar(d)}`;
   if(!isOpen(d))return h+`<div class="card empty">${icb('calendar','',30)}<b>${DOW_L[dow(d)]}นี้ไม่มีรอบไลฟ์</b>เลือกวันอื่นจากแถบด้านบน</div>`;
   const note=S.d.notes[d]?.text;
   if(note||isBrand())h+=`<div class="notebar ${note?'':'nonote'}">${ic('pin',18)}${note?esc(note):'<span class="muted">ไม่มีโน้ตสำหรับวันนี้</span>'}${isBrand()?`<button class="link" style="margin-left:auto;display:inline-flex;gap:4px;align-items:center" data-act="note" data-d="${d}">${ic('edit',14)}${note?'แก้ไข':'เพิ่มโน้ต'}</button>`:''}</div>`;
@@ -1877,7 +1884,7 @@ function vSchedule(){
   if(!od.length)return h+`<div class="card empty">${icb('moon','',30)}<b>รอบนี้ไม่มีวันไลฟ์</b>เลือกสัปดาห์อื่น</div>`;
   return h+(S.calMode==='person'?vPerson(ws,od):vRooms(ws,days,od));
 }
-function dayTabs(days){return`<div class="daytabs">${days.map(d=>{const o=isOpen(d),st=o?dayStats(d):null;return`<button class="dt ${d===TODAY?'tdy':''}" data-act="jumpDay" data-d="${d}" ${o?'':'disabled'}><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b><span class="${o&&!canBookDate(d)?'nb':''}">${o?(!canBookDate(d)?'ยังไม่เปิดจอง':`ว่าง ${st.a-st.f}`):'ไม่มีไลฟ์'}</span></button>`}).join('')}</div>`}
+function dayTabs(days){return`<div class="daytabs">${days.map(d=>{const o=isOpen(d),st=o?dayStats(d):null;return`<button class="dt ${d===TODAY?'tdy':''} ${o&&inRound(d)?'rnd':''}" data-act="jumpDay" data-d="${d}" ${o?'':'disabled'}><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b><span class="${o&&!canBookDate(d)?'nb':''}">${o?(!canBookDate(d)?'ยังไม่เปิดจอง':`ว่าง ${st.a-st.f}`):'ไม่มีไลฟ์'}</span></button>`}).join('')}</div>`}
 function vRooms(ws,days,od){
   const R=ROOMS(),f=S.focus;
   let h=`<details class="lgd"><summary>${ic('info',14)}คำอธิบายสัญลักษณ์</summary><div class="legend2"><span><i style="background:#ffd9d6"></i>ชื่อ = คนที่ไลฟ์ห้องนั้น</span><span><i style="box-shadow:inset 0 0 0 1.5px #d9e5f6;background:#fbfdff"></i>ว่าง (แตะเพื่อจอง)</span><span><i style="background:repeating-linear-gradient(45deg,#f2f5f9 0 4px,#fff 4px 8px)"></i>ห้องปิด</span>${S.meId?`<span><i style="box-shadow:inset 0 0 0 2.5px var(--blue)"></i>คิวของฉัน</span>`:''}<span>${ic('hour',13)}รอยืนยัน</span><span>${ic('undo',13)}ขอยกเลิก</span><span>${ic('swap',13)}ขอย้ายห้อง</span><span>${ic('clock',13)}ขอเปลี่ยนเวลา</span></div></details>`;
@@ -1924,7 +1931,7 @@ function vMonth(){
     const cells=[...Array(7)].map((_,j)=>{const d=add(ws,j),out=d.slice(0,7)!==ym;
       if(!isOpen(d))return`<div class="mday off ${out?'out':''}" style="--i:${i++}"><div class="tp"><b>${dnum(d)}</b></div><small>ไม่มีไลฟ์</small></div>`;
       const st=dayStats(d),note=S.d.notes[d]?.text;if(!out){mf+=st.f;ma+=st.a;mm+=st.me;mfh+=st.fh;mmh+=st.meh}wh+=meView?st.meh:st.fh;
-      return`<div class="mday ${out?'out':''} ${d===TODAY?'tdy':''} ${ws===selW?'selw':''}" style="--i:${i++}" data-act="goDate" data-d="${d}" title="${note?esc(note):'แตะเพื่อจองคิววันนี้'}"><div class="tp"><b>${dnum(d)}</b>${note?ic('pin',13):''}</div><div class="bar"><i style="width:${st.a?Math.round(st.f/st.a*100):0}%"></i></div><small>${st.f}/${st.a} · ว่าง ${st.a-st.f}</small>${S.meId&&st.me?`<span class="tg me">${ic('user',11)}<span>ของฉัน ${st.me}</span></span>`:''}${isBrand()&&st.pd?`<span class="tg pd">${ic('hour',11)}<span>รอ ${st.pd}</span></span>`:''}${note?`<div class="nt">${esc(note)}</div>`:''}</div>`});
+      return`<div class="mday ${out?'out':''} ${inRound(d)?'rnd':''} ${d===TODAY?'tdy':''} ${ws===selW?'selw':''}" style="--i:${i++}" data-act="goDate" data-d="${d}" title="${note?esc(note):'แตะเพื่อจองคิววันนี้'}"><div class="tp"><b>${dnum(d)}</b>${note?ic('pin',13):''}</div><div class="bar"><i style="width:${st.a?Math.round(st.f/st.a*100):0}%"></i></div><small>${st.f}/${st.a} · ว่าง ${st.a-st.f}</small>${S.meId&&st.me?`<span class="tg me">${ic('user',11)}<span>ของฉัน ${st.me}</span></span>`:''}${isBrand()&&st.pd?`<span class="tg pd">${ic('hour',11)}<span>รอ ${st.pd}</span></span>`:''}${note?`<div class="nt">${esc(note)}</div>`:''}</div>`});
     cal+=`<button class="mwk ${ws===selW?'on':''}" data-act="pickWeek" data-d="${ws}" title="ดูรายสัปดาห์"><small>รอบ</small><b>${dnum(ws)}–${dnum(add(ws,6))}</b><span>${ic('clock',11)}${fmtHMc(wh)}</span></button>`+cells.join('');
   }
   return`<div class="stick">${weekBar({act:'calNav',today:'calToday',tl:'เดือนนี้',md:first,me:first,ws:first,rng:fmtRange(first,last),pick:null,pv:'เดือนก่อน',nx:'เดือนถัดไป',extra:calSeg()})}</div>`+
