@@ -2801,8 +2801,8 @@ const acts={
   logCat:b=>{S.logCat=b.dataset.c;S.logLim=150;render()},
   logMore:()=>{S.logLim=(S.logLim||150)+150;render()},
   logOlder:async b=>{const L=allLogs();const min=L.length?Math.min(...L.map(l=>l.at)):Date.now();b.disabled=true;try{const o=await S.store.moreLogs(min);if(!Object.keys(o).length){S.logEnd=1;toast('ไม่มีประวัติเก่ากว่านี้แล้ว')}else{S.oldLogs={...(S.oldLogs||{}),...o};S.logLim=(S.logLim||150)+Object.keys(o).length;toast(`โหลดเพิ่ม ${Object.keys(o).length} รายการ`)}}catch(e){toast('โหลดไม่สำเร็จ: '+(e.message||e),1)}render()},
-  setLog:()=>{S.logCat='set';S.logLim=150;S.setTab='log';render()},
-  setTab:b=>{S.setTab=b.dataset.t;render();const n=document.querySelector('.setnav');if(n&&n.getBoundingClientRect().top<0)n.scrollIntoView({block:'start'});document.querySelector('.setnav .on')?.scrollIntoView({inline:'center',block:'nearest'})},
+  setLog:()=>{S.logCat='set';S.logLim=150;S.setTab='log';render();{const m=document.querySelector('main');m.classList.remove('enter');void m.offsetWidth;m.classList.add('enter')}},
+  setTab:b=>{if(S.setTab===b.dataset.t)return;S.setTab=b.dataset.t;render();{const m=document.querySelector('main');m.classList.remove('enter');void m.offsetWidth;m.classList.add('enter')}const n=document.querySelector('.setnav');if(n&&n.getBoundingClientRect().top<0)n.scrollIntoView({block:'start'});document.querySelector('.setnav .on')?.scrollIntoView({inline:'center',block:'nearest'})},
 
   mvUp:b=>moveMember(b.dataset.id,-1),
   mvDown:b=>moveMember(b.dataset.id,1),
