@@ -1396,6 +1396,10 @@ main.enter{animation:softIn .28s ease-out both}
 .fqk{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 4px}.fqk button{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font:inherit;font-size:13px;font-weight:600;color:var(--navy);cursor:pointer}
 .fqk button.on{background:var(--blue);border-color:var(--blue);color:#fff}
 @media(max-width:860px){.sumline .fbtn{flex:1;justify-content:center;min-width:0;padding:0 8px}.sumline .fbtn>span{display:none}.fbtn b{max-width:110px}}
+
+/* แถบวันในหน้าตาราง: ซ่อนบนคอม · บนมือถือเตี้ยลง */
+@media(min-width:861px){.stick .daytabs{display:none}}
+@media(max-width:860px){.stick .daytabs{gap:4px;margin-top:5px;padding:0 0 2px}.stick .daytabs .dt{display:flex;align-items:baseline;justify-content:center;gap:3px;padding:6px 0;border-radius:9px}.stick .daytabs .dt small{display:inline;font-size:10.5px}.stick .daytabs .dt b{font-size:13.5px}.stick .daytabs .dt span{display:none!important}}
 </style>
 </head>
 <body>
