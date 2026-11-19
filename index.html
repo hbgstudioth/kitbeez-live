@@ -1216,6 +1216,16 @@ main.enter{animation:softIn .28s ease-out both}
 .rdgrid small{font-size:11.5px;color:var(--muted)}.rdgrid b{font-size:20px;line-height:1.1}.rdgrid em{font-style:normal;font-size:11px;color:#1d4ed8;font-weight:700}.rdgrid span{font-size:11px;color:#15803d;font-weight:600}
 .rdgrid button.full span{color:#b42318}.rdgrid button.on{background:#16a34a;border-color:#16a34a;color:#fff}.rdgrid button.on :is(small,em,span){color:#fff}
 .btn.bkgo{background:linear-gradient(135deg,#16a34a,#15803d);border-color:#15803d;color:#fff}.btn.bkgo:hover{background:linear-gradient(135deg,#15803d,#166534);color:#fff}
+.lgcard{margin-top:16px}.lghd{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.lghd .muted{font-size:12.5px}
+.lgcats{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.lgcats button{display:inline-flex;align-items:center;gap:5px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 11px;font:inherit;font-size:12.5px;font-weight:600;color:var(--c);cursor:pointer;transition:background-color .15s,border-color .15s}
+.lgcats button em{font-style:normal;font-size:11px;background:#f1f5f9;color:var(--muted);border-radius:999px;padding:0 6px}
+.lgcats button.on{background:var(--c);border-color:var(--c);color:#fff}.lgcats button.on em{background:rgba(255,255,255,.25);color:#fff}
+.lgtools{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.lgq{position:relative;flex:1;min-width:200px}.lgq svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}.lgq .inp{padding-left:32px;width:100%}.lgtools select{width:auto;min-width:140px}
+.logs2{max-height:520px;overflow:auto;margin-top:10px;font-size:13px}
+.lgday{position:sticky;top:0;background:#f4f8ff;color:var(--navy);font-weight:700;font-size:12px;padding:5px 10px;border-radius:8px;margin:8px 0 2px;z-index:1}
+.lgrow{display:flex;gap:9px;align-items:flex-start;padding:7px 4px;border-bottom:1px solid #f0f4fa}.lgrow time{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;padding-top:2px;flex:none;width:38px}
+.lgic{flex:none;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;color:var(--c);background:color-mix(in srgb,var(--c) 13%,#fff)}.lgrow>div{flex:1;min-width:0;line-height:1.45;word-break:break-word}
+.lgmore{display:flex;gap:8px;justify-content:center;margin-top:10px}.lgmore:empty{display:none}
 .clhd{display:flex;align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap}.clsum{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .clchips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.clchips span{font-size:12px;color:var(--navy);background:#fff5f5;border:1px solid #f6d4d1;border-radius:8px;padding:3px 8px}.clchips b{color:#b42318;margin-left:3px}.clchips .more{background:#f3f6fa;border-color:#e1e8f2;color:var(--muted)}
 .clday{border:1px solid #f1dcda;border-radius:12px;padding:8px 10px;margin-bottom:8px;background:#fffafa}.cldh{display:flex;align-items:center;gap:8px}.cldh b{font-size:14px}.cldh span{font-size:12px;color:#b42318;font-weight:600;flex:1}.cldh .btn{height:28px;padding:0 9px;font-size:12px}
@@ -1542,7 +1552,8 @@ function makeLocal(){
     logout(){sessionStorage.removeItem('kbz-demo-email');Object.assign(S,{user:null,role:null,meId:null,denied:false});cb()},
     setRange(){},reqRange(){},actWatch(){},
     async batch(ops){apply(ops);persist()},
-    async log(text){db.logs[Date.now()+'_'+Math.random().toString(36).slice(2,5)]={at:Date.now(),by:myName(),text};persist()},
+    async log(text,cat){db.logs[Date.now()+'_'+Math.random().toString(36).slice(2,5)]={at:Date.now(),by:myName(),text,...(cat?{cat}:{})};persist()},
+    async moreLogs(){return{}},
     reset(){localStorage.removeItem(KEY);sessionStorage.removeItem('kbz-demo-email');location.reload()}
   };
 }
@@ -1607,11 +1618,12 @@ async function makeFirebase(cfg){
     async batch(ops){for(let i=0;i<ops.length;i+=400){const b=F.writeBatch(db);ops.slice(i,i+400).forEach(([t,c,id,v])=>{const ref=F.doc(db,c,id);t==='set'?b.set(ref,v):t==='patch'?b.update(ref,v):b.delete(ref)});await b.commit()}},
     async wipeAll(){let n=0;for(const c of ['slots','requests','closures','notes','access','members','logs','config']){const sn=await F.getDocs(F.collection(db,c));const ids=sn.docs.map(d=>d.id);n+=ids.length;await this.batch(ids.map(id=>['del',c,id]))}return n},
     presence(p){F.setDoc(F.doc(db,'presence',p.email),p).catch(e=>console.warn('presence',e.code))},
-    async log(text){try{await F.addDoc(F.collection(db,'logs'),{at:Date.now(),uid:S.user.uid,by:myName(),text})}catch(e){console.warn(e)}}
+    async log(text,cat){try{await F.addDoc(F.collection(db,'logs'),{at:Date.now(),uid:S.user.uid,by:myName(),text,...(cat?{cat}:{})})}catch(e){console.warn(e)}},
+    async moreLogs(before){const sn=await F.getDocs(F.query(F.collection(db,'logs'),F.where('at','<',before),F.orderBy('at','desc'),F.limit(300)));const o={};sn.forEach(d=>o[d.id]=d.data());return o}
   };
 }
-async function write(ops,logText){
-  try{await S.store.batch(ops);if(logText)S.store.log(logText);return true}
+async function write(ops,logText,cat){
+  try{await S.store.batch(ops);if(logText)S.store.log(logText,cat);return true}
   catch(e){console.error(e);toast(e.code==='permission-denied'?'ไม่มีสิทธิ์ทำรายการนี้':'บันทึกไม่สำเร็จ: '+(e.message||e),1);return false}
 }
 
@@ -2006,7 +2018,7 @@ function vSet(){
   const c=C(),p=c.perms;
   const emailOf=id=>Object.entries(S.d.access).find(([,a])=>a.memberId===id)?.[0]||'';
   const ms=membersList(true).sort((a,b)=>(b.active!==false)-(a.active!==false)||memberOrder(a,b));
-  return pageHd('settings','ตั้งค่าระบบ','แบรนด์ทำได้ทุกอย่าง · กำหนดได้ว่า Live Streamer ทำอะไรได้บ้าง')+`
+  return pageHd('settings','ตั้งค่าระบบ','แบรนด์ทำได้ทุกอย่าง · กำหนดได้ว่า Live Streamer ทำอะไรได้บ้าง',`<button class="btn" data-act="setLog">${ic('history',16)}ประวัติการแก้ไขตั้งค่า</button>`)+`
   <div class="grid2">
    <div class="card"><h3>${icb('shield')}สิทธิ์ของ Live Streamer</h3>${PERM_INFO.map(([k,i,t,s])=>`<label class="perm">${icb(i)}<div><b>${t}</b><small>${s}</small></div><span class="sw"><input type="checkbox" data-perm="${k}" ${p[k]?'checked':''}><span></span></span></label>`).join('')}
     <label class="perm">${icb('clock','warn')}<div><b>ต้องขอยกเลิกล่วงหน้า</b><small>อย่างน้อยกี่ชั่วโมงก่อนเวลาไลฟ์ (0 = ไม่จำกัด)</small></div><input class="inp" style="width:80px;text-align:center" type="number" min="0" value="${p.cancelBeforeH||0}" data-permnum="cancelBeforeH"></label></div>
@@ -2038,9 +2050,34 @@ function vSet(){
     ${!S.store.demo&&isOwnerMe()?`<button class="btn" data-act="resetAll" style="color:var(--bad)">${ic('trash',16)}รีเซ็ตระบบ (ลบข้อมูลทั้งหมด)</button>`:''}
     ${S.store.demo?`<button class="btn" data-act="resetDemo" style="color:var(--bad)">${ic('history',16)}ล้างข้อมูลโหมดทดลอง</button>`:''}
     <button class="btn" data-act="guide">${ic('book',16)}วิธีติดตั้ง / Login Gmail</button></div></div>`:''}
-   <div class="card"><h3>${icb('history')}ประวัติการใช้งาน</h3>${(()=>{const by=[...new Set(Object.values(S.d.logs).map(l=>l.by))].sort();return`<div class="ftr">${ic('filter',14)}<select data-logby="1"><option value="">ทุกคน</option>${by.map(b=>`<option ${S.logBy===b?'selected':''}>${esc(b)}</option>`).join('')}</select></div>`})()}<div class="logs">${Object.values(S.d.logs).filter(l=>!S.logBy||l.by===S.logBy).sort((a,b)=>b.at-a.at).slice(0,150).map(l=>`<div><time>${timeAgo(l.at)}</time><b>${esc(l.by)}</b> ${esc(l.text)}</div>`).join('')||'<p class="muted">ยังไม่มีประวัติ</p>'}</div></div>
+   ${logCard()}
   </div>`;
 }
+
+
+/* ---------- ประวัติการใช้งาน ---------- */
+const LOGCAT={all:['ทั้งหมด','history',''],set:['ตั้งค่าระบบ','settings','#7c3aed'],mem:['สมาชิก / Admin','users','#0891b2'],book:['จองคิว','ticket','#2563eb'],req:['คำขอ / อนุมัติ','inbox','#d97706'],hrs:['ชั่วโมงไลฟ์','clock','#16a34a']};
+function logCat(l){if(l.cat)return l.cat;const t=l.text||'';
+  if(/^(ปิดห้อง|เปิดห้อง|ห้อง \d+ วัน|ปิดช่อง|เปิดช่อง|เพิ่มรอบเปิดจอง|เปิดรอบจอง|ลบรอบ|เปิดการจำกัด|ปิดการจำกัด|เปลี่ยนวันไลฟ์|เปิดวันไลฟ์|ปิดวันไลฟ์|เปิดสิทธิ์|ปิดสิทธิ์|ตั้งยกเลิก|ตั้ง rooms|ตั้ง hours|ตั้งจำนวนห้อง|ตั้งชั่วโมงต่อรอบ|โน้ต|เริ่มระบบ)/.test(t))return'set';
+  if(/ไลฟ์ไม่ครบ|ชั่วโมงไลฟ์|ชั่วโมงกลับ|รับทราบชั่วโมง|ล้างค่าชั่วโมง|ขอแก้ชั่วโมง/.test(t))return'hrs';
+  if(/สมาชิก|Admin|รายชื่อ|ระงับ|เปิดการใช้งาน|Gmail|อีเมล|สีพื้นหลัง|พนักงาน|เปลี่ยนชื่อ|ตั้งสิทธิ์|กู้คืน|^ย้าย /.test(t))return'mem';
+  if(/^(ขอ|อนุมัติ|ไม่อนุมัติ|ถอน)/.test(t))return'req';return'book'}
+function allLogs(){return Object.values({...(S.oldLogs||{}),...S.d.logs})}
+function logCard(){const L=allLogs(),cat=S.logCat||'all',q=(S.logQ||'').trim().toLowerCase();
+  const cnt={};L.forEach(l=>{const c=logCat(l);cnt[c]=(cnt[c]||0)+1});
+  const by=[...new Set(L.map(l=>l.by))].sort();
+  const F=L.filter(l=>(cat==='all'||logCat(l)===cat)&&(!S.logBy||l.by===S.logBy)&&(!q||(l.text+' '+l.by).toLowerCase().includes(q))).sort((a,b)=>b.at-a.at);
+  const lim=S.logLim||150,show=F.slice(0,lim);let last='';
+  const rows=show.map(l=>{const d=isoOf(new Date(l.at+7*3600e3)),c=logCat(l),[,ico,col]=LOGCAT[c];let h='';
+    if(d!==last){last=d;h=`<div class="lgday">${d===TODAY?'วันนี้ · ':d===add(TODAY,-1)?'เมื่อวาน · ':''}${fmtD(d)}</div>`}
+    const tm=new Date(l.at+7*3600e3).toISOString().slice(11,16);
+    return h+`<div class="lgrow"><time>${tm}</time><span class="lgic" style="--c:${col}" title="${LOGCAT[c][0]}">${ic(ico,13)}</span><div><b>${esc(l.by)}</b> ${esc(l.text)}</div></div>`}).join('');
+  return`<div class="card lgcard" id="logcard"><div class="lghd"><h3 style="margin:0">${icb('history')}ประวัติการใช้งาน</h3><span class="muted">${F.length.toLocaleString()} รายการ${F.length>lim?` · แสดง ${lim}`:''}</span></div>
+   <div class="lgcats">${Object.entries(LOGCAT).map(([k,[lb,ico,col]])=>`<button data-act="logCat" data-c="${k}" class="${cat===k?'on':''}" style="--c:${col||'#334155'}">${ic(ico,13)}${lb}<em>${k==='all'?L.length:(cnt[k]||0)}</em></button>`).join('')}</div>
+   <div class="lgtools"><div class="lgq">${ic('search',14)}<input class="inp" placeholder="ค้นหา เช่น รอบเปิดจอง, ห้อง 2, ชื่อคน" value="${esc(S.logQ||'')}" data-logq="1"></div>
+    <select class="inp" data-logby="1"><option value="">ทุกคน</option>${by.map(b=>`<option ${S.logBy===b?'selected':''}>${esc(b)}</option>`).join('')}</select></div>
+   <div class="logs2">${rows||'<p class="muted" style="padding:14px 0">ไม่พบประวัติตามเงื่อนไขนี้</p>'}</div>
+   <div class="lgmore">${F.length>lim?`<button class="btn sm" data-act="logMore">${ic('down',14)}แสดงเพิ่ม</button>`:''}${!S.logEnd?`<button class="btn sm ghost" data-act="logOlder">${ic('history',14)}โหลดประวัติเก่ากว่า</button>`:''}</div></div>`}
 
 /* =====================================================================
    DIALOGS
@@ -2618,7 +2655,7 @@ function toggleActive(id,on){
     if(await write(all,`ระงับการใช้งาน ${M(id).name}${up.length&&$('#clearUp')?.checked?` และลบคิวล่วงหน้า ${up.length} Slot`:''}`)){closeM();toast(`ระงับการใช้งาน ${M(id).name} แล้ว`)}});
   $('#dlg').addEventListener('close',()=>render(),{once:true});
 }
-async function saveCfg(patch,log){await write([['set','config','main',{...C(),...patch}]],log)}
+async function saveCfg(patch,log){await write([['set','config','main',{...C(),...patch}]],log,'set')}
 async function saveEmail(id,email){
   email=email.trim().toLowerCase();const old=Object.entries(S.d.access).find(([,a])=>a.memberId===id)?.[0];
   if(email===old)return;if(email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){toast('รูปแบบอีเมลไม่ถูกต้อง',1);render();return}
@@ -2684,9 +2721,11 @@ const acts={
   delAdmin:b=>{if(!ownerOnly())return;const e=b.dataset.e;if(isOwnerEmail(e))return toast('ลบเจ้าของระบบไม่ได้',1);const a=S.d.access[e];modal(`<div class="mhead">${icb('trash','bad')}<div><h3>ลบ Admin ${esc(a?.name||e)}?</h3><span class="muted">${esc(e)} จะ Login ไม่ได้อีก · ประวัติการอนุมัติเดิมยังอยู่</span></div></div><div class="mact"><button class="btn bad" data-d="y">${ic('trash',16)}ลบ Admin</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,async x=>{if(x!=='y')return closeM();if(await write([['del','access',e]],`ลบ Admin ${a?.name||e}`)){closeM();toast('ลบ Admin แล้ว')}})},
   roomClose:b=>roomCloseDlg(+b.dataset.d,+b.dataset.r),
   addWin:()=>{const f=$('#wFrom').value,t=$('#wTo').value,l=$('#wLabel').value.trim();if(!f||!t)return toast('เลือกวันที่ให้ครบ',1);if(t<f)return toast('วันที่ “ถึง” ต้องไม่ก่อน “ตั้งแต่”',1);
-    saveWindows([...(C().bookWindows||[]),{id:'w'+Date.now().toString(36),from:f,to:t,label:l}],`เปิดรอบจอง ${l?l+' ':''}${fmtRange(f,t)}`).then(()=>toast('เพิ่มรอบเปิดจองแล้ว'))},
-  quickWin:b=>saveWindows([...(C().bookWindows||[]),{id:'w'+Date.now().toString(36),from:b.dataset.f,to:b.dataset.t,label:b.dataset.l}],`เปิดรอบจอง ${b.dataset.l}`).then(()=>toast('เพิ่มรอบเปิดจองแล้ว')),
-  delWin:b=>{const w=(C().bookWindows||[]).find(x=>x.id===b.dataset.id);saveWindows((C().bookWindows||[]).filter(x=>x.id!==b.dataset.id),`ลบรอบจอง ${w?.label||''} ${w?fmtRange(w.from,w.to):''}`).then(()=>toast('ลบรอบแล้ว'))},
+    saveWindows([...(C().bookWindows||[]),{id:'w'+Date.now().toString(36),from:f,to:t,label:l}],`เพิ่มรอบเปิดจอง ${l?l+' ':''}${fmtRange(f,t)}`).then(()=>toast('เพิ่มรอบเปิดจองแล้ว'))},
+  quickWin:b=>saveWindows([...(C().bookWindows||[]),{id:'w'+Date.now().toString(36),from:b.dataset.f,to:b.dataset.t,label:b.dataset.l}],`เพิ่มรอบเปิดจอง ${b.dataset.l}`).then(()=>toast('เพิ่มรอบเปิดจองแล้ว')),
+  delWin:b=>{const id=b.dataset.id,w=(C().bookWindows||[]).find(x=>x.id===id);if(!w)return;
+    modal(`<div class="mhead">${icb('trash','bad')}<div><h3>ลบรอบเปิดจอง?</h3><span class="muted">${esc(w.label||'รอบเปิดจอง')} · ${fmtRange(w.from,w.to)}</span></div></div><p class="muted">Live Streamer จะจองวันในรอบนี้ไม่ได้ (คิวที่จองไว้แล้วไม่หาย)</p><div class="mact"><button class="btn bad" data-d="go">${ic('trash',15)}ลบรอบ</button><button class="btn ghost" data-d="no">ยกเลิก</button></div>`,
+    async a=>{if(a!=='go')return closeM();await saveWindows((C().bookWindows||[]).filter(x=>x.id!==id),`ลบรอบเปิดจอง ${w.label||''} ${fmtRange(w.from,w.to)}`);closeM();toast('ลบรอบแล้ว')})},
   selCol:b=>selectMany(b.dataset.d,C().slots.map((_,s)=>sid(b.dataset.d,+b.dataset.r,s))),
   selRow:b=>selectMany(b.dataset.d,ROOMS().map(r=>sid(b.dataset.d,r,+b.dataset.s))),
   selDay:b=>selectMany(b.dataset.d,ROOMS().flatMap(r=>C().slots.map((_,s)=>sid(b.dataset.d,r,s)))),
@@ -2695,6 +2734,11 @@ const acts={
   openDay:b=>reopenDlg(Object.keys(S.d.closures||{}).filter(k=>k.startsWith(b.dataset.d+'_')).sort()),
   reopenOne:b=>reopenDlg([b.dataset.k]),
   closuresAll:()=>closuresDlg(),
+  logCat:b=>{S.logCat=b.dataset.c;S.logLim=150;render()},
+  logMore:()=>{S.logLim=(S.logLim||150)+150;render()},
+  logOlder:async b=>{const L=allLogs();const min=L.length?Math.min(...L.map(l=>l.at)):Date.now();b.disabled=true;try{const o=await S.store.moreLogs(min);if(!Object.keys(o).length){S.logEnd=1;toast('ไม่มีประวัติเก่ากว่านี้แล้ว')}else{S.oldLogs={...(S.oldLogs||{}),...o};S.logLim=(S.logLim||150)+Object.keys(o).length;toast(`โหลดเพิ่ม ${Object.keys(o).length} รายการ`)}}catch(e){toast('โหลดไม่สำเร็จ: '+(e.message||e),1)}render()},
+  setLog:()=>{S.logCat='set';S.logLim=150;render();setTimeout(()=>document.getElementById('logcard')?.scrollIntoView({behavior:'smooth',block:'start'}),60)},
+
   mvUp:b=>moveMember(b.dataset.id,-1),
   mvDown:b=>moveMember(b.dataset.id,1),
   sortAZ:()=>{const ids=membersList(true).sort((a,b)=>a.name.localeCompare(b.name)).map(m=>m.id);saveOrder(ids,'เรียงรายชื่อ A–Z')},
@@ -2728,7 +2772,7 @@ const acts={
   resetDemo:()=>modal(`<div class="mhead">${icb('alert','bad')}<h3>ล้างข้อมูลโหมดทดลอง?</h3></div><p class="muted">จะกลับไปเป็นตารางตั้งต้น</p><div class="mact"><button class="btn bad" data-d="y">ล้างข้อมูล</button><button class="btn" data-d="close">ยกเลิก</button></div>`,a=>a==='y'?S.store.reset():closeM()),
   backup:()=>!(isOwnerMe()||S.store.demo)?toast('เฉพาะเจ้าของระบบเท่านั้น',1):download(`kitbeez-live-backup-${TODAY}.json`,JSON.stringify(S.d,null,1),'application/json'),
   print:()=>window.print(),
-  toggleDay:b=>{const d=+b.dataset.d,o=C().openDays;saveCfg({openDays:o.includes(d)?o.filter(x=>x!==d):[...o,d]},`เปลี่ยนวันไลฟ์`)},
+  toggleDay:b=>{const d=+b.dataset.d,o=C().openDays;saveCfg({openDays:o.includes(d)?o.filter(x=>x!==d):[...o,d]},`${o.includes(d)?'ปิด':'เปิด'}วันไลฟ์: วัน${DOW_L[d]}`)},
   toggleRoom:b=>{const d=b.dataset.d,r=+b.dataset.r,cl={...C().closed},cur=cl[d]||[];cl[d]=cur.includes(r)?cur.filter(x=>x!==r):[...cur,r];saveCfg({closed:cl},`${cur.includes(r)?'เปิด':'ปิด'}ห้อง ${r} วัน${DOW_L[d]}`)},
   addMember:()=>{S._newEmp=null;modal(`<div class="mhead">${icb('user')}<h3>เพิ่ม Live Streamer</h3></div><input class="inp" id="nm" placeholder="ชื่อเล่น"><input class="inp" id="em" type="email" placeholder="อีเมล (ใส่ทีหลังได้)" style="margin-top:8px"><div class="sec"><b>${ic('tag',14)}พนักงาน</b><div class="emppick"><button data-d="e:fulltime">${ic('user',15)}Full-Time<small>พนักงานประจำ</small></button><button data-d="e:freelance">${ic('zap',15)}Freelance<small>ฟรีแลนซ์</small></button></div></div><div class="mact"><button class="btn primary" data-d="ok">${ic('plus',16)}เพิ่ม</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,
     async (a,b)=>{if(a==='close')return closeM();if(a.startsWith('e:')){S._newEmp=a.slice(2);document.querySelectorAll('.emppick button').forEach(x=>x.classList.toggle('on',x===b));return}
@@ -2754,20 +2798,21 @@ document.addEventListener('input',e=>{if(e.target.id!=='lemail')return;S.lemail=
 document.addEventListener('change',async e=>{const t=e.target;
   if(t.dataset.perm!==undefined)return saveCfg({perms:{...C().perms,[t.dataset.perm]:t.checked}},`${t.checked?'เปิด':'ปิด'}สิทธิ์: ${PERM_INFO.find(x=>x[0]===t.dataset.perm)[2]}`);
   if(t.dataset.permnum)return saveCfg({perms:{...C().perms,[t.dataset.permnum]:+t.value||0}},`ตั้งยกเลิกล่วงหน้า ${t.value} ชม.`);
-  if(t.dataset.cfgnum){const v=+t.value;if(!(v>0))return render();return saveCfg({[t.dataset.cfgnum]:t.dataset.cfgnum==='rooms'?Math.min(12,Math.round(v)):v},`ตั้ง ${t.dataset.cfgnum} = ${v}`)}
+  if(t.dataset.cfgnum){const v=+t.value;if(!(v>0))return render();if((t.dataset.cfgnum==='rooms'?Math.min(12,Math.round(v)):v)===C()[t.dataset.cfgnum])return;return saveCfg({[t.dataset.cfgnum]:t.dataset.cfgnum==='rooms'?Math.min(12,Math.round(v)):v},`${t.dataset.cfgnum==='rooms'?'ตั้งจำนวนห้องไลฟ์':'ตั้งชั่วโมงต่อรอบ'}: ${C()[t.dataset.cfgnum]} → ${t.dataset.cfgnum==='rooms'?Math.min(12,Math.round(v))+' ห้อง':v+' ชม.'}`)}
   if(t.dataset.memp!==undefined){const v=t.value||null;write([['patch','members',t.dataset.memp,{emp:v}]],`ตั้ง ${M(t.dataset.memp).name} เป็นพนักงาน ${v?EMP[v]:'ไม่ระบุ'}`);return}
-  if(t.dataset.mname){const n=t.value.trim();if(n)write([['patch','members',t.dataset.mname,{name:n}]],`เปลี่ยนชื่อเป็น ${n}`);return}
+  if(t.dataset.mname){const n=t.value.trim();if(n)n!==M(t.dataset.mname).name&&write([['patch','members',t.dataset.mname,{name:n}]],`เปลี่ยนชื่อ Live Streamer: ${M(t.dataset.mname).name} → ${n}`);return}
   if(t.dataset.memail!==undefined&&t.dataset.memail)return saveEmail(t.dataset.memail,t.value);
   if(t.dataset.mrole&&!isOwnerMe()&&t.value==='brand'){toast('ให้สิทธิ์แบรนด์ได้เฉพาะเจ้าของระบบ',1);render();return}
   if(t.dataset.mrole){const em=Object.entries(S.d.access).find(([,a])=>a.memberId===t.dataset.mrole)?.[0];if(em)write([['patch','access',em,{role:t.value}]],`ตั้งสิทธิ์ ${M(t.dataset.mrole).name} = ${ROLE_L[t.value]}`);return}
   if(t.dataset.mactive)return toggleActive(t.dataset.mactive,t.checked);
   if(t.dataset.focus){S.focus=t.value||null;render();return}
-  if(t.dataset.booklimit){if(t.checked&&!(C().bookWindows||[]).length)toast('อย่าลืมเพิ่มรอบเปิดจองด้านล่าง ไม่งั้น Live Streamer จะจองไม่ได้เลย',1);return saveCfg({bookLimit:t.checked},`${t.checked?'เปิด':'ปิด'}การจำกัดวันจอง`)}
+  if(t.dataset.booklimit){if(t.checked&&!(C().bookWindows||[]).length)toast('อย่าลืมเพิ่มรอบเปิดจองด้านล่าง ไม่งั้น Live Streamer จะจองไม่ได้เลย',1);return saveCfg({bookLimit:t.checked},t.checked?'เปิดการจำกัดวันจอง: Live Streamer จองได้เฉพาะรอบเปิดจอง':'ปิดการจำกัดวันจอง (รอบเปิดจอง): Live Streamer จองได้ทุกวัน')}
   if(t.dataset.logby){S.logBy=t.value||null;render();return}
+  if(t.dataset.logq!==undefined){S.logQ=t.value;render();return}
   if(t.dataset.rqd){S.rqF={...(S.rqF||{}),[t.dataset.rqd]:t.value||null};render();return}
   if(t.dataset.reqby){S.reqBy=t.value||null;render();return}
   if((t.dataset.aname||t.dataset.aactive)&&(!ownerOnly()||isOwnerEmail(t.dataset.aname||t.dataset.aactive)))return;
-  if(t.dataset.aname){const n=t.value.trim();if(n)write([['patch','access',t.dataset.aname,{name:n}]],`เปลี่ยนชื่อ Admin เป็น ${n}`);return}
+  if(t.dataset.aname){const n=t.value.trim();if(n)n!==(S.d.access[t.dataset.aname]?.name||'')&&write([['patch','access',t.dataset.aname,{name:n}]],`เปลี่ยนชื่อ Admin: ${S.d.access[t.dataset.aname]?.name||t.dataset.aname} → ${n}`);return}
   if(t.dataset.aactive){write([['patch','access',t.dataset.aactive,{active:t.checked}]],`${t.checked?'เปิด':'ระงับ'}การใช้งาน Admin ${S.d.access[t.dataset.aactive]?.name||t.dataset.aactive}`);return}
 });
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='noteIn')$('#dlg [data-d=save]')?.click()});
