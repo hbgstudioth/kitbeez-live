@@ -1215,6 +1215,7 @@ main.enter{animation:softIn .28s ease-out both}
 .rdgrid button:hover{background:#effaf3;border-color:#16a34a;transform:translateY(-1px)}
 .rdgrid small{font-size:11.5px;color:var(--muted)}.rdgrid b{font-size:20px;line-height:1.1}.rdgrid em{font-style:normal;font-size:11px;color:#1d4ed8;font-weight:700}.rdgrid span{font-size:11px;color:#15803d;font-weight:600}
 .rdgrid button.full span{color:#b42318}.rdgrid button.on{background:#16a34a;border-color:#16a34a;color:#fff}.rdgrid button.on :is(small,em,span){color:#fff}
+.btn.bkgo{background:linear-gradient(135deg,#16a34a,#15803d);border-color:#15803d;color:#fff}.btn.bkgo:hover{background:linear-gradient(135deg,#15803d,#166534);color:#fff}
 .gornd{gap:6px}.gornd small{font-size:12px;font-weight:700;background:rgba(255,255,255,.22);padding:2px 7px;border-radius:7px}
 .gornd:not(.here){background:linear-gradient(135deg,#16a34a,#15803d);border-color:#15803d;color:#fff}.gornd.here{background:#ecfdf3;border-color:#a6e3bd;color:#15803d}.gornd.here small{background:#d1fadf}
 .gorbar{display:none}
@@ -1789,7 +1790,7 @@ function vRooms(ws,days,od){
   h+=`<div class="daytabs">${days.map(d=>{const o=isOpen(d),st=o?dayStats(d):null;return`<button class="dt ${d===TODAY?'tdy':''}" data-act="jumpDay" data-d="${d}" ${o?'':'disabled'}><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b><span class="${o&&!canBookDate(d)?'nb':''}">${o?(!canBookDate(d)?'ยังไม่เปิดจอง':`ว่าง ${st.a-st.f}`):'ไม่มีไลฟ์'}</span></button>`}).join('')}</div><div class="boards">`;
   od.forEach((d,di)=>{
     const st=dayStats(d),note=S.d.notes[d]?.text;
-    h+=`<section class="dayb ${d===TODAY?'tdy':''}" id="day-${d}" style="--i:${di}"><header><div class="big"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></div><div class="ttl"><b>${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[D(d).getUTCMonth()]}</b><div>${ic('grid',12)}ลงแล้ว ${st.f}/${st.a}${canBookDate(d)?` · ว่าง ${st.a-st.f}`:''}${d===TODAY?' · <b style="color:var(--blue)">วันนี้</b>':''}${note?`<span class="nt3">${ic('pin',12)}${esc(note)}</span>`:''}</div></div>${canBookDate(d)?`<button class="btn sm" data-act="goDate" data-d="${d}">${ic('ticket',14)}จองวันนี้</button>`:`<span class="nbtag">${ic('lock',13)}ยังไม่เปิดจอง</span>`}</header>
+    h+=`<section class="dayb ${d===TODAY?'tdy':''}" id="day-${d}" style="--i:${di}"><header><div class="big"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></div><div class="ttl"><b>${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[D(d).getUTCMonth()]}</b><div>${ic('grid',12)}ลงแล้ว ${st.f}/${st.a}${canBookDate(d)?` · ว่าง ${st.a-st.f}`:''}${d===TODAY?' · <b style="color:var(--blue)">วันนี้</b>':''}${note?`<span class="nt3">${ic('pin',12)}${esc(note)}</span>`:''}</div></div>${canBookDate(d)?`<button class="btn sm bkgo" data-act="goDate" data-d="${d}">${ic('ticket',14)}จองวันนี้</button>`:`<span class="nbtag">${ic('lock',13)}ยังไม่เปิดจอง</span>`}</header>
     <div class="rb" style="--rooms:${R.length}"><div></div>${R.map(r=>`<div class="h">${ic('door',13)}ห้อง ${r}</div>`).join('')}
     ${C().slots.map((t,s)=>`<div class="t">${ic(slotIcon(s),14)}<b>${t.split('–')[0]}</b>–${t.split('–')[1]||''}</div>`+R.map(r=>{
       if(isClosed(d,r,s)&&!slotOf(d,r,s)){const dc=dayClosure(d,r,s);return`<div class="cell x ${dc?'dc':''}" title="${dc?'ปิดเฉพาะวันนี้'+(dc.reason?' · '+esc(dc.reason):''):'ปิดประจำ'}">ปิด</div>`}
