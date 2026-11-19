@@ -1216,6 +1216,9 @@ main.enter{animation:softIn .28s ease-out both}
 .rdgrid small{font-size:11.5px;color:var(--muted)}.rdgrid b{font-size:20px;line-height:1.1}.rdgrid em{font-style:normal;font-size:11px;color:#1d4ed8;font-weight:700}.rdgrid span{font-size:11px;color:#15803d;font-weight:600}
 .rdgrid button.full span{color:#b42318}.rdgrid button.on{background:#16a34a;border-color:#16a34a;color:#fff}.rdgrid button.on :is(small,em,span){color:#fff}
 .btn.bkgo{background:linear-gradient(135deg,#16a34a,#15803d);border-color:#15803d;color:#fff}.btn.bkgo:hover{background:linear-gradient(135deg,#15803d,#166534);color:#fff}
+.dstrip,.daytabs{touch-action:pan-y;user-select:none;-webkit-user-select:none}
+@keyframes swl{from{transform:translateX(46px);opacity:.3}to{transform:none;opacity:1}}@keyframes swr{from{transform:translateX(-46px);opacity:.3}to{transform:none;opacity:1}}
+.dstrip.swl,.daytabs.swl{animation:swl .32s var(--ease)}.dstrip.swr,.daytabs.swr{animation:swr .32s var(--ease)}
 .setnav{position:sticky;top:calc(var(--toph,0px) + 6px);z-index:15;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:6px;margin:0 0 16px;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:16px;box-shadow:0 4px 18px rgba(16,60,140,.06)}
 .setnav::-webkit-scrollbar{display:none}
 .setnav button{flex:none;display:inline-flex;align-items:center;gap:7px;border:0;background:none;border-radius:11px;padding:9px 14px;font:inherit;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:background-color .2s,color .2s}
@@ -2802,6 +2805,22 @@ const acts={
     t+='\nรายละเอียดรายคิว\nวันที่,เวลา,ห้อง,ชื่อ,สถานะ\n';Object.values(S.d.slots).filter(v=>v.date>=P.from&&v.date<=P.to).sort((a,b)=>(a.date+a.slot+a.room).localeCompare(b.date+b.slot+b.room)).forEach(v=>t+=`${v.date},${C().slots[v.slot]},${v.room},"${whoName(v)}",${STATUS[v.status]}\n`);
     download(`สรุปชั่วโมง-${P.from}_${P.to}.csv`,t,'text/csv')},
 };
+
+/* ---------- ปัดแถบวันที่ซ้าย/ขวา เพื่อเปลี่ยนสัปดาห์ ---------- */
+(()=>{let G=null,blockClick=0;const SEL='.dstrip,.daytabs';
+  document.addEventListener('pointerdown',e=>{const el=e.target.closest(SEL);if(!el||(e.pointerType==='mouse'&&e.button!==0))return;G={el,x:e.clientX,y:e.clientY,id:e.pointerId,mv:0}},{passive:true});
+  document.addEventListener('pointermove',e=>{if(!G||e.pointerId!==G.id)return;const dx=e.clientX-G.x,dy=e.clientY-G.y;
+    if(!G.mv&&Math.abs(dx)>8&&Math.abs(dx)>Math.abs(dy)*1.2)G.mv=1;
+    if(G.mv){G.el.style.transition='none';G.el.style.transform=`translateX(${Math.max(-90,Math.min(90,dx*.45))}px)`;G.el.style.opacity=String(1-Math.min(.35,Math.abs(dx)/500))}},{passive:true});
+  const end=e=>{if(!G||e.pointerId!==G.id)return;const g=G;G=null;const dx=e.clientX-g.x,dy=e.clientY-g.y;
+    g.el.style.transition='transform .25s var(--ease),opacity .25s';g.el.style.transform='';g.el.style.opacity='';
+    if(!g.mv||e.type==='pointercancel'&&Math.abs(dx)<50)return;
+    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){blockClick=Date.now();const n=dx<0?1:-1,isCal=g.el.classList.contains('daytabs');
+      acts[isCal?'weekJump':'wk']({dataset:{n}});
+      requestAnimationFrame(()=>{const ne=document.querySelector(isCal?'.daytabs':'.dstrip');if(ne){ne.classList.remove('swl','swr');void ne.offsetWidth;ne.classList.add(n>0?'swl':'swr')}})}};
+  document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
+  document.addEventListener('click',e=>{if(Date.now()-blockClick<350&&e.target.closest(SEL)){e.stopPropagation();e.preventDefault()}},true);
+})();
 document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.closest('dialog'))return;const f=acts[b.dataset.act];if(f){if(!(b.tagName==='INPUT'&&b.type==='checkbox'))e.preventDefault();f(b)}});
 document.addEventListener('submit',e=>{if(e.target.id==='loginForm'){e.preventDefault();
   if(!okEmail($('#lemail')?.value)){toast('กรอกอีเมลให้ถูกต้องก่อน',1);$('#lemail')?.focus();return}
