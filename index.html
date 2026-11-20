@@ -1515,6 +1515,15 @@ main.enter{animation:softIn .28s ease-out both}
   .stat:has(.icb[data-i=users])::before{right:30px;top:8px}.stat:has(.icb[data-i=users])::after{right:12px;top:11px}
   .stat:has(.icb[data-i=hour])::before{right:22px;top:6px}.stat:has(.icb[data-i=hour])::after{right:12px;top:6px}}
 @media(prefers-reduced-motion:reduce){.stat::before,.stat::after{animation:none!important}}
+
+/* บอกให้รู้ว่ากดเลือกสัปดาห์ได้ */
+.wkr[data-act]{border-radius:12px;padding:3px 8px 3px 4px;transition:background-color .15s}
+.wkr[data-act]:hover{background:#eef4ff}
+.wkr .wkrr{display:inline-flex;align-items:center;gap:4px}
+.wkr .wkdd{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:7px;background:#e8effc;color:var(--blue);font-style:normal;transition:background-color .15s,transform .2s}
+.wkr[data-act]:hover .wkdd{background:var(--blue);color:#fff;transform:translateY(1px)}
+.wkr[data-act]:hover .wkrr{color:var(--blue)}
+@media(max-width:860px){.wkr .wkdd{width:18px;height:18px;border-radius:6px}}
 </style>
 </head>
 <body>
@@ -2021,7 +2030,7 @@ function winBar(d){const c=C();if(!c.bookLimit)return'';const ws=(c.bookWindows|
 function inRound(d){const c=C();return!!c.bookLimit&&d>=TODAY&&(c.bookDates||[]).includes(d)}
 function weekBar(o){const A=D(o.md),B=D(o.me||o.md),m1=A.getUTCMonth(),m2=B.getUTCMonth(),y1=A.getUTCFullYear(),y2=B.getUTCFullYear();
   const mt=m1===m2&&y1===y2?`${MON_L[m1]} <em>${y1}</em>`:`${MON_S[m1]}${y1!==y2?' '+y1:''} – ${MON_S[m2]} <em>${y2}</em>`;
-  return`<div class="wkb"><div class="wkgrp"><button class="btn icon" data-act="${o.act}" data-n="-1" title="${o.pv||'สัปดาห์ก่อน'}" aria-label="${o.pv||'สัปดาห์ก่อน'}">${ic('left',17)}</button><button class="wkr" ${o.pick===null?'style="cursor:default"':`data-act="${o.pick||'weekPicker'}"`} title="${o.pt||'เลือกสัปดาห์'}"><span class="mbig">${ic('calendar',16)}<span>${mt}</span></span><span class="wkrr">${o.rng||fmtRange(o.ws,add(o.ws,6))}</span></button><button class="btn icon" data-act="${o.act}" data-n="1" title="${o.nx||'สัปดาห์ถัดไป'}" aria-label="${o.nx||'สัปดาห์ถัดไป'}">${ic('right',17)}</button></div><button class="btn wkt" data-act="${o.today}" title="${o.tl}">${ic('target',15)}<span>${o.tl}</span></button><div class="wkx">${o.extra||''}</div></div>`}
+  return`<div class="wkb"><div class="wkgrp"><button class="btn icon" data-act="${o.act}" data-n="-1" title="${o.pv||'สัปดาห์ก่อน'}" aria-label="${o.pv||'สัปดาห์ก่อน'}">${ic('left',17)}</button><button class="wkr" ${o.pick===null?'style="cursor:default"':`data-act="${o.pick||'weekPicker'}"`} title="${o.pt||'เลือกสัปดาห์'}"><span class="mbig">${ic('calendar',16)}<span>${mt}</span></span><span class="wkrr">${o.rng||fmtRange(o.ws,add(o.ws,6))}${o.pick===null?'':`<i class="wkdd">${ic('down',14)}</i>`}</span></button><button class="btn icon" data-act="${o.act}" data-n="1" title="${o.nx||'สัปดาห์ถัดไป'}" aria-label="${o.nx||'สัปดาห์ถัดไป'}">${ic('right',17)}</button></div><button class="btn wkt" data-act="${o.today}" title="${o.tl}">${ic('target',15)}<span>${o.tl}</span></button><div class="wkx">${o.extra||''}</div></div>`}
 function vBook(){
   const d=S.date,ws=monday(d),days=[...Array(7)].map((_,i)=>add(ws,i)),M_=D(d);
   let h=pageHd('ticket','เลือกรอบไลฟ์','เลือกวันจากแถบด้านล่าง แล้วแตะช่องว่างเพื่อจอง',goRoundBtn(d))+
