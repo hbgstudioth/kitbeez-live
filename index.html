@@ -231,7 +231,7 @@ details[open]>.wkh .chev{transform:rotate(90deg)}
 .req .why.mv{background:#f6f2ff;border-color:var(--violet)}
 .meta{font-size:12px;color:var(--muted);margin-top:3px;display:flex;gap:4px;align-items:center}
 /* ---------- settings ---------- */
-.sw{position:relative;width:46px;height:26px;flex:none}
+.sw{position:relative;display:inline-block;width:46px;height:26px;flex:none}
 .sw input{opacity:0;width:0;height:0}
 .sw span{position:absolute;inset:0;background:#d4deec;border-radius:999px;transition:.3s;cursor:pointer}
 .sw span::before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.35s var(--ease);box-shadow:0 2px 4px rgba(0,0,0,.15)}
@@ -1655,8 +1655,8 @@ main.enter{animation:softIn .28s ease-out both}
 .tmst{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;border-radius:999px;padding:4px 10px;justify-self:start;white-space:nowrap}.tmst i{width:7px;height:7px;border-radius:50%}
 .tmst.on{background:#e7f8ee;color:#15803d}.tmst.on i{background:#22c55e}.tmst.off{background:#f1f5f9;color:#64748b}.tmst.off i{background:#94a3b8}.tmst.own{background:#e8effc;color:#1d4ed8}.tmst.own i{background:#2563eb}
 .tmops{display:flex;align-items:center;gap:6px}.tmops .ab{display:flex;gap:2px}.tmops .ab button{width:26px;height:26px;border:1px solid var(--line);background:#fff;border-radius:7px;color:var(--muted);cursor:pointer;display:grid;place-items:center}.tmops .ab button:disabled{opacity:.3}
-.mfrm{display:grid;gap:12px;margin-top:14px}.mfrm label>span,.mfrow>span{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:5px}.mfrm .inp{width:100%}
-.mfrow{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid #f0f4fa;padding-top:12px}.mfrow>span{margin:0;color:var(--navy);font-size:13.5px}.mfrow small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.mfrm{display:grid;gap:12px;margin-top:14px}.mfrm label>span:not(.sw),.mfrow>span:not(.sw){display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:5px}.mfrm .inp{width:100%}
+.mfrow{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid #f0f4fa;padding-top:12px}.mfrow>span:not(.sw){margin:0;color:var(--navy);font-size:13.5px}.mfrow small{display:block;font-weight:400;color:var(--muted);font-size:12px}
 .arow .st2.cnt{font-size:13px;color:var(--muted)}.arow .st2.cnt b{font-size:15px;color:var(--navy);margin-right:3px}
 @media(max-width:860px){.pmgrid{grid-template-columns:1fr}.tmrow{grid-template-columns:40px 1fr auto;gap:10px;padding:10px}.tmrow .ord{display:none}.tmrow .tmst{grid-column:2;grid-row:2;justify-self:start}.tmrow .tmops{grid-column:3;grid-row:1/3}.tmops .ab{display:none}.tmq{max-width:none}}
 </style>
@@ -2596,7 +2596,7 @@ function memberDlg(id){const m=M(id),em=Object.entries(S.d.access).find(([,a])=>
     <label><span>Gmail ที่ใช้ Login</span><input class="inp" type="email" value="${esc(em)}" placeholder="name@gmail.com" data-memail="${id}"></label>
     <label><span>ประเภทพนักงาน</span><select class="inp" data-memp="${id}"><option value="" ${m.emp?'':'selected'}>— ยังไม่ระบุ —</option><option value="fulltime" ${m.emp==='fulltime'?'selected':''}>Full-Time</option><option value="freelance" ${m.emp==='freelance'?'selected':''}>Freelance</option></select></label>
     <div class="mfrow"><span>สีป้ายชื่อ</span><button class="btn sm" data-d="color">${ic('palette',14)}เลือกสี</button></div>
-    <div class="mfrow"><span>สถานะการใช้งาน<small>ปิด = ระงับ (Login ไม่ได้ · ประวัติคิวยังอยู่ครบ)</small></span><label class="sw"><input type="checkbox" data-mactive="${id}" ${m.active!==false?'checked':''}><span></span></label></div></div>
+    <div class="mfrow"><span>สถานะการใช้งาน<small>ปิด = ระงับ (Login ไม่ได้ · ประวัติคิวยังอยู่ครบ)</small></span><span class="sw"><input type="checkbox" data-mactive="${id}" ${m.active!==false?'checked':''} id="mact_${id}"><span onclick="this.previousElementSibling.click()"></span></span></div></div>
    <div class="mact">${m.active===false?`<button class="btn bad" data-d="del">${ic('trash',15)}ลบออกจากรายชื่อ</button>`:''}<button class="btn primary" data-d="close">เสร็จแล้ว</button></div>`,
    a=>{if(a==='color'){closeM();return acts.pickColor({dataset:{id}})}if(a==='del'){closeM();return acts.delMember({dataset:{id}})}closeM()})}
 function adminsCard(){
