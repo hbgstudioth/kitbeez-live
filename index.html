@@ -1409,6 +1409,16 @@ main.enter{animation:softIn .28s ease-out both}
   .stick .dchip span,.stick .dchip i.sh{grid-column:1/-1;text-align:center;font-size:11px}
   .stick .dchip.on{box-shadow:0 6px 14px rgba(31,111,235,.28)}.stick .dchip.on :is(small,span,b){color:#fff!important;opacity:1}.stick .dchip.on span{opacity:.85!important}
 }
+
+/* ช่วงวันที่มาตรฐาน */
+.rqwins{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px}.rqwins .lb{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--muted);margin-right:2px}
+.wchip{display:inline-flex;align-items:center;gap:5px;border:1.5px solid #c6ebd3;background:#f3fdf6;color:#15803d;border-radius:999px;padding:5px 12px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:background-color .15s,border-color .15s}
+.wchip small{font-weight:500;opacity:.8}.wchip:hover{border-color:#16a34a}.wchip.on{background:#16a34a;border-color:#16a34a;color:#fff}
+.dcount{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--blue);background:#eef4ff;border-radius:8px;padding:4px 10px;margin-top:8px}
+.wq{display:flex;gap:6px;flex-wrap:wrap}.wq .btn.on{background:#eef4ff;border-color:var(--blue);color:var(--blue)}.wq .wnext{border-color:#a6e3bd;color:#15803d;background:#f3fdf6}.wq .wnext small{opacity:.75;font-weight:500}
+.wsum{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--blue);background:#eef4ff;border-radius:9px;padding:6px 12px;margin-top:10px}.wsum b{color:var(--navy)}
+.paypre{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:-4px 0 12px}.paypre .dcount{margin-top:0}
+.paywin{width:auto;min-width:220px;height:40px}
 </style>
 </head>
 <body>
@@ -2064,8 +2074,12 @@ function payData(from,to,cols){
   return{rows,pend};
 }
 function vPay(){
-  let from,to,cols,title;const wk=S.payMode==='week',H=C().hours;
-  if(wk){from=S.payStart;to=add(from,6);cols=[...Array(7)].map((_,i)=>{const d=add(from,i);return{from:d,to:d,l:`${DOW_S[dow(d)]}<br><small>${dnum(d)}</small>`}});title=`รอบ ${fmtRange(from,to)}`}
+  let from,to,cols,title;const pm=S.payMode||'week',wk=pm==='week',H=C().hours;
+  const spanCols=(f,t)=>{if(nDays(f,t)<=7)return[...Array(nDays(f,t))].map((_,i)=>{const d=add(f,i);return{from:d,to:d,l:`${DOW_S[dow(d)]}<br><small>${dnum(d)}</small>`}});const c=[];for(let w=monday(f);w<=t;w=add(w,7)){const a=w<f?f:w,b=add(w,6)>t?t:add(w,6);c.push({from:a,to:b,ws:w,l:`${dnum(a)}–${dnum(b)}`})}return c};
+  if(pm==='round'||pm==='custom'){let a,b;if(pm==='round'){const W=openWins(),w=W.find(x=>x.id===S.payWin)||W.filter(x=>x.from<=TODAY).pop()||W[0];if(w){S.payWin=w.id;a=w.from;b=w.to;title=esc(w.label||'รอบเปิดจอง')}else{a=`${TODAY.slice(0,7)}-01`;b=TODAY;title='ยังไม่มีรอบเปิดจอง'}}
+    else{a=S.payFrom||`${TODAY.slice(0,7)}-01`;b=S.payTo||TODAY;if(b<a)[a,b]=[b,a];S.payFrom=a;S.payTo=b;title=fmtRange(a,b)}
+    from=a;to=b;cols=spanCols(a,b)}
+  else if(wk){from=S.payStart;to=add(from,6);cols=[...Array(7)].map((_,i)=>{const d=add(from,i);return{from:d,to:d,l:`${DOW_S[dow(d)]}<br><small>${dnum(d)}</small>`}});title=`รอบ ${fmtRange(from,to)}`}
   else{const[y,m]=S.payMonth.split('-').map(Number);from=`${S.payMonth}-01`;to=isoOf(new Date(Date.UTC(y,m,0)));cols=[];for(let w=monday(from);w<=to;w=add(w,7)){const a=w<from?from:w,b=add(w,6)>to?to:add(w,6);cols.push({from:a,to:b,ws:w,l:`${dnum(a)}–${dnum(b)}`})}title=`${MON_L[m-1]} ${y}`}
   const{rows,pend}=payData(from,to,cols);const trialH=rows.__t||0;delete rows.__t;
   let ids=Object.keys(rows).sort((a,b)=>rows[b].tot-rows[a].tot);
@@ -2077,8 +2091,10 @@ function vPay(){
   const shorts=Object.entries(S.d.slots).filter(([,v])=>v.date>=from&&v.date<=to&&COUNTED.includes(v.status)&&!isTrial(v)&&isShort(v)&&(isBrand()||v.who===S.meId)).sort(([a],[b])=>a.localeCompare(b));
   const pendIds=Object.keys(pend).filter(id=>isBrand()||id===S.meId);
   let h=pageHd('clock','สรุปชั่วโมงไลฟ์','นับเฉพาะคิวที่ยืนยันแล้ว · รอบ จันทร์–อาทิตย์ · ชั่วโมงรายวัน / รายคน',
-   `<div class="seg"><button class="${wk?'on':''}" data-act="payMode" data-m="week">${ic('calweek',14)}รายรอบ</button><button class="${!wk?'on':''}" data-act="payMode" data-m="month">${ic('calendar',14)}รายเดือน</button></div>
-   <button class="btn icon" data-act="payNav" data-n="-1">${ic('left',16)}</button><b style="min-width:150px;text-align:center">${title}</b><button class="btn icon" data-act="payNav" data-n="1">${ic('right',16)}</button>`);
+   `<div class="seg"><button class="${wk?'on':''}" data-act="payMode" data-m="week">${ic('calweek',14)}รายสัปดาห์</button><button class="${pm==='month'?'on':''}" data-act="payMode" data-m="month">${ic('calendar',14)}รายเดือน</button><button class="${pm==='round'?'on':''}" data-act="payMode" data-m="round">${ic('ticket',14)}ตามรอบจอง</button><button class="${pm==='custom'?'on':''}" data-act="payMode" data-m="custom">${ic('edit',14)}เลือกช่วง</button></div>
+   ${pm==='custom'?`<div class="rqdates"><input type="date" class="inp" data-payd="from" value="${from}"><span>ถึง</span><input type="date" class="inp" data-payd="to" value="${to}"></div>`
+    :pm==='round'?`<select class="inp paywin" data-paywin="1">${openWins().map(w=>`<option value="${w.id}" ${w.id===S.payWin?'selected':''}>${esc(w.label||'รอบเปิดจอง')} · ${fmtRange(w.from,w.to,false)}</option>`).join('')||'<option>ยังไม่มีรอบเปิดจอง</option>'}</select>`
+    :`<button class="btn icon" data-act="payNav" data-n="-1">${ic('left',16)}</button><b style="min-width:150px;text-align:center">${title}</b><button class="btn icon" data-act="payNav" data-n="1">${ic('right',16)}</button>`}`)+(pm==='custom'||pm==='round'?`<div class="paypre">${pm==='custom'?rangePresets(['week','month','h1','h2','pmonth']).map(([k,l,f,t])=>`<button class="wchip ${from===f&&to===t?'on':''}" data-act="payPre" data-f="${f}" data-t="${t}">${l}</button>`).join(''):''}<span class="dcount">${ic('calendar',13)}${fmtRange(from,to)} · ${nDays(from,to)} วัน</span></div>`:'');
   if(isBrand())h+=`<div class="empf">${[['all','ทั้งหมด',allIds],['fulltime','Full-Time',grp('fulltime')],['freelance','Freelance',grp('freelance')],...(grp('none').length?[['none','ยังไม่ระบุ',grp('none')]]:[])].map(([k,l,a])=>`<button class="${pe===k?'on':''} ${k}" data-act="payEmp" data-e="${k}"><b>${l}</b><span>${fmtHM(gH(a))} · ${a.length} คน</span></button>`).join('')}</div>`;
   h+=`<div class="stats"><div class="stat" style="--i:0">${icb('clock')}<div><span>ชั่วโมงไลฟ์รวม</span><b>${fmtHM(sumH)}</b></div></div><div class="stat" style="--i:1">${icb('ticket','violet')}<div><span>จำนวน Slot</span><b>${sumN} Slot</b></div></div>${isBrand()?`<div class="stat" style="--i:2">${icb('users','ok')}<div><span>จำนวนคน · เฉลี่ยต่อคน</span><b>${ids.length} คน · ${fmtHM(avg)}</b></div></div>`:''}${isBrand()&&trialH?`<div class="stat" style="--i:3">${icb('mic','warn')}<div><span>ทดลองไลฟ์ (ไม่นับรวม)</span><b>${trialH} ชม.</b></div></div>`:''}${pendIds.length?`<div class="stat" style="--i:4">${icb('hour','warn')}<div><span>รอยืนยัน (ยังไม่นับ)</span><b>${pendIds.reduce((a,id)=>a+pend[id],0)} ชม.</b></div></div>`:''}</div>
   <div class="card scroll"><table class="tbl"><thead><tr><th>ชื่อ</th>${cols.map(c=>`<th>${c.l}</th>`).join('')}<th>รวม ชม.<small style="display:block;font-weight:400">(ชม.:นาที)</small></th><th>Slot</th></tr></thead><tbody>
@@ -2111,14 +2127,17 @@ function reqCard(id,q,brand,i){
    ${brand&&q.ack?`<div class="meta" style="justify-content:flex-end;margin-top:8px">${ic('check',12)}รับทราบแล้ว ${q.ackBy?'โดย '+esc(q.ackBy):''} ${q.ackAt?timeAgo(q.ackAt):''}</div>`:''}</div>`;
 }
 function rqRange(){const f=S.rqF||{};const ws=monday(TODAY);
-  if(f.mode==='today')return[TODAY,TODAY];if(f.mode==='week')return[ws,add(ws,6)];
+  if(f.mode==='today')return[TODAY,TODAY];if(f.mode==='week')return[ws,add(ws,6)];if(f.mode==='nweek')return[add(ws,7),add(ws,13)];
+  if(f.mode==='nmonth'){const p=rangePresets(['nmonth'])[0];return[p[2],p[3]]}
+  if(f.mode?.startsWith('win:')){const w=(C().bookWindows||[]).find(x=>x.id===f.mode.slice(4));if(w)return[w.from,w.to]}
   if(f.mode==='month'){const[y,m]=TODAY.split('-').map(Number);return[`${TODAY.slice(0,7)}-01`,isoOf(new Date(Date.UTC(y,m,0)))]}
   if(f.mode==='custom'&&(f.from||f.to)){const a=f.from||f.to,b=f.to||f.from;return a<=b?[a,b]:[b,a]}return null}
 const rqPass=(date,who)=>{const r=rqRange(),w=S.rqF?.who;return(!r||(date>=r[0]&&date<=r[1]))&&(!w||who===w)};
 function rqFilterBar(n){
   const f=S.rqF||{},r=rqRange(),w=f.who&&S.d.members[f.who]?f.who:null,mode=f.mode||'all';
-  return`<div class="card rqf"><div class="rqfrow"><span class="lb">${ic('calendar',15)}วันไลฟ์</span><div class="seg sm">${[['all','ทั้งหมด'],['today','วันนี้'],['week','สัปดาห์นี้'],['month','เดือนนี้'],['custom','เลือกวัน']].map(([k,l])=>`<button class="${mode===k?'on':''}" data-act="rqMode" data-m="${k}">${l}</button>`).join('')}</div>
-    ${mode==='custom'?`<div class="rqdates"><input type="date" class="inp" data-rqd="from" value="${f.from||''}"><span>ถึง</span><input type="date" class="inp" data-rqd="to" value="${f.to||''}"></div>`:''}</div>
+  return`<div class="card rqf"><div class="rqfrow"><span class="lb">${ic('calendar',15)}วันไลฟ์</span><div class="seg sm">${[['all','ทั้งหมด'],['today','วันนี้'],['week','สัปดาห์นี้'],['nweek','สัปดาห์หน้า'],['month','เดือนนี้'],['nmonth','เดือนหน้า'],['custom','เลือกวัน']].map(([k,l])=>`<button class="${mode===k?'on':''}" data-act="rqMode" data-m="${k}">${l}</button>`).join('')}</div>
+    ${openWins().length?`<div class="rqwins"><span class="lb">${ic('ticket',14)}ตามรอบเปิดจอง</span>${openWins().map(w=>`<button class="wchip ${mode==='win:'+w.id?'on':''}" data-act="rqMode" data-m="win:${w.id}">${esc(w.label||'รอบเปิดจอง')} <small>${fmtRange(w.from,w.to,false)}</small></button>`).join('')}</div>`:''}
+    ${mode==='custom'?`<div class="rqdates"><input type="date" class="inp" data-rqd="from" value="${f.from||''}"><span>ถึง</span><input type="date" class="inp" data-rqd="to" value="${f.to||''}"></div>`:''}${r&&mode!=='all'?`<span class="dcount">${ic('calendar',13)}${fmtRange(r[0],r[1])} · ${nDays(r[0],r[1])} วัน</span>`:''}</div>
    <div class="rqfrow"><span class="lb">${ic('user',15)}Live Streamer</span>${w?`<button class="rqwho" data-act="rqWho">${nameChip(w)}${ic('edit',13)}</button><button class="btn sm ghost" data-act="rqWhoClear">${ic('x',13)}ทุกคน</button>`:`<button class="btn sm" data-act="rqWho">${ic('users',14)}ทุกคน · แตะเพื่อเลือก</button>`}</div>
    <div class="rqfsum">${ic('filter',13)}${r?`${fmtD(r[0])}${r[1]!==r[0]?' – '+fmtD(r[1]):''}`:'ทุกวัน'} · ${w?esc(M(w).name):'ทุกคน'} · <b>พบ ${n} รายการ</b>${r||w?`<button class="link" data-act="rqClear">ล้างตัวกรอง</button>`:''}</div></div>`;
 }
@@ -2398,14 +2417,27 @@ const fmtDs=d=>`${dnum(d)} ${MON_S[D(d).getUTCMonth()]}`;
 function expandDates(ws){const set=new Set();ws.forEach(w=>{for(let d=w.from;d<=w.to;d=add(d,1))set.add(d)});return[...set].sort()}
 function winStatus(w){return w.to<TODAY?['ผ่านแล้ว','pay-unpaid']:w.from<=TODAY?['กำลังเปิดจอง','ok']:['เปิดล่วงหน้า','room']}
 async function saveWindows(list,log){list=list.slice().sort((a,b)=>a.from.localeCompare(b.from));await saveCfg({bookWindows:list,bookDates:expandDates(list)},log)}
+
+/* ---------- ช่วงวันที่มาตรฐาน ---------- */
+const monthEnd=(y,m0)=>isoOf(new Date(Date.UTC(y,m0+1,0)));
+function rangePresets(kind){const[y,m]=TODAY.split('-').map(Number),m0=m-1,ws=monday(TODAY),nm0=(m0+1)%12,ny=y+(m0===11?1:0),nmF=`${ny}-${String(nm0+1).padStart(2,'0')}-01`,nmL=monthEnd(ny,nm0),tmF=`${TODAY.slice(0,7)}-01`,tmL=monthEnd(y,m0);
+  const P={today:['วันนี้',TODAY,TODAY],week:['สัปดาห์นี้',ws,add(ws,6)],nweek:['สัปดาห์หน้า',add(ws,7),add(ws,13)],n2week:['2 สัปดาห์ถัดไป',add(ws,7),add(ws,20)],
+    month:['เดือนนี้',tmF,tmL],monthRest:['ที่เหลือของเดือนนี้',TODAY,tmL],nmonth:['เดือนหน้า',nmF,nmL],nh1:[`1–15 ${MON_S[nm0]}`,nmF,`${nmF.slice(0,8)}15`],nh2:[`16–${dnum(nmL)} ${MON_S[nm0]}`,`${nmF.slice(0,8)}16`,nmL],h1:[`1–15 ${MON_S[m0]}`,tmF,`${tmF.slice(0,8)}15`],h2:[`16–${dnum(tmL)} ${MON_S[m0]}`,`${tmF.slice(0,8)}16`,tmL],pmonth:['เดือนที่แล้ว',isoOf(new Date(Date.UTC(y,m0-1,1))),monthEnd(y,m0-1)]};
+  return kind.map(k=>[k,...P[k]])}
+const nDays=(a,b)=>Math.round((D(b)-D(a))/864e5)+1;
+function wSum(){const a=$('#wFrom'),b=$('#wTo');if(!a||!b)return;let f=a.value,t=b.value;if(f&&t&&t<f){[f,t]=[t,f];a.value=f;b.value=t}const L=$('#wLabel');if(L)L.placeholder=f&&t?winLabel(f,t):'';const o=$('#wSum');if(o)o.innerHTML=f&&t?`${ic('calendar',14)}${fmtRange(f,t)} · <b>${nDays(f,t)} วัน</b>`:'';document.querySelectorAll('.wq [data-act=fillWin]').forEach(x=>x.classList.toggle('on',x.dataset.f===f&&x.dataset.t===t))}
+function winLabel(f,t){return`รอบ ${fmtRange(f,t,false)}`}
+function openWins(){return(C().bookWindows||[]).filter(w=>w.to>=add(TODAY,-31)).sort((a,b)=>a.from.localeCompare(b.from))}
 function windowsCard(){
   const c=C(),ws=c.bookWindows||[],nm=add(monday(TODAY),7),[y,m]=TODAY.split('-').map(Number),nmFirst=isoOf(new Date(Date.UTC(y,m,1))),nmLast=isoOf(new Date(Date.UTC(y,m+1,0)));
   return`<div class="card" style="margin-top:16px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><h3 style="margin:0">${icb('calendar','ok')}รอบเปิดให้จองคิว</h3><span class="muted" style="font-size:13px">กำหนดวัน / ช่วงวันที่ Live Streamer จองได้ เพื่อเปิดลงคิวเป็นรอบ ๆ</span></div>
    <label class="perm">${icb('lock','warn')}<div><b>จำกัดวันที่ Live Streamer จองได้</b><small>${c.bookLimit?'เปิดอยู่: จองได้เฉพาะวันในรอบด้านล่าง':'ปิดอยู่: จองได้ทุกวันที่มีไลฟ์'}</small></div><span class="sw"><input type="checkbox" data-booklimit="1" ${c.bookLimit?'checked':''}><span></span></span></label>
    <div class="wins">${ws.length?ws.map((w,i)=>{const[st,cls]=winStatus(w),n=Math.round((D(w.to)-D(w.from))/864e5)+1;return`<div class="win ${w.to<TODAY?'past':''}" style="--i:${i}">${icb('calendar',cls==='ok'?'ok':'',16)}<div class="grow"><b>${esc(w.label||'รอบเปิดจอง')}</b><small>${fmtD(w.from)} – ${fmtD(w.to)} · ${n} วัน</small></div><span class="pill ${cls}">${st}</span><button class="btn icon ghost" data-act="delWin" data-id="${w.id}" title="ลบรอบนี้" style="color:var(--bad)">${ic('trash',16)}</button></div>`}).join(''):`<p class="muted" style="font-size:13px;margin:10px 0">ยังไม่มีรอบเปิดจอง</p>`}</div>
    <div class="winadd"><b>${ic('plus',14)}เพิ่มรอบใหม่</b>
-    <div class="wq"><button class="btn sm" data-act="quickWin" data-f="${nm}" data-t="${add(nm,6)}" data-l="รอบสัปดาห์">${ic('calweek',14)}สัปดาห์หน้า</button><button class="btn sm" data-act="quickWin" data-f="${nm}" data-t="${add(nm,13)}" data-l="รอบ 2 สัปดาห์">${ic('calweek',14)}2 สัปดาห์ถัดไป</button><button class="btn sm" data-act="quickWin" data-f="${nmFirst}" data-t="${nmLast}" data-l="รอบ${MON_L[D(nmFirst).getUTCMonth()]}">${ic('calendar',14)}ทั้งเดือนหน้า</button></div>
-    <div class="wf"><label>ตั้งแต่<input type="date" id="wFrom" value="${nm}"></label><label>ถึง<input type="date" id="wTo" value="${add(nm,6)}"></label><label class="lb">ชื่อรอบ (ไม่บังคับ)<input id="wLabel" placeholder="เช่น รอบที่ 1 ธ.ค."></label><button class="btn primary" data-act="addWin">${ic('plus',16)}เพิ่ม</button></div>
+    <div class="wq">${(()=>{const L=(C().bookWindows||[]).slice().sort((a,b)=>b.to.localeCompare(a.to))[0];const nx=L?[add(L.to,1),add(L.to,nDays(L.from,L.to))]:null;
+      return(nx?`<button class="btn sm wnext" data-act="fillWin" data-f="${nx[0]}" data-t="${nx[1]}">${ic('right',14)}ต่อจากรอบล่าสุด <small>${fmtRange(nx[0],nx[1],false)}</small></button>`:'')+rangePresets(['nweek','n2week','monthRest','nmonth','nh1','nh2']).map(([k,l,f,t])=>`<button class="btn sm" data-act="fillWin" data-f="${f<TODAY?TODAY:f}" data-t="${t}">${ic(k.startsWith('n')&&k.includes('week')?'calweek':'calendar',14)}${l}</button>`).join('')})()}</div>
+    <div class="wf"><label>ตั้งแต่<input type="date" id="wFrom" value="${nm}" data-wdate="1"></label><label>ถึง<input type="date" id="wTo" value="${add(nm,6)}" data-wdate="1"></label><label class="lb">ชื่อรอบ (ไม่บังคับ)<input id="wLabel" placeholder="${winLabel(nm,add(nm,6))}"></label><button class="btn primary" data-act="addWin">${ic('plus',16)}เพิ่มรอบ</button></div>
+    <div class="wsum" id="wSum">${ic('calendar',14)}${fmtRange(nm,add(nm,6))} · <b>${nDays(nm,add(nm,6))} วัน</b></div>
     <p class="hint" style="margin-top:8px">${ic('info',15)}วันเดียวก็ได้ ใส่ “ตั้งแต่” และ “ถึง” เป็นวันเดียวกัน · แบรนด์ใส่ชื่อ/แก้คิวได้ทุกวันเสมอ</p></div></div>`;
 }
 
@@ -2867,8 +2899,10 @@ const acts={
   addAdmin:()=>{if(ownerOnly())addAdminDlg()},
   delAdmin:b=>{if(!ownerOnly())return;const e=b.dataset.e;if(isOwnerEmail(e))return toast('ลบเจ้าของระบบไม่ได้',1);const a=S.d.access[e];modal(`<div class="mhead">${icb('trash','bad')}<div><h3>ลบ Admin ${esc(a?.name||e)}?</h3><span class="muted">${esc(e)} จะ Login ไม่ได้อีก · ประวัติการอนุมัติเดิมยังอยู่</span></div></div><div class="mact"><button class="btn bad" data-d="y">${ic('trash',16)}ลบ Admin</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,async x=>{if(x!=='y')return closeM();if(await write([['del','access',e]],`ลบ Admin ${a?.name||e}`)){closeM();toast('ลบ Admin แล้ว')}})},
   roomClose:b=>roomCloseDlg(+b.dataset.d,+b.dataset.r),
-  addWin:()=>{const f=$('#wFrom').value,t=$('#wTo').value,l=$('#wLabel').value.trim();if(!f||!t)return toast('เลือกวันที่ให้ครบ',1);if(t<f)return toast('วันที่ “ถึง” ต้องไม่ก่อน “ตั้งแต่”',1);
+  addWin:()=>{let f=$('#wFrom').value,t=$('#wTo').value;if(!f||!t)return toast('เลือกวันที่ให้ครบ',1);if(t<f)[f,t]=[t,f];const l=$('#wLabel').value.trim()||winLabel(f,t);
+    const ov=(C().bookWindows||[]).find(w=>!(t<w.from||f>w.to));if(ov&&!confirm(`ช่วงนี้ทับกับ “${ov.label||'รอบเปิดจอง'}” (${fmtRange(ov.from,ov.to)}) · เพิ่มต่อไหม?`))return;
     saveWindows([...(C().bookWindows||[]),{id:'w'+Date.now().toString(36),from:f,to:t,label:l}],`เพิ่มรอบเปิดจอง ${l?l+' ':''}${fmtRange(f,t)}`).then(()=>toast('เพิ่มรอบเปิดจองแล้ว'))},
+  fillWin:b=>{$('#wFrom').value=b.dataset.f;$('#wTo').value=b.dataset.t;wSum();$('#wLabel').focus()},
   quickWin:b=>saveWindows([...(C().bookWindows||[]),{id:'w'+Date.now().toString(36),from:b.dataset.f,to:b.dataset.t,label:b.dataset.l}],`เพิ่มรอบเปิดจอง ${b.dataset.l}`).then(()=>toast('เพิ่มรอบเปิดจองแล้ว')),
   delWin:b=>{const id=b.dataset.id,w=(C().bookWindows||[]).find(x=>x.id===id);if(!w)return;
     modal(`<div class="mhead">${icb('trash','bad')}<div><h3>ลบรอบเปิดจอง?</h3><span class="muted">${esc(w.label||'รอบเปิดจอง')} · ${fmtRange(w.from,w.to)}</span></div></div><p class="muted">Live Streamer จะจองวันในรอบนี้ไม่ได้ (คิวที่จองไว้แล้วไม่หาย)</p><div class="mact"><button class="btn bad" data-d="go">${ic('trash',15)}ลบรอบ</button><button class="btn ghost" data-d="no">ยกเลิก</button></div>`,
@@ -2904,6 +2938,7 @@ const acts={
   mineOnly:b=>{S.mineOnly=b.checked;render()},
   mineFilter:b=>{S.mineFilter=b.dataset.f;render()},
   payMode:b=>{S.payMode=b.dataset.m;render()},
+  payPre:b=>{S.payFrom=b.dataset.f;S.payTo=b.dataset.t;render()},
   payNav:b=>{const n=+b.dataset.n;if(S.payMode==='week')S.payStart=add(S.payStart,7*n);else{const[y,m]=S.payMonth.split('-').map(Number);S.payMonth=isoOf(new Date(Date.UTC(y,m-1+n,1))).slice(0,7)}render()},
   approve:async b=>{const el=b.closest('.req');el.style.transform='translateX(40px)';el.style.opacity='.3';if(await approve(b.dataset.k))toast('อนุมัติแล้ว');else render()},
   reject:async b=>{const el=b.closest('.req');el.style.transform='translateX(-40px)';el.style.opacity='.3';if(await reject(b.dataset.k))toast('ไม่อนุมัติ · แจ้ง Live Streamer ด้วยนะ');else render()},
@@ -2980,7 +3015,10 @@ document.addEventListener('change',async e=>{const t=e.target;
   if(t.dataset.booklimit){if(t.checked&&!(C().bookWindows||[]).length)toast('อย่าลืมเพิ่มรอบเปิดจองด้านล่าง ไม่งั้น Live Streamer จะจองไม่ได้เลย',1);return saveCfg({bookLimit:t.checked},t.checked?'เปิดการจำกัดวันจอง: Live Streamer จองได้เฉพาะรอบเปิดจอง':'ปิดการจำกัดวันจอง (รอบเปิดจอง): Live Streamer จองได้ทุกวัน')}
   if(t.dataset.logby){S.logBy=t.value||null;render();return}
   if(t.dataset.logq!==undefined){S.logQ=t.value;render();return}
-  if(t.dataset.rqd){S.rqF={...(S.rqF||{}),[t.dataset.rqd]:t.value||null};render();return}
+  if(t.dataset.wdate){wSum();return}
+  if(t.dataset.payd){S['pay'+(t.dataset.payd==='from'?'From':'To')]=t.value||null;render();return}
+  if(t.dataset.paywin){S.payWin=t.value;render();return}
+  if(t.dataset.rqd){S.rqF={...(S.rqF||{}),[t.dataset.rqd]:t.value||null};const q=S.rqF;if(q.from&&q.to&&q.to<q.from)[q.from,q.to]=[q.to,q.from];render();return}
   if(t.dataset.reqby){S.reqBy=t.value||null;render();return}
   if((t.dataset.aname||t.dataset.aactive)&&(!ownerOnly()||isOwnerEmail(t.dataset.aname||t.dataset.aactive)))return;
   if(t.dataset.aname){const n=t.value.trim();if(n)n!==(S.d.access[t.dataset.aname]?.name||'')&&write([['patch','access',t.dataset.aname,{name:n}]],`เปลี่ยนชื่อ Admin: ${S.d.access[t.dataset.aname]?.name||t.dataset.aname} → ${n}`);return}
