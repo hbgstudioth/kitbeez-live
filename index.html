@@ -1727,6 +1727,38 @@ main.enter{animation:softIn .28s ease-out both}
 .stat:has(.icb[data-i=mic])::after{bottom:auto;animation-delay:-1.3s}
 @keyframes fxWave{0%{transform:rotate(45deg) scale(.5);opacity:0}30%{opacity:1}100%{transform:rotate(45deg) scale(1.9);opacity:0}}
 @media(max-width:860px){.stat:has(.icb[data-i=x])::before,.stat:has(.icb[data-i=x])::after{right:12px;top:22px;width:20px}.stat:has(.icb[data-i=history])::before{width:30px;height:30px;right:10px;top:22px;margin-top:-15px}.stat:has(.icb[data-i=history])::after{right:37px;top:12px;margin-top:0}.stat:has(.icb[data-i=mic])::before,.stat:has(.icb[data-i=mic])::after{right:14px;top:20px}}
+
+/* ===== หน้าเข้าระบบ: Luxury ===== */
+.login.lux{--gold:#d4b46a;--gold2:#f2deaa;--ink:#0a1124;position:relative;overflow:hidden;background:radial-gradient(1200px 700px at 20% 0%,#16244a 0%,transparent 60%),radial-gradient(900px 600px at 100% 100%,#1a1638 0%,transparent 60%),linear-gradient(160deg,#070c1a,#0b1430 55%,#0a0f22)}
+.login.lux::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(212,180,106,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(212,180,106,.05) 1px,transparent 1px);background-size:64px 64px;mask:radial-gradient(circle at 50% 45%,#000 0,transparent 70%);-webkit-mask:radial-gradient(circle at 50% 45%,#000 0,transparent 70%);pointer-events:none}
+.login.lux .lxg{position:absolute;border-radius:50%;filter:blur(70px);opacity:.45;pointer-events:none;animation:lxFloat 18s ease-in-out infinite alternate}
+.login.lux .g1{width:420px;height:420px;left:-120px;top:-120px;background:#2b4cff}.login.lux .g2{width:360px;height:360px;right:-100px;bottom:-120px;background:#7c4dff;animation-delay:-6s}.login.lux .g3{width:260px;height:260px;right:22%;top:8%;background:#d4b46a;opacity:.18;animation-delay:-11s}
+@keyframes lxFloat{0%{transform:translate(0,0)}100%{transform:translate(40px,30px)}}
+.login.lux .lwrap{position:relative;z-index:1;background:rgba(255,255,255,.97);border-radius:28px;box-shadow:0 40px 120px rgba(0,0,0,.55),0 0 0 1px rgba(212,180,106,.35);width:min(980px,100%)}
+.login.lux .lside{background:linear-gradient(165deg,#0d1733 0%,#111d42 55%,#16224d 100%);color:#f6f1e4;border-right:1px solid rgba(212,180,106,.3)}
+.login.lux .lside::before{width:360px;height:360px;right:-140px;top:-140px;background:none;border:1px solid rgba(212,180,106,.25);box-shadow:inset 0 0 0 30px rgba(212,180,106,.03)}
+.login.lux .lside::after{width:220px;height:220px;left:-90px;bottom:-90px;background:none;border:1px solid rgba(212,180,106,.18)}
+.login.lux .logo-card{background:rgba(255,255,255,.04);border:1px solid rgba(212,180,106,.35);box-shadow:none}
+.login.lux .logo-card img{filter:brightness(0) invert(1)}
+.login.lux .lsys{color:#fff;letter-spacing:4px;font-weight:300;font-size:22px;margin-top:22px;padding-bottom:14px;position:relative}
+.login.lux .lsys::after{content:'';position:absolute;left:0;bottom:0;width:56px;height:2px;background:linear-gradient(90deg,var(--gold),transparent)}
+.login.lux .lsteps .icb{background:transparent;border:1px solid rgba(212,180,106,.45);color:var(--gold2)}
+.login.lux .lsteps b{color:#fff;font-weight:600}.login.lux .lsteps small{color:#aab4cf;opacity:1}
+.login.lux .lbadges span{background:transparent;border:1px solid rgba(212,180,106,.4);color:var(--gold2);font-weight:500;letter-spacing:.2px}
+.login.lux .lform{padding:40px 38px}
+.login.lux .lform h2{color:var(--ink);font-weight:700;letter-spacing:.3px}.login.lux .lform h2 svg{color:var(--gold)}
+.login.lux .acc{border-radius:16px;border-width:1.5px}.login.lux .acc.on{border-color:var(--ink);background:linear-gradient(160deg,#fff,#faf6ec);box-shadow:0 10px 26px rgba(10,17,36,.12),inset 0 0 0 1px var(--gold)}
+.login.lux .acc .ck{background:var(--ink);color:var(--gold2)}
+.login.lux .field{border-radius:14px}.login.lux .field:focus-within{border-color:var(--ink);box-shadow:0 0 0 4px rgba(212,180,106,.22)}
+.login.lux .gbtn{background:linear-gradient(135deg,#0d1733,#1b2b5c);color:#fff;letter-spacing:.4px;box-shadow:0 10px 24px rgba(13,23,51,.3),inset 0 1px 0 rgba(255,255,255,.12);position:relative;overflow:hidden}
+.login.lux .gbtn::after{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(105deg,transparent,rgba(242,222,170,.35),transparent);animation:lxShine 4.5s ease-in-out infinite}
+.login.lux .gbtn:disabled{background:#c7cedd;box-shadow:none}.login.lux .gbtn:disabled::after{display:none}
+.login.lux .gbtn:hover:not(:disabled){box-shadow:0 16px 32px rgba(13,23,51,.38),0 0 0 1px var(--gold)}
+@keyframes lxShine{0%,60%{left:-60%}100%{left:130%}}
+.login.lux .ggbtn{border-radius:14px}
+.login.lux .lfoot{position:relative;z-index:1;color:rgba(242,222,170,.75);letter-spacing:3px}.login.lux .lfoot span{color:rgba(255,255,255,.4)}
+.login.lux .aic.person{background:linear-gradient(145deg,#0d1733,#1b2b5c)!important;color:var(--gold2)!important}.login.lux .acc.on b{color:var(--ink)}
+@media(prefers-reduced-motion:reduce){.login.lux .lxg,.login.lux .gbtn::after{animation:none}}
 </style>
 </head>
 <body>
@@ -2144,7 +2176,7 @@ function render(){
 function vLogin(){
   const demo=S.store.demo,t=S.loginType||'streamer',pk=S.loginPick&&S.d.members[S.loginPick]?S.loginPick:null,pc=pk?colOf(pk):null;
   const lfirst=!S._loginShown;S._loginShown=true;
-  $('#app').innerHTML=`<div class="login"><div class="lwrap ${lfirst?'first':''}">
+  $('#app').innerHTML=`<div class="login lux"><i class="lxg g1"></i><i class="lxg g2"></i><i class="lxg g3"></i><div class="lwrap ${lfirst?'first':''}">
    <div class="lside"><div class="logo-card"><img src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv">LIVE</span></div><h1 class="lsys">LIVE BOOKING SYSTEM</h1>
     <ul class="lsteps">
      <li style="--i:0">${icb('users')}<div><b>เลือกประเภทบัญชี</b><small>แบรนด์ หรือ Live Streamer</small></div></li>
