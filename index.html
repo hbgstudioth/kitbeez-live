@@ -1565,6 +1565,28 @@ main.enter{animation:softIn .28s ease-out both}
   .wkr .wkrr{width:170px;justify-content:center}
   .modebar .seg button{flex:1 1 0;justify-content:center}
 }
+
+/* ===== ตารางสรุปชั่วโมง (สบายตา) ===== */
+.ptcard{padding:6px!important}
+.ptbl{border-collapse:separate;border-spacing:0;width:100%}
+.ptbl thead th{background:#f4f8ff;border:0;padding:12px 10px;text-align:center;vertical-align:middle;font-weight:600;color:var(--navy)}
+.ptbl thead th:first-child{border-radius:12px 0 0 12px;text-align:left}.ptbl thead th:last-child{border-radius:0 12px 12px 0}
+.ptbl thead th small{display:block;font-size:11px;color:var(--muted);font-weight:500}.ptbl th.pn small{display:inline;margin-left:6px}
+.ptbl .ph{display:inline-flex;flex-direction:column;align-items:center;line-height:1.2}.ptbl .ph b{font-size:13px;white-space:nowrap}
+.ptbl tbody td{border:0;border-bottom:1px solid #f0f4fa;padding:9px 10px;text-align:center;font-variant-numeric:tabular-nums}
+.ptbl tbody tr:hover td{background:#fafcff}
+.ptbl td.pn,.ptbl th.pn{text-align:left;min-width:200px}
+.ptbl .rk{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:7px;background:#f1f5f9;color:var(--muted);font-size:11.5px;font-weight:700;margin-right:2px}
+.ptbl tbody tr:nth-child(1) .rk{background:#fef3c7;color:#b45309}.ptbl tbody tr:nth-child(2) .rk{background:#e2e8f0;color:#475569}.ptbl tbody tr:nth-child(3) .rk{background:#fde7d6;color:#9a3412}
+.ptbl .hv{display:inline-block;min-width:38px;padding:3px 8px;border-radius:8px;background:rgba(37,99,235,var(--a));color:var(--navy);font-weight:600;font-size:13.5px}
+.ptbl .dot0{display:inline-block;width:5px;height:5px;border-radius:50%;background:#dbe3ee}
+.ptbl td.ptot,.ptbl th.ptot{background:#f7faff;min-width:130px}.ptbl tbody td.ptot{border-bottom-color:#e8eff9}.ptbl thead th.ptot{background:#e8f0fe}
+.ptbl td.ptot .tw{display:flex;align-items:center;justify-content:center;gap:6px}.ptbl td.ptot b{font-size:16px;color:var(--blue)}
+.ptbl td.ptot .bar{display:block;width:100%;height:4px;border-radius:4px;background:#e3ecf8;margin:5px auto 0;max-width:110px;overflow:hidden}.ptbl td.ptot .bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#60a5fa,#2563eb)}
+.ptbl td.pslot{color:var(--muted);font-weight:600}
+.ptbl tfoot td{border:0;background:#eef4ff;color:var(--navy);font-weight:700;padding:12px 10px;text-align:center;font-variant-numeric:tabular-nums;border-top:2px solid #dbe7fb}
+.ptbl tfoot td:first-child{border-radius:12px 0 0 12px;text-align:left}.ptbl tfoot td:last-child{border-radius:0 12px 12px 0}.ptbl tfoot td.z{color:#b6c3d6}.ptbl tfoot td.ptot{background:#dbe7fb}.ptbl tfoot td.ptot b{color:var(--blue);font-size:17px}
+.ptbl tbody tr:last-child td{border-bottom:0}
 </style>
 </head>
 <body>
@@ -2264,9 +2286,11 @@ function vPay(){
     :`<button class="btn icon" data-act="payNav" data-n="-1">${ic('left',16)}</button><b style="min-width:150px;text-align:center">${title}</b><button class="btn icon" data-act="payNav" data-n="1">${ic('right',16)}</button>`}`)+(pm==='custom'||pm==='round'?`<div class="paypre">${pm==='custom'?rangePresets(['week','month','h1','h2','pmonth']).map(([k,l,f,t])=>`<button class="wchip ${from===f&&to===t?'on':''}" data-act="payPre" data-f="${f}" data-t="${t}">${l}</button>`).join(''):''}<span class="dcount">${ic('calendar',13)}${fmtRange(from,to)} · ${nDays(from,to)} วัน</span></div>`:'');
   if(isBrand())h+=`<div class="empf">${[['all','ทั้งหมด',allIds],['fulltime','Full-Time',grp('fulltime')],['freelance','Freelance',grp('freelance')],...(grp('none').length?[['none','ยังไม่ระบุ',grp('none')]]:[])].map(([k,l,a])=>`<button class="${pe===k?'on':''} ${k}" data-act="payEmp" data-e="${k}"><b>${l}</b><span>${fmtHM(gH(a))} · ${a.length} คน</span></button>`).join('')}</div>`;
   h+=`<div class="stats"><div class="stat" style="--i:0">${icb('clock')}<div><span>ชั่วโมงไลฟ์รวม</span><b>${fmtHM(sumH)}</b></div></div><div class="stat" style="--i:1">${icb('ticket','violet')}<div><span>จำนวน Slot</span><b>${sumN} Slot</b></div></div>${isBrand()?`<div class="stat" style="--i:2">${icb('users','ok')}<div><span>จำนวนคน · เฉลี่ยต่อคน</span><b>${ids.length} คน · ${fmtHM(avg)}</b></div></div>`:''}${isBrand()&&trialH?`<div class="stat" style="--i:3">${icb('mic','warn')}<div><span>ทดลองไลฟ์ (ไม่นับรวม)</span><b>${trialH} ชม.</b></div></div>`:''}${pendIds.length?`<div class="stat" style="--i:4">${icb('hour','warn')}<div><span>รอยืนยัน (ยังไม่นับ)</span><b>${pendIds.reduce((a,id)=>a+pend[id],0)} ชม.</b></div></div>`:''}</div>
-  <div class="card scroll"><table class="tbl"><thead><tr><th>ชื่อ</th>${cols.map(c=>`<th>${c.l}</th>`).join('')}<th>รวม ชม.<small style="display:block;font-weight:400">(ชม.:นาที)</small></th><th>Slot</th></tr></thead><tbody>
-  ${ids.map((id,i)=>`<tr style="--i:${i}"><td><div class="nmc">${nameChip(id)}${empTag(id)}</div></td>${rows[id].cols.map(x=>`<td class="${x?'':'z'}">${x?fmtHMs(x):'–'}</td>`).join('')}<td><b>${fmtHMs(rows[id].tot)}</b>${rows[id].short?`<small class="shtag" title="มี ${rows[id].short} Slot ที่ไลฟ์ไม่ครบ">${ic('hour',10)}${rows[id].short}</small>`:''}</td><td>${rows[id].n}</td></tr>`).join('')||`<tr><td colspan="${cols.length+3}" class="muted" style="text-align:center;padding:30px">ยังไม่มีคิวในช่วงนี้</td></tr>`}
-  </tbody>${ids.length?`<tfoot><tr><td>รวม</td>${cols.map((_,ci)=>`<td>${fmtHMs(ids.reduce((a,id)=>a+rows[id].cols[ci],0))}</td>`).join('')}<td>${fmtHMs(sumH)}</td><td>${sumN}</td></tr></tfoot>`:''}</table></div>
+  ${(()=>{const mx=Math.max(1,...ids.map(id=>rows[id].tot)),cmx=Math.max(1,...ids.flatMap(id=>rows[id].cols));
+    const hd=c=>{if(c.from===c.to)return`<span class="ph"><small>${DOW_S[dow(c.from)]}</small><b>${dnum(c.from)} ${MON_S[D(c.from).getUTCMonth()]}</b></span>`;return`<span class="ph"><small>${nDays(c.from,c.to)} วัน</small><b>${dnum(c.from)}${c.from.slice(0,7)!==c.to.slice(0,7)?' '+MON_S[D(c.from).getUTCMonth()]:''}–${dnum(c.to)} ${MON_S[D(c.to).getUTCMonth()]}</b></span>`};
+    return`<div class="card scroll ptcard"><table class="tbl ptbl"><thead><tr><th class="pn">Live Streamer <small>${ids.length} คน</small></th>${cols.map(c=>`<th>${hd(c)}</th>`).join('')}<th class="ptot">รวม<small>ชม.:นาที</small></th><th class="pslot">Slot</th></tr></thead><tbody>
+  ${ids.map((id,i)=>`<tr style="--i:${i}"><td class="pn"><div class="nmc"><span class="rk">${i+1}</span>${nameChip(id)}${empTag(id)}</div></td>${rows[id].cols.map(x=>`<td class="pc2 ${x?'':'z'}">${x?`<span class="hv" style="--a:${(.08+.34*x/cmx).toFixed(2)}">${fmtHMs(x)}</span>`:'<i class="dot0"></i>'}</td>`).join('')}<td class="ptot"><div class="tw"><b>${fmtHMs(rows[id].tot)}</b>${rows[id].short?`<small class="shtag" title="มี ${rows[id].short} Slot ที่ไลฟ์ไม่ครบ">${ic('hour',10)}${rows[id].short}</small>`:''}</div><i class="bar"><i style="width:${Math.round(rows[id].tot/mx*100)}%"></i></i></td><td class="pslot">${rows[id].n}</td></tr>`).join('')||`<tr><td colspan="${cols.length+3}" class="muted" style="text-align:center;padding:30px">ยังไม่มีคิวในช่วงนี้</td></tr>`}
+  </tbody>${ids.length?`<tfoot><tr><td class="pn">รวมทั้งหมด</td>${cols.map((_,ci)=>{const v=ids.reduce((a,id)=>a+rows[id].cols[ci],0);return`<td class="${v?'':'z'}">${v?fmtHMs(v):'–'}</td>`}).join('')}<td class="ptot"><b>${fmtHMs(sumH)}</b></td><td class="pslot">${sumN}</td></tr></tfoot>`:''}</table></div>`})()}
   <div class="mact" style="justify-content:flex-end"><button class="btn" data-act="copyPay">${ic('copy',16)}คัดลอกสรุปส่ง LINE</button><button class="btn" data-act="csvPay">${ic('sheet',16)}ส่งออก CSV</button><button class="btn" data-act="print">${ic('printer',16)}พิมพ์ / PDF</button></div>`;
   h+=`<div class="card shcard" style="margin-top:16px"><h3 style="margin:0 0 4px">${icb('hour','warn')}Slot ที่ไลฟ์ไม่ครบ ${shorts.length?`(${shorts.length})`:''}</h3><p class="muted" style="margin:0 0 10px;font-size:13px">ชั่วโมงในตารางด้านบนนับตามเวลาไลฟ์จริงแล้ว (เช่น 5:15 = 5 ชั่วโมง 15 นาที) · แตะรายการเพื่อแก้ไข</p>
    ${shorts.length?`<div class="shlist">${shorts.map(([k,v])=>{const p=parseSid(k);return`<button class="shrow" data-act="hrs" data-k="${k}">${nameChip(v.who)}<span class="sht">${ic('calendar',12)}${fmtD(p.d)} · ${C().slots[p.s]} · ห้อง ${p.r}</span><b class="shh">${fmtHM(hrsOf(v))}<small> / ${C().hours} ชม.</small></b><span class="shr">${actChip(v)}${ic('msg',12)}${esc(v.actReason||'ไม่ระบุเหตุผล')}${v.actBy?`<small> · แจ้งโดย ${esc(v.actBy)}</small>`:''}</span></button>`}).join('')}</div>`:`<div class="muted" style="font-size:13px;padding:6px 0">${ic('checkc',14)} ทุก Slot ในช่วงนี้ไลฟ์ครบ ${C().hours} ชั่วโมง</div>`}</div>`;
