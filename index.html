@@ -1601,6 +1601,14 @@ main.enter{animation:softIn .28s ease-out both}
 .btn.lnbtn{border-color:#b7ebcb;background:linear-gradient(135deg,#fff 40%,#e8faef);color:#047a34;font-weight:600}.btn.lnbtn:hover{border-color:#06c755;box-shadow:0 6px 14px rgba(6,199,85,.18)}
 .lnbtn .lnic{display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:#06c755;color:#fff}.lnbtn .lnic svg{width:16px;height:16px}
 .btn.prbtn{color:#d93025;border-color:#f6d0cc}.btn.prbtn:hover{background:#fdecea;border-color:#d93025}
+
+/* ปุ่มส่งออก: เรียบ ไม่แย่งความสนใจ */
+.expbar{display:flex!important;justify-content:flex-end;flex-wrap:wrap;gap:8px!important}
+.expb{background:#fff!important;border:1px solid var(--line)!important;border-radius:10px!important;padding:6px 12px 6px 6px!important;gap:8px!important;box-shadow:none!important;font-size:13.5px;font-weight:600;color:var(--navy)}
+.expb:hover{transform:none!important;border-color:var(--c)!important;background:color-mix(in srgb,var(--b) 50%,#fff)!important}
+.expb .ex{width:28px!important;height:28px!important;border-radius:8px!important;background:var(--b)!important;color:var(--c)!important;box-shadow:none!important}
+.expb .ex svg{width:16px;height:16px}.expb .ft{font-size:9px!important;padding:2px 3px!important;background:var(--c)!important;color:#fff!important}
+@media(max-width:700px){.expbar{justify-content:stretch}.expb{flex:1 1 auto;justify-content:center}}
 </style>
 </head>
 <body>
@@ -2306,7 +2314,7 @@ function vPay(){
     return`<div class="card scroll ptcard"><table class="tbl ptbl"><thead><tr><th class="pn">Live Streamer <small>${ids.length} คน</small></th>${cols.map(c=>`<th>${hd(c)}</th>`).join('')}<th class="ptot">รวม<small>ชม.:นาที</small></th><th class="pslot">Slot</th></tr></thead><tbody>
   ${ids.map((id,i)=>`<tr style="--i:${i}"><td class="pn"><div class="nmc"><span class="rk">${i+1}</span>${nameChip(id)}${empTag(id)}</div></td>${rows[id].cols.map(x=>`<td class="pc2 ${x?'':'z'}">${x?`<span class="hv" style="--a:${(.08+.34*x/cmx).toFixed(2)}">${fmtHMs(x)}</span>`:'<i class="dot0"></i>'}</td>`).join('')}<td class="ptot"><div class="tw"><b>${fmtHMs(rows[id].tot)}</b>${rows[id].short?`<small class="shtag" title="มี ${rows[id].short} Slot ที่ไลฟ์ไม่ครบ">${ic('hour',10)}${rows[id].short}</small>`:''}</div></td><td class="pslot">${rows[id].n}</td></tr>`).join('')||`<tr><td colspan="${cols.length+3}" class="muted" style="text-align:center;padding:30px">ยังไม่มีคิวในช่วงนี้</td></tr>`}
   </tbody>${ids.length?`<tfoot><tr><td class="pn">รวมทั้งหมด</td>${cols.map((_,ci)=>{const v=ids.reduce((a,id)=>a+rows[id].cols[ci],0);return`<td class="${v?'':'z'}">${v?fmtHMs(v):'–'}</td>`}).join('')}<td class="ptot"><b>${fmtHMs(sumH)}</b></td><td class="pslot">${sumN}</td></tr></tfoot>`:''}</table></div>`})()}
-  <div class="expbar"><button class="expb ln" data-act="copyPay"><span class="ex">${LINEIC}</span><div><b>คัดลอกสรุปส่ง LINE</b><small>วางในแชทได้ทันที</small></div></button><button class="expb csv" data-act="csvPay"><span class="ex"><i class="ft">CSV</i></span><div><b>ส่งออก CSV</b><small>เปิดใน Excel / Sheets</small></div></button><button class="expb pdf" data-act="print"><span class="ex"><i class="ft">PDF</i></span><div><b>พิมพ์ / PDF</b><small>บันทึกเป็นไฟล์ PDF</small></div></button></div>`;
+  <div class="expbar"><button class="expb ln" data-act="copyPay"><span class="ex">${LINEIC}</span><span>คัดลอกสรุปส่ง LINE</span></button><button class="expb csv" data-act="csvPay"><span class="ex"><i class="ft">CSV</i></span><span>ส่งออก CSV</span></button><button class="expb pdf" data-act="print"><span class="ex"><i class="ft">PDF</i></span><span>พิมพ์ / PDF</span></button></div>`;
   h+=`<div class="card shcard" style="margin-top:16px"><h3 style="margin:0 0 4px">${icb('hour','warn')}Slot ที่ไลฟ์ไม่ครบ ${shorts.length?`(${shorts.length})`:''}</h3><p class="muted" style="margin:0 0 10px;font-size:13px">ชั่วโมงในตารางด้านบนนับตามเวลาไลฟ์จริงแล้ว (เช่น 5:15 = 5 ชั่วโมง 15 นาที) · แตะรายการเพื่อแก้ไข</p>
    ${shorts.length?`<div class="shlist">${shorts.map(([k,v])=>{const p=parseSid(k);return`<button class="shrow" data-act="hrs" data-k="${k}">${nameChip(v.who)}<span class="sht">${ic('calendar',12)}${fmtD(p.d)} · ${C().slots[p.s]} · ห้อง ${p.r}</span><b class="shh">${fmtHM(hrsOf(v))}<small> / ${C().hours} ชม.</small></b><span class="shr">${actChip(v)}${ic('msg',12)}${esc(v.actReason||'ไม่ระบุเหตุผล')}${v.actBy?`<small> · แจ้งโดย ${esc(v.actBy)}</small>`:''}</span></button>`}).join('')}</div>`:`<div class="muted" style="font-size:13px;padding:6px 0">${ic('checkc',14)} ทุก Slot ในช่วงนี้ไลฟ์ครบ ${C().hours} ชั่วโมง</div>`}</div>`;
   S._pay={from,to,cols,ids,rows,title,wk,shorts,pe};
