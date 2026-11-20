@@ -1609,6 +1609,26 @@ main.enter{animation:softIn .28s ease-out both}
 .expb .ex{width:28px!important;height:28px!important;border-radius:8px!important;background:var(--b)!important;color:var(--c)!important;box-shadow:none!important}
 .expb .ex svg{width:16px;height:16px}.expb .ft{font-size:9px!important;padding:2px 3px!important;background:var(--c)!important;color:#fff!important}
 @media(max-width:700px){.expbar{justify-content:stretch}.expb{flex:1 1 auto;justify-content:center}}
+
+/* ===== หัวกระดาษ/ท้ายกระดาษ ตอนพิมพ์ ===== */
+.prhd,.prmeta,.prft{display:none}
+@media print{
+  @page{size:A4;margin:12mm 10mm}
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .prhd{display:flex!important;justify-content:space-between;align-items:center;gap:16px;padding:0 0 10px;border-bottom:3px solid #1d4ed8;margin-bottom:10px}
+  .prl{display:flex;align-items:center;gap:14px}.prl img{height:34px}.prl b{display:block;font-size:19px;color:#0b2e6b}.prl span{font-size:11.5px;color:#475569}
+  .prr{display:grid;gap:2px;text-align:right;font-size:11px;color:#0b2e6b}.prr small{color:#64748b;margin-right:6px}
+  .prmeta{display:flex!important;flex-wrap:wrap;gap:6px 16px;font-size:11.5px;color:#475569;background:#f4f8ff;border-radius:8px;padding:7px 10px;margin-bottom:12px}.prmeta b{color:#0b2e6b}
+  .prft{display:block!important;margin-top:18px;break-inside:avoid}
+  .prsig{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin:26px 0 14px}.prsig div{text-align:center;font-size:12px;color:#0b2e6b}.prsig i{display:block;border-bottom:1px dotted #64748b;height:36px;margin-bottom:6px}.prsig small{display:block;color:#64748b;font-size:10.5px;margin-top:2px}
+  .prfl{font-size:10px;color:#94a3b8;text-align:center;border-top:1px solid #e2e8f0;padding-top:6px}
+  .pagehd,.stick,.modebar,.seg,.paypre,.expbar,.rqdates,.paywin,.sumline .fbtn,.empf,.stats{display:none!important}
+  .ptcard{box-shadow:none!important;border:1px solid #e2e8f0;overflow:visible!important;padding:0!important}.ptbl{font-size:11.5px;width:100%!important}.ptbl .rk{display:none}
+  .ptbl th,.ptbl td{padding:6px 5px!important;position:static!important}.ptbl td.pn,.ptbl th.pn{min-width:0!important}.ptbl td.ptot,.ptbl th.ptot{min-width:0!important}.ptbl .hv{padding:2px 6px;min-width:0}
+  *,*::before,*::after{animation:none!important;transition:none!important}.cell.e,.seat.free{background-image:none!important}
+  #toast,.toast,.sumline,.mfoot,.shcard>p,.lgd,.dayb>header .btn,.dayb>header .nbtag{display:none!important}.boards{grid-template-columns:1fr 1fr!important;gap:8px!important}.dayb{break-inside:avoid;box-shadow:none!important;border:1px solid #e2e8f0}.shrow{break-inside:avoid}
+  .shcard{break-inside:avoid}
+}
 </style>
 </head>
 <body>
@@ -2185,12 +2205,12 @@ function focusDlg(){const canOthers=isBrand()||C().perms.seeOthers,list=canOther
 function vSchedule(){
   const ws=monday(S.date),days=[...Array(7)].map((_,i)=>add(ws,i)),od=days.filter(isOpen),H=C().hours;
   let tot=0,free=0,mine=0;od.forEach(d=>{const st=dayStats(d);tot+=st.fh;free+=st.a-st.f;mine+=st.meh});
-  let h='';
+  let h=printHead('ตารางไลฟ์ประจำสัปดาห์',`${fmtRange(ws,add(ws,6))} · มุมมอง${S.calMode==='person'?'ตามคน':'ตามห้อง'}${roomF()?' · ห้อง '+roomF():''}`,`<span>วันไลฟ์ <b>${od.length} วัน</b></span><span>ชั่วโมงไลฟ์รวม <b>${fmtHM(tot)}</b></span><span>ช่องว่าง <b>${free}</b></span>${S.focus?`<span>ไฮไลต์ <b>${esc(S.focus===TRIAL?'ทดลองไลฟ์':M(S.focus).name)}</b></span>`:''}`);
   h+=`<div class="stick">${weekBar({act:'weekJump',today:'weekThis',tl:'สัปดาห์นี้',md:ws,me:add(ws,6),ws,extra:calSeg()})}${S.calMode==='room'&&od.length?dayTabs(days):''}</div>`;
   const tools=`<span class="sp"></span>${focusSel()}<button class="btn icon prbtn" data-act="print" title="พิมพ์ / บันทึก PDF">${ic('printer',17)}</button>`;
   h+=`<div class="sumline"><span class="pill room">${ic('clock',13)}ไลฟ์รวม ${fmtHM(tot)}</span><span class="pill ok">${ic('grid',13)}ช่องว่าง ${free}</span>${S.meId?`<span class="pill movereq">${ic('user',13)}ของฉัน ${fmtHM(mine)}</span>`:''}<span class="pill pay-unpaid">${ic('calendar',13)}วันไลฟ์ ${od.length} วัน</span>${tools}</div>`;
   if(!od.length)return h+`<div class="card empty">${icb('moon','',30)}<b>รอบนี้ไม่มีวันไลฟ์</b>เลือกสัปดาห์อื่น</div>`;
-  return h+(S.calMode==='person'?vPerson(ws,od):vRooms(ws,days,od));
+  return h+(S.calMode==='person'?vPerson(ws,od):vRooms(ws,days,od))+printFoot(false);
 }
 function dayTabs(days){return`<div class="daytabs">${days.map(d=>{const o=isOpen(d),st=o?dayStats(d):null;return`<button class="dt ${d===TODAY?'tdy':''} ${o&&inRound(d)?'rnd':''}" data-act="jumpDay" data-d="${d}" ${o?'':'disabled'}><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b><span class="${o&&!canBookDate(d)?'nb':''}">${o?(!canBookDate(d)?'ยังไม่เปิดจอง':`ว่าง ${st.a-st.f}`):'ไม่มีไลฟ์'}</span></button>`}).join('')}</div>`}
 function vRooms(ws,days,od){
@@ -2285,6 +2305,11 @@ function payData(from,to,cols){
     if(ci>=0)r.cols[ci]+=hh;r.tot+=hh;r.n++;if(isShort(v))r.short++}
   return{rows,pend};
 }
+
+/* ---------- หัวกระดาษตอนพิมพ์ / PDF ---------- */
+function printHead(title,sub,meta){const n=new Date(Date.now()+7*3600e3).toISOString(),ts=`${+n.slice(8,10)} ${MON_S[+n.slice(5,7)-1]} ${n.slice(0,4)} · ${n.slice(11,16)} น.`;
+  return`<div class="prhd"><div class="prl"><img src="${LOGO_DARK}" alt="KITBEEZ"><div><b>${title}</b><span>${sub}</span></div></div><div class="prr"><div><small>ระบบ</small>LIVE BOOKING SYSTEM</div><div><small>พิมพ์เมื่อ</small>${ts}</div><div><small>พิมพ์โดย</small>${esc(myName())}${isBrand()?' · KITBEEZ_ADMIN':''}</div></div></div>${meta?`<div class="prmeta">${meta}</div>`:''}`}
+function printFoot(sign){return`<div class="prft">${sign?`<div class="prsig"><div><i></i>ผู้จัดทำ<small>วันที่ ……/……/……</small></div><div><i></i>ผู้ตรวจสอบ<small>วันที่ ……/……/……</small></div><div><i></i>ผู้อนุมัติ<small>วันที่ ……/……/……</small></div></div>`:''}<div class="prfl">KITBEEZ · LIVE BOOKING SYSTEM · เอกสารนี้สร้างจากระบบอัตโนมัติ</div></div>`}
 function vPay(){
   let from,to,cols,title;const pm=S.payMode||'week',wk=pm==='week',H=C().hours;
   const spanCols=(f,t)=>{if(nDays(f,t)<=7)return[...Array(nDays(f,t))].map((_,i)=>{const d=add(f,i);return{from:d,to:d,l:`${DOW_S[dow(d)]}<br><small>${dnum(d)}</small>`}});const c=[];for(let w=monday(f);w<=t;w=add(w,7)){const a=w<f?f:w,b=add(w,6)>t?t:add(w,6);c.push({from:a,to:b,ws:w,l:`${dnum(a)}–${dnum(b)}`})}return c};
@@ -2318,6 +2343,9 @@ function vPay(){
   h+=`<div class="card shcard" style="margin-top:16px"><h3 style="margin:0 0 4px">${icb('hour','warn')}Slot ที่ไลฟ์ไม่ครบ ${shorts.length?`(${shorts.length})`:''}</h3><p class="muted" style="margin:0 0 10px;font-size:13px">ชั่วโมงในตารางด้านบนนับตามเวลาไลฟ์จริงแล้ว (เช่น 5:15 = 5 ชั่วโมง 15 นาที) · แตะรายการเพื่อแก้ไข</p>
    ${shorts.length?`<div class="shlist">${shorts.map(([k,v])=>{const p=parseSid(k);return`<button class="shrow" data-act="hrs" data-k="${k}">${nameChip(v.who)}<span class="sht">${ic('calendar',12)}${fmtD(p.d)} · ${C().slots[p.s]} · ห้อง ${p.r}</span><b class="shh">${fmtHM(hrsOf(v))}<small> / ${C().hours} ชม.</small></b><span class="shr">${actChip(v)}${ic('msg',12)}${esc(v.actReason||'ไม่ระบุเหตุผล')}${v.actBy?`<small> · แจ้งโดย ${esc(v.actBy)}</small>`:''}</span></button>`}).join('')}</div>`:`<div class="muted" style="font-size:13px;padding:6px 0">${ic('checkc',14)} ทุก Slot ในช่วงนี้ไลฟ์ครบ ${C().hours} ชั่วโมง</div>`}</div>`;
   S._pay={from,to,cols,ids,rows,title,wk,shorts,pe};
+  {const pmL={week:'รายสัปดาห์',month:'รายเดือน',round:'ตามรอบเปิดจอง',custom:'ช่วงที่เลือก'}[pm];
+   const meta=`<span>ช่วงวันที่ <b>${fmtRange(from,to)}</b> (${nDays(from,to)} วัน)</span><span>รูปแบบ <b>${pmL}</b></span><span>Live Streamer <b>${ids.length} คน</b></span><span>ชั่วโมงรวม <b>${fmtHM(sumH)}</b></span><span>Slot รวม <b>${sumN}</b></span>${pe!=='all'?`<span>พนักงาน <b>${pe==='fulltime'?'Full-Time':'Freelance'}</b></span>`:''}`;
+   h=printHead('รายงานสรุปชั่วโมงไลฟ์',`${title} · ชั่วโมงนับตามเวลาไลฟ์จริง (ชม.:นาที)`,meta)+h+printFoot(isBrand());}
   return h;
 }
 /* ---------------- REQUESTS ---------------- */
