@@ -1971,6 +1971,18 @@ main.enter{animation:softIn .28s ease-out both}
 .cell.x.dc{flex-direction:column;justify-content:center;gap:2px;padding:4px 3px;min-height:52px}.cell.x.dc .ct{align-items:center;text-align:center}.cell.x.dc .ct small{max-width:100%}
 .cell.e:not(.nb),.cell.x:not(.dc),.cell.e.nb{min-height:52px}
 .boards.one .cell.occ,.boards.one .cell.x.dc{flex-direction:row;justify-content:flex-start;padding:4px 10px;text-align:left}.boards.one .cell.occ .cn{flex:1;font-size:13px}.boards.one .cell.x.dc .ct{align-items:flex-start;text-align:left}
+
+.rmsum{margin-bottom:16px}.rmsh2{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.rmsh2 .muted{font-size:13px}
+.rsgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:12px}
+.rsc{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:linear-gradient(180deg,#fff,#f8fbff);display:flex;flex-direction:column;gap:6px}
+.rsc.best{border-color:#bcd3f7;box-shadow:0 6px 16px rgba(37,99,235,.08)}
+.rst{display:flex;align-items:center;justify-content:space-between}.rst .rm{font-style:normal;font-size:12.5px;font-weight:700;padding:3px 9px;border-radius:7px}
+.rst em{display:inline-flex;align-items:center;gap:3px;font-style:normal;font-size:10.5px;font-weight:700;color:#b45309;background:#fef3c7;border-radius:999px;padding:1px 7px}
+.rsc>b{font-size:22px;color:var(--navy);font-variant-numeric:tabular-nums}
+.rsbar{height:6px;border-radius:999px;background:#e8eff9;overflow:hidden}.rsbar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#60a5fa,#2563eb)}
+.rsc small{font-size:11.5px;color:var(--muted)}
+@media(max-width:600px){.rsgrid{grid-template-columns:1fr 1fr;gap:8px}.rsc{padding:10px}.rsc>b{font-size:18px}.rsc small{font-size:10.5px}}
+@media print{.rmsum{display:block!important;break-inside:avoid;box-shadow:none!important;border:1px solid #e2e8f0}}
 </style>
 </head>
 <body>
@@ -2671,7 +2683,13 @@ function vPay(){
     :pm==='round'?`<select class="inp paywin" data-paywin="1">${openWins().map(w=>`<option value="${w.id}" ${w.id===S.payWin?'selected':''}>${esc(w.label||'รอบเปิดจอง')} · ${fmtRange(w.from,w.to,false)}</option>`).join('')||'<option>ยังไม่มีรอบเปิดจอง</option>'}</select>`
     :`<button class="btn icon" data-act="payNav" data-n="-1">${ic('left',16)}</button><b style="min-width:150px;text-align:center">${title}</b><button class="btn icon" data-act="payNav" data-n="1">${ic('right',16)}</button>`}`)+(pm==='custom'||pm==='round'?`<div class="paypre">${pm==='custom'?rangePresets(['week','month','h1','h2','pmonth']).map(([k,l,f,t])=>`<button class="wchip ${from===f&&to===t?'on':''}" data-act="payPre" data-f="${f}" data-t="${t}">${l}</button>`).join(''):''}<span class="dcount">${ic('calendar',13)}${fmtRange(from,to)} · ${nDays(from,to)} วัน</span></div>`:'');
   if(isBrand())h+=`<div class="empf">${[['all','ทั้งหมด',allIds],['fulltime','Full-Time',grp('fulltime')],['freelance','Freelance',grp('freelance')],...(grp('none').length?[['none','ยังไม่ระบุ',grp('none')]]:[])].map(([k,l,a])=>`<button class="${pe===k?'on':''} ${k}" data-act="payEmp" data-e="${k}"><b>${l}</b><span>${fmtHM(gH(a))} · ${a.length} คน</span></button>`).join('')}</div>`;
+  let rsHtml='';if(isBrand()){const RS={};ROOMS().forEach(r=>RS[r]={h:0,n:0,p:new Set()});
+    Object.values(S.d.slots).forEach(v=>{if(v.date<from||v.date>to||!COUNTED.includes(v.status)||!RS[v.room])return;if(isTrial(v)?pe!=='all':(pe!=='all'&&!ids.includes(v.who)))return;const x=RS[v.room];x.h+=hrsOf(v);x.n++;if(!isTrial(v))x.p.add(v.who)});
+    const tot=Object.values(RS).reduce((a,x)=>a+x.h,0),mx=Math.max(1,...Object.values(RS).map(x=>x.h)),cap=nDays(from,to)*C().slots.length*C().hours;
+    rsHtml=`<div class="card rmsum"><div class="rmsh2"><h3 style="margin:0">${icb('door')}ชั่วโมงไลฟ์แยกตามห้อง</h3><span class="muted">${fmtRange(from,to)} · รวม ${fmtHM(tot)}</span></div>
+     <div class="rsgrid">${ROOMS().map(r=>{const x=RS[r],pc=tot?Math.round(x.h/tot*100):0;return`<div class="rsc ${x.h===mx&&x.h?'best':''}"><div class="rst"><span class="rm r${(r-1)%6}">ห้อง ${r}</span>${x.h===mx&&x.h?`<em>★ มากสุด</em>`:''}</div><b>${fmtHM(x.h)}</b><div class="rsbar"><i style="width:${Math.round(x.h/mx*100)}%"></i></div><small>${x.n} Slot · ${x.p.size} คน · ${pc}% ของทั้งหมด</small></div>`}).join('')}</div></div>`}
   h+=`<div class="stats"><div class="stat" style="--i:0">${icb('clock')}<div><span>ชั่วโมงไลฟ์รวม</span><b>${fmtHM(sumH)}</b></div></div><div class="stat" style="--i:1">${icb('ticket','violet')}<div><span>จำนวน Slot</span><b>${sumN} Slot</b></div></div>${isBrand()?`<div class="stat" style="--i:2">${icb('users','ok')}<div><span>จำนวนคน · เฉลี่ยต่อคน</span><b>${ids.length} คน · ${fmtHM(avg)}</b></div></div>`:''}${isBrand()&&trialH?`<div class="stat" style="--i:3">${icb('mic','warn')}<div><span>ทดลองไลฟ์ (ไม่นับรวม)</span><b>${trialH} ชม.</b></div></div>`:''}${pendIds.length?`<div class="stat" style="--i:4">${icb('hour','warn')}<div><span>รอยืนยัน (ยังไม่นับ)</span><b>${pendIds.reduce((a,id)=>a+pend[id],0)} ชม.</b></div></div>`:''}</div>
+  ${rsHtml}
   ${(()=>{const mx=Math.max(1,...ids.map(id=>rows[id].tot)),cmx=Math.max(1,...ids.flatMap(id=>rows[id].cols));
     const hd=c=>{if(c.from===c.to)return`<span class="ph"><small>${DOW_S[dow(c.from)]}</small><b>${dnum(c.from)} ${MON_S[D(c.from).getUTCMonth()]}</b></span>`;return`<span class="ph"><small>${nDays(c.from,c.to)} วัน</small><b>${dnum(c.from)}${c.from.slice(0,7)!==c.to.slice(0,7)?' '+MON_S[D(c.from).getUTCMonth()]:''}–${dnum(c.to)} ${MON_S[D(c.to).getUTCMonth()]}</b></span>`};
     return`<div class="card scroll ptcard"><table class="tbl ptbl"><thead><tr><th class="pn">Live Streamer <small>${ids.length} คน</small></th>${cols.map(c=>`<th>${hd(c)}</th>`).join('')}<th class="ptot">รวม<small>ชม.:นาที</small></th><th class="pslot">Slot</th></tr></thead><tbody>
