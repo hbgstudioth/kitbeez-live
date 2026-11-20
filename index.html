@@ -1711,6 +1711,22 @@ main.enter{animation:softIn .28s ease-out both}
 }
 @media(prefers-reduced-motion:reduce){.sidefx{display:none!important}}
 @media print{.sidefx{display:none!important}}
+
+/* ไม่อนุมัติ: เครื่องหมาย ✕ แบบตราประทับ ค่อยๆ ปรากฏแล้วจาง */
+.stat:has(.icb[data-i=x])::before,.stat:has(.icb[data-i=x])::after{width:30px;height:3px;right:26px;top:50%;margin-top:-2px;border:0;border-radius:3px;background:var(--fx);animation:fxStamp 4s ease-in-out infinite}
+.stat:has(.icb[data-i=x])::before{transform:rotate(45deg)}.stat:has(.icb[data-i=x])::after{bottom:auto;transform:rotate(-45deg);animation-name:fxStamp2}
+@keyframes fxStamp{0%,100%{opacity:.25;transform:rotate(45deg) scale(.8)}45%{opacity:1;transform:rotate(45deg) scale(1.15)}}
+@keyframes fxStamp2{0%,100%{opacity:.25;transform:rotate(-45deg) scale(.8)}45%{opacity:1;transform:rotate(-45deg) scale(1.15)}}
+/* ถอนคำขอ: ลูกศรวงกลมหมุนย้อนกลับช้าๆ */
+.stat:has(.icb[data-i=history])::before{width:44px;height:44px;right:16px;top:50%;margin-top:-22px;border:2.5px solid var(--fx);border-right-color:transparent;border-radius:50%;animation:fxRewind 6s linear infinite}
+.stat:has(.icb[data-i=history])::after{width:0;height:0;right:56px;bottom:auto;top:50%;margin-top:-16px;border-radius:0;background:none;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:8px solid var(--fx);animation:fxNudgeL 6s ease-in-out infinite}
+@keyframes fxRewind{to{transform:rotate(-360deg)}}
+@keyframes fxNudgeL{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-3px);opacity:1}}
+/* ทดลองไลฟ์ (ไมค์): คลื่นเสียงกระจายออก */
+.stat:has(.icb[data-i=mic])::before,.stat:has(.icb[data-i=mic])::after{width:26px;height:26px;right:30px;top:50%;margin-top:-13px;border:2px solid var(--fx);border-left-color:transparent;border-bottom-color:transparent;border-radius:50%;transform:rotate(45deg);animation:fxWave 2.6s ease-out infinite}
+.stat:has(.icb[data-i=mic])::after{bottom:auto;animation-delay:-1.3s}
+@keyframes fxWave{0%{transform:rotate(45deg) scale(.5);opacity:0}30%{opacity:1}100%{transform:rotate(45deg) scale(1.9);opacity:0}}
+@media(max-width:860px){.stat:has(.icb[data-i=x])::before,.stat:has(.icb[data-i=x])::after{right:12px;top:22px;width:20px}.stat:has(.icb[data-i=history])::before{width:30px;height:30px;right:10px;top:22px;margin-top:-15px}.stat:has(.icb[data-i=history])::after{right:37px;top:12px;margin-top:0}.stat:has(.icb[data-i=mic])::before,.stat:has(.icb[data-i=mic])::after{right:14px;top:20px}}
 </style>
 </head>
 <body>
