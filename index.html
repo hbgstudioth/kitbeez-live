@@ -1437,6 +1437,31 @@ main.enter{animation:softIn .28s ease-out both}
 .stat:hover{border-color:color-mix(in srgb,var(--ac) 35%,#fff)}
 @media(max-width:860px){.stat>.icb{width:36px;height:36px;flex:0 0 36px;border-radius:11px}.stat>.icb svg{width:18px;height:18px}.stat b{font-size:18px}.stat{padding:11px 12px;gap:10px}}
 @media(prefers-reduced-motion:reduce){.stat::before,.stat::after{animation:none}}
+
+/* ===== การ์ดวันไลฟ์และห้อง (ดีไซน์ใหม่) ===== */
+.rmhd{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.rmhd .muted{font-size:13px}
+.rmtop{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-top:14px}
+.rmt{border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:linear-gradient(180deg,#fbfdff,#f6f9fe);display:flex;flex-direction:column;gap:8px}
+.rmt .lb{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--muted)}.rmt .lb em{margin-left:auto;font-style:normal;font-size:11.5px;color:#15803d;background:#e7f8ee;border-radius:999px;padding:1px 8px}
+.dseg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;background:#eef3fa;border-radius:11px;padding:3px}
+.dseg button{border:0;background:none;border-radius:8px;padding:7px 0;font:inherit;font-size:13px;font-weight:700;color:#8a99b0;cursor:pointer;transition:background-color .2s,color .2s,box-shadow .2s}
+.dseg button.on{background:#fff;color:#15803d;box-shadow:0 1px 4px rgba(16,60,140,.12),inset 0 -2px 0 #22c55e}
+.dseg button:not(.on):hover{color:var(--navy)}
+.step{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:11px;padding:3px}
+.step button{width:34px;height:32px;border:0;border-radius:8px;background:#eef4ff;color:var(--blue);font-size:18px;font-weight:700;cursor:pointer;transition:background-color .15s}.step button:hover{background:#dce9ff}.step button:disabled{opacity:.35;cursor:not-allowed}
+.step b{font-size:20px;color:var(--navy);font-variant-numeric:tabular-nums;display:flex;align-items:baseline;gap:4px}.step b small{font-size:12px;color:var(--muted);font-weight:500}
+.rmsh{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;margin:18px 0 8px}.rmsh>div{flex:1;min-width:200px}.rmsh b{display:block;font-size:14px;color:var(--navy)}.rmsh small{font-size:12px;color:var(--muted)}
+.rmlg{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted)}.rmlg i{width:9px;height:9px;border-radius:50%;margin-left:6px}.rmlg i.o{background:#22c55e}.rmlg i.s{background:#f59e0b}.rmlg i.a{background:#ef4444}
+.rmx{display:grid;grid-template-columns:84px repeat(var(--n),minmax(0,1fr));gap:5px;align-items:center;background:#f7f9fd;border:1px solid var(--line);border-radius:14px;padding:8px}
+.rmx .rh{text-align:center;font-size:12px;font-weight:700;color:var(--navy);padding:2px 0 4px}.rmx .dl{font-size:13px;font-weight:600;color:var(--navy);padding-left:6px}
+.rmc{display:flex;align-items:center;justify-content:center;gap:6px;height:36px;border:1px solid transparent;border-radius:9px;font:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:background-color .2s,border-color .2s,transform .15s}
+.rmc i{width:8px;height:8px;border-radius:50%;flex:none}
+.rmc.o{background:#fff;border-color:#dcefe3;color:#15803d}.rmc.o i{background:#22c55e;box-shadow:0 0 0 3px #dcfce7;animation:lampG 2.6s ease-in-out infinite}
+.rmc.s{background:#fff8e6;border-color:#f8d98a;color:#9a6200}.rmc.s i{background:#f59e0b}
+.rmc.a{background:#fff1f1;border-color:#f6c4c6;color:#b42318}.rmc.a i{background:#ef4444}
+.rmc:hover{transform:translateY(-1px);border-color:var(--blue)}
+.rmcr{display:flex;align-items:center;gap:12px;margin-top:14px!important;padding:12px 14px!important}.rmcr .icb{width:38px;height:38px;border-radius:11px}
+@media(max-width:860px){.rmtop{grid-template-columns:1fr 1fr}.rmt.wide{grid-column:1/-1}.rmx{grid-template-columns:44px repeat(var(--n),minmax(0,1fr));gap:4px;padding:6px}.rmx .dl{font-size:12px;padding-left:2px}.rmc{height:34px;font-size:0;gap:0}.rmc i{width:10px;height:10px}.rmx .rh{font-size:11px}.rmcr{flex-wrap:wrap}.rmcr .btn{width:100%}}
 </style>
 </head>
 <body>
@@ -2247,13 +2272,17 @@ function vSet(){
     ${S.store.demo?`<button class="btn" data-act="resetDemo" style="color:var(--bad)">${ic('history',16)}ล้างข้อมูลโหมดทดลอง</button>`:''}
     <button class="btn" data-act="guide">${ic('book',16)}วิธีติดตั้ง / Login Gmail</button></div></div>`:''}</div>`;
   default:return`<div class="setsec">
-   <div class="card"><h3>${icb('calendar')}วันไลฟ์และห้อง</h3><b class="muted" style="font-size:13px">วันที่มีไลฟ์</b>
-    <div class="daychips" style="margin:8px 0 14px">${[1,2,3,4,5,6,0].map(d=>`<button class="${c.openDays.includes(d)?'on':''}" data-act="toggleDay" data-d="${d}">${c.openDays.includes(d)?ic('check',13):''}${DOW_L[d]}</button>`).join('')}</div>
-    <label class="perm">${icb('door')}<div><b>จำนวนห้องไลฟ์</b></div><input class="inp" style="width:80px;text-align:center" type="number" min="1" max="12" value="${c.rooms}" data-cfgnum="rooms"></label>
-    <label class="perm">${icb('clock')}<div><b>ชั่วโมงต่อรอบ</b><small>ใช้คำนวณชั่วโมงไลฟ์</small></div><input class="inp" style="width:80px;text-align:center" type="number" min="0.5" step="0.5" value="${c.hours}" data-cfgnum="hours"></label>
-    <b class="muted" style="font-size:13px;display:block;margin-top:14px">ห้องปิดประจำทุกสัปดาห์ (ถาวร) · แตะห้องเพื่อเลือก ปิดทั้งวัน หรือ ปิดบางรอบ</b>
-    ${c.openDays.slice().sort((a,b)=>((a+6)%7)-((b+6)%7)).map(d=>`<div style="display:flex;gap:8px;align-items:center;margin-top:8px"><span style="width:70px">${DOW_L[d]}</span><div class="daychips">${ROOMS().map(r=>roomChip(d,r)).join('')}</div></div>`).join('')}
-    <div class="crbox"><div class="grow"><b>${ic('lock',15)}ปิดห้องชั่วคราวตามวันที่</b><small>เช่น ปิดห้อง 2 วันที่ 1–5 ธ.ค. · พ้นวันแล้วกลับมาเปิดให้จองเอง</small></div><button class="btn bad sm" data-act="closeRange">${ic('lock',14)}ปิดห้องตามวันที่</button></div>
+   <div class="card rmcard"><div class="rmhd"><h3 style="margin:0">${icb('calendar')}วันไลฟ์และห้อง</h3><span class="muted">ตั้งค่าหลักของตารางไลฟ์</span></div>
+    <div class="rmtop">
+     <div class="rmt wide"><span class="lb">${ic('calendar',14)}วันที่มีไลฟ์<em>${c.openDays.length}/7 วัน</em></span><div class="dseg">${[1,2,3,4,5,6,0].map(d=>`<button class="${c.openDays.includes(d)?'on':''}" data-act="toggleDay" data-d="${d}" title="${c.openDays.includes(d)?'ปิด':'เปิด'}วัน${DOW_L[d]}">${DOW_S[d]}</button>`).join('')}</div></div>
+     <div class="rmt"><span class="lb">${ic('door',14)}จำนวนห้องไลฟ์</span><div class="step"><button data-act="cfgStep" data-k="rooms" data-n="-1" ${c.rooms<=1?'disabled':''} aria-label="ลด">−</button><b>${c.rooms}<small>ห้อง</small></b><button data-act="cfgStep" data-k="rooms" data-n="1" ${c.rooms>=12?'disabled':''} aria-label="เพิ่ม">+</button></div></div>
+     <div class="rmt"><span class="lb">${ic('clock',14)}ชั่วโมงต่อรอบ</span><div class="step"><button data-act="cfgStep" data-k="hours" data-n="-1" ${c.hours<=0.5?'disabled':''} aria-label="ลด">−</button><b>${c.hours}<small>ชม.</small></b><button data-act="cfgStep" data-k="hours" data-n="1" aria-label="เพิ่ม">+</button></div></div>
+    </div>
+    <div class="rmsh"><div><b>ห้องปิดประจำทุกสัปดาห์</b><small>แตะช่องเพื่อปิดทั้งวัน หรือปิดบางรอบ · ถาวรจนกว่าจะเปิดคืน</small></div><span class="rmlg"><i class="o"></i>เปิด<i class="s"></i>ปิดบางรอบ<i class="a"></i>ปิดทั้งวัน</span></div>
+    <div class="rmx" style="--n:${c.rooms}"><span></span>${ROOMS().map(r=>`<span class="rh">ห้อง ${r}</span>`).join('')}
+     ${c.openDays.slice().sort((a,b)=>((a+6)%7)-((b+6)%7)).map(d=>`<span class="dl">${DOW_L[d]}</span>${ROOMS().map(r=>{const x=closedOf2(d,r);return`<button class="rmc ${x==='all'?'a':x?'s':'o'}" data-act="roomClose" data-d="${d}" data-r="${r}" title="วัน${DOW_L[d]} · ห้อง ${r}"><i></i><span>${x==='all'?'ปิดทั้งวัน':x?`ปิด ${x.length} รอบ`:'เปิด'}</span></button>`}).join('')}`).join('')}
+    </div>
+    <div class="crbox rmcr"><span class="icb bad">${ic('lock',16)}</span><div class="grow"><b>ปิดห้องชั่วคราวตามวันที่</b><small>เช่น ปิดห้อง 2 วันที่ 1–5 ธ.ค. · พ้นวันแล้วเปิดให้จองเอง</small></div><button class="btn bad sm" data-act="closeRange">${ic('lock',14)}ปิดห้องตามวันที่</button></div>
    </div>
    ${closuresCard()}</div>`;
   }})();
@@ -2954,6 +2983,8 @@ const acts={
   openDay:b=>reopenDlg(Object.keys(S.d.closures||{}).filter(k=>k.startsWith(b.dataset.d+'_')).sort()),
   reopenOne:b=>reopenDlg([b.dataset.k]),
   closuresAll:()=>closuresDlg(),
+  cfgStep:b=>{const k=b.dataset.k,n=+b.dataset.n,o=C()[k],v=k==='rooms'?Math.max(1,Math.min(12,o+n)):Math.max(0.5,Math.round((o+n*0.5)*2)/2);if(v===o)return;
+    saveCfg({[k]:v},`${k==='rooms'?'ตั้งจำนวนห้องไลฟ์':'ตั้งชั่วโมงต่อรอบ'}: ${o} → ${v}${k==='rooms'?' ห้อง':' ชม.'}`)},
   roomFDlg:()=>roomFDlg(),
   roomFClear:(b,e)=>{e?.stopPropagation?.();S.roomF=null;render()},
   focusDlg:()=>focusDlg(),
