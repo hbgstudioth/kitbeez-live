@@ -1759,6 +1759,32 @@ main.enter{animation:softIn .28s ease-out both}
 .login.lux .lfoot{position:relative;z-index:1;color:rgba(242,222,170,.75);letter-spacing:3px}.login.lux .lfoot span{color:rgba(255,255,255,.4)}
 .login.lux .aic.person{background:linear-gradient(145deg,#0d1733,#1b2b5c)!important;color:var(--gold2)!important}.login.lux .acc.on b{color:var(--ink)}
 @media(prefers-reduced-motion:reduce){.login.lux .lxg,.login.lux .gbtn::after{animation:none}}
+
+/* ===== Login layout v2 (editorial luxury) ===== */
+.login.lx2{display:grid;grid-template-columns:1.25fr minmax(380px,440px);gap:0;align-items:stretch;padding:0;min-height:100vh;place-items:stretch}
+.lx2 .lxhero{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:space-between;padding:48px 64px;color:#f6f1e4}
+.lx2 .lxtop{display:flex;align-items:center;gap:12px}.lx2 .lxtop img{height:34px;filter:brightness(0) invert(1)}.lx2 .lxtop .lv{display:inline-flex;align-items:center;gap:5px;background:#e11d48;color:#fff;font-size:11px;font-weight:800;letter-spacing:1.5px;border-radius:7px;padding:3px 8px}.lx2 .lxtop .lv::before{content:'';width:6px;height:6px;border-radius:50%;background:#fff;animation:lampG 1.6s ease-in-out infinite}
+.lx2 .eyb{display:block;font-size:11.5px;letter-spacing:5px;color:var(--gold);font-weight:600}
+.lx2 .lxmid h1{margin:22px 0 0;font-size:clamp(46px,6.2vw,92px);line-height:.98;font-weight:200;letter-spacing:6px;color:#fff}
+.lx2 .lxmid h1 em{font-style:normal;font-weight:700;background:linear-gradient(100deg,var(--gold2),var(--gold) 50%,#a8843f);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lx2 .lxmid .gl{display:block;width:90px;height:2px;margin-top:30px;background:linear-gradient(90deg,var(--gold),transparent)}
+.lx2 .lxbot{display:flex;gap:24px;font-size:10.5px;letter-spacing:3px;color:rgba(255,255,255,.4)}
+.lx2 .lxcard{position:relative;z-index:1;margin:24px;align-self:center;background:rgba(255,255,255,.97);border-radius:26px;padding:42px 38px;display:flex;flex-direction:column;gap:14px;box-shadow:0 40px 100px rgba(0,0,0,.5),0 0 0 1px rgba(212,180,106,.35)}
+.lx2 .lxcard .eyb{color:#a8843f;letter-spacing:4px}
+.lx2 .lxcard h2{margin:-6px 0 6px;font-size:30px;font-weight:700;color:var(--ink);letter-spacing:.3px}
+.lxseg{position:relative;display:grid;grid-template-columns:1fr 1fr;background:#f1f3f8;border-radius:14px;padding:4px}
+.lxseg i{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:11px;background:var(--ink);box-shadow:0 6px 16px rgba(10,17,36,.25),inset 0 0 0 1px rgba(212,180,106,.5);transform:translateX(calc(var(--x)*100%));transition:transform .35s var(--ease)}
+.lxseg button{position:relative;z-index:1;border:0;background:none;font:inherit;font-size:14px;font-weight:600;color:#64748b;padding:11px 0;cursor:pointer;transition:color .25s}.lxseg button.on{color:var(--gold2)}
+.lxf{display:flex;flex-direction:column;gap:2px;border-bottom:1.5px solid #d6dce8;padding:6px 2px 6px;transition:border-color .2s}
+.lxf span{font-size:11.5px;font-weight:600;letter-spacing:.5px;color:#64748b}.lxf input{border:0;outline:0;font:inherit;font-size:16px;padding:6px 0;background:transparent;color:var(--ink)}
+.lxf:focus-within{border-bottom-color:var(--gold)}.lxf.bad{border-bottom-color:#e11d48}
+.lx2 .adminchips{display:flex;gap:6px;flex-wrap:wrap;min-height:0}.lx2 .adminchips:empty{display:none}.lx2 .adminchips button{border:1px solid #e3e7ef;background:#fff;border-radius:999px;padding:4px 11px;font:inherit;font-size:12px;color:#475569;cursor:pointer}.lx2 .adminchips button:hover{border-color:var(--gold)}
+.lx2 .gbtn{height:52px;border-radius:14px;justify-content:space-between;padding:0 18px 0 22px;font-size:15.5px}.lx2 .gbtn .ar{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:rgba(242,222,170,.16);color:var(--gold2)}
+.lx2 .ggbtn{height:50px;border-radius:14px;font-size:14.5px}
+.lx2 .lnote{min-height:16px;text-align:center;font-size:12px;color:#94a3b8}
+.lxhint{margin:0;display:flex;align-items:center;justify-content:center;gap:6px;font-size:11.5px;color:#94a3b8;text-align:center}.lxhint svg{color:#a8843f}
+.lx2.first .lxhero{animation:fadeUp .7s var(--ease) both}.lx2.first .lxcard{animation:fadeUp .7s .1s var(--ease) both}
+@media(max-width:900px){.login.lx2{grid-template-columns:minmax(0,1fr);align-content:start;overflow-x:hidden}.lx2 .lxcard,.lx2 .lxhero{min-width:0}.lx2 .lxhero{padding:28px 24px 8px;gap:18px}.lx2 .lxmid h1{font-size:30px;letter-spacing:3px;margin-top:10px;line-height:1.15}.lx2 .lxmid h1 br{display:none}.lx2 .lxmid .gl{margin-top:14px}.lx2 .lxbot{display:none}.lx2 .lxcard{margin:12px 14px 24px;padding:28px 22px}}
 </style>
 </head>
 <body>
@@ -2174,35 +2200,27 @@ function render(){
 
 /* ---------------- LOGIN ---------------- */
 function vLogin(){
-  const demo=S.store.demo,t=S.loginType||'streamer',pk=S.loginPick&&S.d.members[S.loginPick]?S.loginPick:null,pc=pk?colOf(pk):null;
+  const demo=S.store.demo,t=S.loginType||'streamer';
   const lfirst=!S._loginShown;S._loginShown=true;
-  $('#app').innerHTML=`<div class="login lux"><i class="lxg g1"></i><i class="lxg g2"></i><i class="lxg g3"></i><div class="lwrap ${lfirst?'first':''}">
-   <div class="lside"><div class="logo-card"><img src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv">LIVE</span></div><h1 class="lsys">LIVE BOOKING SYSTEM</h1>
-    <ul class="lsteps">
-     <li style="--i:0">${icb('users')}<div><b>เลือกประเภทบัญชี</b><small>แบรนด์ หรือ Live Streamer</small></div></li>
-     <li style="--i:1">${icb('mail')}<div><b>ใส่อีเมลของคุณ</b><small>อีเมลที่แบรนด์ลงทะเบียนไว้ให้</small></div></li>
-     <li style="--i:2">${icb('tap')}<div><b>กดเข้าสู่ระบบด้วย Google</b><small>ใช้ Gmail ที่ Login ไว้ในเครื่องนี้</small></div></li>
-    </ul>
-    <div class="lbadges"><span>${ic('user',14)}ไม่ต้องสมัครสมาชิก</span><span>${ic('key',14)}ไม่ต้องตั้งรหัสผ่าน</span></div>
-   </div>
-   <form class="lform" id="loginForm" autocomplete="on">
-    <h2>${ic('login',24)}เข้าสู่ระบบ</h2><p class="muted">เลือกประเภทบัญชีของคุณ</p>
+  const ev=S.lemail??(demo?(t==='brand'?'brand@demo.live':''):''),ok=okEmail(ev);
+  const chips=demo?(t==='brand'?Object.entries(S.d.access).filter(([,a])=>a.role==='brand'&&!a.memberId&&a.active!==false).map(([e,a])=>[e,a.name||e]):Object.entries(S.d.access).filter(([,a])=>a.memberId&&a.active!==false&&S.d.members[a.memberId]).slice(0,6).map(([e,a])=>[e,S.d.members[a.memberId].name])):[];
+  $('#app').innerHTML=`<div class="login lux lx2 ${lfirst?'first':''}"><i class="lxg g1"></i><i class="lxg g2"></i><i class="lxg g3"></i>
+   <section class="lxhero"><div class="lxtop"><img src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv">LIVE</span></div>
+    <div class="lxmid"><span class="eyb">KITBEEZ&nbsp;·&nbsp;LIVE COMMERCE</span><h1>LIVE <br>BOOKING <br><em>SYSTEM</em></h1><i class="gl"></i></div>
+    <div class="lxbot"><span>SOFTWARE ENGINEERING &amp; DEVELOPMENT</span><span>HS DEVELOPMENT</span></div></section>
+   <form class="lxcard" id="loginForm" autocomplete="on">
+    <span class="eyb">WELCOME</span><h2>เข้าสู่ระบบ</h2>
     ${inApp()?`<div class="warnbox">${ic('alert',18)}<div>คุณกำลังเปิดในแอป (เช่น LINE) ซึ่ง Google ไม่อนุญาตให้ Login<br><button type="button" class="link" data-act="openExt">เปิดใน Chrome / Safari</button></div></div>`:''}
-    <div class="acct">
-     <button type="button" class="acc ${t==='streamer'?'on':''}" data-act="loginType" data-t="streamer"><span class="ck">${ic('check',13)}</span><span class="aic person"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.9-3.9 3.9-6 7.5-6s6.6 2.1 7.5 6"/></svg></span><b>Live Streamer</b><small>จองคิว · ดูตาราง · ติดตามคำขอ</small></button>
-     <button type="button" class="acc ${t==='brand'?'on':''}" data-act="loginType" data-t="brand"><span class="ck">${ic('check',13)}</span><span class="aic logo"><img src="${KIT_BADGE}" alt="kitBEEZ"></span><b>แบรนด์</b><small>จัดการตาราง · อนุมัติ · ตั้งค่า</small></button>
-    </div>
-    ${(()=>{const ev=S.lemail??(demo?(t==='brand'?'brand@demo.live':''):''),ok=okEmail(ev);
-     const chips=demo?(t==='brand'?Object.entries(S.d.access).filter(([,a])=>a.role==='brand'&&!a.memberId&&a.active!==false).map(([e,a])=>[e,a.name||e]):Object.entries(S.d.access).filter(([,a])=>a.memberId&&a.active!==false&&S.d.members[a.memberId]).slice(0,6).map(([e,a])=>[e,S.d.members[a.memberId].name])):[];
-     return`<span class="lbl">${t==='brand'?'อีเมลของแบรนด์':'อีเมลของคุณ'}</span><label class="field ${ev&&!ok?'bad':''}">${ic('mail',18)}<input id="lemail" type="email" inputmode="email" autocomplete="email" placeholder="name@gmail.com หรืออีเมลบริษัท" value="${esc(ev)}"></label>
-     <div class="adminchips">${chips.length?chips.map(([e,n])=>`<button type="button" data-act="fillEmail" data-e="${esc(e)}">${ic(t==='brand'?'tag':'user',12)}${esc(n)}</button>`).join('')+'<small class="muted" style="align-self:center">(ทดลอง)</small>':''}</div>
-     <div class="lbtns"><button class="gbtn" type="submit" id="lgo" ${ok?'':'disabled'}>${ic('login',18)}เข้าสู่ระบบ</button>
-     <div class="lor"><span>หรือ</span></div>
-     <button type="button" class="ggbtn" data-act="loginGoogle"><span class="g">${GOOGLE}</span>Login ด้วย Google</button>
-     <small class="lnote" id="lnote">${ok?'':'กรอกอีเมลให้ถูกต้องก่อน แล้วกด “เข้าสู่ระบบ”'}</small></div>`})()}
-    <p class="hint">${ic('shield',15)}ไม่ต้องสมัครสมาชิก ไม่ต้องตั้งรหัสผ่าน · ยืนยันตัวตนด้วย Gmail ที่ Login ไว้ในเครื่องนี้ (ระบบไม่เก็บรหัสผ่าน)</p>
-    ${demo?`<p class="hint">${ic('flask',15)}<span>โหมดทดลอง: กดเข้าสู่ระบบได้ทันทีโดยไม่ผ่าน Google · <button type="button" class="link" data-act="guide">วิธีเปิดใช้ Login Gmail จริง</button></span></p>`:''}
-   </form></div><div class="lfoot">LIVE BOOKING SYSTEM<span>SOFTWARE ENGINEERING &amp; DEVELOPMENT</span></div></div>`;
+    <div class="lxseg" style="--x:${t==='brand'?1:0}"><i></i><button type="button" class="${t==='streamer'?'on':''}" data-act="loginType" data-t="streamer">Live Streamer</button><button type="button" class="${t==='brand'?'on':''}" data-act="loginType" data-t="brand">แบรนด์</button></div>
+    <label class="lxf ${ev&&!ok?'bad':''}"><span>${t==='brand'?'อีเมลของแบรนด์':'อีเมลของคุณ'}</span><input id="lemail" type="email" inputmode="email" autocomplete="email" placeholder="name@gmail.com" value="${esc(ev)}"></label>
+    <div class="adminchips">${chips.length?chips.map(([e,n])=>`<button type="button" data-act="fillEmail" data-e="${esc(e)}">${esc(n)}</button>`).join('')+'<small class="muted">(ทดลอง)</small>':''}</div>
+    <button class="gbtn" type="submit" id="lgo" ${ok?'':'disabled'}>เข้าสู่ระบบ<span class="ar">${ic('right',18)}</span></button>
+    <div class="lor"><span>หรือ</span></div>
+    <button type="button" class="ggbtn" data-act="loginGoogle"><span class="g">${GOOGLE}</span>ดำเนินการต่อด้วย Google</button>
+    <small class="lnote" id="lnote">${ok?'':'กรอกอีเมลให้ถูกต้องก่อน แล้วกด “เข้าสู่ระบบ”'}</small>
+    <p class="lxhint">${ic('shield',13)}ไม่ต้องสมัครสมาชิก · ไม่ต้องตั้งรหัสผ่าน · ยืนยันด้วย Gmail</p>
+    ${demo?`<p class="lxhint">${ic('flask',13)}โหมดทดลอง · <button type="button" class="link" data-act="guide">วิธีเปิดใช้ Login Gmail จริง</button></p>`:''}
+   </form></div>`;
   renderCart();
 }
 function nameGrid(list,opt={}){
