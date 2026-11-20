@@ -1820,7 +1820,7 @@ main.enter{animation:softIn .28s ease-out both}
 @media(prefers-reduced-motion:reduce){.lv .eq i{animation:none;height:70%}}
 
 /* popup ยืนยันปิดวัน */
-.cfwarn{display:flex;gap:10px;align-items:flex-start;background:#fff4f2;border:1px solid #fbd0cb;color:#9f1d14;border-radius:12px;padding:11px 13px;margin-top:12px}.cfwarn b{display:block}.cfwarn small{display:block;color:#7a2a24;font-size:12.5px;margin-top:2px}
+.cfwarn{display:flex;gap:10px;align-items:flex-start;background:#fff4f2;border:1px solid #fbd0cb;color:#9f1d14;border-radius:12px;padding:11px 13px;margin-top:12px}.cfwarn>div>b{display:block}.cfwarn small{display:block;color:#7a2a24;font-size:12.5px;margin-top:2px}
 .cfok{display:flex;gap:8px;align-items:center;background:#effbf3;color:#15803d;border-radius:12px;padding:10px 13px;margin-top:12px;font-weight:600;font-size:13.5px}
 .cflist{list-style:none;padding:0;margin:12px 0 4px;display:grid;gap:6px}.cflist li{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
 /* popup ห้องปิดประจำ (ใหม่) */
@@ -1844,6 +1844,17 @@ main.enter{animation:softIn .28s ease-out both}
 .rcimp p.bad{display:flex;gap:6px;align-items:center;margin:8px 0 0;font-size:12.5px;color:#b42318}
 .rctip{display:flex;gap:8px;align-items:center;margin-top:14px;font-size:12.5px;color:var(--muted)}
 @media(max-width:600px){.rcslots{grid-template-columns:1fr}}
+
+/* ค่าหลักแบบล็อก */
+.rmt .lb .lk{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:6px;background:#eef2f8;color:#94a3b8;margin-left:auto}
+.lkv{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff;border:1px dashed #d5deea;border-radius:11px;padding:6px 6px 6px 14px}
+.lkv b{font-size:22px;color:var(--navy);display:flex;align-items:baseline;gap:5px;font-variant-numeric:tabular-nums}.lkv b small{font-size:12px;color:var(--muted);font-weight:500}
+.cfstep{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:16px}
+.cfstep .old{display:flex;flex-direction:column;align-items:center;padding:8px 14px;border-radius:12px;background:#f1f5f9;color:#64748b}.cfstep .old small{font-size:11px}.cfstep .old b{font-size:22px;text-decoration:line-through;text-decoration-color:#94a3b8}.cfstep .old em{font-style:normal;font-size:11px}
+.cfstep .arr{color:#94a3b8;display:inline-flex}
+.step.big{padding:4px;gap:6px}.step.big button{width:42px;height:42px;font-size:20px}.step.big b{font-size:26px;min-width:80px;justify-content:center}
+.cfack{display:flex;gap:10px;align-items:flex-start;margin-top:12px;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;cursor:pointer;font-size:13.5px;color:var(--navy)}.cfack input{margin-top:3px;width:17px;height:17px;accent-color:#2563eb;flex:none}
+.cfack:has(input:checked){border-color:#2563eb;background:#f4f8ff}
 </style>
 </head>
 <body>
@@ -2672,8 +2683,8 @@ function vSet(){
    <div class="card rmcard"><div class="rmhd"><h3 style="margin:0">${icb('calendar')}วันไลฟ์และห้อง</h3><span class="muted">ตั้งค่าหลักของตารางไลฟ์</span></div>
     <div class="rmtop">
      <div class="rmt wide"><span class="lb">${ic('calendar',14)}วันที่มีไลฟ์<em>${c.openDays.length}/7 วัน</em></span><div class="dseg">${[1,2,3,4,5,6,0].map(d=>`<button class="${c.openDays.includes(d)?'on':''}" data-act="toggleDay" data-d="${d}" title="${c.openDays.includes(d)?'ปิด':'เปิด'}วัน${DOW_L[d]}">${DOW_S[d]}</button>`).join('')}</div></div>
-     <div class="rmt"><span class="lb">${ic('door',14)}จำนวนห้องไลฟ์</span><div class="step"><button data-act="cfgStep" data-k="rooms" data-n="-1" ${c.rooms<=1?'disabled':''} aria-label="ลด">−</button><b>${c.rooms}<small>ห้อง</small></b><button data-act="cfgStep" data-k="rooms" data-n="1" ${c.rooms>=12?'disabled':''} aria-label="เพิ่ม">+</button></div></div>
-     <div class="rmt"><span class="lb">${ic('clock',14)}ชั่วโมงต่อรอบ</span><div class="step"><button data-act="cfgStep" data-k="hours" data-n="-1" ${c.hours<=0.5?'disabled':''} aria-label="ลด">−</button><b>${c.hours}<small>ชม.</small></b><button data-act="cfgStep" data-k="hours" data-n="1" aria-label="เพิ่ม">+</button></div></div>
+     <div class="rmt"><span class="lb">${ic('door',14)}จำนวนห้องไลฟ์<i class="lk" title="ล็อกไว้ ป้องกันการกดโดน">${ic('lock',11)}</i></span><div class="lkv"><b>${c.rooms}<small>ห้อง</small></b><button class="btn sm" data-act="cfgEdit" data-k="rooms">${ic('edit',13)}แก้ไข</button></div></div>
+     <div class="rmt"><span class="lb">${ic('clock',14)}ชั่วโมงต่อรอบ<i class="lk" title="ล็อกไว้ ป้องกันการกดโดน">${ic('lock',11)}</i></span><div class="lkv"><b>${c.hours}<small>ชม.</small></b><button class="btn sm" data-act="cfgEdit" data-k="hours">${ic('edit',13)}แก้ไข</button></div></div>
     </div>
     <div class="rmsh"><div><b>ห้องปิดประจำทุกสัปดาห์</b><small>แตะช่องเพื่อปิดทั้งวัน หรือปิดบางรอบ · ถาวรจนกว่าจะเปิดคืน</small></div><span class="rmlg"><i class="o"></i>เปิด<i class="s"></i>ปิดบางรอบ<i class="a"></i>ปิดทั้งวัน</span></div>
     <div class="rmx" style="--n:${c.rooms}"><span></span>${ROOMS().map(r=>`<span class="rh">ห้อง ${r}</span>`).join('')}
@@ -2767,6 +2778,23 @@ function orphanCard(){
   return`<div class="card orph" style="margin-top:16px"><h3 style="margin:0 0 4px">${icb('alert','warn')}อีเมลที่ไม่ได้ผูกกับใคร (${L.length})</h3><p class="muted" style="margin:0 0 10px;font-size:13px">รายชื่อที่อีเมลเหล่านี้ผูกไว้ถูกลบไปแล้ว จึงเข้าระบบไม่ได้ · ลบสิทธิ์ทิ้ง หรือผูกกับ Live Streamer ที่ยังไม่มีอีเมล</p>
    ${L.map(([e,a])=>`<div class="orow"><span class="pav" style="background:#fee2e2;color:#b42318">${esc(e[0].toUpperCase())}</span><div class="oi"><b>${esc(e)}</b><small>เคยผูกกับ: ${S.d.members[a.memberId]?esc(S.d.members[a.memberId].name)+' (ลบแล้ว)':'รายชื่อที่ไม่มีในระบบ'}</small></div><button class="btn sm" data-act="orphBind" data-e="${esc(e)}">${ic('user',14)}ผูกกับรายชื่อ</button><button class="btn sm bad" data-act="orphDel" data-e="${esc(e)}">${ic('trash',14)}ลบสิทธิ์</button></div>`).join('')}</div>`;
 }
+function cfgEditDlg(k){const c=C(),o=c[k],R=k==='rooms';let v=o,ok=false;
+  const impact=()=>{if(v===o)return`<div class="cfok">${ic('info',16)}ยังไม่ได้เปลี่ยนค่า</div>`;
+    if(R){if(v>o)return`<div class="cfok">${ic('checkc',16)}เพิ่มห้อง ${o+1}${v>o+1?'–'+v:''} · Live Streamer จองห้องใหม่ได้ทันที</div>`;
+      const gone=Object.values(S.d.slots||{}).filter(x=>x.room>v&&!isPast(x.date,x.slot)).length;
+      return`<div class="cfwarn">${ic('alert',16)}<div><b>ห้อง ${v+1}${o>v+1?'–'+o:''} จะหายจากตารางและหน้าจองคิว</b><small>${gone?`มีคิวที่จองไว้ล่วงหน้าในห้องเหล่านี้ <b>${gone} คิว</b> · จะไม่แสดง (ข้อมูลไม่หาย เพิ่มห้องคืนแล้วกลับมา)`:'ไม่มีคิวที่จองล่วงหน้าในห้องเหล่านี้'}</small></div></div>`}
+    return`<div class="cfwarn">${ic('alert',16)}<div><b>ชั่วโมงในหน้าสรุปจะคำนวณใหม่ทั้งหมด รวมย้อนหลัง</b><small>ทุก Slot ที่ไม่ได้แจ้งชั่วโมงจริงจะนับเป็น ${v} ชม. แทน ${o} ชม. · มีผลกับยอดที่สรุปจ่ายไปแล้วด้วย</small></div></div>`};
+  const body=()=>`<div class="cfstep"><span class="old"><small>ค่าเดิม</small><b>${o}</b><em>${R?'ห้อง':'ชม.'}</em></span><span class="arr">${ic('right',18)}</span>
+     <div class="step big"><button data-d="n:-1" ${(R?v<=1:v<=0.5)?'disabled':''}>−</button><b>${v}<small>${R?'ห้อง':'ชม.'}</small></b><button data-d="n:1" ${R&&v>=12?'disabled':''}>+</button></div></div>
+    ${impact()}
+    ${v!==o?`<label class="cfack"><input type="checkbox" data-d="ack" ${ok?'checked':''}><span>เข้าใจผลกระทบแล้ว และต้องการเปลี่ยนเป็น <b>${v} ${R?'ห้อง':'ชม.'}</b></span></label>`:''}`;
+  const re=()=>{$('#cfb').innerHTML=body();const g=$('#cfgo');if(g)g.disabled=!(v!==o&&ok)};
+  modal(`<div class="mhead">${icb(R?'door':'clock','warn')}<div><h3>แก้ไข${R?'จำนวนห้องไลฟ์':'ชั่วโมงต่อรอบ'}</h3><span class="muted">ค่าตั้งค่าหลัก มีผลกับทั้งระบบ · บันทึกลงประวัติ</span></div></div><div id="cfb">${body()}</div>
+   <div class="mact"><button class="btn primary" id="cfgo" data-d="save" disabled>${ic('save',15)}บันทึก</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,
+   async a=>{if(a==='close')return closeM();
+     if(a.startsWith('n:')){const n=+a.slice(2);v=R?Math.max(1,Math.min(12,v+n)):Math.max(0.5,Math.round((v+n*0.5)*2)/2);ok=false;return re()}
+     if(a==='ack'){ok=!ok;return re()}
+     if(a==='save'&&v!==o&&ok){await saveCfg({[k]:v},`${R?'ตั้งจำนวนห้องไลฟ์':'ตั้งชั่วโมงต่อรอบ'}: ${o} → ${v}${R?' ห้อง':' ชม.'}`);closeM();toast('บันทึกแล้ว')}})}
 function memberDlg(id){const m=M(id),em=Object.entries(S.d.access).find(([,a])=>a.memberId===id)?.[0]||'',cc=colOf(id);
   modal(`<div class="mhead"><span class="tav big" style="background:${cc.bg};color:${cc.fg}">${esc([...m.name].find(c=>!/[เแโใไ\s(]/.test(c))||'?')}</span><div><h3>แก้ไข Live Streamer</h3><span class="muted">${esc(m.name)} · บันทึกอัตโนมัติเมื่อแก้แต่ละช่อง</span></div></div>
    <div class="mfrm"><label><span>ชื่อที่แสดง</span><input class="inp" value="${esc(m.name)}" data-mname="${id}"></label>
@@ -3414,6 +3442,7 @@ const acts={
   openDay:b=>reopenDlg(Object.keys(S.d.closures||{}).filter(k=>k.startsWith(b.dataset.d+'_')).sort()),
   reopenOne:b=>reopenDlg([b.dataset.k]),
   closuresAll:()=>closuresDlg(),
+  cfgEdit:b=>cfgEditDlg(b.dataset.k),
   permStep:b=>{const o=C().perms.cancelBeforeH||0,v=Math.max(0,o+ +b.dataset.n);if(v===o)return;saveCfg({perms:{...C().perms,cancelBeforeH:v}},`ตั้งยกเลิกล่วงหน้า: ${o} → ${v} ชม.`)},
   mFilt:b=>{S.mFilt=b.dataset.f;render()},
   editMember:b=>memberDlg(b.dataset.id),
