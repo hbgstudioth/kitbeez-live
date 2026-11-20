@@ -1809,6 +1809,15 @@ main.enter{animation:softIn .28s ease-out both}
 .lx2 .gbtn .ar{background:rgba(255,255,255,.18)!important;color:#fff!important}
 .lxhint svg{color:#16a34a!important}
 .lx2 .adminchips button:hover{border-color:#2563eb!important}
+
+/* ป้าย LIVE แบบ B: แท่งเสียง พื้นชมพูอ่อน */
+.brand .lv,.logo-card .lv,.lx2 .lxtop .lv{display:inline-flex!important;align-items:center;gap:6px;background:#fff0f1!important;color:#e11d2e!important;border:1px solid #ffc9cd;box-shadow:none!important;animation:none!important;font-weight:800}
+.brand .lv::before,.logo-card .lv::before,.lx2 .lxtop .lv::before{display:none!important}
+.lv .eq{display:inline-flex;align-items:flex-end;gap:1.5px;height:10px}
+.lv .eq i{width:2.5px;border-radius:1px;background:#e11d2e;animation:lvEq 1s ease-in-out infinite}
+.lv .eq i:nth-child(2){animation-delay:-.35s}.lv .eq i:nth-child(3){animation-delay:-.7s}
+@keyframes lvEq{0%,100%{height:30%}50%{height:100%}}
+@media(prefers-reduced-motion:reduce){.lv .eq i{animation:none;height:70%}}
 </style>
 </head>
 <body>
@@ -2194,7 +2203,7 @@ function render(){
   S.store.setRange(add(monday(anchor),-14),add(monday(anchor),40));
   const u=S.user,c=S.meId?colOf(S.meId):{bg:'var(--sky)',fg:'var(--blue)'};
   if(!$('#shell')){let so=false;try{so=localStorage.getItem('kbz-side')==='off'}catch(e){}
-    app.innerHTML=`<div id="shell" class="${so?'nos':''}"><header class="top"><button class="btn icon ghost sidetg" data-act="side" title="ซ่อน / แสดงเมนู" aria-label="ซ่อน / แสดงเมนู">${ic('side',20)}</button><div class="brand"><div class="bw"><div><img class="wordmark" src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv">LIVE</span></div><small class="sys">LIVE BOOKING SYSTEM : HS DEVELOPMENT</small></div></div><nav class="tabs" id="tabs"></nav><div class="user" id="user"></div></header><div id="demo"></div><main id="main"></main></div>`;
+    app.innerHTML=`<div id="shell" class="${so?'nos':''}"><header class="top"><button class="btn icon ghost sidetg" data-act="side" title="ซ่อน / แสดงเมนู" aria-label="ซ่อน / แสดงเมนู">${ic('side',20)}</button><div class="brand"><div class="bw"><div><img class="wordmark" src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv"><span class="eq"><i></i><i></i><i></i></span>LIVE</span></div><small class="sys">LIVE BOOKING SYSTEM : HS DEVELOPMENT</small></div></div><nav class="tabs" id="tabs"></nav><div class="user" id="user"></div></header><div id="demo"></div><main id="main"></main></div>`;
     const fh=()=>{const t=$('.top');if(t)$('#shell').style.setProperty('--toph',t.offsetHeight+'px')};fh();addEventListener('resize',fh)}
   const prevOn=$('#tabs .on');const prevRect=prevOn?{l:prevOn.offsetLeft,w:prevOn.offsetWidth}:null;
   $('#tabs').innerHTML=`<div class="sidefx" aria-hidden="true"><i class="r r1"></i><i class="r r2"></i><i class="r r3"></i><span class="hz h1"></span><span class="hz h2"></span><span class="hz h3"></span><span class="hz h4"></span><span class="hz h5"></span><div class="eq"><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div></div>`+T.map(t=>`<button data-act="view" data-v="${t.id}" class="${S.view===t.id?'on':''}" title="${t.l}">${ic(t.i,19)}<span>${t.l}</span>${t.b?`<em>${t.b}</em>`:''}</button>`).join('')+'<b class="ink"></b>'+presWidget()+'<div class="sidefoot"><span>SOFTWARE ENGINEERING<br>&amp; DEVELOPMENT</span></div>';
@@ -2229,7 +2238,7 @@ function vLogin(){
   const ev=S.lemail??(demo?(t==='brand'?'brand@demo.live':''):''),ok=okEmail(ev);
   const chips=demo?(t==='brand'?Object.entries(S.d.access).filter(([,a])=>a.role==='brand'&&!a.memberId&&a.active!==false).map(([e,a])=>[e,a.name||e]):Object.entries(S.d.access).filter(([,a])=>a.memberId&&a.active!==false&&S.d.members[a.memberId]).slice(0,6).map(([e,a])=>[e,S.d.members[a.memberId].name])):[];
   $('#app').innerHTML=`<div class="login lux lx2 ${lfirst?'first':''}"><i class="lxg g1"></i><i class="lxg g2"></i><i class="lxg g3"></i>
-   <section class="lxhero"><div class="lxtop"><img src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv">LIVE</span></div>
+   <section class="lxhero"><div class="lxtop"><img src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv"><span class="eq"><i></i><i></i><i></i></span>LIVE</span></div>
     <div class="lxmid"><span class="eyb">KITBEEZ&nbsp;·&nbsp;LIVE COMMERCE</span><h1>LIVE <br>BOOKING <br><em>SYSTEM</em></h1><i class="gl"></i></div>
     <div class="lxbot"><span>SOFTWARE ENGINEERING &amp; DEVELOPMENT</span><span>HS DEVELOPMENT</span></div></section>
    <form class="lxcard" id="loginForm" autocomplete="on">
