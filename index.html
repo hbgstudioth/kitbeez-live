@@ -2345,7 +2345,7 @@ const _cu=new Map(),_cuA=new Map();let _cuView='';
 function countUp(){const vk=S.view+'|'+(S.payMode||''),vchg=_cuView!==vk;_cuView=vk;
   if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
   const dur=750,ease=x=>1-Math.pow(1-x,3),now0=performance.now();
-  document.querySelectorAll('.stat b').forEach(el=>{const key=(el.previousElementSibling?.textContent||'')+'|'+S.view,txt=el.textContent,prev=_cu.get(key);_cu.set(key,txt);
+  document.querySelectorAll('.stat b,.rsc>b[data-cu]').forEach(el=>{const key=(el.dataset.cu||el.previousElementSibling?.textContent||'')+'|'+S.view,txt=el.textContent,prev=_cu.get(key);_cu.set(key,txt);
     let A=_cuA.get(key);
     if(!vchg&&prev===txt){if(!A||now0-A.t0>=dur)return}
     else{const parts=txt.split(/(\d+(?:\.\d+)?)/),old=(prev||'').split(/(\d+(?:\.\d+)?)/).filter((_,i)=>i%2).map(Number);let k=0;
@@ -2687,7 +2687,7 @@ function vPay(){
     Object.values(S.d.slots).forEach(v=>{if(v.date<from||v.date>to||!COUNTED.includes(v.status)||!RS[v.room])return;if(isTrial(v)?pe!=='all':(pe!=='all'&&!ids.includes(v.who)))return;const x=RS[v.room];x.h+=hrsOf(v);x.n++;if(!isTrial(v))x.p.add(v.who)});
     const tot=Object.values(RS).reduce((a,x)=>a+x.h,0),mx=Math.max(1,...Object.values(RS).map(x=>x.h)),cap=nDays(from,to)*C().slots.length*C().hours;
     rsHtml=`<div class="card rmsum"><div class="rmsh2"><h3 style="margin:0">${icb('door')}ชั่วโมงไลฟ์แยกตามห้อง</h3><span class="muted">${fmtRange(from,to)} · รวม ${fmtHM(tot)}</span></div>
-     <div class="rsgrid" style="--n:${ROOMS().length}">${ROOMS().map(r=>{const x=RS[r],pc=tot?Math.round(x.h/tot*100):0;return`<div class="rsc ${x.h===mx&&x.h?'best':''}"><div class="rst"><span class="rm r${(r-1)%6}">ห้อง ${r}</span>${x.h===mx&&x.h?`<em>★ มากสุด</em>`:''}</div><b>${fmtHM(x.h)}</b><div class="rsbar"><i style="width:${Math.round(x.h/mx*100)}%"></i></div><small>${x.n} Slot · ${x.p.size} คน · ${pc}% ของทั้งหมด</small></div>`}).join('')}</div></div>`}
+     <div class="rsgrid" style="--n:${ROOMS().length}">${ROOMS().map(r=>{const x=RS[r],pc=tot?Math.round(x.h/tot*100):0;return`<div class="rsc ${x.h===mx&&x.h?'best':''}"><div class="rst"><span class="rm r${(r-1)%6}">ห้อง ${r}</span>${x.h===mx&&x.h?`<em>★ มากสุด</em>`:''}</div><b data-cu="rm${r}">${fmtHM(x.h)}</b><div class="rsbar"><i style="width:${Math.round(x.h/mx*100)}%"></i></div><small>${x.n} Slot · ${x.p.size} คน · ${pc}% ของทั้งหมด</small></div>`}).join('')}</div></div>`}
   h+=`<div class="stats"><div class="stat" style="--i:0">${icb('clock')}<div><span>ชั่วโมงไลฟ์รวม</span><b>${fmtHM(sumH)}</b></div></div><div class="stat" style="--i:1">${icb('ticket','violet')}<div><span>จำนวน Slot</span><b>${sumN} Slot</b></div></div>${isBrand()?`<div class="stat" style="--i:2">${icb('users','ok')}<div><span>จำนวนคน · เฉลี่ยต่อคน</span><b>${ids.length} คน · ${fmtHM(avg)}</b></div></div>`:''}${isBrand()&&trialH?`<div class="stat" style="--i:3">${icb('mic','warn')}<div><span>ทดลองไลฟ์ (ไม่นับรวม)</span><b>${trialH} ชม.</b></div></div>`:''}${pendIds.length?`<div class="stat" style="--i:4">${icb('hour','warn')}<div><span>รอยืนยัน (ยังไม่นับ)</span><b>${pendIds.reduce((a,id)=>a+pend[id],0)} ชม.</b></div></div>`:''}</div>
   ${rsHtml}
   ${(()=>{const mx=Math.max(1,...ids.map(id=>rows[id].tot)),cmx=Math.max(1,...ids.flatMap(id=>rows[id].cols));
