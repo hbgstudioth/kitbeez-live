@@ -1879,6 +1879,22 @@ main.enter{animation:softIn .28s ease-out both}
 .studio .seat.free:hover .bk{opacity:1;max-height:14px}.studio .seat.free:hover .rec{background:#e11d2e;box-shadow:0 0 0 3px #fee2e2}
 @media(max-width:860px){.studio .stbar{padding:12px 14px;gap:10px}.stl b{font-size:16px}.str{margin-left:0;width:100%}.spg{flex:1;width:auto}.studio .rhead .cam{width:20px;height:20px}.studio .seat.free .bk{display:none}}
 @media(prefers-reduced-motion:reduce){.steq i,.onair.on{animation:none}}
+
+/* แถบหัววัน: สีนุ่ม + ลายน้ำโลโก้ kitBEEZ หายใจเบาๆ และแสงวิ่งผ่านช้าๆ */
+.studio .stbar{color:var(--navy)!important;background:linear-gradient(120deg,#ffffff 0%,#f3f8ff 55%,#e8f0ff 100%)!important;border:1px solid #dbe6f7;box-shadow:0 6px 18px rgba(16,60,140,.06)!important}
+.studio .stbar::before{display:none}
+.studio .stl,.studio .str{position:relative;z-index:1}
+.studio .onair{background:#e8effc;color:#2563eb}.studio .onair i{background:#2563eb}
+.studio .onair.on{background:#e11d2e;color:#fff}.studio .onair.on i{background:#fff}
+.studio .sk{background:#fff;border-color:#dbe6f7;color:#64748b}.studio .sk em{color:var(--navy)}
+.studio .spg{background:#e3ecf8}.studio .spg small{color:#64748b}
+.stfx{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.stfx::before{content:'';position:absolute;left:50%;top:50%;width:240px;height:64%;transform:translate(-50%,-50%);background:var(--lg) no-repeat center/contain;opacity:.06;animation:stBreath 9s ease-in-out infinite}
+.stfx::after{content:'';position:absolute;top:0;bottom:0;width:140px;left:-160px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.75),transparent);animation:stSheen 9s ease-in-out infinite}
+@keyframes stBreath{0%,100%{opacity:.05;transform:translate(-50%,-50%) scale(1)}50%{opacity:.09;transform:translate(-50%,-50%) scale(1.025)}}
+@keyframes stSheen{0%,55%{left:-160px}100%{left:110%}}
+@media(max-width:860px){.stfx::before{width:150px;height:40%;top:28%;left:auto;right:-10px;transform:none;animation:none;opacity:.06}}
+@media(prefers-reduced-motion:reduce){.stfx::before,.stfx::after{animation:none}}
 </style>
 </head>
 <body>
@@ -2393,7 +2409,7 @@ function vBook(){
   const _pct=_st.a?Math.round(_st.f/_st.a*100):0,_live=d===TODAY;
   h+=`<div class="hall studio"><div class="stbar"><div class="stl"><span class="onair ${_live?'on':''}"><i></i>${_live?'ON AIR วันนี้':'ตารางไลฟ์'}</span><b>${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[M_.getUTCMonth()]}</b></div>
    <div class="str"><span class="sk"><em>${_st.a-_st.f}</em>ช่องว่าง</span><span class="sk"><em>${_st.f}/${_st.a}</em>ลงแล้ว</span><div class="spg"><i style="width:${_pct}%"></i><small>${_pct}%</small></div></div>
-   <div class="steq" aria-hidden="true">${'<i></i>'.repeat(14)}</div></div><header class="bkdh"><div class="big"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></div><div class="ttl"><b>${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[D(d).getUTCMonth()]}</b><div>${ic('grid',12)}ลงแล้ว ${_st.f}/${_st.a} · ว่าง ${_st.a-_st.f}${d===TODAY?' · <b style="color:var(--blue)">วันนี้</b>':''}${note?`<span class="nt3">${ic('pin',12)}${esc(note)}</span>`:''}</div></div></header><div class="seats" style="--rooms:${R.length}"><div></div>${R.map(r=>isBrand()?`<button class="rhead pick" data-act="selCol" data-d="${d}" data-r="${r}" title="เลือกทุกช่องว่างของห้องนี้"><span class="cam"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/></svg></span>ห้อง ${r}</button>`:`<div class="rhead"><span class="cam"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/></svg></span>ห้อง ${r}</div>`).join('')}
+   <div class="stfx" aria-hidden="true" style="--lg:url('${LOGO_DARK}')"></div></div><header class="bkdh"><div class="big"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></div><div class="ttl"><b>${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[D(d).getUTCMonth()]}</b><div>${ic('grid',12)}ลงแล้ว ${_st.f}/${_st.a} · ว่าง ${_st.a-_st.f}${d===TODAY?' · <b style="color:var(--blue)">วันนี้</b>':''}${note?`<span class="nt3">${ic('pin',12)}${esc(note)}</span>`:''}</div></div></header><div class="seats" style="--rooms:${R.length}"><div></div>${R.map(r=>isBrand()?`<button class="rhead pick" data-act="selCol" data-d="${d}" data-r="${r}" title="เลือกทุกช่องว่างของห้องนี้"><span class="cam"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/></svg></span>ห้อง ${r}</button>`:`<div class="rhead"><span class="cam"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/></svg></span>ห้อง ${r}</div>`).join('')}
   ${C().slots.map((t,s)=>`<${isBrand()?`button class="rowlab pick" data-act="selRow" data-d="${d}" data-s="${s}" title="เลือกทุกช่องว่างของรอบนี้"`:'div class="rowlab"'}><div><b>${t.split('–')[0]}</b><span class="to"><span class="tw">ถึง </span>${t.split('–')[1]||''}</span></div></${isBrand()?'button':'div'}>`+R.map(r=>seat(d,r,s,i++)).join('')).join('')}</div>
   <div class="legend"><span><i style="background:#fff;border-color:#c7dbf7"></i>ว่าง</span><span><i style="background:var(--navy)"></i>ที่เลือก</span><span><i style="background:#ffe1c2;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--blue)"></i>คิวของฉัน</span><span>${ic('hour',13)} รอยืนยัน</span><span>${ic('undo',13)} ขอยกเลิก</span><span>${ic('swap',13)} ขอย้ายห้อง</span><span>${ic('clock',13)} ขอเปลี่ยนเวลา</span><span><i style="background:repeating-linear-gradient(45deg,#f1f4f9 0 4px,#fff 4px 8px)"></i>ปิด</span><span><i style="background:repeating-linear-gradient(45deg,#ffe9e9 0 4px,#fff 4px 8px);border-color:#f6c4c6"></i>ปิดเฉพาะวันนี้</span></div></div>`;
   return h;
