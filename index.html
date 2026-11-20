@@ -1688,6 +1688,29 @@ main.enter{animation:softIn .28s ease-out both}
   .wcard{display:grid;grid-template-columns:auto auto auto minmax(0,1fr);grid-template-rows:auto auto;column-gap:6px;row-gap:8px}
   .wcard .wto{display:none}.wcard .wcd{grid-row:1}.wcard .wci{grid-column:3/5;grid-row:1;margin-left:4px}
   .wcard .wst{grid-column:1/4;grid-row:2;justify-self:start}.wcard>.btn.icon{grid-column:4;grid-row:2;justify-self:end;width:34px;height:34px}}
+
+/* ===== เมนูซ้าย: โมชั่นพื้นหลังเกี่ยวกับการไลฟ์ (เบามาก) ===== */
+.sidefx{display:none}
+@media(min-width:861px){
+  .tabs{overflow:hidden;isolation:isolate}
+  .tabs>*:not(.sidefx){position:relative;z-index:1}
+  .sidefx{display:block;position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  /* คลื่นสัญญาณไลฟ์ กระจายออกช้าๆ */
+  .sidefx .r{position:absolute;left:50%;top:52%;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;border:1.5px solid rgba(255,255,255,.16);animation:sfxRing 9s ease-out infinite;opacity:0}
+  .sidefx .r2{animation-delay:3s}.sidefx .r3{animation-delay:6s}
+  @keyframes sfxRing{0%{transform:scale(.4);opacity:0}15%{opacity:.9}100%{transform:scale(3.2);opacity:0}}
+  /* หัวใจ/ไลก์ ลอยขึ้นเหมือนตอนไลฟ์ */
+  .sidefx .hz{position:absolute;bottom:-20px;width:12px;height:12px;opacity:0;background:rgba(255,255,255,.22);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.4 5c2 0 3.6 1.1 4.6 2.6C12 6.1 13.6 5 15.6 5 19 5 21.1 8.4 19.6 11.8 17.5 16.4 12 21 12 21z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 5 6.4 5c2 0 3.6 1.1 4.6 2.6C12 6.1 13.6 5 15.6 5 19 5 21.1 8.4 19.6 11.8 17.5 16.4 12 21 12 21z'/%3E%3C/svg%3E") center/contain no-repeat;animation:sfxHeart 14s linear infinite}
+  .sidefx .h1{left:18%;animation-delay:0s}.sidefx .h2{left:62%;width:9px;height:9px;animation-delay:3.5s}.sidefx .h3{left:38%;width:14px;height:14px;animation-delay:7s}.sidefx .h4{left:80%;animation-delay:10s}.sidefx .h5{left:8%;width:8px;height:8px;animation-delay:12s}
+  @keyframes sfxHeart{0%{transform:translate(0,0) scale(.8);opacity:0}10%{opacity:.9}50%{transform:translate(12px,-45vh) scale(1)}100%{transform:translate(-8px,-92vh) scale(1.1);opacity:0}}
+  /* อีควอไลเซอร์เสียงจางๆ ด้านล่าง */
+  .sidefx .eq{position:absolute;left:40px;right:40px;bottom:210px;height:28px;display:flex;align-items:flex-end;gap:5px;opacity:.13}
+  .sidefx .eq b{flex:1;background:#fff;border-radius:3px 3px 0 0;height:30%;animation:sfxEq 2.6s ease-in-out infinite}
+  .sidefx .eq b:nth-child(2){animation-delay:-.4s}.sidefx .eq b:nth-child(3){animation-delay:-1.1s}.sidefx .eq b:nth-child(4){animation-delay:-.7s}.sidefx .eq b:nth-child(5){animation-delay:-1.6s}.sidefx .eq b:nth-child(6){animation-delay:-.2s}.sidefx .eq b:nth-child(7){animation-delay:-1.3s}
+  @keyframes sfxEq{0%,100%{height:25%}50%{height:90%}}
+}
+@media(prefers-reduced-motion:reduce){.sidefx{display:none!important}}
+@media print{.sidefx{display:none!important}}
 </style>
 </head>
 <body>
@@ -2076,7 +2099,7 @@ function render(){
     app.innerHTML=`<div id="shell" class="${so?'nos':''}"><header class="top"><button class="btn icon ghost sidetg" data-act="side" title="ซ่อน / แสดงเมนู" aria-label="ซ่อน / แสดงเมนู">${ic('side',20)}</button><div class="brand"><div class="bw"><div><img class="wordmark" src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv">LIVE</span></div><small class="sys">LIVE BOOKING SYSTEM : HS DEVELOPMENT</small></div></div><nav class="tabs" id="tabs"></nav><div class="user" id="user"></div></header><div id="demo"></div><main id="main"></main></div>`;
     const fh=()=>{const t=$('.top');if(t)$('#shell').style.setProperty('--toph',t.offsetHeight+'px')};fh();addEventListener('resize',fh)}
   const prevOn=$('#tabs .on');const prevRect=prevOn?{l:prevOn.offsetLeft,w:prevOn.offsetWidth}:null;
-  $('#tabs').innerHTML=T.map(t=>`<button data-act="view" data-v="${t.id}" class="${S.view===t.id?'on':''}" title="${t.l}">${ic(t.i,19)}<span>${t.l}</span>${t.b?`<em>${t.b}</em>`:''}</button>`).join('')+'<b class="ink"></b>'+presWidget()+'<div class="sidefoot"><span>SOFTWARE ENGINEERING<br>&amp; DEVELOPMENT</span></div>';
+  $('#tabs').innerHTML=`<div class="sidefx" aria-hidden="true"><i class="r r1"></i><i class="r r2"></i><i class="r r3"></i><span class="hz h1"></span><span class="hz h2"></span><span class="hz h3"></span><span class="hz h4"></span><span class="hz h5"></span><div class="eq"><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div></div>`+T.map(t=>`<button data-act="view" data-v="${t.id}" class="${S.view===t.id?'on':''}" title="${t.l}">${ic(t.i,19)}<span>${t.l}</span>${t.b?`<em>${t.b}</em>`:''}</button>`).join('')+'<b class="ink"></b>'+presWidget()+'<div class="sidefoot"><span>SOFTWARE ENGINEERING<br>&amp; DEVELOPMENT</span></div>';
   const ink=$('#tabs .ink'),on=$('#tabs .on');
   if(on){if(prevRect){ink.style.transition='none';ink.style.left=prevRect.l+'px';ink.style.width=prevRect.w+'px';void ink.offsetWidth;ink.style.transition=''}
     requestAnimationFrame(()=>{ink.style.left=on.offsetLeft+'px';ink.style.width=on.offsetWidth+'px'})}
