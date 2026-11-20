@@ -1524,6 +1524,27 @@ main.enter{animation:softIn .28s ease-out both}
 .wkr[data-act]:hover .wkdd{background:var(--blue);color:#fff;transform:translateY(1px)}
 .wkr[data-act]:hover .wkrr{color:var(--blue)}
 @media(max-width:860px){.wkr .wkdd{width:18px;height:18px;border-radius:6px}}
+
+/* ===== การ์ดคำขอ (อ่านง่าย) ===== */
+.rq2{--tc:#2563eb;--tb:#eef4ff;--sc:#d97706;--sb:#fff7e6;border-left:5px solid var(--sc)!important;padding:14px 16px!important}
+.rq2.t-cancel{--tc:#dc2626;--tb:#fee2e2}.rq2.t-move{--tc:#7c3aed;--tb:#ede9fe}.rq2.t-time{--tc:#0e7490;--tb:#cffafe}
+.rq2.s-approved{--sc:#16a34a;--sb:#dcfce7}.rq2.s-rejected{--sc:#dc2626;--sb:#fee2e2}.rq2.s-withdrawn{--sc:#94a3b8;--sb:#f1f5f9}
+.rq2h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rq2 .tchip{display:inline-flex;align-items:center;gap:6px;background:var(--tb);color:var(--tc);font-weight:700;font-size:14px;border-radius:9px;padding:5px 11px}
+.rq2 .spill{margin-left:auto;display:inline-flex;align-items:center;gap:6px;background:var(--sb);color:var(--sc);font-weight:700;font-size:13.5px;border-radius:999px;padding:5px 12px}
+.rq2.s-approved .spill{color:#15803d}.rq2.s-withdrawn .spill{color:#64748b}
+.rq2b{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.rqs{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:6px 14px 6px 6px;background:#fbfcff}
+.rqs .dbx{display:flex;flex-direction:column;align-items:center;justify-content:center;width:46px;height:50px;border-radius:9px;background:var(--tb);color:var(--tc);line-height:1.05}.rqs .dbx small{font-size:11px}.rqs .dbx b{font-size:19px}.rqs .dbx em{font-style:normal;font-size:10.5px;font-weight:600}
+.rqs .ti b{display:block;font-size:15px;color:var(--navy);font-variant-numeric:tabular-nums}.rqs .ti span{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:var(--muted)}
+.rqs.from{opacity:.75}.rqs.from .ti b{text-decoration:line-through;text-decoration-color:#94a3b8}
+.rqs.to{border-color:var(--tc);background:#fff;box-shadow:0 0 0 3px var(--tb)}
+.rqar{color:var(--tc);display:inline-flex}
+.rqwhy{flex:1;min-width:180px;display:flex;align-items:center;gap:8px;font-size:14px;color:var(--navy);background:#f8fafc;border-radius:10px;padding:10px 12px}.rqwhy svg{color:var(--muted);flex:none}
+.rqnote{display:flex;align-items:center;gap:6px;font-size:13px;color:#9a6200;background:#fff8e6;border-radius:9px;padding:7px 10px;margin-top:8px}
+.rq2f{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:12.5px;color:var(--muted)}.rq2f span{display:inline-flex;align-items:center;gap:4px}.rq2f i{width:18px;height:1.5px;background:#d5deea}
+.rq2f .e-ok{color:#15803d}.rq2f .e-bad{color:#b42318}.rq2f .e-wait{color:#b45309}.rq2f b{color:var(--navy)}
+@media(max-width:600px){.rq2b{gap:8px}.rqs{padding-right:10px}.rqwhy{flex-basis:100%}.rq2 .spill{margin-left:0}}
 </style>
 </head>
 <body>
@@ -2242,12 +2263,18 @@ function timeline(q){
   else st.push(['wd','ถอนคำขอแล้ว',q.withdrawnAt,'history']);
   return`<div class="tl">${st.map(([c,l,t,i])=>`<div class="st ${c}"><span class="dot">${ic(i,14)}</span><div><b>${l}</b><small>${t?timeAgo(t):'กำลังรอ…'}${c!=='send'&&q.decidedBy&&c!=='wait'&&c!=='wd'?' · '+esc(q.decidedBy):''}</small></div></div>`).join('<i class="ln"></i>')}</div>`;
 }
+function rqSlot(d,sl,r,cls=''){return`<div class="rqs ${cls}"><div class="dbx"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b><em>${MON_S[D(d).getUTCMonth()]}</em></div><div class="ti"><b>${C().slots[sl]||''}</b><span>${ic('door',12)}ห้อง ${r}</span></div></div>`}
+function rqTime(t){if(!t)return'';const x=new Date(t+7*3600e3).toISOString();return`${+x.slice(8,10)}/${+x.slice(5,7)} ${x.slice(11,16)}`}
 function reqCard(id,q,brand,i){
   const t={...(RT[q.type]||RT.book),l:reqLabel(q)},s=RS[q.status]||RS.pending,isNew=brand&&q.status==='withdrawn'&&!q.ack;
-  return`<div class="rq ${isNew?'new':''}" style="--i:${i}"><div class="rqh">${icb(t.i,t.c)}<div><b>${t.l}</b>${brand?nameChip(q.who):''}<div class="meta">${ic('calendar',12)}${slotInfo(q)}</div></div><span class="pill rs-${q.status}">${ic(s.i,12)}${s.l}</span></div>
-   ${q.reason?`<div class="why ${q.type==='move'?'mv':q.type==='time'?'tm':''}">${ic('msg',14)}${esc(q.reason)}</div>`:''}
-   ${q.note?`<div class="why note">${ic('tag',14)}แบรนด์: ${esc(q.note)}</div>`:''}
-   ${timeline(q)}
+  const chg=q.toDate||q.toRoom!=null||q.toSlot!=null,to=chg?rqSlot(q.toDate||q.date,q.toSlot??q.slot,q.toRoom??q.room,'to'):'';
+  const end=q.status==='approved'?['ok','อนุมัติ',q.decidedAt,q.decidedBy]:q.status==='rejected'?['bad','ไม่อนุมัติ',q.decidedAt,q.decidedBy]:q.status==='withdrawn'?['wd','ถอนคำขอ',q.withdrawnAt,'']:['wait','รอแบรนด์ดำเนินการ…',null,''];
+  return`<div class="rq rq2 t-${q.type||'book'} s-${q.status} ${isNew?'new':''}" style="--i:${i}">
+   <div class="rq2h"><span class="tchip">${ic(t.i,14)}${t.l}</span>${brand?nameChip(q.who):''}<span class="spill">${ic(s.i,14)}${s.l}</span></div>
+   <div class="rq2b">${rqSlot(q.date,q.slot,q.room,chg?'from':'')}${chg?`<span class="rqar">${ic('right',18)}</span>${to}`:''}
+    ${q.reason?`<div class="rqwhy">${ic('msg',14)}<span>${esc(q.reason)}</span></div>`:''}</div>
+   ${q.note?`<div class="rqnote">${ic('tag',13)}แบรนด์: ${esc(q.note)}</div>`:''}
+   <div class="rq2f"><span>${ic('arrow',12)}ส่ง ${rqTime(q.createdAt)}</span><i></i><span class="e-${end[0]}">${ic(end[0]==='ok'?'checkc':end[0]==='bad'?'x':end[0]==='wd'?'history':'hour',12)}${end[1]}${end[2]?' '+rqTime(end[2]):''}${end[3]?` · โดย <b>${esc(end[3])}</b>`:''}</span></div>
    ${!brand&&q.status==='pending'?`<div class="mact" style="justify-content:flex-end;margin-top:10px"><button class="btn sm" data-act="withdrawReq" data-id="${id}">${ic('history',14)}ถอนคำขอนี้</button></div>`:''}
    ${isNew?`<div class="mact" style="justify-content:flex-end;margin-top:10px"><button class="btn sm primary" data-act="ackReq" data-id="${id}">${ic('check',14)}รับทราบ</button></div>`:''}
    ${brand&&q.ack?`<div class="meta" style="justify-content:flex-end;margin-top:8px">${ic('check',12)}รับทราบแล้ว ${q.ackBy?'โดย '+esc(q.ackBy):''} ${q.ackAt?timeAgo(q.ackAt):''}</div>`:''}</div>`;
