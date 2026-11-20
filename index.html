@@ -1895,6 +1895,53 @@ main.enter{animation:softIn .28s ease-out both}
 @keyframes stSheen{0%,55%{left:-160px}100%{left:110%}}
 @media(max-width:860px){.stfx::before{width:150px;height:40%;top:28%;left:auto;right:-10px;transform:none;animation:none;opacity:.06}}
 @media(prefers-reduced-motion:reduce){.stfx::before,.stfx::after{animation:none}}
+
+/* ===== ช่องที่มีคนจองแล้ว (สไตล์การ์ดไลฟ์) ===== */
+.studio .seat.occ{flex-direction:row;justify-content:flex-start;gap:8px;padding:0 10px;text-align:left;border:1px solid rgba(15,23,42,.06);box-shadow:0 2px 6px rgba(16,60,140,.05)}
+.studio .seat.occ::after{display:none}
+.studio .seat.occ .av{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;box-shadow:0 0 0 2px rgba(255,255,255,.85)}
+.studio .seat.occ .av.lk{background:#e2e8f0;color:#94a3b8}
+.studio .seat.occ .n{flex:1;min-width:0;font-size:13.5px;font-weight:700}
+.studio .seat.occ small.me,.studio .seat.occ small.oa{position:absolute;right:8px;bottom:4px;font-size:9.5px;font-weight:700;opacity:1;padding:0 6px;border-radius:999px;line-height:15px}
+.studio .seat.occ small.me{background:#2563eb;color:#fff}
+.studio .seat.occ small.oa{background:#e11d2e;color:#fff;animation:liveDot 1.6s ease-in-out infinite}
+.studio .seat.occ.air{box-shadow:0 0 0 2px #fecaca,0 6px 16px rgba(225,29,46,.18)}
+.studio .seat.occ.mine{box-shadow:0 0 0 2px #fff,0 0 0 4px #2563eb}
+.studio .seat.occ.hid{background:#f4f6fa!important;color:#94a3b8!important;border-style:dashed}
+.studio .seat.occ.past{opacity:.5;filter:grayscale(.4)}
+.studio .seat.occ .tg{position:absolute;left:44px;top:4px;margin:0}
+.studio .seat.occ .nt{display:none}
+.studio .seat.occ:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 18px rgba(16,60,140,.12)}
+@media(max-width:860px){.studio .seat.occ{flex-direction:column;justify-content:center;gap:2px;padding:0 3px;text-align:center}.studio .seat.occ .av{width:20px;height:20px;font-size:10px}.studio .seat.occ .n{flex:none;font-size:11px;max-width:100%}.studio .seat.occ small.me,.studio .seat.occ small.oa{display:none}.studio .seat.occ .tg{display:none}}
+
+/* ===== ช่องที่มีคิว (ทันสมัย): การ์ดชื่อ + แถบสีด้านซ้าย ===== */
+.studio .seat.occ.hid{flex-direction:row;justify-content:flex-start;gap:8px;padding:0 10px 0 12px;text-align:left;border-radius:12px;border-width:1.5px;border-color:color-mix(in srgb,currentColor 18%,transparent);box-shadow:0 2px 6px rgba(16,40,90,.05);overflow:hidden}
+.studio .seat.occ.hid::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:currentColor;opacity:.55}
+.studio .seat.occ.hid::after{display:none}
+.studio .seat.occ.hid .av{width:28px;height:28px;flex:none;border-radius:50%;font-size:12.5px;box-shadow:0 0 0 2px rgba(255,255,255,.75)}
+.studio .seat.occ.hid .n{flex:1;min-width:0;font-size:13.5px;font-weight:700}
+.studio .seat.occ.hid .oa{background:#e11d2e;color:#fff}
+.studio .seat.occ.hid .st{top:4px;right:5px}
+.studio .seat.occ.hid{color:#94a3b8}.studio .seat.occ.hid .av.lk{background:#e2e8f0!important;color:#94a3b8!important}
+.studio .seat.occ.hid .hb{position:absolute;left:10px;top:3px}
+/* ===== ช่องปิดวันนี้ สไตล์เดียวกัน ===== */
+.studio .seat.x.dc{flex-direction:row;justify-content:flex-start;gap:8px;padding:0 10px 0 12px;border-radius:12px;border:1.5px dashed #f5b5b9;background:linear-gradient(135deg,#fff7f7,#fff)!important;color:#b42318;overflow:hidden}
+.studio .seat.x.dc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:repeating-linear-gradient(180deg,#ef4444 0 5px,#fca5a5 5px 10px);opacity:.7}
+.studio .seat.x.dc::after{display:none}
+.studio .seat.x.dc .lkc{display:grid;place-items:center;width:28px;height:28px;flex:none;border-radius:50%;background:#fee2e2;color:#dc2626}
+.studio .seat.x.dc .dct{display:flex;flex-direction:column;min-width:0;line-height:1.15;text-align:left}.studio .seat.x.dc .dct b{font-size:12.5px}.studio .seat.x.dc .rs{font-size:10px;opacity:.85}
+@media(max-width:860px){.studio .seat.occ.hid{flex-direction:column;justify-content:center;gap:2px;padding:4px 3px 4px 6px;text-align:center}.studio .seat.occ.hid .av{width:22px;height:22px;font-size:11px}.studio .seat.occ.hid .n{flex:none;font-size:11px;max-width:100%}
+  .studio .seat.x.dc{flex-direction:column;justify-content:center;gap:2px;padding:4px 3px 4px 6px}.studio .seat.x.dc .lkc{width:20px;height:20px}.studio .seat.x.dc .dct{align-items:center;text-align:center}.studio .seat.x.dc .dct b{font-size:10.5px}.studio .seat.x.dc .rs{display:none}}
+
+/* ช่องไม่ว่าง (มองไม่เห็นชื่อ) แบบการ์ด */
+.studio .seat.occ.hid{background:linear-gradient(135deg,#f6f8fc,#fff)!important;border:1.5px solid #e1e8f2;color:#64748b}
+.studio .seat.occ.hid::before{background:repeating-linear-gradient(180deg,#94a3b8 0 5px,#cbd5e1 5px 10px);opacity:.6}
+.studio .seat.occ.hid .av.lk{display:grid;place-items:center;background:#eef2f8!important;color:#94a3b8!important;box-shadow:none}
+.studio .seat.occ.hid .n{flex:none;font-size:12.5px;color:#475569}
+.studio .seat.occ.hid .hs{display:block;font-size:10px;color:#94a3b8;opacity:1}
+.studio .seat.occ.hid{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;align-content:center;column-gap:8px;row-gap:0}
+.studio .seat.occ.hid .av{grid-row:1/3}.studio .seat.occ.hid .n,.studio .seat.occ.hid .hs{text-align:left}
+@media(max-width:860px){.studio .seat.occ.hid{display:flex}.studio .seat.occ.hid .hs{display:none}}
 </style>
 </head>
 <body>
@@ -2414,17 +2461,18 @@ function vBook(){
   <div class="legend"><span><i style="background:#fff;border-color:#c7dbf7"></i>ว่าง</span><span><i style="background:var(--navy)"></i>ที่เลือก</span><span><i style="background:#ffe1c2;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--blue)"></i>คิวของฉัน</span><span>${ic('hour',13)} รอยืนยัน</span><span>${ic('undo',13)} ขอยกเลิก</span><span>${ic('swap',13)} ขอย้ายห้อง</span><span>${ic('clock',13)} ขอเปลี่ยนเวลา</span><span><i style="background:repeating-linear-gradient(45deg,#f1f4f9 0 4px,#fff 4px 8px)"></i>ปิด</span><span><i style="background:repeating-linear-gradient(45deg,#ffe9e9 0 4px,#fff 4px 8px);border-color:#f6c4c6"></i>ปิดเฉพาะวันนี้</span></div></div>`;
   return h;
 }
+function onAirNow(d,s){if(d!==TODAY)return false;const t=(C().slots[s]||'').split('–');if(t.length<2)return false;const n=new Date(Date.now()+7*3600e3).toISOString().slice(11,16);return n>=t[0]&&n<(t[1]==='24:00'?'24:01':t[1])}
 function seat(d,r,s,i){
   const k=sid(d,r,s),st=`style="--i:${i}`;
   const dc=dayClosure(d,r,s);
-  if(dc&&!S.d.slots[k])return`<button class="seat x dc" ${isBrand()?`data-act="closedSeat" data-k="${k}"`:'disabled'} ${st}" title="ปิดเฉพาะวันนี้${dc.reason?' · '+esc(dc.reason):''}">${ic('lock',15)}<small>ปิดวันนี้</small>${dc.reason?`<small class="rs">${esc(dc.reason)}</small>`:''}</button>`;
+  if(dc&&!S.d.slots[k])return`<button class="seat x dc" ${isBrand()?`data-act="closedSeat" data-k="${k}"`:'disabled'} ${st}" title="ปิดเฉพาะวันนี้${dc.reason?' · '+esc(dc.reason):''}"><span class="lkc">${ic('lock',13)}</span><span class="dct"><b>ปิดวันนี้</b>${dc.reason?`<small class="rs">${esc(dc.reason)}</small>`:''}</span></button>`;
   if(isClosedWeekly(d,r,s))return`<button class="seat x" disabled ${st}" title="ปิดประจำทุกสัปดาห์ (แก้ที่ตั้งค่า)">${ic('lock',16)}${isClosedRoom(d,r)?'':'<small>ปิดประจำ</small>'}</button>`;
   const v=S.d.slots[k],past=isPast(d,s);
   if(!v&&!isBrand()&&!past&&!canBookDate(d))return`<button class="seat lockd" disabled ${st}">${ic('lock',12)}ยังไม่เปิดจอง</button>`;
   if(!v){const sel=S.sel.has(k);return`<button class="seat free ${sel?'sel':''} ${past?'past':''}" data-act="seat" data-k="${k}" ${past&&!isBrand()?'disabled':''} ${st}">${sel?ic('check',15)+'<span class="sl">เลือกแล้ว</span>':past?'—':'<span class="rec"></span>ว่าง'}</button>`}
   const mine=v.who===S.meId,show=mine||isBrand()||C().perms.seeOthers,c=colOf(v.who);
-  const cls=['seat',v.status!=='ok'?v.status:'',mine?'mine':'',show?'':'hid',past?'past':'',isTrial(v)&&show?'trial':''].join(' ');
-  return`<button class="${cls}" data-act="seat" data-k="${k}" ${st};${show?`background-color:${c.bg};color:${c.fg}`:''}" title="${show?esc(whoName(v))+(v.note?' · '+esc(v.note):'')+' · ':''}${STATUS[v.status]}">${v.status!=='ok'?`<span class="st">${ic(SIC[v.status],11)}</span>`:''}${isTrial(v)&&show?'<small class="tg">ทดลองไลฟ์</small>':''}${isShort(v)&&show?`<i class="hb" title="ไลฟ์จริง ${fmtHM(hrsOf(v))}${v.actReason?' · '+esc(v.actReason):''}">${fmtHMc(hrsOf(v))}</i>`:''}<span class="n">${show?esc(isTrial(v)?(v.guest||'ไม่ระบุชื่อ'):M(v.who).name):'ไม่ว่าง'}</span>${mine?'<small>คิวของฉัน</small>':''}${isTrial(v)&&show&&v.note?`<small class="nt">${esc(v.note)}</small>`:''}</button>`;
+  const cls=['seat',v.status!=='ok'?v.status:'',mine?'mine':'',show?'':'hid',past?'past':'',isTrial(v)&&show?'trial':'','occ',onAirNow(d,s)?'air':''].join(' ');
+  return`<button class="${cls}" data-act="seat" data-k="${k}" ${st};${show?`background-color:${c.bg};color:${c.fg}`:''}" title="${show?esc(whoName(v))+(v.note?' · '+esc(v.note):'')+' · ':''}${STATUS[v.status]}">${v.status!=='ok'?`<span class="st">${ic(SIC[v.status],11)}</span>`:''}${isTrial(v)&&show?'<small class="tg">ทดลองไลฟ์</small>':''}${isShort(v)&&show?`<i class="hb" title="ไลฟ์จริง ${fmtHM(hrsOf(v))}${v.actReason?' · '+esc(v.actReason):''}">${fmtHMc(hrsOf(v))}</i>`:''}${show?`<span class="av" style="background:${c.fg};color:${c.bg}">${esc([...(isTrial(v)?(v.guest||'?'):M(v.who).name)].find(ch=>!/[เแโใไ\s(]/.test(ch))||'?')}</span>`:`<span class="av lk">${ic('lock',12)}</span>`}<span class="n">${show?esc(isTrial(v)?(v.guest||'ไม่ระบุชื่อ'):M(v.who).name):'ไม่ว่าง'}</span>${show?'':'<small class="hs">มีคนจองแล้ว</small>'}${onAirNow(d,s)?'<small class="oa">● กำลังไลฟ์</small>':mine?'<small class="me">คิวของฉัน</small>':''}${isTrial(v)&&show&&v.note?`<small class="nt">${esc(v.note)}</small>`:''}</button>`;
 }
 function renderCart(){
   const el=$('#cart');if(!S.user||S.view!=='book'||!S.sel.size){el.classList.remove('show');return}
