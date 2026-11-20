@@ -1818,6 +1818,32 @@ main.enter{animation:softIn .28s ease-out both}
 .lv .eq i:nth-child(2){animation-delay:-.35s}.lv .eq i:nth-child(3){animation-delay:-.7s}
 @keyframes lvEq{0%,100%{height:30%}50%{height:100%}}
 @media(prefers-reduced-motion:reduce){.lv .eq i{animation:none;height:70%}}
+
+/* popup ยืนยันปิดวัน */
+.cfwarn{display:flex;gap:10px;align-items:flex-start;background:#fff4f2;border:1px solid #fbd0cb;color:#9f1d14;border-radius:12px;padding:11px 13px;margin-top:12px}.cfwarn b{display:block}.cfwarn small{display:block;color:#7a2a24;font-size:12.5px;margin-top:2px}
+.cfok{display:flex;gap:8px;align-items:center;background:#effbf3;color:#15803d;border-radius:12px;padding:10px 13px;margin-top:12px;font-weight:600;font-size:13.5px}
+.cflist{list-style:none;padding:0;margin:12px 0 4px;display:grid;gap:6px}.cflist li{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+/* popup ห้องปิดประจำ (ใหม่) */
+.rchead{display:flex;align-items:center;gap:12px;padding-right:30px}.rchead .rm{font-style:normal;font-size:15px;font-weight:800;padding:10px 12px;border-radius:12px}.rchead h3{margin:0;font-size:19px}.rchead .muted{font-size:12.5px}
+.rcseg{position:relative;display:grid;grid-template-columns:repeat(3,1fr);background:#f1f4f9;border-radius:14px;padding:4px;margin-top:16px}
+.rcseg i{position:absolute;top:4px;bottom:4px;left:4px;width:calc(33.333% - 2.7px);border-radius:11px;background:#fff;box-shadow:0 4px 12px rgba(16,60,140,.12);transition:transform .3s var(--ease)}
+.rcseg.m-some i{transform:translateX(100%)}.rcseg.m-all i{transform:translateX(200%)}
+.rcseg button{position:relative;z-index:1;border:0;background:none;font:inherit;font-size:13.5px;font-weight:600;color:#64748b;padding:10px 0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:7px}.rcseg button.on{color:var(--navy)}
+.rcseg .dt{width:8px;height:8px;border-radius:50%}.rcseg .dt.open{background:#22c55e}.rcseg .dt.some{background:#f59e0b}.rcseg .dt.all{background:#ef4444}
+.rcsum{display:flex;align-items:center;gap:12px;margin-top:14px;font-size:13px;color:var(--muted)}.rcsum b{color:var(--navy);font-size:15px}
+.rcbar{flex:1;display:flex;gap:3px}.rcbar i{flex:1;height:8px;border-radius:4px;background:#86efac;transition:background-color .2s}.rcbar i.x{background:#fca5a5}.rcsum.some .rcbar i.x{background:#fcd34d}
+.rchd{display:flex;align-items:baseline;justify-content:space-between;margin-top:16px;font-size:13px}.rchd b{color:var(--navy)}.rchd span{font-size:12.5px;color:var(--muted)}
+.rcslots{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.rcslots button{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;font:inherit;cursor:pointer;text-align:left;transition:border-color .2s,background-color .2s}
+.rcslots .tt{flex:1}.rcslots .tt b{display:block;font-size:15px;color:var(--navy);font-variant-numeric:tabular-nums}.rcslots .tt small{font-size:11.5px;color:var(--muted)}
+.rcslots em{font-style:normal;font-size:11.5px;font-weight:700;color:#15803d;width:24px}
+.sw2{width:34px;height:20px;border-radius:999px;background:#22c55e;position:relative;flex:none;transition:background-color .2s}.sw2 i{position:absolute;top:2px;left:16px;width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s}
+.rcslots button.x{background:#fffaf0;border-color:#f8d98a}.rcslots button.x .sw2{background:#cbd5e1}.rcslots button.x .sw2 i{left:2px}.rcslots button.x em{color:#b45309}.rcslots button.x .tt b{color:#9a6200}
+.rcimp{margin-top:14px;background:#f7f9fd;border:1px solid var(--line);border-radius:12px;padding:10px 12px}.rcimp>span{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted)}
+.rcimp div{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.rcimp em{font-style:normal;font-size:12.5px;font-weight:600;background:#fff;border:1px solid var(--line);border-radius:8px;padding:3px 9px;color:var(--navy)}.rcimp em.more{background:none;border:0;color:var(--muted);font-weight:400}
+.rcimp p.bad{display:flex;gap:6px;align-items:center;margin:8px 0 0;font-size:12.5px;color:#b42318}
+.rctip{display:flex;gap:8px;align-items:center;margin-top:14px;font-size:12.5px;color:var(--muted)}
+@media(max-width:600px){.rcslots{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -2833,17 +2859,25 @@ function roomCloseDlg(d,r){
   const hits=()=>{const L=[];if(!rf||!rt)return L;let a=rf<=rt?rf:rt,b=rf<=rt?rt:rf;for(let x=a;x<=b&&L.length<60;x=add(x,1))if(dow(x)===d)L.push(x);return L};
   const prev=()=>{const L=hits();return L.length?`<div class="crhit">${ic('lock',13)} จะปิดห้อง ${r} วันที่: ${L.slice(0,10).map(x=>`<b>${DOW_S[d]} ${fmtDs(x)}</b>`).join(' ')}${L.length>10?` และอีก ${L.length-10} วัน`:''}</div><p class="muted" style="font-size:12.5px;margin:6px 0 0">${ic('info',13)} พ้นวันสุดท้ายแล้ว ห้องจะกลับมาเปิดให้จองอัตโนมัติ</p>`:`<div class="crhit bad">${ic('alert',13)} ช่วงนี้ไม่มีวัน${DOW_L[d]}เลย จึงไม่มีผล · ถ้าจะปิดเฉพาะวันที่ ${rf?fmtDs(rf):''} ให้ไปที่หน้า “จองคิว” เลือกช่อง แล้วกด “ปิดช่อง”</div>`};
 
-  const body=()=>`<div class="ccopt">${[['open','door','เปิดทั้งวัน','ทุกรอบจองได้ตามปกติ'],['all','lock','ปิดทั้งวัน','ห้องนี้ไม่ใช้ทั้งวัน'],['some','clock','ปิดบางรอบ','เลือกรอบเวลาที่ปิด']].map(([m,i,t,s])=>`<button data-d="m:${m}" class="${mode===m?'on':''}">${icb(i,m==='all'?'bad':m==='some'?'warn':'ok')}<b>${t}</b><small>${s}</small></button>`).join('')}</div>
-   ${mode==='some'?`<div class="sec"><b>${ic('clock',14)}แตะรอบเวลาที่ต้องการปิด</b><div class="tpick">${c.slots.map((t,s)=>`<button data-d="s:${s}" class="${sel.has(s)?'on cl':''}">${ic(sel.has(s)?'lock':slotIcon(s),15)}<b>${t}</b><small>${sel.has(s)?'ปิด':'เปิด'}</small></button>`).join('')}</div></div>`:''}
+  const nexts=()=>{const L=[];let x=TODAY;while(dow(x)!==d)x=add(x,1);for(let k=0;k<4;k++){L.push(x);x=add(x,7)}return L};
+  const booked=()=>Object.values(S.d.slots||{}).filter(v=>dow(v.date)===d&&v.room===r&&!isPast(v.date,v.slot)&&(mode==='all'||(mode==='some'&&sel.has(v.slot)))).length;
+  const body=()=>{const n=c.slots.length,cl=mode==='all'?n:mode==='some'?sel.size:0,bk=booked();
+   return`<div class="rcseg m-${mode}"><i></i>${[['open','เปิดทั้งวัน'],['some','ปิดบางรอบ'],['all','ปิดทั้งวัน']].map(([m,t])=>`<button data-d="m:${m}" class="${mode===m?'on':''}"><span class="dt ${m}"></span>${t}</button>`).join('')}</div>
+   <div class="rcsum ${mode}"><div class="rcbar">${c.slots.map((_,s)=>`<i class="${mode==='all'||(mode==='some'&&sel.has(s))?'x':''}"></i>`).join('')}</div><span><b>${n-cl}/${n}</b> รอบเปิดจองได้</span></div>
+   ${mode==='some'?`<div class="rchd"><b>แตะรอบเวลาที่ต้องการปิด</b><span><button class="link" data-d="sa">ปิดทุกรอบ</button> · <button class="link" data-d="sn">ล้าง</button></span></div>
+    <div class="rcslots">${c.slots.map((t,s)=>`<button data-d="s:${s}" class="${sel.has(s)?'x':''}"><span class="tt"><b>${t.split('–')[0]}</b><small>ถึง ${t.split('–')[1]||''}</small></span><span class="sw2"><i></i></span><em>${sel.has(s)?'ปิด':'เปิด'}</em></button>`).join('')}</div>`:''}
+   ${mode!=='open'?`<div class="rcimp"><span>${ic('calendar',13)}มีผลกับวัน${DOW_L[d]}ถัดไป</span><div>${nexts().map(x=>`<em>${dnum(x)} ${MON_S[D(x).getUTCMonth()]}</em>`).join('')}<em class="more">…ทุกสัปดาห์</em></div>${bk?`<p class="bad">${ic('alert',13)}มีคิวที่จองไว้แล้ว ${bk} Slot ในรอบที่จะปิด · ตรวจสอบในตารางด้วย</p>`:''}</div>`:''}
    ${mode!=='open'&&rg0?`<div class="crhit">${ic('calendar',13)} ตั้งช่วงไว้: ${fmtD(rg0.from)} – ${fmtD(rg0.to)}</div>`:''}
-   <div class="tipbox">${ic('info',15)}<div>หน้านี้ใช้ปิด<b>ประจำทุกสัปดาห์</b> · ถ้าจะปิด<b>ชั่วคราวตามวันที่</b> (เช่น 1–5 ธ.ค.) ใช้ <button class="link" data-d="toRange">ปิดห้องตามวันที่</button> จะกลับมาเปิดเองเมื่อพ้นวัน</div></div>`;
-  modal(`<div class="mhead">${icb('door')}<div><h3>ห้อง ${r} · ทุกวัน${DOW_L[d]}</h3><span class="muted">ตั้งค่าห้องปิดประจำ (มีผลทุกสัปดาห์)</span></div></div><div id="ccbody">${body()}</div>
+   <div class="rctip">${ic('info',14)}<span>ปิดชั่วคราวแค่บางวัน (เช่น 1–5 ธ.ค.)? ใช้ <button class="link" data-d="toRange">ปิดห้องตามวันที่</button> · พ้นวันแล้วเปิดเอง</span></div>`};
+  modal(`<div class="rchead"><span class="rm r${(r-1)%6}">ห้อง ${r}</span><div><h3>ทุกวัน${DOW_L[d]}</h3><span class="muted">ห้องปิดประจำ · มีผลทุกสัปดาห์</span></div></div><div id="ccbody">${body()}</div>
    <div class="mact"><button class="btn primary" data-d="save">${ic('save',16)}บันทึก</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,
   async a=>{
     if(a==='close')return closeM();
     if(a.startsWith('m:')){cap();mode=a.slice(2);$('#ccbody').innerHTML=body();return}
     if(a==='toRange'){closeM();return closeRangeDlg({rooms:[r],dows:[d]})}
     if(a.startsWith('r:')){cap();rmode=a.slice(2);$('#ccbody').innerHTML=body();return}
+    if(a==='sa'){c.slots.forEach((_,x)=>sel.add(x));$('#ccbody').innerHTML=body();return}
+    if(a==='sn'){sel.clear();$('#ccbody').innerHTML=body();return}
     if(a.startsWith('s:')){cap();const s=+a.slice(2);sel.has(s)?sel.delete(s):sel.add(s);$('#ccbody').innerHTML=body();return}
     if(a==='save'){
       cap();if(mode==='some'&&!sel.size)mode='open';
@@ -3431,7 +3465,14 @@ const acts={
   resetDemo:()=>modal(`<div class="mhead">${icb('alert','bad')}<h3>ล้างข้อมูลโหมดทดลอง?</h3></div><p class="muted">จะกลับไปเป็นตารางตั้งต้น</p><div class="mact"><button class="btn bad" data-d="y">ล้างข้อมูล</button><button class="btn" data-d="close">ยกเลิก</button></div>`,a=>a==='y'?S.store.reset():closeM()),
   backup:()=>!(isOwnerMe()||S.store.demo)?toast('เฉพาะเจ้าของระบบเท่านั้น',1):download(`kitbeez-live-backup-${TODAY}.json`,JSON.stringify(S.d,null,1),'application/json'),
   print:()=>window.print(),
-  toggleDay:b=>{const d=+b.dataset.d,o=C().openDays;saveCfg({openDays:o.includes(d)?o.filter(x=>x!==d):[...o,d]},`${o.includes(d)?'ปิด':'เปิด'}วันไลฟ์: วัน${DOW_L[d]}`)},
+  toggleDay:b=>{const d=+b.dataset.d,o=C().openDays;
+    if(!o.includes(d))return saveCfg({openDays:[...o,d]},`เปิดวันไลฟ์: วัน${DOW_L[d]}`);
+    const fut=Object.values(S.d.slots||{}).filter(v=>dow(v.date)===d&&!isPast(v.date,v.slot)),last=fut.map(v=>v.date).sort().pop();
+    modal(`<div class="mhead">${icb('calendar','bad')}<div><h3>ปิดวันไลฟ์วัน${DOW_L[d]}?</h3><span class="muted">มีผลทุกสัปดาห์จนกว่าจะเปิดคืน</span></div></div>
+     ${fut.length?`<div class="cfwarn">${ic('alert',16)}<div><b>มีคิวที่จองไว้ล่วงหน้า ${fut.length} คิว</b>${last?` (ถึง ${fmtD(last)})`:''}<small>ปิดแล้วคิวเหล่านี้จะไม่แสดงในตาราง · ข้อมูลไม่หาย เปิดคืนแล้วกลับมาครบ</small></div></div>`:`<div class="cfok">${ic('checkc',16)}ยังไม่มีคิวที่จองล่วงหน้าในวัน${DOW_L[d]}</div>`}
+     <ul class="cflist"><li>${ic('lock',13)}Live Streamer และแอดมินจองวัน${DOW_L[d]}เพิ่มไม่ได้</li><li>${ic('calweek',13)}หน้าตารางจะซ่อนวัน${DOW_L[d]}</li><li>${ic('info',13)}ถ้าปิดแค่บางช่วง (เช่น วันหยุดยาว) ใช้ “ปิดห้องตามวันที่” แทน</li></ul>
+     <div class="mact"><button class="btn bad" data-d="go">${ic('lock',15)}ปิดวัน${DOW_L[d]}</button><button class="btn ghost" data-d="no">ยกเลิก</button></div>`,
+     async a=>{if(a!=='go')return closeM();await saveCfg({openDays:o.filter(x=>x!==d)},`ปิดวันไลฟ์: วัน${DOW_L[d]}${fut.length?` (มีคิวล่วงหน้า ${fut.length} คิว)`:''}`);closeM();toast(`ปิดวัน${DOW_L[d]}แล้ว`)})},
   toggleRoom:b=>{const d=b.dataset.d,r=+b.dataset.r,cl={...C().closed},cur=cl[d]||[];cl[d]=cur.includes(r)?cur.filter(x=>x!==r):[...cur,r];saveCfg({closed:cl},`${cur.includes(r)?'เปิด':'ปิด'}ห้อง ${r} วัน${DOW_L[d]}`)},
   addMember:()=>{S._newEmp=null;modal(`<div class="mhead">${icb('user')}<h3>เพิ่ม Live Streamer</h3></div><input class="inp" id="nm" placeholder="ชื่อเล่น"><input class="inp" id="em" type="email" placeholder="อีเมล (ใส่ทีหลังได้)" style="margin-top:8px"><div class="sec"><b>${ic('tag',14)}พนักงาน</b><div class="emppick"><button data-d="e:fulltime">${ic('user',15)}Full-Time<small>พนักงานประจำ</small></button><button data-d="e:freelance">${ic('zap',15)}Freelance<small>ฟรีแลนซ์</small></button></div></div><div class="mact"><button class="btn primary" data-d="ok">${ic('plus',16)}เพิ่ม</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,
     async (a,b)=>{if(a==='close')return closeM();if(a.startsWith('e:')){S._newEmp=a.slice(2);document.querySelectorAll('.emppick button').forEach(x=>x.classList.toggle('on',x===b));return}
