@@ -1855,6 +1855,30 @@ main.enter{animation:softIn .28s ease-out both}
 .step.big{padding:4px;gap:6px}.step.big button{width:42px;height:42px;font-size:20px}.step.big b{font-size:26px;min-width:80px;justify-content:center}
 .cfack{display:flex;gap:10px;align-items:flex-start;margin-top:12px;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;cursor:pointer;font-size:13.5px;color:var(--navy)}.cfack input{margin-top:3px;width:17px;height:17px;accent-color:#2563eb;flex:none}
 .cfack:has(input:checked){border-color:#2563eb;background:#f4f8ff}
+
+/* ===== หน้าจองคิว: สไตล์สตูดิโอไลฟ์ ===== */
+.hall.studio{padding-top:16px}
+.studio .stbar{position:relative;overflow:hidden;display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:0 0 18px;padding:14px 18px;border-radius:18px;color:#fff;background:linear-gradient(120deg,#0f1f4d 0%,#1d3c8f 55%,#2563eb 100%);box-shadow:0 10px 26px rgba(29,60,143,.25)}
+.stbar::before{content:'';position:absolute;right:-60px;top:-80px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.18),transparent 65%)}
+.stl{display:flex;flex-direction:column;gap:4px;z-index:1}.stl b{font-size:18px;letter-spacing:.2px}
+.onair{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:10.5px;font-weight:800;letter-spacing:1.5px;padding:3px 9px;border-radius:6px;background:rgba(255,255,255,.14);color:#dbe7ff}
+.onair i{width:7px;height:7px;border-radius:50%;background:#94a3b8}.onair.on{background:#e11d2e;color:#fff;box-shadow:0 0 0 0 rgba(225,29,46,.5);animation:onairP 2.2s ease-out infinite}.onair.on i{background:#fff;animation:liveDot 1.2s ease-in-out infinite}
+@keyframes onairP{0%{box-shadow:0 0 0 0 rgba(225,29,46,.45)}70%{box-shadow:0 0 0 8px rgba(225,29,46,0)}100%{box-shadow:0 0 0 0 rgba(225,29,46,0)}}
+.str{margin-left:auto;display:flex;align-items:center;gap:10px;z-index:1}
+.sk{display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:11px;padding:5px 12px;font-size:11px;color:#c9d8ff;line-height:1.2}.sk em{font-style:normal;font-size:17px;font-weight:800;color:#fff}
+.spg{position:relative;width:120px;height:8px;border-radius:999px;background:rgba(255,255,255,.18)}.spg i{position:absolute;inset:0 auto 0 0;border-radius:999px;background:linear-gradient(90deg,#86efac,#22c55e)}.spg small{position:absolute;right:0;top:11px;font-size:10.5px;color:#c9d8ff}
+.steq{position:absolute;left:0;right:0;bottom:0;height:22px;display:flex;align-items:flex-end;gap:5px;padding:0 18px;opacity:.16;pointer-events:none}
+.steq i{flex:1;background:#fff;border-radius:2px 2px 0 0;height:30%;animation:sfxEq2 2.4s ease-in-out infinite}
+.steq i:nth-child(3n){animation-delay:-.6s}.steq i:nth-child(3n+1){animation-delay:-1.2s}.steq i:nth-child(4n){animation-delay:-1.8s}
+@keyframes sfxEq2{0%,100%{height:20%}50%{height:90%}}
+.studio .rhead{gap:6px;font-weight:700}.studio .rhead .cam{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:8px;background:#eef4ff;color:var(--blue)}
+.studio .seat.free:not(.past):not(.sel){flex-direction:column;gap:0;font-weight:700;color:#15803d}
+.studio .seat.free .rec{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px #dcfce7;margin-bottom:3px}
+.studio .bkdh{display:none!important}
+.studio .seat.free .bk{font-size:10px;font-weight:500;color:#64748b;opacity:0;max-height:0;transition:opacity .2s,max-height .2s}
+.studio .seat.free:hover .bk{opacity:1;max-height:14px}.studio .seat.free:hover .rec{background:#e11d2e;box-shadow:0 0 0 3px #fee2e2}
+@media(max-width:860px){.studio .stbar{padding:12px 14px;gap:10px}.stl b{font-size:16px}.str{margin-left:0;width:100%}.spg{flex:1;width:auto}.studio .rhead .cam{width:20px;height:20px}.studio .seat.free .bk{display:none}}
+@media(prefers-reduced-motion:reduce){.steq i,.onair.on{animation:none}}
 </style>
 </head>
 <body>
@@ -2366,7 +2390,10 @@ function vBook(){
   const R=ROOMS();let i=0;
   if(isBrand())h+=`<div class="admtool">${icb('tag','navy',16)}<div class="grow"><b>เครื่องมือแอดมิน</b><small>แตะช่องว่างเพื่อเลือก · แตะ <b>หัวห้อง</b> หรือ <b>เวลา</b> เพื่อเลือกทั้งแถว · แล้วกด <b>ใส่ชื่อ</b> หรือ <b>ปิดช่อง</b> ที่แถบด้านล่าง</small><small class="ms">แตะ หัวห้อง / เวลา = เลือกทั้งแถว</small></div><button class="btn sm" data-act="selDay" data-d="${d}">${ic('grid',14)}เลือกทั้งวัน</button>${Object.keys(S.d.closures||{}).some(k=>k.startsWith(d+'_'))?`<button class="btn sm" data-act="openDay" data-d="${d}">${ic('door',14)}เปิดทุกช่องที่ปิดวันนี้</button>`:''}</div>`;
   const _st=dayStats(d);
-  h+=`<div class="hall"><div class="screen">${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[M_.getUTCMonth()]}</div><header class="bkdh"><div class="big"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></div><div class="ttl"><b>${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[D(d).getUTCMonth()]}</b><div>${ic('grid',12)}ลงแล้ว ${_st.f}/${_st.a} · ว่าง ${_st.a-_st.f}${d===TODAY?' · <b style="color:var(--blue)">วันนี้</b>':''}${note?`<span class="nt3">${ic('pin',12)}${esc(note)}</span>`:''}</div></div></header><div class="seats" style="--rooms:${R.length}"><div></div>${R.map(r=>isBrand()?`<button class="rhead pick" data-act="selCol" data-d="${d}" data-r="${r}" title="เลือกทุกช่องว่างของห้องนี้">${ic('door',15)}ห้อง ${r}</button>`:`<div class="rhead">${ic('door',15)}ห้อง ${r}</div>`).join('')}
+  const _pct=_st.a?Math.round(_st.f/_st.a*100):0,_live=d===TODAY;
+  h+=`<div class="hall studio"><div class="stbar"><div class="stl"><span class="onair ${_live?'on':''}"><i></i>${_live?'ON AIR วันนี้':'ตารางไลฟ์'}</span><b>${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[M_.getUTCMonth()]}</b></div>
+   <div class="str"><span class="sk"><em>${_st.a-_st.f}</em>ช่องว่าง</span><span class="sk"><em>${_st.f}/${_st.a}</em>ลงแล้ว</span><div class="spg"><i style="width:${_pct}%"></i><small>${_pct}%</small></div></div>
+   <div class="steq" aria-hidden="true">${'<i></i>'.repeat(14)}</div></div><header class="bkdh"><div class="big"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></div><div class="ttl"><b>${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[D(d).getUTCMonth()]}</b><div>${ic('grid',12)}ลงแล้ว ${_st.f}/${_st.a} · ว่าง ${_st.a-_st.f}${d===TODAY?' · <b style="color:var(--blue)">วันนี้</b>':''}${note?`<span class="nt3">${ic('pin',12)}${esc(note)}</span>`:''}</div></div></header><div class="seats" style="--rooms:${R.length}"><div></div>${R.map(r=>isBrand()?`<button class="rhead pick" data-act="selCol" data-d="${d}" data-r="${r}" title="เลือกทุกช่องว่างของห้องนี้"><span class="cam"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/></svg></span>ห้อง ${r}</button>`:`<div class="rhead"><span class="cam"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/></svg></span>ห้อง ${r}</div>`).join('')}
   ${C().slots.map((t,s)=>`<${isBrand()?`button class="rowlab pick" data-act="selRow" data-d="${d}" data-s="${s}" title="เลือกทุกช่องว่างของรอบนี้"`:'div class="rowlab"'}><div><b>${t.split('–')[0]}</b><span class="to"><span class="tw">ถึง </span>${t.split('–')[1]||''}</span></div></${isBrand()?'button':'div'}>`+R.map(r=>seat(d,r,s,i++)).join('')).join('')}</div>
   <div class="legend"><span><i style="background:#fff;border-color:#c7dbf7"></i>ว่าง</span><span><i style="background:var(--navy)"></i>ที่เลือก</span><span><i style="background:#ffe1c2;box-shadow:0 0 0 2px #fff,0 0 0 3px var(--blue)"></i>คิวของฉัน</span><span>${ic('hour',13)} รอยืนยัน</span><span>${ic('undo',13)} ขอยกเลิก</span><span>${ic('swap',13)} ขอย้ายห้อง</span><span>${ic('clock',13)} ขอเปลี่ยนเวลา</span><span><i style="background:repeating-linear-gradient(45deg,#f1f4f9 0 4px,#fff 4px 8px)"></i>ปิด</span><span><i style="background:repeating-linear-gradient(45deg,#ffe9e9 0 4px,#fff 4px 8px);border-color:#f6c4c6"></i>ปิดเฉพาะวันนี้</span></div></div>`;
   return h;
@@ -2378,7 +2405,7 @@ function seat(d,r,s,i){
   if(isClosedWeekly(d,r,s))return`<button class="seat x" disabled ${st}" title="ปิดประจำทุกสัปดาห์ (แก้ที่ตั้งค่า)">${ic('lock',16)}${isClosedRoom(d,r)?'':'<small>ปิดประจำ</small>'}</button>`;
   const v=S.d.slots[k],past=isPast(d,s);
   if(!v&&!isBrand()&&!past&&!canBookDate(d))return`<button class="seat lockd" disabled ${st}">${ic('lock',12)}ยังไม่เปิดจอง</button>`;
-  if(!v){const sel=S.sel.has(k);return`<button class="seat free ${sel?'sel':''} ${past?'past':''}" data-act="seat" data-k="${k}" ${past&&!isBrand()?'disabled':''} ${st}">${sel?ic('check',15)+'<span class="sl">เลือกแล้ว</span>':past?'—':ic('plus',14)+'ว่าง'}</button>`}
+  if(!v){const sel=S.sel.has(k);return`<button class="seat free ${sel?'sel':''} ${past?'past':''}" data-act="seat" data-k="${k}" ${past&&!isBrand()?'disabled':''} ${st}">${sel?ic('check',15)+'<span class="sl">เลือกแล้ว</span>':past?'—':'<span class="rec"></span>ว่าง'}</button>`}
   const mine=v.who===S.meId,show=mine||isBrand()||C().perms.seeOthers,c=colOf(v.who);
   const cls=['seat',v.status!=='ok'?v.status:'',mine?'mine':'',show?'':'hid',past?'past':'',isTrial(v)&&show?'trial':''].join(' ');
   return`<button class="${cls}" data-act="seat" data-k="${k}" ${st};${show?`background-color:${c.bg};color:${c.fg}`:''}" title="${show?esc(whoName(v))+(v.note?' · '+esc(v.note):'')+' · ':''}${STATUS[v.status]}">${v.status!=='ok'?`<span class="st">${ic(SIC[v.status],11)}</span>`:''}${isTrial(v)&&show?'<small class="tg">ทดลองไลฟ์</small>':''}${isShort(v)&&show?`<i class="hb" title="ไลฟ์จริง ${fmtHM(hrsOf(v))}${v.actReason?' · '+esc(v.actReason):''}">${fmtHMc(hrsOf(v))}</i>`:''}<span class="n">${show?esc(isTrial(v)?(v.guest||'ไม่ระบุชื่อ'):M(v.who).name):'ไม่ว่าง'}</span>${mine?'<small>คิวของฉัน</small>':''}${isTrial(v)&&show&&v.note?`<small class="nt">${esc(v.note)}</small>`:''}</button>`;
