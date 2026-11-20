@@ -1419,6 +1419,11 @@ main.enter{animation:softIn .28s ease-out both}
 .wsum{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--blue);background:#eef4ff;border-radius:9px;padding:6px 12px;margin-top:10px}.wsum b{color:var(--navy)}
 .paypre{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:-4px 0 12px}.paypre .dcount{margin-top:0}
 .paywin{width:auto;min-width:220px;height:40px}
+
+.wpq{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 4px}.wpq button{display:inline-flex;align-items:center;gap:5px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:12.5px;font-weight:600;color:var(--navy);cursor:pointer;transition:border-color .15s,background-color .15s}
+.wpq button:hover{border-color:var(--blue)}.wpq button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.wpq.rnd{margin-top:2px}.wpq.rnd>span{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--muted)}.wpq.rnd button{border-color:#c6ebd3;background:#f3fdf6;color:#15803d}.wpq.rnd button small{opacity:.75;font-weight:500}
+.wprow span.rd{box-shadow:inset 0 0 0 1.5px #22c55e;border-radius:7px}
 </style>
 </head>
 <body>
@@ -2017,10 +2022,14 @@ function vPerson(ws,od){
 function weekPicker(){
   let ym=S.date.slice(0,7);
   const body=()=>{const[y,m]=ym.split('-').map(Number),first=`${ym}-01`,last=isoOf(new Date(Date.UTC(y,m,0))),sel=monday(S.date),cur=monday(TODAY);let rows='';
-    for(let ws=monday(first);ws<=last;ws=add(ws,7))rows+=`<button class="wprow ${ws===sel?'on':''} ${ws===cur?'cur':''}" data-d="w:${ws}"><span class="lb">${dnum(ws)}–${dnum(add(ws,6))}<small>${ws===cur?'สัปดาห์นี้':'รอบ'}</small></span>${[...Array(7)].map((_,j)=>{const d=add(ws,j);return`<span class="${isOpen(d)?'o':''} ${d.slice(0,7)!==ym?'out':''}">${dnum(d)}</span>`}).join('')}</button>`;
-    return`<div class="wphd"><button class="btn icon" data-d="nav:-1">${ic('left',16)}</button><b style="color:var(--navy)">${MON_L[m-1]} ${y}</b><button class="btn icon" data-d="nav:1">${ic('right',16)}</button></div><div class="wpd"><span>รอบ</span>${[1,2,3,4,5,6,0].map(d=>`<span>${DOW_S[d]}</span>`).join('')}</div><div class="wp">${rows}</div>`};
+    for(let ws=monday(first);ws<=last;ws=add(ws,7))rows+=`<button class="wprow ${ws===sel?'on':''} ${ws===cur?'cur':''}" data-d="w:${ws}"><span class="lb">${dnum(ws)}–${dnum(add(ws,6))}<small>${ws===cur?'สัปดาห์นี้':'รอบ'}</small></span>${[...Array(7)].map((_,j)=>{const d=add(ws,j);return`<span class="${isOpen(d)?'o':''} ${d.slice(0,7)!==ym?'out':''} ${inRound(d)?'rd':''}">${dnum(d)}</span>`}).join('')}</button>`;
+    const cw=monday(TODAY),[ty,tm]=TODAY.split('-').map(Number),nmF=isoOf(new Date(Date.UTC(ty,tm,1)));
+    const Q=[['สัปดาห์นี้',cw,'target'],['สัปดาห์หน้า',add(cw,7),'calweek'],['ต้นเดือนหน้า',monday(nmF),'calendar']];
+    const W=openWins().filter(w=>w.to>=TODAY);
+    return`<div class="wpq">${Q.map(([l,w,i])=>`<button data-d="w:${w}" class="${w===sel?'on':''}">${ic(i,14)}${l}</button>`).join('')}</div>${W.length?`<div class="wpq rnd"><span>${ic('ticket',13)}รอบเปิดจอง</span>${W.map(w=>`<button data-d="d:${w.from<TODAY?TODAY:w.from}">${esc(w.label||'รอบเปิดจอง')} <small>${fmtRange(w.from,w.to,false)}</small></button>`).join('')}</div>`:''}<div class="wphd"><button class="btn icon" data-d="nav:-1">${ic('left',16)}</button><b style="color:var(--navy)">${MON_L[m-1]} ${y}</b><button class="btn icon" data-d="nav:1">${ic('right',16)}</button></div><div class="wpd"><span>รอบ</span>${[1,2,3,4,5,6,0].map(d=>`<span>${DOW_S[d]}</span>`).join('')}</div><div class="wp">${rows}</div>`};
   modal(`<div class="mhead">${icb('calendar')}<div><h3>เลือกสัปดาห์</h3><span class="muted">แตะแถวเพื่อเลือกรอบ จันทร์–อาทิตย์ · ตัวเลขสีฟ้า = วันที่มีไลฟ์</span></div></div><div id="wpbody">${body()}</div><div class="mact"><button class="btn ghost" data-d="close">ปิด</button></div>`,
    a=>{if(a==='close')return closeM();if(a.startsWith('nav:')){const[y,m]=ym.split('-').map(Number);ym=isoOf(new Date(Date.UTC(y,m-1+(+a.slice(4)),1))).slice(0,7);$('#wpbody').innerHTML=body();return}
+     if(a.startsWith('d:')){S.date=a.slice(2);S.sel?.clear?.();if(S.calMode==='month')S.calMode='room';closeM();render();window.scrollTo({top:0,behavior:'smooth'});return}
      if(a.startsWith('w:')){S.date=firstOpen(a.slice(2));if(S.calMode==='month')S.calMode='room';closeM();render();window.scrollTo({top:0,behavior:'smooth'})}});
 }
 function vMonth(){
