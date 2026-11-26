@@ -2867,7 +2867,6 @@ function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
    ${S.meId?`<button class="hc hmine ${isBrand()?'':'solo'}" style="--i:6" data-act="view" data-v="mine">${newAdds().length?`<span class="hbadge">${newAdds().length}</span>`:''}<div class="hq">${mine.length}</div><div><b>คิวของฉัน</b><p>สัปดาห์นี้ · ${fmtHM(mine.reduce((a,v)=>a+hrsOf(v),0))}</p></div></button>`:''}
    ${isBrand()?`<button class="hc hset" style="--i:7" data-act="view" data-v="set"><div class="hgear">${ic('settings',22)}</div><div><b>ตั้งค่าระบบ</b><p>ห้อง · วันไลฟ์ · สิทธิ์</p></div></button>`:''}
   </div>
-  <div class="hdock"><button class="hplus" data-act="homePlus" title="จองคิวช่องว่างถัดไป">${ic('plus',24)}<span>จองคิว</span></button><button class="hcal" data-act="view" data-v="week" title="ตารางไลฟ์">${ic('calweek',22)}</button></div>
   </div>`}
 
 function dayStats(d){let f=0,a=0,me=0,pd=0,fh=0,meh=0;ROOMS().forEach(r=>{C().slots.forEach((_,s)=>{if(isClosed(d,r,s))return;a++;const v=slotOf(d,r,s);if(v){f++;fh+=hrsOf(v);if(v.who===S.meId&&COUNTED.includes(v.status)){me++;meh+=hrsOf(v)}if(v.status!=='ok')pd++}})});return{f,a,me,pd,fh,meh}}
