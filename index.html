@@ -2683,7 +2683,7 @@ function render(){
   const NA=newAdds();
   const FOOT=`<footer class="mfoot"><b>LIVE BOOKING SYSTEM : HS DEVELOPMENT</b><span>SOFTWARE ENGINEERING &amp; DEVELOPMENT</span></footer>`;
   document.body.dataset.v=S.view;const VL={book:'จองคิว',week:'ตารางไลฟ์',mine:'คิวของฉัน',track:'ติดตามคำขอ',pay:'สรุปชั่วโมง',req:'อนุมัติ',set:'ตั้งค่า'};
-  main.innerHTML=(S.view!=='home'?`<button class="hback" data-act="view" data-v="home"><i>${ic('left',15)}</i>หน้าแรก <small>/ ${VL[S.view]||''}</small></button>`:'')+(NA.length&&(S.view==='book'||S.view==='mine')?`<button class="newbar" data-act="newAdds"><span class="bl">${ic('bell',18)}</span><span class="tx"><b>แบรนด์เพิ่มคิวให้คุณ ${NA.length} Slot</b><small>${esc([...new Set(NA.map(([,v])=>v.addedBy||v.by).filter(Boolean))].join(', '))} · แตะเพื่อดูรายละเอียด</small></span>${ic('right',18)}</button>`:'')+views[S.view]()+FOOT;
+  main.innerHTML=(NA.length&&(S.view==='book'||S.view==='mine')?`<button class="newbar" data-act="newAdds"><span class="bl">${ic('bell',18)}</span><span class="tx"><b>แบรนด์เพิ่มคิวให้คุณ ${NA.length} Slot</b><small>${esc([...new Set(NA.map(([,v])=>v.addedBy||v.by).filter(Boolean))].join(', '))} · แตะเพื่อดูรายละเอียด</small></span>${ic('right',18)}</button>`:'')+views[S.view]()+FOOT;
   if(NA.length&&!S._newShown&&!$('#dlg').open){S._newShown=true;setTimeout(()=>{if(!$('#dlg').open)newAddsDlg()},500)}
   if(S.lastView!==S.view){main.classList.remove('enter');void main.offsetWidth;main.classList.add('enter');S.lastView=S.view}else{main.classList.remove('enter');window.scrollTo(0,y)}
   const wr=$('#wrow');if(wr){wr.style.scrollBehavior='auto';if(keep&&wrowX!=null)wr.scrollLeft=wrowX;else{const t=$('.wday.tdy')||$('.wday:not(.off)');if(t)wr.scrollLeft=t.offsetLeft-4}wr.style.scrollBehavior=''}
@@ -2830,6 +2830,7 @@ function homeNext(n){const out=[];const R=ROOMS(),SL=C().slots;
   for(let k=0;k<45&&out.length<n;k++){const d=add(TODAY,k);if(!canBookDate(d))continue;
     for(let s=0;s<SL.length&&out.length<n;s++){if(d===TODAY&&+SL[s].slice(0,2)<=new Date().getHours())continue;for(const r of R){if(isClosed(d,r,s)||slotOf(d,r,s))continue;out.push({d,s,r});break}}}
   return out}
+function homeGo(k){const d=k?k.split('_')[0]:TODAY;S.date=d;S.view='book';S.sel.clear();S._keepRow=false;render();window.scrollTo({top:0,behavior:'smooth'});if(k)setTimeout(()=>{const e=document.querySelector(`.seat[data-k="${k}"]`);if(e){e.scrollIntoView({block:'center',behavior:'smooth'});e.classList.add('hflash')}},450)}
 function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
   const RD=roundDays(),rdays=RD.flatMap(([,L])=>L),free=rdays.reduce((a,x)=>a+freeCount(x),0),rdLbl=RD.length?RD.map(([w])=>fmtRange(w.from,w.to,false)).join(', '):'';
   const hr=new Date().getHours(),cs=SL.findIndex(x=>+x.slice(0,2)<=hr&&hr<+x.slice(6,8)+(x.slice(6,8)==='24'?0:0)&&hr<(+x.slice(6,8)||24));
@@ -2851,7 +2852,7 @@ function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
    <h1>Live <em>Booking</em></h1></div>
   <div class="hbento">
    <button class="hc hbook" style="--i:0" data-act="view" data-v="book"><div class="hl">จองคิว</div><div class="hled">ON AIR<br>BOOKING</div><div class="honair"><i></i>${RD.length?(free>0?`ว่าง ${free} ช่อง`:'เต็มแล้ว'):'ยังไม่มีรอบเปิดจอง'}</div>${RD.length?`<div class="hrnd">ตลอดรอบจอง ${rdLbl}</div>`:''}<div class="hcap">ช่องว่างที่ใกล้ที่สุด<span class="hm"> · แตะเพื่อไปจอง</span></div>
-    <div class="hslots">${nx.length?nx.map((x,i)=>`<span class="hslot ${i?'':'sel'}" data-act="goDate" data-d="${x.d}"><span class="ck">${i?'':ic('check',12)}</span><b>${SL[x.s].slice(0,5)}</b><small>${x.d===TODAY?'วันนี้':fmtD(x.d).replace(/^\S+ /,'')}<span class="hrmx"> · ห้อง ${x.r}</span></small></span>`).join(''):`<span class="hslot">ยังไม่มีช่องว่างในรอบนี้</span>`}</div>${mic}</button>
+    <div class="hslots">${nx.length?nx.map((x,i)=>`<span class="hslot ${i?'':'sel'}" data-act="homeSlot" data-k="${x.d}_${x.r}_${x.s}" title="ไปจอง ${fmtD(x.d)} ${SL[x.s]} ห้อง ${x.r}"><span class="ck">${i?'':ic('check',12)}</span><b>${SL[x.s].slice(0,5)}</b><small>${x.d===TODAY?'วันนี้':fmtD(x.d).replace(/^\S+ /,'')}<span class="hrmx"> · ห้อง ${x.r}</span></small></span>`).join(''):`<span class="hslot">ยังไม่มีช่องว่างในรอบนี้</span>`}</div>${mic}</button>
    <button class="hc htoday" style="--i:1" data-act="view" data-v="week"><div class="hl">ตารางไลฟ์</div><div class="hbig">วันนี้<span>${fmtD(TODAY).replace(/^\S+ /,'')}</span></div>
     <div class="hmg" style="--c:${R.length*2}">${cells.map((c,k)=>`<i class="${c}" style="--d:${k}"></i>`).join('')}</div>
     <div class="hmeta"><div>ลงแล้ว <b>${ds.f}/${ds.a}</b><br>${R.length} ห้อง · ${SL.length} รอบ</div><svg class="hring" viewBox="0 0 46 46"><circle class="tr" cx="23" cy="23" r="18"/><circle class="pr" cx="23" cy="23" r="18" style="--p:${ds.a?ds.f/ds.a:0}"/></svg></div></button>
@@ -3867,7 +3868,8 @@ const acts={
   view:b=>{S.view=b.dataset.v;S.sel.clear();S._keepRow=false;S._wkInit=false;render();window.scrollTo({top:0,behavior:'smooth'})},
   date:b=>{S.date=b.dataset.d;render()},
   goRound:()=>roundDlg(),
-  homePlus:()=>{const x=homeNext(1)[0];S.date=x?x.d:TODAY;S.view='book';S.sel.clear();render();window.scrollTo({top:0,behavior:'smooth'});if(x)setTimeout(()=>{const e=document.querySelector(`[data-k="${x.d}_${x.r}_${x.s}"]`);if(e){e.scrollIntoView({block:'center',behavior:'smooth'});e.classList.add('hflash')}},450)},
+  homePlus:()=>{const x=homeNext(1)[0];homeGo(x?`${x.d}_${x.r}_${x.s}`:null)},
+  homeSlot:b=>homeGo(b.dataset.k),
   goDate:b=>{S.date=b.dataset.d;S.view='book';render();window.scrollTo({top:0,behavior:'smooth'})},
   wk:b=>{S.date=firstOpen(add(monday(S.date),7*+b.dataset.n));render()},
   today:()=>{const ws=monday(TODAY);S.date=isOpen(TODAY)?TODAY:([...Array(7)].map((_,i)=>add(ws,i)).find(d=>d>=TODAY&&isOpen(d))||firstOpen(ws));render()},
