@@ -2284,6 +2284,16 @@ body[data-v=home] .tophome{display:none}
 .htags{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}.htags span{font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap}.htags .more{background:rgba(29,78,216,.12);color:#1d4ed8}.htags em{font-style:normal;font-size:12px;color:#64748b;background:rgba(15,31,61,.06);padding:3px 10px;border-radius:999px}
 @media(max-width:860px){.htags span{font-size:10.5px;padding:1px 7px}.htoday{grid-row:span 5!important}}
 .req.rqgo{transition:transform .32s cubic-bezier(.4,0,.2,1),opacity .28s ease,height .32s .18s ease,margin .32s .18s ease,padding .32s .18s ease;transform:translateX(60px) scale(.96);opacity:0;height:0!important;margin-top:0!important;margin-bottom:0!important;padding-top:0!important;padding-bottom:0!important;border-width:0!important;overflow:hidden}
+.hlive{flex-direction:column!important;align-items:stretch!important;justify-content:space-between!important;gap:10px!important;cursor:default!important}.hlive:hover{transform:none!important}
+.hlv1{display:flex;align-items:center;gap:12px}.hlv1 .hplay,.hlv1 .hwave{margin-top:0!important}.hlv1 .hwave{flex:0 1 220px;height:40px}
+.hlvt{margin-left:auto;text-align:right;line-height:1.3}.hlvt b{display:block;font-size:15px}.hlvt small{position:static!important;font-size:11.5px;opacity:.9}
+.hrooms{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:6px}
+.hrm{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:12px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);font-size:12px;min-width:0}
+.hrm i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.55);flex:none}
+.hrm b{font-weight:600;font-size:12.5px;white-space:nowrap}.hrm em{font-style:normal;margin-left:auto;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hrm.on{background:rgba(255,255,255,.92);color:#3b2f8f;border-color:#fff}.hrm.on i{background:#ef4444;animation:lvDot 1.6s ease-out infinite}.hrm.on em{opacity:1;font-weight:600}
+.hrm.cl{opacity:.55}
+@media(max-width:860px){.hlive{grid-column:1/-1!important;grid-row:span 4!important}.hlv1 .hwave{flex:1}.hrooms{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
@@ -2838,8 +2848,8 @@ function homeNext(n){const out=[];const R=ROOMS(),SL=C().slots;
 function homeGo(k){const d=k?k.split('_')[0]:TODAY;S.date=d;S.view='book';S.sel.clear();S._keepRow=false;render();window.scrollTo({top:0,behavior:'smooth'});if(k)setTimeout(()=>{const e=document.querySelector(`.seat[data-k="${k}"]`);if(e){e.scrollIntoView({block:'center',behavior:'smooth'});e.classList.add('hflash')}},450)}
 function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
   const RD=roundDays(),rdays=RD.flatMap(([,L])=>L),free=rdays.reduce((a,x)=>a+freeCount(x),0),rdLbl=RD.length?RD.map(([w])=>fmtRange(w.from,w.to,false)).join(', '):'';
-  const hr=new Date().getHours(),cs=SL.findIndex(x=>+x.slice(0,2)<=hr&&hr<+x.slice(6,8)+(x.slice(6,8)==='24'?0:0)&&hr<(+x.slice(6,8)||24));
-  const now=cs<0?[]:R.map(r=>({r,v:slotOf(TODAY,r,cs)})).filter(x=>x.v&&COUNTED.includes(x.v.status));
+  const hr=new Date().getHours(),cs=SL.findIndex(x=>+x.slice(0,2)<=hr&&hr<(+x.slice(6,8)||24));
+  const now=cs<0?[]:R.map(r=>({r,v:isClosed(TODAY,r,cs)?null:slotOf(TODAY,r,cs)})).filter(x=>x.v&&COUNTED.includes(x.v.status));
   const wk=monday(TODAY),bars=[...Array(7)].map((_,i)=>{const d=add(wk,i);let h=0;Object.values(S.d.slots).forEach(v=>{if(v.date===d&&COUNTED.includes(v.status)&&(isBrand()||v.who===S.meId))h+=hrsOf(v)});return h});
   const wh=bars.reduce((a,b)=>a+b,0),bm=Math.max(1,...bars);
   const rq=isBrand()?Object.values(reqs()||{}):Object.values(S.d.requests||{}).filter(q=>q.who===S.meId&&q.status==='pending');
@@ -2861,7 +2871,8 @@ function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
    <button class="hc htoday" style="--i:1" data-act="view" data-v="week"><div class="hl">ตารางไลฟ์</div><div class="hbig">วันนี้<span>${fmtD(TODAY).replace(/^\S+ /,'')}</span></div>
     ${isBrand()?(()=>{const P=[...new Set(Object.values(S.d.slots).filter(v=>v.date===TODAY&&COUNTED.includes(v.status)).map(v=>v.who))];return`<div class="htags">${P.length?P.slice(0,8).map(id=>{const c=colOf(id);return`<span style="background:${c.bg};color:${c.fg}">${esc(id===TRIAL?'ทดลองไลฟ์':M(id).name)}</span>`}).join('')+(P.length>8?`<span class="more">+${P.length-8}</span>`:''):'<em>ไม่มีคนไลฟ์วันนี้</em>'}</div>`})():''}<div class="hmg" style="--c:${R.length*2}">${cells.map((c,k)=>`<i class="${c}" style="--d:${k}"></i>`).join('')}</div>
     <div class="hmeta"><div>ลงแล้ว <b>${ds.f}/${ds.a}</b><br>${R.length} ห้อง · ${SL.length} รอบ</div><svg class="hring" viewBox="0 0 46 46"><circle class="tr" cx="23" cy="23" r="18"/><circle class="pr" cx="23" cy="23" r="18" style="--p:${ds.a?ds.f/ds.a:0}"/></svg></div></button>
-   <button class="hc hlive" style="--i:2" data-act="view" data-v="week"><span class="hplay"></span><div class="hwave ${now.length?'':'idle'}">${wave}</div><small>${now.length?`กำลังไลฟ์ · ${now.map(x=>`ห้อง ${x.r} ${esc(isTrial(x.v)?'ทดลอง':M(x.v.who).name)}`).slice(0,2).join(' · ')}${now.length>2?` +${now.length-2}`:''}`:cs<0?'ตอนนี้ไม่มีรอบไลฟ์':'รอบนี้ยังไม่มีคนไลฟ์'}</small></button>
+   <div class="hc hlive" style="--i:2"><div class="hlv1"><span class="hplay"></span><div class="hwave ${now.length?'':'idle'}">${wave}</div><div class="hlvt"><b>${now.length?`กำลังไลฟ์ ${now.length} ห้อง`:'ตอนนี้ไม่มีคนไลฟ์'}</b><small>${cs<0?'อยู่นอกช่วงเวลาไลฟ์':`รอบ ${SL[cs]} · วันนี้`}</small></div></div>
+    <div class="hrooms" style="--n:${R.length}">${R.map(r=>{const v=cs<0||isClosed(TODAY,r,cs)?null:slotOf(TODAY,r,cs),on=v&&COUNTED.includes(v.status),cl=cs>=0&&isClosed(TODAY,r,cs);return`<span class="hrm ${on?'on':''} ${cl?'cl':''}"><i></i><b>ห้อง ${r}</b><em>${on?esc(isTrial(v)?'ทดลองไลฟ์':M(v.who).name):cl?'ปิด':'ว่าง'}</em></span>`}).join('')}</div></div>
    ${isBrand()||C().perms.seePay?`<button class="hc hhours" style="--i:3" data-act="view" data-v="pay"><div class="hl">${isBrand()?'ชั่วโมงไลฟ์ สัปดาห์นี้':'ชั่วโมงของฉัน สัปดาห์นี้'}</div><div class="hbars">${bars.map((b,i)=>`<i style="--d:${i};height:${Math.max(6,b/bm*100)}%"></i>`).join('')}</div><div class="hserif"><b data-cu="hhrs">${fmtHM(wh)}</b></div></button>`:''}
    <div class="hrw" style="--i:4"><button class="hc hreq" data-act="view" data-v="${isBrand()?'req':'track'}"><div class="hl">${isBrand()?'รออนุมัติ':'คำขอของฉัน'}</div><div class="hn">${isBrand()?rqN:rq.length}<small>${isBrand()?'รายการ':'คำขอ'}</small></div>
     <div class="hstack">${rqW.slice(0,3).map(id=>{const c=colOf(id);return`<b style="background:${c.bg};color:${c.fg}">${esc((isTrial({who:id})?'ท':M(id).name||'?')[0])}</b>`}).join('')}${rqW.length>3?`<b class="more">+${rqW.length-3}</b>`:''}${(isBrand()?rqN:rq.length)?'':'<span class="hok">ไม่มีค้าง</span>'}</div></button></div>
