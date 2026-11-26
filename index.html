@@ -2376,6 +2376,18 @@ body .hbento .hmine.solo{order:0!important;grid-column:1/-1!important;grid-row:s
 @media(max-width:860px){body .hbento .hmine.solo{flex-wrap:wrap!important;align-content:center;row-gap:8px}.hmine .hnext{flex:1 1 100%;margin-left:0;flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:0 8px;text-align:left;background:rgba(255,255,255,.55);padding:6px 10px;border-radius:12px}.hmine .hnext b{font-size:13.5px}.hmore3{display:none!important}}
 body .hbento .hround{order:0!important}body .hbento .hmine.solo{order:-1!important}
 .honair i{background:#22c55e!important;box-shadow:0 0 0 0 rgba(34,197,94,.7);animation:hgBlink 1.4s ease-out infinite!important}@keyframes hgBlink{0%{box-shadow:0 0 0 0 rgba(34,197,94,.7);opacity:1}60%{box-shadow:0 0 0 6px rgba(34,197,94,0);opacity:.55}100%{box-shadow:0 0 0 0 rgba(34,197,94,0);opacity:1}}
+.tbell{position:relative;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.6);background:rgba(255,255,255,.28);color:#fff;cursor:pointer;flex:none;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:background-color .2s,transform .2s}
+.tbell:hover{background:rgba(255,255,255,.45)}
+.tbell em{position:absolute;top:-4px;right:-4px;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:#ef4444;color:#fff;font-style:normal;font-size:11px;font-weight:700;display:grid;place-items:center;border:2px solid #fff;box-shadow:0 4px 10px -3px rgba(239,68,68,.7)}
+.tbell.has{background:#fff;color:#1d4ed8;border-color:#fff}
+.tbell.has svg{animation:bellIdle 4s ease-in-out infinite;transform-origin:50% 2px}
+.tbell.has::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(255,255,255,.8);animation:bellPulse 2.4s ease-out infinite;pointer-events:none}
+.tbell.ring svg{animation:bellRing 1s ease-in-out 3}
+@keyframes bellIdle{0%,88%,100%{transform:rotate(0)}91%{transform:rotate(14deg)}94%{transform:rotate(-12deg)}97%{transform:rotate(6deg)}}
+@keyframes bellRing{0%,100%{transform:rotate(0)}15%{transform:rotate(22deg)}30%{transform:rotate(-20deg)}45%{transform:rotate(14deg)}60%{transform:rotate(-10deg)}75%{transform:rotate(5deg)}}
+@keyframes bellPulse{0%{transform:scale(.9);opacity:1}100%{transform:scale(1.35);opacity:0}}
+@media(max-width:860px){.tbell{width:38px;height:38px}.top:has(.tbell) .lv{display:none!important}body:not([data-v=home]) .top:has(.tbell) .pres{display:none!important}body:not([data-v=home]) .top .wordmark{height:20px!important;width:auto}.top .user{gap:6px}}
+@media(prefers-reduced-motion:reduce){.tbell svg,.tbell::after{animation:none!important}}
 </style>
 </head>
 <body>
@@ -2769,7 +2781,9 @@ function render(){
   if(on){if(prevRect){ink.style.transition='none';ink.style.left=prevRect.l+'px';ink.style.width=prevRect.w+'px';void ink.offsetWidth;ink.style.transition=''}
     requestAnimationFrame(()=>{ink.style.left=on.offsetLeft+'px';ink.style.width=on.offsetWidth+'px'})}
   const nm=myName();
-  $('#user').innerHTML=presWidget()+`<button class="ubtn" data-act="profile" title="ข้อมูลของฉัน"><div class="avatar" style="background:${c.bg};color:${c.fg}">${u.photo?`<img src="${esc(u.photo)}" alt="">`:(S.meId?esc(nm[0]):ic('tag',17))}</div><div class="uname"><b>${esc(nm)}</b><span class="role ${isBrand()?'brand':''}">${ic(isBrand()?'tag':'mic',11)}${isBrand()?'KITBEEZ_ADMIN':ROLE_L[S.role]}</span></div></button><button class="btn icon ghost" data-act="logout" title="ออกจากระบบ">${ic('logout',18)}</button>`;
+  const rqB=isBrand()?(T.find(x=>x.id==='req')?.b||0):0,rqUp=isBrand()&&S._rqPrev!=null&&rqB>S._rqPrev;
+  if(isBrand()){if(rqUp)setTimeout(()=>toast(`🔔 มีคำขอใหม่เข้ามา · รอดำเนินการ ${rqB} รายการ`),300);S._rqPrev=rqB;document.title=(rqB?`(${rqB}) `:'')+document.title.replace(/^\(\d+\) /,'')}
+  $('#user').innerHTML=(isBrand()?`<button class="tbell ${rqB?'has':''} ${rqUp?'ring':''}" data-act="view" data-v="req" title="${rqB?`มีคำขอรอดำเนินการ ${rqB} รายการ`:'ไม่มีคำขอค้าง'}">${ic('bell',19)}${rqB?`<em>${rqB>99?'99+':rqB}</em>`:''}</button>`:'')+presWidget()+`<button class="ubtn" data-act="profile" title="ข้อมูลของฉัน"><div class="avatar" style="background:${c.bg};color:${c.fg}">${u.photo?`<img src="${esc(u.photo)}" alt="">`:(S.meId?esc(nm[0]):ic('tag',17))}</div><div class="uname"><b>${esc(nm)}</b><span class="role ${isBrand()?'brand':''}">${ic(isBrand()?'tag':'mic',11)}${isBrand()?'KITBEEZ_ADMIN':ROLE_L[S.role]}</span></div></button><button class="btn icon ghost" data-act="logout" title="ออกจากระบบ">${ic('logout',18)}</button>`;
   $('#demo').innerHTML=S.store.demo?`<div class="demo">${ic('flask',16)} <b>โหมดทดลอง</b> ข้อมูลเก็บในเครื่องนี้เท่านั้น · <button class="link" data-act="guide">วิธีเปิดใช้ Login Gmail ให้ทุกคนใช้ร่วมกัน</button></div>`:'';
   const main=$('#main');const views={home:vHome,book:vBook,week:vWeek,mine:vMine,track:vTrack,pay:vPay,req:vReq,set:vSet};
   main.classList.remove('wide');
