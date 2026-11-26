@@ -1679,7 +1679,7 @@ main.enter{animation:softIn .28s ease-out both}
 .wempty{display:flex;flex-direction:column;align-items:center;gap:4px;padding:26px;border:1.5px dashed var(--line);border-radius:14px;color:var(--muted);text-align:center}.wempty b{color:var(--navy);font-size:14px}.wempty small{font-size:12.5px}
 .wpast{margin-top:10px}.wpast summary{cursor:pointer;font-size:13px;color:var(--muted);display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:8px;list-style:none}.wpast summary::-webkit-details-marker{display:none}.wpast summary:hover{background:#f2f6fc}.wpast .wlist{margin-top:8px}
 .wadd{position:sticky;top:calc(var(--hh,62px) + 70px);border:1px solid var(--line);border-radius:16px;padding:14px;background:linear-gradient(180deg,#fbfdff,#f4f8ff);display:flex;flex-direction:column;gap:8px;margin-top:18px}
-.wadh{display:flex;align-items:center;gap:8px;color:var(--navy);font-size:15px}.wadh svg{color:var(--blue)}
+.wadh{display:flex;flex-direction:column;gap:2px;color:var(--navy);padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:4px;cursor:default}.wadh b{font-size:14px;font-weight:600}.wadh small{font-size:12px;color:var(--muted)}
 .wsl{font-size:11.5px;font-weight:700;color:var(--muted);letter-spacing:.3px;margin-top:4px}
 .wadd .wq .btn{background:#fff}.wf2{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:6px}.wf2 .wto{padding-bottom:10px;color:var(--muted)}
 .wf2 label>span,.wlb>span{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:4px}.wlb i{font-style:normal;font-weight:400}.wf2 .inp,.wlb .inp{width:100%}
@@ -3541,7 +3541,7 @@ function windowsCard(){
     <div class="wcol"><div class="rmsh"><div><b>รอบที่เปิด / กำลังจะมาถึง</b><small>${cur.length} รอบ</small></div></div>
      <div class="wlist">${cur.map(wc).join('')||`<div class="wempty">${ic('calendar',22)}<b>ยังไม่มีรอบที่เปิดอยู่</b><small>เพิ่มรอบใหม่จากแผงด้านขวา</small></div>`}</div>
      ${past.length?`<details class="wpast"><summary>${ic('history',14)}รอบที่ผ่านมาแล้ว (${past.length})</summary><div class="wlist">${past.slice().reverse().map(wc).join('')}</div></details>`:''}</div>
-    <div class="wadd"><div class="wadh">${ic('plus',16)}<b>เพิ่มรอบใหม่</b></div>
+    <div class="wadd"><div class="wadh"><b>เพิ่มรอบใหม่</b><small>เลือกช่วงวันที่ แล้วกด “เพิ่มรอบ” ด้านล่าง</small></div>
      <span class="wsl">เลือกเร็ว</span>
      <div class="wq">${(()=>{const L=ws.slice().sort((a,b)=>b.to.localeCompare(a.to))[0];const nx=L?[add(L.to,1),add(L.to,nDays(L.from,L.to))]:null;
       return(nx?`<button class="btn sm wnext" data-act="fillWin" data-f="${nx[0]}" data-t="${nx[1]}">${ic('right',14)}ต่อจากรอบล่าสุด <small>${fmtRange(nx[0],nx[1],false)}</small></button>`:'')+rangePresets(['nweek','n2week','monthRest','nmonth','nh1','nh2']).map(([k,l,f,t])=>`<button class="btn sm" data-act="fillWin" data-f="${f<TODAY?TODAY:f}" data-t="${t}">${l}</button>`).join('')})()}</div>
