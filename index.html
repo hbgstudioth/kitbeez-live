@@ -2122,7 +2122,10 @@ b,strong{font-weight:600}
 .hled{font-size:26px;line-height:1.1;font-weight:600;letter-spacing:-.01em;color:#0f2a26;margin-top:6px}
 .honair{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:#0f2a26;color:#fff;font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:999px}
 .honair i{width:7px;height:7px;border-radius:50%;background:#ff4d5e;animation:hblink 1.2s infinite}@keyframes hblink{50%{opacity:.25}}
-.hslots{position:relative;z-index:1;display:flex;flex-direction:column;gap:7px;margin-top:14px}
+.hcap{font-size:12px;font-weight:600;color:#0f2a26;opacity:.7;margin-top:14px}
+.hslots{position:relative;z-index:1;display:flex;flex-direction:column;gap:7px;margin-top:7px}
+.honair{max-width:100%;white-space:nowrap}
+.hrnd{font-size:12px;color:#0f2a26;opacity:.75;margin-top:5px}
 .hslot{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.65);font-size:14px;color:#0f2a26;transition:background-color .2s}
 .hslot:hover{background:rgba(255,255,255,.55)}
 .hslot b{font-weight:600}.hslot small{margin-left:auto;font-size:11.5px;opacity:.75;white-space:nowrap}
@@ -2824,7 +2827,8 @@ function homeNext(n){const out=[];const R=ROOMS(),SL=C().slots;
   for(let k=0;k<45&&out.length<n;k++){const d=add(TODAY,k);if(!canBookDate(d))continue;
     for(let s=0;s<SL.length&&out.length<n;s++){if(d===TODAY&&+SL[s].slice(0,2)<=new Date().getHours())continue;for(const r of R){if(isClosed(d,r,s)||slotOf(d,r,s))continue;out.push({d,s,r});break}}}
   return out}
-function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),free=ds.a-ds.f,nx=homeNext(3);
+function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
+  const RD=roundDays(),rdays=RD.flatMap(([,L])=>L),free=rdays.reduce((a,x)=>a+freeCount(x),0),rdLbl=RD.length?RD.map(([w])=>fmtRange(w.from,w.to,false)).join(', '):'';
   const hr=new Date().getHours(),cs=SL.findIndex(x=>+x.slice(0,2)<=hr&&hr<+x.slice(6,8)+(x.slice(6,8)==='24'?0:0)&&hr<(+x.slice(6,8)||24));
   const now=cs<0?[]:R.map(r=>({r,v:slotOf(TODAY,r,cs)})).filter(x=>x.v&&COUNTED.includes(x.v.status));
   const wk=monday(TODAY),bars=[...Array(7)].map((_,i)=>{const d=add(wk,i);let h=0;Object.values(S.d.slots).forEach(v=>{if(v.date===d&&COUNTED.includes(v.status)&&(isBrand()||v.who===S.meId))h+=hrsOf(v)});return h});
@@ -2843,7 +2847,7 @@ function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),free=ds.a-ds.f,
   <div class="hhero"><div class="hhi"><svg class="hspark" viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"><path d="M24 4v40M4 24h40M9.9 9.9l28.2 28.2M38.1 9.9 9.9 38.1"/></svg><span>${greet} ${esc(myName())} · ${fmtD(TODAY)}</span></div>
    <h1>Live <em>Booking</em></h1></div>
   <div class="hbento">
-   <button class="hc hbook" style="--i:0" data-act="view" data-v="book"><div class="hl">จองคิว</div><div class="hled">ON AIR<br>BOOKING</div><div class="honair"><i></i>${free>0?`ว่าง ${free} ช่องวันนี้`:'วันนี้เต็มแล้ว'}</div>
+   <button class="hc hbook" style="--i:0" data-act="view" data-v="book"><div class="hl">จองคิว</div><div class="hled">ON AIR<br>BOOKING</div><div class="honair"><i></i>${RD.length?(free>0?`ว่าง ${free} ช่อง`:'เต็มแล้ว'):'ยังไม่มีรอบเปิดจอง'}</div>${RD.length?`<div class="hrnd">ตลอดรอบจอง ${rdLbl}</div>`:''}<div class="hcap">ช่องว่างที่ใกล้ที่สุด<span class="hm"> · แตะเพื่อไปจอง</span></div>
     <div class="hslots">${nx.length?nx.map((x,i)=>`<span class="hslot ${i?'':'sel'}" data-act="goDate" data-d="${x.d}"><span class="ck">${i?'':ic('check',12)}</span><b>${SL[x.s].slice(0,5)}</b><small>${x.d===TODAY?'วันนี้':fmtD(x.d).replace(/^\S+ /,'')}<span class="hrmx"> · ห้อง ${x.r}</span></small></span>`).join(''):`<span class="hslot">ยังไม่มีช่องว่างในรอบนี้</span>`}</div>${mic}</button>
    <button class="hc htoday" style="--i:1" data-act="view" data-v="week"><div class="hl">ตารางไลฟ์</div><div class="hbig">วันนี้<span>${fmtD(TODAY).replace(/^\S+ /,'')}</span></div>
     <div class="hmg" style="--c:${R.length*2}">${cells.map((c,k)=>`<i class="${c}" style="--d:${k}"></i>`).join('')}</div>
