@@ -2280,6 +2280,8 @@ dialog{border-radius:28px!important}
 body[data-v=home] .tophome{display:none}
 @media(max-width:860px){.tophome{height:36px;padding:0 12px 0 8px;font-size:13px;margin-left:4px}.top .sys{display:none}body:not([data-v=home]) .top .lv{display:none!important}}
 @media print{.tophome{display:none!important}}
+.htags{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}.htags span{font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap}.htags .more{background:rgba(29,78,216,.12);color:#1d4ed8}.htags em{font-style:normal;font-size:12px;color:#64748b;background:rgba(15,31,61,.06);padding:3px 10px;border-radius:999px}
+@media(max-width:860px){.htags span{font-size:10.5px;padding:1px 7px}.htoday{grid-row:span 5!important}}
 </style>
 </head>
 <body>
@@ -2827,7 +2829,8 @@ function renderCart(){
 /* ---------------- ตารางไลฟ์: ตามห้อง / ตามคน / ภาพรวมเดือน ---------------- */
 function calSeg(){return`<div class="seg">${[['room','door','ตามห้อง'],['person','users','ตามคน'],['month','calendar','ภาพรวมเดือน']].map(([k,i,l])=>`<button class="${S.calMode===k?'on':''}" data-act="calMode" data-m="${k}">${ic(i,14)}${l}</button>`).join('')}</div>`}
 function homeNext(n){const out=[];const R=ROOMS(),SL=C().slots;
-  for(let k=0;k<45&&out.length<n;k++){const d=add(TODAY,k);if(!canBookDate(d))continue;
+  const rd=roundDays().flatMap(([,L])=>L),DL=C().bookLimit?rd:[...Array(45)].map((_,k)=>add(TODAY,k));
+  for(const d of DL){if(out.length>=n)break;if(d<TODAY)continue;
     for(let s=0;s<SL.length&&out.length<n;s++){if(d===TODAY&&+SL[s].slice(0,2)<=new Date().getHours())continue;for(const r of R){if(isClosed(d,r,s)||slotOf(d,r,s))continue;out.push({d,s,r});break}}}
   return out}
 function homeGo(k){const d=k?k.split('_')[0]:TODAY;S.date=d;S.view='book';S.sel.clear();S._keepRow=false;render();window.scrollTo({top:0,behavior:'smooth'});if(k)setTimeout(()=>{const e=document.querySelector(`.seat[data-k="${k}"]`);if(e){e.scrollIntoView({block:'center',behavior:'smooth'});e.classList.add('hflash')}},450)}
@@ -2854,7 +2857,7 @@ function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
    <button class="hc hbook" style="--i:0" data-act="view" data-v="book"><div class="hl">จองคิว</div><div class="hled">ON AIR<br>BOOKING</div><div class="honair"><i></i>${RD.length?(free>0?`ว่าง ${free} ช่อง`:'เต็มแล้ว'):'ยังไม่มีรอบเปิดจอง'}</div>${RD.length?`<div class="hrnd">ตลอดรอบจอง ${rdLbl}</div>`:''}<div class="hcap">ช่องว่างที่ใกล้ที่สุด<span class="hm"> · แตะเพื่อไปจอง</span></div>
     <div class="hslots">${nx.length?nx.map((x,i)=>`<span class="hslot ${i?'':'sel'}" data-act="homeSlot" data-k="${x.d}_${x.r}_${x.s}" title="ไปจอง ${fmtD(x.d)} ${SL[x.s]} ห้อง ${x.r}"><span class="ck">${i?'':ic('check',12)}</span><b>${SL[x.s].slice(0,5)}</b><small>${x.d===TODAY?'วันนี้':fmtD(x.d).replace(/^\S+ /,'')}<span class="hrmx"> · ห้อง ${x.r}</span></small></span>`).join(''):`<span class="hslot">ยังไม่มีช่องว่างในรอบนี้</span>`}</div>${mic}</button>
    <button class="hc htoday" style="--i:1" data-act="view" data-v="week"><div class="hl">ตารางไลฟ์</div><div class="hbig">วันนี้<span>${fmtD(TODAY).replace(/^\S+ /,'')}</span></div>
-    <div class="hmg" style="--c:${R.length*2}">${cells.map((c,k)=>`<i class="${c}" style="--d:${k}"></i>`).join('')}</div>
+    ${isBrand()?(()=>{const P=[...new Set(Object.values(S.d.slots).filter(v=>v.date===TODAY&&COUNTED.includes(v.status)).map(v=>v.who))];return`<div class="htags">${P.length?P.slice(0,8).map(id=>{const c=colOf(id);return`<span style="background:${c.bg};color:${c.fg}">${esc(id===TRIAL?'ทดลองไลฟ์':M(id).name)}</span>`}).join('')+(P.length>8?`<span class="more">+${P.length-8}</span>`:''):'<em>ไม่มีคนไลฟ์วันนี้</em>'}</div>`})():''}<div class="hmg" style="--c:${R.length*2}">${cells.map((c,k)=>`<i class="${c}" style="--d:${k}"></i>`).join('')}</div>
     <div class="hmeta"><div>ลงแล้ว <b>${ds.f}/${ds.a}</b><br>${R.length} ห้อง · ${SL.length} รอบ</div><svg class="hring" viewBox="0 0 46 46"><circle class="tr" cx="23" cy="23" r="18"/><circle class="pr" cx="23" cy="23" r="18" style="--p:${ds.a?ds.f/ds.a:0}"/></svg></div></button>
    <button class="hc hlive" style="--i:2" data-act="view" data-v="week"><span class="hplay"></span><div class="hwave ${now.length?'':'idle'}">${wave}</div><small>${now.length?`กำลังไลฟ์ · ${now.map(x=>`ห้อง ${x.r} ${esc(isTrial(x.v)?'ทดลอง':M(x.v.who).name)}`).slice(0,2).join(' · ')}${now.length>2?` +${now.length-2}`:''}`:cs<0?'ตอนนี้ไม่มีรอบไลฟ์':'รอบนี้ยังไม่มีคนไลฟ์'}</small></button>
    ${isBrand()||C().perms.seePay?`<button class="hc hhours" style="--i:3" data-act="view" data-v="pay"><div class="hl">${isBrand()?'ชั่วโมงไลฟ์ สัปดาห์นี้':'ชั่วโมงของฉัน สัปดาห์นี้'}</div><div class="hbars">${bars.map((b,i)=>`<i style="--d:${i};height:${Math.max(6,b/bm*100)}%"></i>`).join('')}</div><div class="hserif"><b data-cu="hhrs">${fmtHM(wh)}</b></div></button>`:''}
