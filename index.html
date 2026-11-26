@@ -2201,7 +2201,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
 @keyframes hdrift2{to{transform:translate(2%,3%) scale(1.05)}}
 /* top bar: glass over gradient, white logo */
 .top{background:transparent!important;border-bottom:1px solid rgba(255,255,255,.35)!important;box-shadow:none!important}
-.top::before{content:"";position:absolute;inset:0;z-index:-1;background:rgba(255,255,255,.16);backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);pointer-events:none}
+.top::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(112,150,218,.82),rgba(132,166,226,.78));backdrop-filter:blur(24px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);pointer-events:none}
 .top .wordmark{filter:brightness(0) invert(1)}
 .top .sys{color:rgba(255,255,255,.75)!important}
 .top .brand{cursor:pointer}
@@ -2267,6 +2267,13 @@ dialog{border-radius:28px!important}
  .top .pres{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:rgba(255,255,255,.3)}
  .top .plist{position:fixed;left:12px;right:12px;width:auto;top:64px}
 }
+
+/* top-bar home button (always visible on inner pages) */
+.tophome{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px 0 10px;margin-left:10px;border-radius:999px;border:0;background:#fff;color:#1d4ed8;box-shadow:0 6px 16px -6px rgba(15,31,61,.45);font:inherit;font-size:14px;font-weight:600;cursor:pointer;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:background-color .2s,transform .2s;flex:none}
+.tophome:hover{background:#eef4ff}.tophome:active{transform:scale(.96)}
+body[data-v=home] .tophome{display:none}
+@media(max-width:860px){.tophome{height:36px;padding:0 12px 0 8px;font-size:13px;margin-left:4px}.top .sys{display:none}body:not([data-v=home]) .top .lv{display:none!important}}
+@media print{.tophome{display:none!important}}
 </style>
 </head>
 <body>
@@ -2652,7 +2659,7 @@ function render(){
   S.store.setRange(add(monday(anchor),-14),add(monday(anchor),40));
   const u=S.user,c=S.meId?colOf(S.meId):{bg:'var(--sky)',fg:'var(--blue)'};
   if(!$('#shell')){let so=false;try{so=localStorage.getItem('kbz-side')==='off'}catch(e){}
-    app.innerHTML=`<div id="shell" class="${so?'nos':''}"><header class="top"><button class="btn icon ghost sidetg" data-act="side" title="ซ่อน / แสดงเมนู" aria-label="ซ่อน / แสดงเมนู">${ic('side',20)}</button><div class="brand" data-act="view" data-v="home" title="หน้าแรก"><div class="bw"><div><img class="wordmark" src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv"><span class="eq"><i></i><i></i><i></i></span>LIVE</span></div><small class="sys">LIVE BOOKING SYSTEM : HS DEVELOPMENT</small></div></div><nav class="tabs" id="tabs"></nav><div class="user" id="user"></div></header><div id="demo"></div><main id="main"></main></div>`;
+    app.innerHTML=`<div id="shell" class="${so?'nos':''}"><header class="top"><button class="btn icon ghost sidetg" data-act="side" title="ซ่อน / แสดงเมนู" aria-label="ซ่อน / แสดงเมนู">${ic('side',20)}</button><div class="brand" data-act="view" data-v="home" title="หน้าแรก"><div class="bw"><div><img class="wordmark" src="${LOGO_DARK}" alt="KITBEEZ"><span class="lv"><span class="eq"><i></i><i></i><i></i></span>LIVE</span></div><small class="sys">LIVE BOOKING SYSTEM : HS DEVELOPMENT</small></div></div><button class="tophome" data-act="view" data-v="home" title="กลับหน้าแรก">${ic('left',16)}<span>หน้าแรก</span></button><nav class="tabs" id="tabs"></nav><div class="user" id="user"></div></header><div id="demo"></div><main id="main"></main></div>`;
     const fh=()=>{const t=$('.top');if(t)$('#shell').style.setProperty('--toph',t.offsetHeight+'px')};fh();addEventListener('resize',fh)}
   const prevOn=$('#tabs .on');const prevRect=prevOn?{l:prevOn.offsetLeft,w:prevOn.offsetWidth}:null;
   $('#tabs').innerHTML=`<div class="sidefx" aria-hidden="true"><i class="r r1"></i><i class="r r2"></i><i class="r r3"></i><span class="hz h1"></span><span class="hz h2"></span><span class="hz h3"></span><span class="hz h4"></span><span class="hz h5"></span><div class="eq"><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div></div>`+T.map(t=>`<button data-act="view" data-v="${t.id}" class="${S.view===t.id?'on':''}" title="${t.l}">${ic(t.i,19)}<span>${t.l}</span>${t.b?`<em>${t.b}</em>`:''}</button>`).join('')+'<b class="ink"></b>'+'<div class="sidefoot"><span>SOFTWARE ENGINEERING<br>&amp; DEVELOPMENT</span></div>';
