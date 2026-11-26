@@ -2301,6 +2301,8 @@ body[data-v=home] .tophome{display:none}
 .hlive{justify-content:flex-start!important}.hlv1{margin-bottom:2px}
 @media(max-width:860px){.hlive{grid-row:span 6!important}.hlrow{grid-template-columns:1fr;gap:5px}}
 body[data-v=pay] .pagehd{flex-wrap:wrap!important;align-items:flex-start}body[data-v=pay] .pagehd>.hdact{width:100%;flex:1 1 100%;justify-content:flex-start!important;align-items:center;min-height:48px}
+.hview{white-space:nowrap;align-self:flex-start;display:inline-flex;align-items:center;gap:3px;margin-top:8px;font-size:12px;font-weight:600;color:#b0398f;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.85);padding:3px 8px 3px 11px;border-radius:999px;position:relative;z-index:1;transition:background-color .2s}.hround:hover .hview{background:#fff}
+@media(max-width:860px){.hround .hpages{display:none}.hview{font-size:11px;padding:3px 6px 3px 9px}}
 </style>
 </head>
 <body>
@@ -2885,7 +2887,7 @@ function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
    ${isBrand()||C().perms.seePay?`<button class="hc hhours" style="--i:3" data-act="view" data-v="pay"><div class="hl">${isBrand()?'ชั่วโมงไลฟ์ สัปดาห์นี้':'ชั่วโมงของฉัน สัปดาห์นี้'}</div><div class="hbars">${bars.map((b,i)=>`<i style="--d:${i};height:${Math.max(6,b/bm*100)}%"></i>`).join('')}</div><div class="hserif"><b data-cu="hhrs">${fmtHM(wh)}</b></div></button>`:''}
    <div class="hrw" style="--i:4"><button class="hc hreq" data-act="view" data-v="${isBrand()?'req':'track'}"><div class="hl">${isBrand()?'รออนุมัติ':'คำขอของฉัน'}</div><div class="hn">${isBrand()?rqN:rq.length}<small>${isBrand()?'รายการ':'คำขอ'}</small></div>
     <div class="hstack">${rqW.slice(0,3).map(id=>{const c=colOf(id);return`<b style="background:${c.bg};color:${c.fg}">${esc((isTrial({who:id})?'ท':M(id).name||'?')[0])}</b>`}).join('')}${rqW.length>3?`<b class="more">+${rqW.length-3}</b>`:''}${(isBrand()?rqN:rq.length)?'':'<span class="hok">ไม่มีค้าง</span>'}</div></button></div>
-   <button class="hc hround" style="--i:5" data-act="goRound"><div class="hl">รอบเปิดจอง</div><div class="hpages"><div class="hpg"><i></i><i></i><i></i><i></i></div><div class="hpg"><i></i><i></i><i></i><i></i></div></div><div class="hbig2"><small>${w?(w.from<=TODAY?'เปิดอยู่':'รอบถัดไป'):'ยังไม่มีรอบ'}</small>${w?fmtRange(w.from,w.to,false):'—'}</div></button>
+   <button class="hc hround" style="--i:5" data-act="goRound" title="ดูรอบที่เปิดจอง"><div class="hl">รอบเปิดจอง</div><span class="hview"><span class="hm">คลิกเพื่อ</span>ดูรอบที่เปิดจอง ${ic('right',13)}</span><div class="hpages"><div class="hpg"><i></i><i></i><i></i><i></i></div><div class="hpg"><i></i><i></i><i></i><i></i></div></div><div class="hbig2"><small>${w?(w.from<=TODAY?'กำลังเปิดจองอยู่':'เปิดจองแล้ว'):'ยังไม่มีรอบเปิดจอง'}</small>${w?fmtRange(w.from,w.to,false):'—'}</div></button>
    ${S.meId?`<button class="hc hmine ${isBrand()?'':'solo'}" style="--i:6" data-act="view" data-v="mine">${newAdds().length?`<span class="hbadge">${newAdds().length}</span>`:''}<div class="hq">${mine.length}</div><div><b>คิวของฉัน</b><p>สัปดาห์นี้ · ${fmtHM(mine.reduce((a,v)=>a+hrsOf(v),0))}</p></div></button>`:''}
    ${isBrand()?`<button class="hc hset" style="--i:7" data-act="view" data-v="set"><div class="hgear">${ic('settings',22)}</div><div><b>ตั้งค่าระบบ</b><p>ห้อง · วันไลฟ์ · สิทธิ์</p></div></button>`:''}
   </div>
