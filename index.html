@@ -2334,6 +2334,40 @@ body .hhours{grid-row:span 4!important}
 .hreq .hstack{display:none}
 body .hrw{grid-row:span 5!important}
 @media(max-width:860px){body .hrw{grid-column:1/-1!important;grid-row:span 6!important}}
+/* ===== home layout v2 ===== */
+body .hbento .hround{display:flex!important;flex-direction:row!important;align-items:center!important;gap:14px;padding:12px 16px}
+.hround .hrx{width:42px;height:42px;border-radius:13px;background:#fff;color:#b0398f;display:grid;place-items:center;flex:none;box-shadow:0 6px 14px -8px rgba(120,40,110,.5)}
+.hround .hrt{display:flex;flex-direction:column;line-height:1.2;min-width:0}.hround .hrt small{font-size:12px;font-weight:600;color:#7a3a6e}.hround .hrt b{font-size:24px;font-weight:600;color:#b0398f;letter-spacing:-.01em;white-space:nowrap}
+.hround .hrs{display:flex;gap:8px;margin-left:10px}.hround .hrs>span{font-size:12px;color:#7a3a6e;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.85);padding:3px 10px;border-radius:999px;white-space:nowrap}.hround .hrs b{font-weight:700;color:#b0398f}
+.hround .hview{margin:0 0 0 auto!important;align-self:center!important}
+.hround .hpages,.hround .hbig2{display:none}
+body .hbento>*{grid-column:auto!important}
+@media(min-width:861px){
+ body .hbento{grid-auto-rows:64px}
+ body .hbento .hbook{order:1;grid-row:span 5!important}
+ body .hbento .htoday{order:2;grid-row:span 5!important}
+ body .hbento .hlive{order:3;grid-row:span 5!important;grid-column:span 2!important}
+ body .hbento .hround{order:4;grid-row:span 1!important;grid-column:1/-1!important}
+ body .hbento .hhours{order:5;grid-row:span 4!important;grid-column:span 2!important}
+ body .hbento .hrw{order:6;grid-row:span 4!important;grid-column:span 2!important}
+ body .hbento .hmine{order:7;grid-row:span 1!important;grid-column:span 2!important;padding:10px 16px}
+ body .hbento .hset{order:8;grid-row:span 1!important;grid-column:span 2!important;padding:10px 16px}
+ body .hbento .hmine .hq,body .hbento .hset .hgear{width:40px;height:40px;font-size:17px}
+ body .hbento .hmine.solo{grid-column:1/-1!important}
+}
+@media(max-width:860px){
+ body .hbento .hbook{order:1;grid-row:span 6!important}
+ body .hbento .htoday{order:2;grid-row:span 6!important}
+ body .hbento .hround{order:3;grid-row:span 2!important;grid-column:1/-1!important;flex-wrap:wrap;gap:8px 12px;padding:10px 14px}
+ .hround .hrt b{font-size:20px}.hround .hrs{order:5;margin-left:54px}.hround .hview{font-size:11px}
+ body .hbento .hlive{order:4;grid-column:1/-1!important}
+ body .hbento .hhours{order:5;grid-column:1/-1!important}
+ body .hbento .hrw{order:6;grid-column:1/-1!important}
+ body .hbento .hmine{order:7}body .hbento .hset{order:8}
+ body .hbento .hmine.solo{grid-column:1/-1!important}
+}
+@media(min-width:861px){.hreq{gap:6px!important}.hreq .hn{font-size:34px}.rqi{padding:5px 8px}.rql{gap:4px}.rqmore{position:absolute;left:16px;bottom:16px}}
+body .hbento:not(:has(.hmine)) .hset{grid-column:1/-1!important}
 </style>
 </head>
 <body>
@@ -2930,7 +2964,7 @@ function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
     ${tot?`<div class="rqcs">${chips}</div><div class="rql">${L.slice(0,3).map(([k,v])=>{const c=colOf(v.who),p=parseSid(k);return`<div class="rqi"><b style="background:${c.bg};color:${c.fg}">${esc((isTrial(v)?'ท':M(v.who).name||'?')[0])}</b><span><strong>${esc(isTrial(v)?'ทดลองไลฟ์':M(v.who).name)}</strong><small>${fmtD(p.d)} · ${C().slots[p.s].slice(0,5)} · ห้อง ${p.r}</small></span><em class="${v.status}">${TL[v.status]}</em></div>`}).join('')}${L.length>3?`<div class="rqmore">และอีก ${L.length-3} รายการ</div>`:''}</div>`
       :`<div class="rqok">${ic('checkc',28)}<b>${isBrand()?'ไม่มีคำขอค้าง':'ไม่มีคำขอที่รอผล'}</b><small>${isBrand()?'อนุมัติครบทุกรายการแล้ว':'คำขอทั้งหมดได้รับการตอบแล้ว'}</small></div>`}
     <span class="hmore2">${isBrand()?'ไปหน้าอนุมัติ':'ดูคำขอทั้งหมด'} ${ic('right',12)}</span>`})()}</button></div>
-   <button class="hc hround" style="--i:5" data-act="goRound" title="ดูรอบที่เปิดจอง"><span class="hview" style="margin-top:0"><span><span class="hm">คลิกเพื่อ</span>ดูรอบที่เปิดจอง</span> ${ic('right',13)}</span><div class="hpages"><div class="hpg"><i></i><i></i><i></i><i></i></div><div class="hpg"><i></i><i></i><i></i><i></i></div></div><div class="hbig2"><small>${w?(w.from<=TODAY?'กำลังเปิดจองอยู่':'เปิดจองแล้ว'):'ยังไม่มีรอบเปิดจอง'}</small>${w?fmtRange(w.from,w.to,false):'—'}</div></button>
+   <button class="hc hround" style="--i:2" data-act="goRound" title="ดูรอบที่เปิดจอง"><span class="hrx">${ic('calendar',20)}</span><span class="hrt"><small>${w?(w.from<=TODAY?'รอบเปิดจอง · กำลังเปิดจองอยู่':'รอบเปิดจอง · เปิดจองแล้ว'):'รอบเปิดจอง'}</small><b>${w?fmtRange(w.from,w.to,false):'ยังไม่มีรอบเปิดจอง'}</b></span>${RD.length?`<span class="hrs"><span><b>${rdays.length}</b> วัน</span><span><b>${free}</b> ช่องว่าง</span></span>`:''}<span class="hview"><span><span class="hm">คลิกเพื่อ</span>ดูรอบที่เปิดจอง</span>${ic('right',13)}</span></button>
    ${S.meId?`<button class="hc hmine ${isBrand()?'':'solo'}" style="--i:6" data-act="view" data-v="mine">${newAdds().length?`<span class="hbadge">${newAdds().length}</span>`:''}<div class="hq">${mine.length}</div><div><b>คิวของฉัน</b><p>สัปดาห์นี้ · ${fmtHM(mine.reduce((a,v)=>a+hrsOf(v),0))}</p></div></button>`:''}
    ${isBrand()?`<button class="hc hset" style="--i:7" data-act="view" data-v="set"><div class="hgear">${ic('settings',22)}</div><div><b>ตั้งค่าระบบ</b><p>ห้อง · วันไลฟ์ · สิทธิ์</p></div></button>`:''}
   </div>
