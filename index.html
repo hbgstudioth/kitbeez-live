@@ -2283,6 +2283,7 @@ body[data-v=home] .tophome{display:none}
 @media print{.tophome{display:none!important}}
 .htags{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}.htags span{font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap}.htags .more{background:rgba(29,78,216,.12);color:#1d4ed8}.htags em{font-style:normal;font-size:12px;color:#64748b;background:rgba(15,31,61,.06);padding:3px 10px;border-radius:999px}
 @media(max-width:860px){.htags span{font-size:10.5px;padding:1px 7px}.htoday{grid-row:span 5!important}}
+.req.rqgo{transition:transform .32s cubic-bezier(.4,0,.2,1),opacity .28s ease,height .32s .18s ease,margin .32s .18s ease,padding .32s .18s ease;transform:translateX(60px) scale(.96);opacity:0;height:0!important;margin-top:0!important;margin-bottom:0!important;padding-top:0!important;padding-bottom:0!important;border-width:0!important;overflow:hidden}
 </style>
 </head>
 <body>
@@ -3092,7 +3093,7 @@ function vReq(){
   const rr=rqRange();S.store.reqRange?.(rr?.[0],rr?.[1]);
   const all=Object.entries(reqs()||{}).filter(([k,v])=>{const p=parseSid(k);return rqPass(p.d,v.who)}).sort(([a],[b])=>a.localeCompare(b));
   S._reqVis=all.map(([k])=>k);
-  const g={pending:[],cancelreq:[],movereq:[],timereq:[]};all.forEach(([k,v])=>g[v.status]?.push([k,v]));
+  const g={pending:[],cancelreq:[],movereq:[],timereq:[]};all.forEach(([k,v])=>{if(!S._gone?.has(k))g[v.status]?.push([k,v])});
   const rq=Object.entries({...(S.d.reqRange||{}),...(S.d.requests||{})}).filter(([,q])=>rqPass(q.date,q.who)).sort(([,a],[,b])=>(b.withdrawnAt||b.createdAt)-(a.withdrawnAt||a.createdAt));
   const wd=rq.filter(([,q])=>q.status==='withdrawn'),un=wd.filter(([,q])=>!q.ack).length;
   let h=pageHd('inbox','คำขอจาก Live Streamer','อนุมัติคำขอ · ดูคำขอที่ถูกยกเลิก · ประวัติย้อนหลัง')+
@@ -3957,7 +3958,11 @@ const acts={
   payNav:b=>{const n=+b.dataset.n;if(S.payMode==='week')S.payStart=add(S.payStart,7*n);else{const[y,m]=S.payMonth.split('-').map(Number);S.payMonth=isoOf(new Date(Date.UTC(y,m-1+n,1))).slice(0,7)}render()},
   approve:async b=>{const el=b.closest('.req');el.style.transform='translateX(40px)';el.style.opacity='.3';if(await approve(b.dataset.k))toast('อนุมัติแล้ว');else render()},
   reject:async b=>{const el=b.closest('.req');el.style.transform='translateX(-40px)';el.style.opacity='.3';if(await reject(b.dataset.k))toast('ไม่อนุมัติ · แจ้ง Live Streamer ด้วยนะ');else render()},
-  approveAll:async b=>{const vis=new Set(S._reqVis||[]);const ks=Object.entries(reqs()).filter(([k,v])=>v.status===b.dataset.st&&vis.has(k)).map(([k])=>k);for(const k of ks)await approve(k);toast(`อนุมัติ ${ks.length} รายการ`)},
+  approveAll:async b=>{const vis=new Set(S._reqVis||[]);const ks=Object.entries(reqs()).filter(([k,v])=>v.status===b.dataset.st&&vis.has(k)).map(([k])=>k);if(!ks.length)return;
+    const card=b.closest('.card'),els=[...card.querySelectorAll('.req')];b.disabled=true;
+    if(!matchMedia('(prefers-reduced-motion:reduce)').matches){card.style.overflow='hidden';els.forEach(el=>{el.style.height=el.offsetHeight+'px'});void card.offsetHeight;
+      els.forEach(el=>{el.classList.add('rqgo')});await new Promise(r=>setTimeout(r,520))}
+    S._gone=new Set(ks);let n=0;try{for(const k of ks)if(await approve(k))n++}finally{S._gone=null;render()}toast(`อนุมัติ ${n} รายการ`)},
   note:b=>{const d=b.dataset.d;modal(`<div class="mhead">${icb('pin','warn')}<h3>โน้ตวัน${DOW_L[dow(d)]} ${dnum(d)} ${MON_S[D(d).getUTCMonth()]}</h3></div><input class="inp" id="noteIn" value="${esc(S.d.notes[d]?.text||'')}" placeholder="เช่น วันตัดยอด 2, แม่บ้านเข้าทำความสะอาด"><div class="mact"><button class="btn primary" data-d="save">${ic('save',16)}บันทึก</button><button class="btn" data-d="clear">${ic('trash',16)}ลบโน้ต</button><button class="btn ghost" data-d="close">ปิด</button></div>`,
     async a=>{if(a==='close')return closeM();const t=a==='save'?$('#noteIn').value.trim():'';await write([t?['set','notes',d,{text:t}]:['del','notes',d]],`โน้ต ${fmtD(d)}: ${t||'(ลบ)'}`);closeM()});setTimeout(()=>$('#noteIn')?.focus(),50)},
   loginGoogle:()=>S.store.login('google'),
