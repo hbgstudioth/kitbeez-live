@@ -2318,6 +2318,22 @@ body[data-v=pay] .pagehd{flex-wrap:wrap!important;align-items:flex-start}body[da
 .hmore{margin-left:auto;display:inline-flex;align-items:center;gap:2px;font-weight:600;white-space:nowrap}
 body .hhours{grid-row:span 4!important}
 @media(max-width:860px){body .hhours{grid-column:1/-1!important;grid-row:span 5!important}}
+.hreq{display:flex!important;flex-direction:column;gap:8px}.hreq .hn{margin-top:2px}
+.rqcs{display:flex;flex-wrap:wrap;gap:5px}
+.rqc{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);white-space:nowrap}.rqc b{font-weight:700;margin-left:2px}
+.rqc.pending{background:#fde68a;color:#7a5200;border-color:transparent}.rqc.cancelreq{background:#fecaca;color:#9f1239;border-color:transparent}.rqc.movereq{background:#ddd6fe;color:#5b21b6;border-color:transparent}.rqc.timereq{background:#bae6fd;color:#075985;border-color:transparent}.rqc.act{background:#bbf7d0;color:#166534;border-color:transparent}
+.rql{display:flex;flex-direction:column;gap:5px;margin-top:2px}
+.rqi{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15)}
+.rqi>b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;flex:none}
+.rqi span{min-width:0;flex:1;display:flex;flex-direction:column;line-height:1.25}.rqi strong{font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rqi small{font-size:10.5px;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rqi em{font-style:normal;font-size:10px;font-weight:600;padding:1px 7px;border-radius:999px;white-space:nowrap;background:rgba(255,255,255,.18)}
+.rqi em.pending{background:#fde68a;color:#7a5200}.rqi em.cancelreq{background:#fecaca;color:#9f1239}.rqi em.movereq{background:#ddd6fe;color:#5b21b6}.rqi em.timereq{background:#bae6fd;color:#075985}
+.rqmore{font-size:11px;opacity:.75;padding-left:4px}
+.rqok{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center}.rqok svg{color:#86efac}.rqok b{font-size:14px}.rqok small{font-size:11.5px;opacity:.75}
+.hmore2{margin-top:auto;align-self:flex-end;display:inline-flex;align-items:center;gap:2px;font-size:12px;font-weight:600;opacity:.9}
+.hreq .hstack{display:none}
+body .hrw{grid-row:span 5!important}
+@media(max-width:860px){body .hrw{grid-column:1/-1!important;grid-row:span 6!important}}
 </style>
 </head>
 <body>
@@ -2904,8 +2920,16 @@ function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
    <div class="htot"><b data-cu="hhrs">${fmtHM(wh)}</b><small>รวมสัปดาห์นี้</small></div>
    <div class="hchart">${bars.map((v,i)=>{const d=add(wk,i);return`<div class="hcol ${d===TODAY?'tdy':''}"><em>${v?fmtHM(v).replace(' ชม.',''):''}</em><i style="--d:${i};height:${v?Math.max(8,v/bm*100):4}%"></i><span>${DOW_S[dow(d)]}</span></div>`}).join('')}</div>
    <div class="hst">${isBrand()?`<span><b>${W.length}</b> Slot</span><span><b>${Object.keys(pp).length}</b> คน</span>${top?`<span class="htop">★ ${esc(M(top[0]).name)} ${fmtHM(top[1])}</span>`:''}`:`<span><b>${W.length}</b> Slot</span>`}<span class="hmore">ดูสรุปทั้งหมด ${ic('right',12)}</span></div>`})()}</button>`:''}
-   <div class="hrw" style="--i:4"><button class="hc hreq" data-act="view" data-v="${isBrand()?'req':'track'}"><div class="hl">${isBrand()?'รออนุมัติ':'คำขอของฉัน'}</div><div class="hn">${isBrand()?rqN:rq.length}<small>${isBrand()?'รายการ':'คำขอ'}</small></div>
-    <div class="hstack">${rqW.slice(0,3).map(id=>{const c=colOf(id);return`<b style="background:${c.bg};color:${c.fg}">${esc((isTrial({who:id})?'ท':M(id).name||'?')[0])}</b>`}).join('')}${rqW.length>3?`<b class="more">+${rqW.length-3}</b>`:''}${(isBrand()?rqN:rq.length)?'':'<span class="hok">ไม่มีค้าง</span>'}</div></button></div>
+   <div class="hrw" style="--i:4"><button class="hc hreq" data-act="view" data-v="${isBrand()?'req':'track'}">${(()=>{
+    const L=Object.entries(isBrand()?(reqs()||{}):Object.fromEntries(Object.entries(S.d.slots).filter(([,v])=>v.who===S.meId&&STATUS[v.status]&&v.status!=='ok'))).filter(([,v])=>STATUS[v.status]&&v.status!=='ok').sort((a,b)=>(a[1].date+a[1].slot).localeCompare(b[1].date+b[1].slot));
+    const cnt={};L.forEach(([,v])=>cnt[v.status]=(cnt[v.status]||0)+1);
+    const ac=isBrand()?actQ().length:0,wd=isBrand()?Object.values(S.d.requests||{}).filter(q=>q.status==='withdrawn'&&!q.ack).length:0,tot=L.length+ac+wd;
+    const TL={pending:'จองใหม่',cancelreq:'ขอยกเลิก',movereq:'ขอย้ายห้อง',timereq:'ขอเปลี่ยนเวลา'};
+    const chips=[...Object.keys(TL).filter(k=>cnt[k]).map(k=>`<span class="rqc ${k}">${TL[k]} <b>${cnt[k]}</b></span>`),ac?`<span class="rqc act">แจ้งชั่วโมง <b>${ac}</b></span>`:'',wd?`<span class="rqc wd">ถูกยกเลิก <b>${wd}</b></span>`:''].join('');
+    return`<div class="hl">${isBrand()?'รออนุมัติ':'คำขอของฉัน'}</div><div class="hn">${tot}<small>${isBrand()?'รายการ':'คำขอ'}</small></div>
+    ${tot?`<div class="rqcs">${chips}</div><div class="rql">${L.slice(0,3).map(([k,v])=>{const c=colOf(v.who),p=parseSid(k);return`<div class="rqi"><b style="background:${c.bg};color:${c.fg}">${esc((isTrial(v)?'ท':M(v.who).name||'?')[0])}</b><span><strong>${esc(isTrial(v)?'ทดลองไลฟ์':M(v.who).name)}</strong><small>${fmtD(p.d)} · ${C().slots[p.s].slice(0,5)} · ห้อง ${p.r}</small></span><em class="${v.status}">${TL[v.status]}</em></div>`}).join('')}${L.length>3?`<div class="rqmore">และอีก ${L.length-3} รายการ</div>`:''}</div>`
+      :`<div class="rqok">${ic('checkc',28)}<b>${isBrand()?'ไม่มีคำขอค้าง':'ไม่มีคำขอที่รอผล'}</b><small>${isBrand()?'อนุมัติครบทุกรายการแล้ว':'คำขอทั้งหมดได้รับการตอบแล้ว'}</small></div>`}
+    <span class="hmore2">${isBrand()?'ไปหน้าอนุมัติ':'ดูคำขอทั้งหมด'} ${ic('right',12)}</span>`})()}</button></div>
    <button class="hc hround" style="--i:5" data-act="goRound" title="ดูรอบที่เปิดจอง"><span class="hview" style="margin-top:0"><span><span class="hm">คลิกเพื่อ</span>ดูรอบที่เปิดจอง</span> ${ic('right',13)}</span><div class="hpages"><div class="hpg"><i></i><i></i><i></i><i></i></div><div class="hpg"><i></i><i></i><i></i><i></i></div></div><div class="hbig2"><small>${w?(w.from<=TODAY?'กำลังเปิดจองอยู่':'เปิดจองแล้ว'):'ยังไม่มีรอบเปิดจอง'}</small>${w?fmtRange(w.from,w.to,false):'—'}</div></button>
    ${S.meId?`<button class="hc hmine ${isBrand()?'':'solo'}" style="--i:6" data-act="view" data-v="mine">${newAdds().length?`<span class="hbadge">${newAdds().length}</span>`:''}<div class="hq">${mine.length}</div><div><b>คิวของฉัน</b><p>สัปดาห์นี้ · ${fmtHM(mine.reduce((a,v)=>a+hrsOf(v),0))}</p></div></button>`:''}
    ${isBrand()?`<button class="hc hset" style="--i:7" data-act="view" data-v="set"><div class="hgear">${ic('settings',22)}</div><div><b>ตั้งค่าระบบ</b><p>ห้อง · วันไลฟ์ · สิทธิ์</p></div></button>`:''}
