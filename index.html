@@ -2388,6 +2388,23 @@ body .hbento .hround{order:0!important}body .hbento .hmine.solo{order:-1!importa
 @keyframes bellPulse{0%{transform:scale(.9);opacity:1}100%{transform:scale(1.35);opacity:0}}
 @media(max-width:860px){.tbell{width:38px;height:38px}.top:has(.tbell) .lv{display:none!important}body:not([data-v=home]) .top:has(.tbell) .pres{display:none!important}body:not([data-v=home]) .top .wordmark{height:20px!important;width:auto}.top .user{gap:6px}}
 @media(prefers-reduced-motion:reduce){.tbell svg,.tbell::after{animation:none!important}}
+/* card tags */
+.htag{align-self:flex-start;display:inline-flex;align-items:center;gap:3px;white-space:nowrap;font-size:12px;font-weight:600;padding:3px 8px 3px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.85);background:rgba(255,255,255,.6);position:relative;z-index:1;transition:background-color .2s,transform .2s}
+.htag.tg{color:#0f5a4a}.htag.tb{color:#1d4ed8;background:rgba(29,78,216,.08);border-color:rgba(29,78,216,.18)}
+.hc:hover .htag{background:#fff;transform:translateX(2px)}
+@media(max-width:860px){.htag{font-size:11px;padding:3px 6px 3px 9px}}
+/* live card = display panel, not a button */
+body .hbento .hlive{cursor:default!important;box-shadow:inset 0 2px 10px rgba(40,30,120,.28),inset 0 0 0 1px rgba(255,255,255,.35)!important;border:1px solid rgba(255,255,255,.25)!important;background:linear-gradient(135deg,rgba(150,158,240,.78),rgba(185,175,245,.72))!important;padding-top:12px}
+body .hbento .hlive:hover,body .hbento .hlive:active{transform:none!important}
+.hauto{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:rgba(255,255,255,.85);letter-spacing:.02em}
+.hauto i{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80}
+body .hbento .hlive{background:linear-gradient(135deg,#7f86d9,#9a8fdc)!important;box-shadow:inset 0 3px 14px rgba(30,20,90,.35),inset 0 0 0 1px rgba(255,255,255,.18)!important;border:0!important}
+body .hbento .hlive .hrm{border:0!important;border-radius:8px;background:rgba(255,255,255,.1)!important;color:#fff!important;box-shadow:none!important}
+body .hbento .hlive .hrm.on{background:rgba(255,255,255,.2)!important}body .hbento .hlive .hrm.on em{color:#fff}
+body .hbento .hlive .hrm.nx{background:rgba(255,255,255,.12)!important}body .hbento .hlive .hrm.nx em{color:#fff}
+body .hbento .hlive .hrm.cl{opacity:.45}
+.hauto{color:rgba(255,255,255,.9);background:rgba(0,0,0,.14);padding:3px 10px;border-radius:999px}
+.hmine .hmtag{align-self:center;margin-left:14px}@media(max-width:860px){.hmine .hmtag{margin-left:auto;align-self:center}body .hbento .hmine.solo .hnext{order:5}}
 </style>
 </head>
 <body>
@@ -2962,12 +2979,12 @@ function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
   <div class="hhero"><div class="hhi"><svg class="hspark" viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"><path d="M24 4v40M4 24h40M9.9 9.9l28.2 28.2M38.1 9.9 9.9 38.1"/></svg><span>${greet} ${esc(myName())} · ${fmtD(TODAY)}</span></div>
    <h1>Live <em>Booking</em></h1></div>
   <div class="hbento">
-   <button class="hc hbook" style="--i:0" data-act="view" data-v="book"><div class="hl">จองคิว</div><div class="hled">ON AIR<br>BOOKING</div><div class="honair"><i></i>${RD.length?(free>0?`ว่าง ${free} Slot`:'เต็มแล้ว'):'ยังไม่มีรอบเปิดจอง'}</div>${RD.length?`<div class="hrnd">ตลอดรอบจอง ${rdLbl}</div>`:''}<div class="hcap">Slot ว่างที่ใกล้ที่สุด<span class="hm"> · แตะเพื่อไปจอง</span></div>
+   <button class="hc hbook" style="--i:0" data-act="view" data-v="book"><span class="htag tg">คลิกเพื่อจองคิว ${ic('right',13)}</span><div class="hled">ON AIR<br>BOOKING</div><div class="honair"><i></i>${RD.length?(free>0?`ว่าง ${free} Slot`:'เต็มแล้ว'):'ยังไม่มีรอบเปิดจอง'}</div>${RD.length?`<div class="hrnd">ตลอดรอบจอง ${rdLbl}</div>`:''}<div class="hcap">Slot ว่างที่ใกล้ที่สุด<span class="hm"> · แตะเพื่อไปจอง</span></div>
     <div class="hslots">${nx.length?nx.map((x,i)=>`<span class="hslot ${i?'':'sel'}" data-act="homeSlot" data-k="${x.d}_${x.r}_${x.s}" title="ไปจอง ${fmtD(x.d)} ${SL[x.s]} ห้อง ${x.r}"><span class="ck">${i?'':ic('check',12)}</span><b>${SL[x.s].slice(0,5)}</b><small>${x.d===TODAY?'วันนี้':fmtD(x.d).replace(/^\S+ /,'')}<span class="hrmx"> · ห้อง ${x.r}</span></small></span>`).join(''):`<span class="hslot">ยังไม่มีช่องว่างในรอบนี้</span>`}</div>${mic}</button>
-   <button class="hc htoday" style="--i:1" data-act="view" data-v="week"><div class="hl">ตารางไลฟ์</div><div class="hbig">วันนี้<span>${fmtD(TODAY).replace(/^\S+ /,'')}</span></div>
+   <button class="hc htoday" style="--i:1" data-act="view" data-v="week"><span class="htag tb"><span><span class="hm">คลิกเพื่อ</span>ดูตารางรายสัปดาห์</span>${ic('right',13)}</span><div class="hbig">วันนี้<span>${fmtD(TODAY).replace(/^\S+ /,'')}</span></div>
     ${isBrand()?(()=>{const P=[...new Set(Object.values(S.d.slots).filter(v=>v.date===TODAY&&COUNTED.includes(v.status)).map(v=>v.who))];return`<div class="htags">${P.length?P.slice(0,8).map(id=>{const c=colOf(id);return`<span style="background:${c.bg};color:${c.fg}">${esc(id===TRIAL?'ทดลองไลฟ์':M(id).name)}</span>`}).join('')+(P.length>8?`<span class="more">+${P.length-8}</span>`:''):'<em>ไม่มีคนไลฟ์วันนี้</em>'}</div>`})():''}<div class="hmg" style="--c:${R.length*2}">${cells.map((c,k)=>`<i class="${c}" style="--d:${k}"></i>`).join('')}</div>
     <div class="hmeta"><div>ลงแล้ว <b>${ds.f}/${ds.a}</b><br>${R.length} ห้อง · ${SL.length} รอบ</div><svg class="hring" viewBox="0 0 46 46"><circle class="tr" cx="23" cy="23" r="18"/><circle class="pr" cx="23" cy="23" r="18" style="--p:${ds.a?ds.f/ds.a:0}"/></svg></div></button>
-   <div class="hc hlive" style="--i:2"><div class="hlv1"><span class="hplay"></span><div class="hwave ${now.length?'':'idle'}">${wave}</div><div class="hlvt"><b>${now.length?`กำลังไลฟ์ ${now.length} ห้อง`:'ตอนนี้ไม่มีคนไลฟ์'}</b><small>${cs<0?'อยู่นอกช่วงเวลาไลฟ์':`รอบ ${SL[cs]} · วันนี้`}</small></div></div>
+   <div class="hc hlive" style="--i:2" aria-label="สถานะการไลฟ์ (แสดงผลอย่างเดียว)"><span class="hauto"><i></i>สถานะสด · อัปเดตอัตโนมัติ</span><div class="hlv1"><span class="hplay"></span><div class="hwave ${now.length?'':'idle'}">${wave}</div><div class="hlvt"><b>${now.length?`กำลังไลฟ์ ${now.length} ห้อง`:'ตอนนี้ไม่มีคนไลฟ์'}</b><small>${cs<0?'อยู่นอกช่วงเวลาไลฟ์':`รอบ ${SL[cs]} · วันนี้`}</small></div></div>
     ${(()=>{const row=(d,si,cur)=>`<div class="hrooms" style="--n:${R.length}">${R.map(r=>{const cl=isClosed(d,r,si),v=cl?null:slotOf(d,r,si),on=v&&COUNTED.includes(v.status);return`<span class="hrm ${on?(cur?'on':'nx'):''} ${cl?'cl':''}"><i></i><b>ห้อง ${r}</b><em>${on?esc(isTrial(v)?'ทดลองไลฟ์':M(v.who).name):cl?'ปิด':'ว่าง'}</em></span>`}).join('')}</div>`;
       let nd=TODAY,ns=cs<0?SL.findIndex(x=>+x.slice(0,2)>hr):cs+1;if(ns<0||ns>=SL.length){nd=add(TODAY,1);ns=0}
       return`${cs>=0?`<div class="hlrow"><span class="hlab cur">ตอนนี้ · ${SL[cs]}</span>${row(TODAY,cs,1)}</div>`:''}<div class="hlrow"><span class="hlab">รอบถัดไป · ${nd===TODAY?'':'พรุ่งนี้ '}${SL[ns]}</span>${row(nd,ns,0)}</div>`})()}</div>
@@ -2988,7 +3005,7 @@ function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
     <span class="hmore2">${isBrand()?'ไปหน้าอนุมัติ':'ดูคำขอทั้งหมด'} ${ic('right',12)}</span>`})()}</button></div>
    <button class="hc hround" style="--i:2" data-act="goRound" title="ดูรอบที่เปิดจอง"><span class="hrx">${ic('calendar',20)}</span><span class="hrt"><small>${w?(w.from<=TODAY?'รอบเปิดจอง · กำลังเปิดจองอยู่':'รอบเปิดจอง · เปิดจองแล้ว'):'รอบเปิดจอง'}</small><b>${w?fmtRange(w.from,w.to,false):'ยังไม่มีรอบเปิดจอง'}</b></span>${RD.length?`<span class="hrs"><span><b>${rdays.length}</b> วัน</span><span>ว่าง <b>${free}</b> Slot</span></span>`:''}<span class="hview"><span><span class="hm">คลิกเพื่อ</span>ดูรอบที่เปิดจอง</span>${ic('right',13)}</span></button>
    ${S.meId?`<button class="hc hmine ${isBrand()?'':'solo'}" style="--i:6" data-act="view" data-v="mine">${newAdds().length?`<span class="hbadge">${newAdds().length}</span>`:''}<div class="hq">${mine.length}</div><div><b>คิวของฉัน</b><p>สัปดาห์นี้ · ${fmtHM(mine.reduce((a,v)=>a+hrsOf(v),0))}</p></div>${(()=>{const hr2=new Date().getHours();const up=Object.entries(S.d.slots).filter(([k,v])=>v.who===S.meId&&COUNTED.concat(['pending']).includes(v.status)&&(v.date>TODAY||(v.date===TODAY&&(+(C().slots[parseSid(k).s]||'').slice(6,8)||24)>hr2))).map(([k,v])=>({k,v,p:parseSid(k)})).sort((x,y)=>(x.p.d+x.p.s).localeCompare(y.p.d+y.p.s));const n=up[0];
- return`<div class="hnext">${n?`<small>คิวถัดไป${up.length>1?` · ที่จะถึงอีก ${up.length} คิว`:''}</small><b>${n.p.d===TODAY?'วันนี้':fmtD(n.p.d)} · ${C().slots[n.p.s]} · ห้อง ${n.p.r}</b>${n.v.status==='pending'?'<em>รอยืนยัน</em>':''}`:`<small>คิวถัดไป</small><b>ยังไม่มีคิวที่จะถึง</b>`}</div><span class="hmore3">ดูคิวของฉัน ${ic('right',12)}</span>`})()}</button>`:''}
+ return`<div class="hnext">${n?`<small>คิวถัดไป${up.length>1?` · ที่จะถึงอีก ${up.length} คิว`:''}</small><b>${n.p.d===TODAY?'วันนี้':fmtD(n.p.d)} · ${C().slots[n.p.s]} · ห้อง ${n.p.r}</b>${n.v.status==='pending'?'<em>รอยืนยัน</em>':''}`:`<small>คิวถัดไป</small><b>ยังไม่มีคิวที่จะถึง</b>`}</div><span class="htag tb hmtag"><span><span class="hm">คลิกเพื่อ</span>ดูคิวของฉัน</span>${ic('right',13)}</span>`})()}</button>`:''}
    ${isBrand()?`<button class="hc hset" style="--i:7" data-act="view" data-v="set"><div class="hgear">${ic('settings',22)}</div><div><b>ตั้งค่าระบบ</b><p>ห้อง · วันไลฟ์ · สิทธิ์</p></div></button>`:''}
   </div>
   </div>`}
