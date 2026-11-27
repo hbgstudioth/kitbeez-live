@@ -2441,6 +2441,17 @@ body .hbento .hlive .hrm.cl{opacity:.45}
 @keyframes hannP{0%,100%{transform:rotate(0)}6%{transform:rotate(-12deg)}12%{transform:rotate(10deg)}18%{transform:rotate(0)}}
 .hann>span:last-child{font-size:13px;font-weight:500;line-height:1.35}.hann small{position:static!important;display:block;font-size:10.5px;font-weight:700;color:#a16207;letter-spacing:.03em}
 .annl{display:inline-block;font-size:11px;font-weight:700;background:#f59e0b;color:#fff;padding:1px 8px;border-radius:999px;margin-right:6px}
+/* home round popup CI */
+#dlg:has(.hrdw){background:linear-gradient(160deg,rgba(246,230,250,.96),rgba(232,212,244,.96))!important;border:1px solid rgba(255,255,255,.9)!important;box-shadow:inset 0 1px 0 #fff,0 40px 90px -20px rgba(110,40,120,.45)!important}
+#dlg:has(.hrdw) .hrdic{width:48px;height:48px;border-radius:15px;background:#fff;color:#b0398f;display:grid;place-items:center;flex:none;box-shadow:0 8px 18px -10px rgba(120,40,110,.55)}
+#dlg:has(.hrdw) h3{color:#8a2b72}#dlg:has(.hrdw) .mhead .muted{color:#7a5a78}
+#dlg:has(.hrdw) .rdgrp>b{color:#b0398f!important}#dlg:has(.hrdw) .rdgrp>b svg{color:#b0398f}
+#dlg:has(.hrdw) .rdgrid div.ro{background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.95);border-radius:14px;box-shadow:inset 0 1px 0 #fff,0 4px 12px -8px rgba(120,40,110,.4)}
+#dlg:has(.hrdw) .rdgrid b{color:#b0398f}#dlg:has(.hrdw) .rdgrid em{color:#7a3a6e}
+#dlg:has(.hrdw) .rdgrid div.ro span{color:#0f7a4a;background:#dcfce7;padding:0 7px;border-radius:999px;margin-top:2px}
+#dlg:has(.hrdw) .rdgrid div.ro.full{background:rgba(255,240,240,.75)}#dlg:has(.hrdw) .rdgrid div.ro.full span{color:#b42318;background:#fee2e2}
+#dlg:has(.hrdw) .btn{border-radius:999px!important;background:rgba(255,255,255,.7)!important;border:1px solid rgba(255,255,255,.95)!important;color:#8a2b72!important}
+#dlg:has(.hrdw) .btn[data-d=manage]{background:#b0398f!important;border-color:#b0398f!important;color:#fff!important;box-shadow:0 8px 18px -8px rgba(176,57,143,.7)!important}
 </style>
 </head>
 <body>
@@ -2931,7 +2942,7 @@ function roundDays(){const c=C();if(!c.bookLimit)return[];const bd=new Set(c.boo
 function rdWeeks(L){const W={};L.forEach(x=>{(W[monday(x)]??=[]).push(x)});const cur=monday(S.date);
   return`<div class="rdwk">${Object.entries(W).map(([ws,ds])=>{const fr=ds.reduce((n,x)=>n+freeCount(x),0);return`<button data-d="g:${ds[0]}" class="${ws===cur?'on':''}">${ic('calweek',18)}<div><b>${fmtRange(ws,add(ws,6))}</b><small>ลงคิวได้ ${ds.length} วัน · ${fr?`ว่าง ${fr} ช่อง`:'เต็มแล้ว'}</small></div>${ic('right',16)}</button>`}).join('')}</div>`}
 function roundDlg(){const R=roundDays(),bk=S.view==='book'||S.view==='home',ro=S.view==='home';
-  modal(`<div class="mhead">${icb('ticket','ok')}<div><h3>${ro?'รอบเปิดจอง':bk?'เลือกวันในรอบลงคิว':'เลือกสัปดาห์ในรอบลงคิว'}</h3><span class="muted">${ro?'จำนวนช่องว่างของแต่ละวันในรอบที่เปิดให้จอง':bk?'แตะวันที่ต้องการเพื่อไปหน้าจองวันนั้น':'แตะสัปดาห์ที่ต้องการเพื่อดูตาราง'}</span></div></div>
+  modal(`${ro?'<i class="hrdw" hidden></i>':''}<div class="mhead">${ro?`<span class="hrdic">${ic('calendar',22)}</span>`:icb('ticket','ok')}<div><h3>${ro?'รอบเปิดจอง':bk?'เลือกวันในรอบลงคิว':'เลือกสัปดาห์ในรอบลงคิว'}</h3><span class="muted">${ro?'จำนวนช่องว่างของแต่ละวันในรอบที่เปิดให้จอง':bk?'แตะวันที่ต้องการเพื่อไปหน้าจองวันนั้น':'แตะสัปดาห์ที่ต้องการเพื่อดูตาราง'}</span></div></div>
    ${R.map(([w,L])=>`<div class="rdgrp"><b>${ic('calendar',14)}${esc(w.label||'รอบเปิดจอง')} · ${fmtRange(w.from,w.to,false)}</b>${!bk?rdWeeks(L):`<div class="rdgrid">${L.map(x=>{const fr=freeCount(x);const tg=ro?'div':'button';return`<${tg} ${ro?'':`data-d="g:${x}"`} class="${!ro&&x===S.date?'on':''} ${fr?'':'full'} ${ro?'ro':''}"><small>${DOW_S[dow(x)]}</small><b>${dnum(x)}</b><em>${MON_S[D(x).getUTCMonth()]}</em><span>${fr?'ว่าง '+fr:'เต็ม'}</span></${tg}>`}).join('')}</div>`}</div>`).join('')||'<p class="muted">ยังไม่มีรอบเปิดจอง</p>'}
    ${R.length?'':'<p class="muted" style="text-align:center;padding:14px 0">ยังไม่มีรอบเปิดจอง</p>'}<div class="mact">${isBrand()&&S.view==='home'?`<button class="btn" data-d="manage">${ic('settings',15)}จัดการรอบเปิดจอง</button>`:''}<button class="btn ghost" data-d="close">ปิด</button></div>`,
   a=>{if(a==='manage'){closeM();S.setTab='round';S.view='set';render();window.scrollTo({top:0});return}if(a.startsWith('g:')){S.date=a.slice(2);S.sel.clear();if(S.view==='home'){S.view='book';S._keepRow=false};if(S.calMode==='month')S.calMode='room';closeM();render();window.scrollTo({top:0,behavior:'smooth'})}else closeM()})}
