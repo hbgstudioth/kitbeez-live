@@ -2405,6 +2405,11 @@ body .hbento .hlive .hrm.nx{background:rgba(255,255,255,.12)!important}body .hbe
 body .hbento .hlive .hrm.cl{opacity:.45}
 .hauto{color:rgba(255,255,255,.9);background:rgba(0,0,0,.14);padding:3px 10px;border-radius:999px}
 .hmine .hmtag{align-self:center;margin-left:14px}@media(max-width:860px){.hmine .hmtag{margin-left:auto;align-self:center}body .hbento .hmine.solo .hnext{order:5}}
+.hhours .hmore,.hreq .hmore2{display:inline-flex;align-items:center;gap:3px;white-space:nowrap;font-size:12px;font-weight:600;padding:4px 9px 4px 12px;border-radius:999px;opacity:1;transition:background-color .2s,transform .2s}
+.hhours .hmore{color:#7a5c12;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.95);box-shadow:0 4px 10px -6px rgba(150,110,20,.5)}
+.hreq .hmore2{color:#1e3a8a;background:#fff;border:1px solid #fff;box-shadow:0 4px 12px -6px rgba(0,0,0,.5)}
+.hhours:hover .hmore{background:#fff;transform:translateX(2px)}.hreq:hover .hmore2{background:#eef4ff;transform:translateX(2px)}
+@media(max-width:860px){.hhours .hmore,.hreq .hmore2{font-size:11px;padding:3px 7px 3px 10px}}
 </style>
 </head>
 <body>
@@ -2992,7 +2997,7 @@ function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
    return`<div class="hhd"><span class="hsum">${ic('chart',14)}${isBrand()?'สรุปชั่วโมงไลฟ์':'สรุปชั่วโมงของฉัน'}</span><span class="hwk">${fmtRange(wk,add(wk,6),false)}</span></div>
    <div class="htot"><b data-cu="hhrs">${fmtHM(wh)}</b><small>รวมสัปดาห์นี้</small></div>
    <div class="hchart">${bars.map((v,i)=>{const d=add(wk,i);return`<div class="hcol ${d===TODAY?'tdy':''}"><em>${v?fmtHM(v).replace(' ชม.',''):''}</em><i style="--d:${i};height:${v?Math.max(8,v/bm*100):4}%"></i><span>${DOW_S[dow(d)]}</span></div>`}).join('')}</div>
-   <div class="hst">${isBrand()?`<span><b>${W.length}</b> Slot</span><span><b>${Object.keys(pp).length}</b> คน</span>${top?`<span class="htop">★ ${esc(M(top[0]).name)} ${fmtHM(top[1])}</span>`:''}`:`<span><b>${W.length}</b> Slot</span>`}<span class="hmore">ดูสรุปทั้งหมด ${ic('right',12)}</span></div>`})()}</button>`:''}
+   <div class="hst">${isBrand()?`<span><b>${W.length}</b> Slot</span><span><b>${Object.keys(pp).length}</b> คน</span>${top?`<span class="htop">★ ${esc(M(top[0]).name)} ${fmtHM(top[1])}</span>`:''}`:`<span><b>${W.length}</b> Slot</span>`}<span class="hmore"><span><span class="hm">คลิกเพื่อ</span>ดูสรุปทั้งหมด</span>${ic('right',13)}</span></div>`})()}</button>`:''}
    <div class="hrw" style="--i:4"><button class="hc hreq" data-act="view" data-v="${isBrand()?'req':'track'}">${(()=>{
     const L=Object.entries(isBrand()?(reqs()||{}):Object.fromEntries(Object.entries(S.d.slots).filter(([,v])=>v.who===S.meId&&STATUS[v.status]&&v.status!=='ok'))).filter(([,v])=>STATUS[v.status]&&v.status!=='ok').sort((a,b)=>(a[1].date+a[1].slot).localeCompare(b[1].date+b[1].slot));
     const cnt={};L.forEach(([,v])=>cnt[v.status]=(cnt[v.status]||0)+1);
@@ -3002,7 +3007,7 @@ function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
     return`<div class="hl">${isBrand()?'รออนุมัติ':'คำขอของฉัน'}</div><div class="hn">${tot}<small>${isBrand()?'รายการ':'คำขอ'}</small></div>
     ${tot?`<div class="rqcs">${chips}</div><div class="rql">${L.slice(0,3).map(([k,v])=>{const c=colOf(v.who),p=parseSid(k);return`<div class="rqi"><b style="background:${c.bg};color:${c.fg}">${esc((isTrial(v)?'ท':M(v.who).name||'?')[0])}</b><span><strong>${esc(isTrial(v)?'ทดลองไลฟ์':M(v.who).name)}</strong><small>${fmtD(p.d)} · ${C().slots[p.s].slice(0,5)} · ห้อง ${p.r}</small></span><em class="${v.status}">${TL[v.status]}</em></div>`}).join('')}${L.length>3?`<div class="rqmore">และอีก ${L.length-3} รายการ</div>`:''}</div>`
       :`<div class="rqok">${ic('checkc',28)}<b>${isBrand()?'ไม่มีคำขอค้าง':'ไม่มีคำขอที่รอผล'}</b><small>${isBrand()?'อนุมัติครบทุกรายการแล้ว':'คำขอทั้งหมดได้รับการตอบแล้ว'}</small></div>`}
-    <span class="hmore2">${isBrand()?'ไปหน้าอนุมัติ':'ดูคำขอทั้งหมด'} ${ic('right',12)}</span>`})()}</button></div>
+    <span class="hmore2"><span><span class="hm">คลิกเพื่อ</span>${isBrand()?'ไปหน้าอนุมัติ':'ดูคำขอทั้งหมด'}</span>${ic('right',13)}</span>`})()}</button></div>
    <button class="hc hround" style="--i:2" data-act="goRound" title="ดูรอบที่เปิดจอง"><span class="hrx">${ic('calendar',20)}</span><span class="hrt"><small>${w?(w.from<=TODAY?'รอบเปิดจอง · กำลังเปิดจองอยู่':'รอบเปิดจอง · เปิดจองแล้ว'):'รอบเปิดจอง'}</small><b>${w?fmtRange(w.from,w.to,false):'ยังไม่มีรอบเปิดจอง'}</b></span>${RD.length?`<span class="hrs"><span><b>${rdays.length}</b> วัน</span><span>ว่าง <b>${free}</b> Slot</span></span>`:''}<span class="hview"><span><span class="hm">คลิกเพื่อ</span>ดูรอบที่เปิดจอง</span>${ic('right',13)}</span></button>
    ${S.meId?`<button class="hc hmine ${isBrand()?'':'solo'}" style="--i:6" data-act="view" data-v="mine">${newAdds().length?`<span class="hbadge">${newAdds().length}</span>`:''}<div class="hq">${mine.length}</div><div><b>คิวของฉัน</b><p>สัปดาห์นี้ · ${fmtHM(mine.reduce((a,v)=>a+hrsOf(v),0))}</p></div>${(()=>{const hr2=new Date().getHours();const up=Object.entries(S.d.slots).filter(([k,v])=>v.who===S.meId&&COUNTED.concat(['pending']).includes(v.status)&&(v.date>TODAY||(v.date===TODAY&&(+(C().slots[parseSid(k).s]||'').slice(6,8)||24)>hr2))).map(([k,v])=>({k,v,p:parseSid(k)})).sort((x,y)=>(x.p.d+x.p.s).localeCompare(y.p.d+y.p.s));const n=up[0];
  return`<div class="hnext">${n?`<small>คิวถัดไป${up.length>1?` · ที่จะถึงอีก ${up.length} คิว`:''}</small><b>${n.p.d===TODAY?'วันนี้':fmtD(n.p.d)} · ${C().slots[n.p.s]} · ห้อง ${n.p.r}</b>${n.v.status==='pending'?'<em>รอยืนยัน</em>':''}`:`<small>คิวถัดไป</small><b>ยังไม่มีคิวที่จะถึง</b>`}</div><span class="htag tb hmtag"><span><span class="hm">คลิกเพื่อ</span>ดูคิวของฉัน</span>${ic('right',13)}</span>`})()}</button>`:''}
