@@ -2609,6 +2609,17 @@ body[data-v=pay] .stat:has(.icb[data-i=ticket]) b{color:#4c2fa8!important}
 body[data-v=pay] .stat:has(.icb[data-i=users]) b{color:#14683a!important}
 body[data-v=pay] .stat:has(.icb[data-i=mic]) b{color:#9a4a12!important}
 body[data-v=pay] .stat:has(.icb[data-i=hour]) b{color:#9f1239!important}
+/* settings sub-nav refined */
+.setnav{display:flex!important;gap:4px!important;padding:5px!important;border-radius:18px!important;background:rgba(255,255,255,.55)!important;border:1px solid rgba(255,255,255,.9)!important;backdrop-filter:blur(20px) saturate(170%)!important;-webkit-backdrop-filter:blur(20px) saturate(170%)!important;box-shadow:inset 0 1px 0 #fff,0 12px 28px -18px rgba(15,31,61,.4)!important}
+.setnav button{flex:1 1 auto;justify-content:center;gap:7px!important;padding:10px 12px!important;border-radius:13px!important;font-size:13.5px!important;font-weight:500!important;color:#475569!important;position:relative}
+.setnav button svg{color:#64748b;flex:none}
+.setnav button:hover{background:rgba(255,255,255,.75)!important;color:#0f1f3d!important}
+.setnav button.on{background:#0f1f3d!important;color:#fff!important;font-weight:600!important;box-shadow:0 8px 18px -8px rgba(15,31,61,.65),inset 0 1px 0 rgba(255,255,255,.12)!important}
+.setnav button.on svg{color:#fff}
+.setnav em{font-size:10.5px!important;padding:0 6px!important;min-width:18px;line-height:18px;text-align:center;background:#e0e7ff!important;color:#1e3a8a!important}
+.setnav button.on em{background:rgba(255,255,255,.2)!important;color:#fff!important}
+.setnav em.warn{background:#ef4444!important;color:#fff!important}
+@media(max-width:860px){.setnav{display:flex!important;grid-auto-flow:unset}.setnav button{flex:none;padding:9px 12px!important;font-size:13px!important}}
 </style>
 </head>
 <body>
@@ -3477,7 +3488,7 @@ function vTrack(){
 }
 /* ---------------- SETTINGS ---------------- */
 function setNav(){const orph=Object.values(S.d.access||{}).filter(a=>a.memberId&&a.role!=='brand'&&(!S.d.members[a.memberId]||S.d.members[a.memberId].deleted)).length,cl=Object.values(S.d.closures||{}).filter(c=>c.date>=TODAY).length;
-  const T=[['room','door','ห้อง & วันไลฟ์',cl],['round','calendar','รอบเปิดจอง',(C().bookWindows||[]).filter(w=>w.to>=TODAY).length],['perm','shield','สิทธิ์ Live Streamer'],['member','users','Live Streamer',orph?'!'+orph:0],['admin','key','Admin'],['log','history','ประวัติการใช้งาน'],...(isOwnerMe()||S.store.demo?[['data','save','ข้อมูล']]:[])];
+  const T=[['room','door','ห้อง & วันไลฟ์'],['round','calendar','รอบเปิดจอง',(C().bookWindows||[]).filter(w=>w.to>=TODAY).length],['perm','shield','สิทธิ์ Live Streamer'],['member','users','Live Streamer',orph?'!'+orph:0],['admin','key','Admin'],['log','history','ประวัติ'],...(isOwnerMe()||S.store.demo?[['data','save','ข้อมูล']]:[])];
   const cur=S.setTab||'room';
   return`<nav class="setnav">${T.map(([k,i,l,n])=>`<button data-act="setTab" data-t="${k}" class="${cur===k?'on':''}">${ic(i,16)}<span>${l}</span>${n?`<em class="${String(n)[0]==='!'?'warn':''}">${String(n).replace('!','')}</em>`:''}</button>`).join('')}</nav>`}
 function vSet(){
