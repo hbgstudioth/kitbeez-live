@@ -2748,6 +2748,10 @@ body[data-v=pay] .stat:has(.icb[data-i=hour]) b{color:#9f1239!important}
 .clheat .hc{flex:none}
 .clheat .hc.more{position:static;box-shadow:0 6px 14px -8px rgba(225,29,72,.4)!important}
 @media(max-width:600px){.clheat{grid-template-columns:repeat(auto-fill,minmax(60px,1fr))}}
+.crbox.rmcr{background:linear-gradient(160deg,rgba(255,244,244,.95),rgba(255,228,230,.9))!important;border:1px solid rgba(253,164,175,.6)!important;border-radius:16px!important;box-shadow:inset 0 1px 0 #fff,0 10px 24px -18px rgba(225,29,72,.5)}
+.crbox.rmcr b{color:#9f1239!important}.crbox.rmcr small{color:#9f6b74!important}
+.crbox.rmcr .btn.bad{background:linear-gradient(160deg,#fb7185,#e11d48)!important;border-color:#e11d48!important;color:#fff!important;font-weight:600;padding:8px 14px!important;box-shadow:0 8px 18px -8px rgba(225,29,72,.7)!important}
+.crbox.rmcr .btn.bad:hover{filter:brightness(1.05);transform:translateY(-1px)}
 </style>
 </head>
 <body>
@@ -3673,7 +3677,7 @@ function vSet(){
     <div class="rmx" style="--n:${c.rooms}"><span></span>${ROOMS().map(r=>`<span class="rh">ห้อง ${r}</span>`).join('')}
      ${c.openDays.slice().sort((a,b)=>((a+6)%7)-((b+6)%7)).map(d=>`<span class="dl">${DOW_L[d]}</span>${ROOMS().map(r=>{const x=closedOf2(d,r);return`<button class="rmc ${x==='all'?'a':x?'s':'o'}" data-act="roomClose" data-d="${d}" data-r="${r}" title="วัน${DOW_L[d]} · ห้อง ${r}"><i></i><span>${x==='all'?'ปิดทั้งวัน':x?`ปิด ${x.length} รอบ`:'เปิด'}</span></button>`}).join('')}`).join('')}
     </div>
-    <div class="crbox rmcr"><span class="icb bad">${ic('lock',16)}</span><div class="grow"><b>ปิดห้องชั่วคราวตามวันที่</b><small>เช่น ปิดห้อง 2 วันที่ 1–5 ธ.ค. · พ้นวันแล้วเปิดให้จองเอง</small></div><button class="btn bad sm" data-act="closeRange">${ic('lock',14)}ปิดห้องตามวันที่</button></div>
+    <div class="crbox rmcr"><span class="cllk">${ic('lock',20)}</span><div class="grow"><b>ปิดห้องชั่วคราวตามวันที่</b><small>เช่น ปิดห้อง 2 วันที่ 1–5 ธ.ค. · พ้นวันแล้วเปิดให้จองเอง</small></div><button class="btn bad sm" data-act="closeRange">${ic('lock',14)}ปิดห้องตามวันที่</button></div>
    </div>
    ${closuresCard()}</div>`;
   }})();
