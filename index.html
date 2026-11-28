@@ -2826,6 +2826,7 @@ body[data-v=req] .rqf span.dcount.dcount,body[data-v=req] .rqf span.dcount.dcoun
 @media(max-width:860px){body[data-v=pay] .stats .stat{min-height:96px}}
 .seat .tg,.cell .tg{background:#d97706!important;color:#fff!important}
 .nb small,.nb span:not(.tg){color:#64748b}
+.crhint{font-weight:500;font-size:11.5px;opacity:.75;margin-left:6px}
 </style>
 </head>
 <body>
@@ -4053,15 +4054,15 @@ function reopenDlg(keys,back){
 }
 function crMonths(){const y0=+TODAY.slice(0,4),m0=+TODAY.slice(5,7)-1,out=[];for(let i=0;i<6;i++){const y=y0+Math.floor((m0+i)/12),m=(m0+i)%12,st=`${y}-${String(m+1).padStart(2,'0')}-01`,en=isoOf(new Date(Date.UTC(y,m+1,0)));out.push([st.slice(0,7),MON_S[m]+(y!==y0?' '+y:''),st<TODAY?TODAY:st,en])}return out}
 function closeRangeDlg(o){
-  const R=ROOMS(),SL=C().slots;let rooms=new Set(o.rooms||[]),dows=new Set(o.dows||[0,1,2,3,4,5,6]),allDay=true,slots=new Set(),f=o.from||TODAY,t=o.to||o.from||TODAY,why='';
-  const dates=()=>{const L=[];let a=f<=t?f:t,b=f<=t?t:f;for(let x=a;x<=b&&L.length<93;x=add(x,1))if(dows.has(dow(x))&&isOpen(x))L.push(x);return L};
+  const R=ROOMS(),SL=C().slots;let rooms=new Set(o.rooms||[]),dows=new Set(o.dows||[]),allDay=true,slots=new Set(),f=o.from||TODAY,t=o.to||o.from||TODAY,why='';
+  const dates=()=>{const L=[];let a=f<=t?f:t,b=f<=t?t:f;for(let x=a;x<=b&&L.length<93;x=add(x,1))if((!dows.size||dows.has(dow(x)))&&isOpen(x))L.push(x);return L};
   const keys=()=>{const K=[];dates().forEach(d=>[...rooms].forEach(r=>(allDay?SL.map((_,i)=>i):[...slots]).forEach(sl=>{if(!isClosedWeekly(d,r,sl))K.push(sid(d,r,sl))})));return K};
   const body=()=>{const D=dates(),K=keys(),bk=K.filter(k=>S.d.slots[k]).length;return`
    <div class="sec"><b>${ic('door',14)}ห้อง</b><div class="crch">${R.map(r=>`<button data-d="rm:${r}" class="${rooms.has(r)?'on':''}">ห้อง ${r}</button>`).join('')}<button data-d="rm:all" class="ghost">ทุกห้อง</button></div></div>
    <div class="sec"><b>${ic('calendar',14)}วันที่</b><div class="rqdates"><input type="date" class="inp" id="cr_f" value="${f}"><span>ถึง</span><input type="date" class="inp" id="cr_t" value="${t}"></div>
      <div class="crch" style="margin-top:8px"><button data-d="q:0" class="ghost">วันนี้</button><button data-d="q:1" class="ghost">พรุ่งนี้</button><button data-d="q:7" class="ghost">7 วันข้างหน้า</button></div>
      <div class="crmo"><small>${ic('calendar',13)}ทั้งเดือน (คลิกเดียว)</small><div class="crch">${crMonths().map(([k,lb,a,b],i)=>`<button data-d="m:${k}" class="mo ${f===a&&t===b?'mon':''}">${i===0?'เดือนนี้ · ':''}${lb}</button>`).join('')}</div></div></div>
-   <div class="sec"><b>${ic('calendar',14)}เฉพาะวัน</b><div class="crch">${[1,2,3,4,5,6,0].map(w=>`<button data-d="dw:${w}" class="${dows.has(w)?'on':''}">${DOW_S[w]}</button>`).join('')}</div></div>
+   <div class="sec"><b>${ic('calendar',14)}เฉพาะวัน <small class="crhint">${dows.size?`ปิดเฉพาะวัน ${[1,2,3,4,5,6,0].filter(w=>dows.has(w)).map(w=>DOW_S[w]).join(' ')} ในช่วงที่เลือก`:'ไม่เลือก = ทุกวันในช่วงที่เลือก · แตะเพื่อเลือกเฉพาะบางวัน'}</small></b><div class="crch"><button data-d="dw:all" class="${dows.size?'':'on'}">ทุกวัน</button>${[1,2,3,4,5,6,0].map(w=>`<button data-d="dw:${w}" class="${dows.has(w)?'on':''}">${DOW_S[w]}</button>`).join('')}</div></div>
    <div class="sec"><b>${ic('clock',14)}รอบเวลา</b><div class="crch"><button data-d="ad:1" class="${allDay?'on':''}">ทั้งวัน</button><button data-d="ad:0" class="${!allDay?'on':''}">เลือกรอบ</button></div>
      ${!allDay?`<div class="crch" style="margin-top:8px">${SL.map((x,i)=>`<button data-d="sl:${i}" class="${slots.has(i)?'on':''}">${x}</button>`).join('')}</div>`:''}</div>
    <div class="sec"><b>${ic('msg',14)}เหตุผล (ไม่บังคับ)</b><input class="inp" id="cr_w" placeholder="เช่น ซ่อมไฟ, ถ่ายโฆษณา" value="${esc(why)}"></div>
@@ -4074,7 +4075,7 @@ function closeRangeDlg(o){
     const re=()=>{$('#crbody').innerHTML=body();bind()};
     if(a==='close')return closeM();
     if(a.startsWith('rm:')){const v=a.slice(3);if(v==='all')rooms=rooms.size===R.length?new Set():new Set(R);else{const r=+v;rooms.has(r)?rooms.delete(r):rooms.add(r)}return re()}
-    if(a.startsWith('dw:')){const w=+a.slice(3);dows.has(w)?dows.delete(w):dows.add(w);return re()}
+    if(a.startsWith('dw:')){if(a==='dw:all'){dows.clear();return re()}const w=+a.slice(3);dows.has(w)?dows.delete(w):dows.add(w);if(dows.size===7)dows.clear();return re()}
     if(a.startsWith('ad:')){allDay=a==='ad:1';return re()}
     if(a.startsWith('sl:')){const i=+a.slice(3);slots.has(i)?slots.delete(i):slots.add(i);return re()}
     if(a.startsWith('m:')){const r=crMonths().find(x=>x[0]===a.slice(2));if(r){f=r[2];t=r[3]}return re()}
