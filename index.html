@@ -2744,6 +2744,10 @@ body[data-v=pay] .stat:has(.icb[data-i=hour]) b{color:#9f1239!important}
 .clheat .hc.more{position:sticky;right:0;z-index:2;box-shadow:-10px 0 14px -6px rgba(255,240,242,.95),0 6px 14px -8px rgba(225,29,72,.4)!important;flex:0 0 66px;background:#fff!important;color:#be123c;border:1.5px dashed #fda4af!important}
 .clheat .hc.more:hover{background:#fff1f2!important}
 @media(max-width:600px){.clheat .hc{flex:0 0 64px}.clheat .hc em{white-space:nowrap}.clcard .clhd{flex-wrap:wrap;gap:8px}}
+.clheat{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));overflow:visible!important}
+.clheat .hc{flex:none}
+.clheat .hc.more{position:static;box-shadow:0 6px 14px -8px rgba(225,29,72,.4)!important}
+@media(max-width:600px){.clheat{grid-template-columns:repeat(auto-fill,minmax(60px,1fr))}}
 </style>
 </head>
 <body>
@@ -4424,7 +4428,7 @@ const acts={
   reopenOne:b=>reopenDlg([b.dataset.k]),
   closuresAll:()=>closuresDlg(),
   closureDay:b=>closuresDlg(b.dataset.d),
-  clMore:()=>{S._clMore=!S._clMore;render();if(S._clMore)setTimeout(()=>{const h=document.querySelector('.clheat');h?.scrollTo({left:h.scrollWidth,behavior:'smooth'})},60)},
+  clMore:()=>{S._clMore=!S._clMore;render()},
   cfgEdit:b=>cfgEditDlg(b.dataset.k),
   permStep:b=>{const o=C().perms.cancelBeforeH||0,v=Math.max(0,o+ +b.dataset.n);if(v===o)return;saveCfg({perms:{...C().perms,cancelBeforeH:v}},`ตั้งยกเลิกล่วงหน้า: ${o} → ${v} ชม.`)},
   mFilt:b=>{S.mFilt=b.dataset.f;render()},
