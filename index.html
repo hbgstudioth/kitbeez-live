@@ -2620,6 +2620,40 @@ body[data-v=pay] .stat:has(.icb[data-i=hour]) b{color:#9f1239!important}
 .setnav button.on em{background:rgba(255,255,255,.2)!important;color:#fff!important}
 .setnav em.warn{background:#ef4444!important;color:#fff!important}
 @media(max-width:860px){.setnav{display:flex!important;grid-auto-flow:unset}.setnav button{flex:none;padding:9px 12px!important;font-size:13px!important}}
+@media print{
+ body[data-v=pay]{background:#fff!important}
+ body[data-v=pay]::before,body[data-v=pay] .hsky{display:none!important}
+ body[data-v=pay] main{max-width:none!important;width:718px!important;padding:0!important;margin:0!important}
+ body[data-v=pay] .card,body[data-v=pay] .rsc,body[data-v=pay] .pmc{background:#fff!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:none!important;border:1px solid #e5dcc0!important;border-radius:10px!important}
+ body[data-v=pay] .pmob{display:none!important}body[data-v=pay] .ptcard{display:block!important}
+ body[data-v=pay] .rmsum{padding:10px 12px!important;margin-bottom:10px!important}
+ body[data-v=pay] .rmsh2{margin-bottom:8px!important}body[data-v=pay] .rmsum h3{font-size:13px!important}body[data-v=pay] .rmsum h3 .icb{display:none!important}
+ body[data-v=pay] .rsgrid{gap:6px!important}body[data-v=pay] .rsc{padding:7px 9px!important;gap:3px!important}body[data-v=pay] .rsc>b{font-size:16px!important}
+ body[data-v=pay] .rst{flex-wrap:nowrap!important}body[data-v=pay] .rst em{font-size:9px!important;padding:0 5px!important;white-space:nowrap}body[data-v=pay] .rst .rm{white-space:nowrap}
+ body[data-v=pay] .rsc small{font-size:9.5px!important}
+ body[data-v=pay] .ptcard{margin-bottom:10px!important}
+ body[data-v=pay] .ptbl{font-size:11px!important}body[data-v=pay] .ptbl th,body[data-v=pay] .ptbl td{padding:4px 4px!important;background:transparent!important}
+ body[data-v=pay] .ptbl thead th{background:#faf5e4!important;border-bottom:1px solid #e5dcc0!important}
+ body[data-v=pay] .ptbl tbody tr:nth-child(even) td{background:#fcfaf3!important}
+ body[data-v=pay] .ptbl tfoot td{background:#faf5e4!important;border-top:1px solid #e5dcc0!important}
+ body[data-v=pay] .ptbl td.ptot,body[data-v=pay] .ptbl th.ptot{background:#fbf1d2!important}
+ body[data-v=pay] .ptbl td.pc2::before{display:none!important}
+ body[data-v=pay] .ptbl .namechip{font-size:10.5px!important;padding:1px 7px!important}
+ body[data-v=pay] .ptbl .emptag{font-size:9px!important}
+ body[data-v=pay] .ptbl .ptot b{font-size:12.5px!important}
+ body[data-v=pay] .shcard{padding:8px 12px!important;margin-top:8px!important}body[data-v=pay] .shcard h3{font-size:12.5px!important;margin:0!important}body[data-v=pay] .shcard .icb{display:none!important}
+ body[data-v=pay] .shcard .shrow{padding:4px 8px!important;font-size:11px!important}
+ body[data-v=pay] .prft{margin-top:10px!important}body[data-v=pay] .prsig{margin:14px 0 8px!important}body[data-v=pay] .prsig i{height:26px!important}
+ body[data-v=pay] .prhd{margin-bottom:8px!important}body[data-v=pay] .prmeta{margin-bottom:8px!important}
+ body[data-v=pay] main,body[data-v=pay] .card,body[data-v=pay] .prft{break-inside:avoid}
+}
+@media print{
+ body[data-v=pay] .stats{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(0,1fr))!important;gap:6px!important;margin:0 0 10px!important}
+ body[data-v=pay] .stat{display:flex!important;align-items:center;gap:8px;padding:7px 10px!important;border-radius:10px!important;box-shadow:none!important;border:1px solid #e5dcc0!important;background:#fff!important;backdrop-filter:none!important}
+ body[data-v=pay] .stat::before,body[data-v=pay] .stat::after{display:none!important}
+ body[data-v=pay] .stat .icb{width:24px!important;height:24px!important;border-radius:7px!important}body[data-v=pay] .stat .icb svg{width:13px!important;height:13px!important}
+ body[data-v=pay] .stat span{font-size:9.5px!important}body[data-v=pay] .stat b{font-size:13px!important;line-height:1.2}
+}
 </style>
 </head>
 <body>
@@ -3361,6 +3395,9 @@ function payData(from,to,cols){
 /* ---------- หัวกระดาษตอนพิมพ์ / PDF ---------- */
 function printHead(title,sub,meta){const n=new Date(Date.now()+7*3600e3).toISOString(),ts=`${+n.slice(8,10)} ${MON_S[+n.slice(5,7)-1]} ${n.slice(0,4)} · ${n.slice(11,16)} น.`;
   return`<div class="prhd"><div class="prl"><img src="${LOGO_DARK}" alt="KITBEEZ"><div><b>${title}</b><span>${sub}</span></div></div><div class="prr"><div><small>ระบบ</small>LIVE BOOKING SYSTEM</div><div><small>พิมพ์เมื่อ</small>${ts}</div><div><small>พิมพ์โดย</small>${esc(myName())}${isBrand()?' · KITBEEZ_ADMIN':''}</div></div></div>${meta?`<div class="prmeta">${meta}</div>`:''}`}
+function fitPrint(){const m=document.querySelector('main');if(!m)return;m.style.zoom='';if(S.view!=='pay')return;document.body.classList.add('prfit');
+  const pw=718,ph=1030;const w=m.scrollWidth,h=m.scrollHeight;const z=Math.min(1,pw/w,ph/h);document.body.classList.remove('prfit');if(z<1)m.style.zoom=z.toFixed(3)}
+window.addEventListener('beforeprint',()=>{if(!document.querySelector('main')?.style.zoom)fitPrint()});window.addEventListener('afterprint',()=>{const m=document.querySelector('main');if(m)m.style.zoom=''});
 function printFoot(sign){return`<div class="prft">${sign?`<div class="prsig"><div><i></i>ผู้จัดทำ<small>วันที่ ……/……/……</small></div><div><i></i>ผู้ตรวจสอบ<small>วันที่ ……/……/……</small></div><div><i></i>ผู้อนุมัติ<small>วันที่ ……/……/……</small></div></div>`:''}<div class="prfl">KITBEEZ · LIVE BOOKING SYSTEM · เอกสารนี้สร้างจากระบบอัตโนมัติ</div></div>`}
 function vPay(){
   let from,to,cols,title;const pm=S.payMode||'week',wk=pm==='week',H=C().hours;
@@ -4344,7 +4381,7 @@ const acts={
   seedEmpty:()=>write([['set','config','main',DEFAULT_CONFIG]],'เริ่มระบบใหม่'),
   resetDemo:()=>modal(`<div class="mhead">${icb('alert','bad')}<h3>ล้างข้อมูลโหมดทดลอง?</h3></div><p class="muted">จะกลับไปเป็นตารางตั้งต้น</p><div class="mact"><button class="btn bad" data-d="y">ล้างข้อมูล</button><button class="btn" data-d="close">ยกเลิก</button></div>`,a=>a==='y'?S.store.reset():closeM()),
   backup:()=>!(isOwnerMe()||S.store.demo)?toast('เฉพาะเจ้าของระบบเท่านั้น',1):download(`kitbeez-live-backup-${TODAY}.json`,JSON.stringify(S.d,null,1),'application/json'),
-  print:()=>window.print(),
+  print:()=>{fitPrint();window.print()},
   toggleDay:b=>{const d=+b.dataset.d,o=C().openDays;
     if(!o.includes(d))return saveCfg({openDays:[...o,d]},`เปิดวันไลฟ์: วัน${DOW_L[d]}`);
     const fut=Object.values(S.d.slots||{}).filter(v=>dow(v.date)===d&&!isPast(v.date,v.slot)),last=fut.map(v=>v.date).sort().pop();
