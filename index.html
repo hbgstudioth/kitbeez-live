@@ -2623,7 +2623,7 @@ body[data-v=pay] .stat:has(.icb[data-i=hour]) b{color:#9f1239!important}
 @media print{
  body[data-v=pay]{background:#fff!important}
  body[data-v=pay]::before,body[data-v=pay] .hsky{display:none!important}
- body[data-v=pay] main{max-width:none!important;width:718px!important;padding:0!important;margin:0!important}
+ body[data-v=pay] main{max-width:none!important;width:auto!important;zoom:1!important;padding:0!important;margin:0!important}
  body[data-v=pay] .card,body[data-v=pay] .rsc,body[data-v=pay] .pmc{background:#fff!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:none!important;border:1px solid #e5dcc0!important;border-radius:10px!important}
  body[data-v=pay] .pmob{display:none!important}body[data-v=pay] .ptcard{display:block!important}
  body[data-v=pay] .rmsum{padding:10px 12px!important;margin-bottom:10px!important}
@@ -2663,6 +2663,43 @@ body[data-v=pay] .stat:has(.icb[data-i=hour]) b{color:#9f1239!important}
 .pmst small{font-size:11px;font-weight:500}
 @media print{body[data-v=pay] .ptbl tr.trrow td{background:#fff8e6!important}body[data-v=pay] .stat .stsub{font-size:8.5px!important}}
 @media(max-width:600px){.stat>div>.stsub{grid-column:1/-1;grid-row:3;font-size:10.5px}}
+@media print{
+ body[data-v=pay] .ptbl{font-size:12px!important}body[data-v=pay] .ptbl th,body[data-v=pay] .ptbl td{padding:5.5px 5px!important}
+ body[data-v=pay] .ptbl .namechip{font-size:11px!important}
+ body[data-v=pay] .stat b{font-size:14px!important}body[data-v=pay] .rsc>b{font-size:17px!important}
+}
+@media print{
+ body[data-v=pay] .ptcard.prsm .ptbl th,body[data-v=pay] .ptcard.prsm .ptbl td{padding:3.5px 5px!important}body[data-v=pay] .ptcard.prsm .ptbl{font-size:11.5px!important}
+ body[data-v=pay] .ptcard.prxs .ptbl th,body[data-v=pay] .ptcard.prxs .ptbl td{padding:2px 4px!important}body[data-v=pay] .ptcard.prxs .ptbl{font-size:10.5px!important}body[data-v=pay] .ptcard.prxs .namechip{font-size:9.5px!important;padding:0 6px!important}
+ body[data-v=pay] .stat span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+ body[data-v=pay] .stat>div{min-width:0}
+ body[data-v=pay] .rsc{padding:6px 9px!important}
+ body[data-v=pay] .prmeta{padding:5px 10px!important}
+}
+@media print{
+ @page{margin:10mm 9mm}
+ body[data-v=pay] .rmsum{padding:8px 10px!important}
+ body[data-v=pay] .rsc{gap:1px!important;padding:5px 8px!important}body[data-v=pay] .rsc>b{font-size:15px!important;line-height:1.15}body[data-v=pay] .rsbw{margin:1px 0}
+ body[data-v=pay] .stats{margin-bottom:8px!important}body[data-v=pay] .stat{padding:5px 8px!important}
+ body[data-v=pay] .prhd{padding-bottom:6px!important}body[data-v=pay] .prhd img{height:28px!important}
+ body[data-v=pay] .shcard{padding:6px 10px!important}body[data-v=pay] .shcard .muted{padding:2px 0!important;font-size:11px!important}
+ body[data-v=pay] .prsig{margin:10px 0 6px!important;gap:20px!important}body[data-v=pay] .prsig i{height:20px!important}body[data-v=pay] .prft{margin-top:6px!important}
+ body[data-v=pay] .ptcard.prsm .ptbl th,body[data-v=pay] .ptcard.prsm .ptbl td{padding:3px 5px!important}
+ body[data-v=pay] .ptbl thead th{padding-top:4px!important;padding-bottom:4px!important}
+}
+@media print{
+ body[data-v=pay] .ptcard.prlg .ptbl{font-size:13px!important}body[data-v=pay] .ptcard.prlg .ptbl th,body[data-v=pay] .ptcard.prlg .ptbl td{padding:9px 6px!important}
+ body[data-v=pay] .ptcard.prlg .namechip{font-size:12px!important;padding:2px 9px!important}body[data-v=pay] .ptcard.prlg .ptot b{font-size:14px!important}
+ body[data-v=pay] .ptcard.prxs .ptbl th,body[data-v=pay] .ptcard.prxs .ptbl td{padding:1.5px 4px!important}
+ body[data-v=pay]:has(.prlg) .rsc{padding:9px 11px!important;gap:4px!important}body[data-v=pay]:has(.prlg) .rsc>b{font-size:19px!important}
+ body[data-v=pay]:has(.prlg) .stat{padding:9px 10px!important}body[data-v=pay]:has(.prlg) .stat b{font-size:15px!important}
+ body[data-v=pay]:has(.prlg) .prsig{margin:30px 0 10px!important}body[data-v=pay]:has(.prlg) .prsig i{height:34px!important}
+}
+.emptag.trial{background:#fff1cc;color:#9a6200}
+.ptbl tr.trrow td{background:transparent!important;border-top:0!important}
+.ptbl tbody tr.trrow:nth-child(even) td{background:rgba(255,255,255,.35)!important}
+.pmtr{background:linear-gradient(160deg,rgba(253,250,238,.9),rgba(245,237,208,.85))!important;border-style:solid!important;border-color:rgba(255,255,255,.95)!important}
+@media print{body[data-v=pay] .ptbl tr.trrow td{background:transparent!important}}
 </style>
 </head>
 <body>
@@ -3394,7 +3431,7 @@ function vMine(){
 function payData(from,to,cols){
   const rows={},pend={};
   for(const v of Object.values(S.d.slots)){if(v.date<from||v.date>to)continue;
-    if(isTrial(v)){if(!COUNTED.includes(v.status))continue;const t=rows.__t||(rows.__t={cols:cols.map(()=>0),tot:0,n:0});const ci=cols.findIndex(c=>v.date>=c.from&&v.date<=c.to),hh=hrsOf(v);if(ci>=0)t.cols[ci]+=hh;t.tot+=hh;t.n++;continue}
+    if(isTrial(v)){if(!COUNTED.includes(v.status))continue;const t=rows.__t||(rows.__t={cols:cols.map(()=>0),tot:0,n:0,g:{}});const gn=(v.guest||'').trim()||'ไม่ระบุชื่อ',g=t.g[gn]||(t.g[gn]={name:gn,cols:cols.map(()=>0),tot:0,n:0});const ci=cols.findIndex(c=>v.date>=c.from&&v.date<=c.to),hh=hrsOf(v);if(ci>=0){t.cols[ci]+=hh;g.cols[ci]+=hh}t.tot+=hh;t.n++;g.tot+=hh;g.n++;continue}
     if(v.status==='pending'){pend[v.who]=(pend[v.who]||0)+C().hours;continue}
     const r=rows[v.who]||(rows[v.who]={cols:cols.map(()=>0),tot:0,n:0,short:0});const ci=cols.findIndex(c=>v.date>=c.from&&v.date<=c.to),hh=hrsOf(v);
     if(ci>=0)r.cols[ci]+=hh;r.tot+=hh;r.n++;if(isShort(v))r.short++}
@@ -3404,9 +3441,6 @@ function payData(from,to,cols){
 /* ---------- หัวกระดาษตอนพิมพ์ / PDF ---------- */
 function printHead(title,sub,meta){const n=new Date(Date.now()+7*3600e3).toISOString(),ts=`${+n.slice(8,10)} ${MON_S[+n.slice(5,7)-1]} ${n.slice(0,4)} · ${n.slice(11,16)} น.`;
   return`<div class="prhd"><div class="prl"><img src="${LOGO_DARK}" alt="KITBEEZ"><div><b>${title}</b><span>${sub}</span></div></div><div class="prr"><div><small>ระบบ</small>LIVE BOOKING SYSTEM</div><div><small>พิมพ์เมื่อ</small>${ts}</div><div><small>พิมพ์โดย</small>${esc(myName())}${isBrand()?' · KITBEEZ_ADMIN':''}</div></div></div>${meta?`<div class="prmeta">${meta}</div>`:''}`}
-function fitPrint(){const m=document.querySelector('main');if(!m)return;m.style.zoom='';if(S.view!=='pay')return;document.body.classList.add('prfit');
-  const pw=718,ph=1030;const w=m.scrollWidth,h=m.scrollHeight;const z=Math.min(1,pw/w,ph/h);document.body.classList.remove('prfit');if(z<1)m.style.zoom=z.toFixed(3)}
-window.addEventListener('beforeprint',()=>{if(!document.querySelector('main')?.style.zoom)fitPrint()});window.addEventListener('afterprint',()=>{const m=document.querySelector('main');if(m)m.style.zoom=''});
 function printFoot(sign){return`<div class="prft">${sign?`<div class="prsig"><div><i></i>ผู้จัดทำ<small>วันที่ ……/……/……</small></div><div><i></i>ผู้ตรวจสอบ<small>วันที่ ……/……/……</small></div><div><i></i>ผู้อนุมัติ<small>วันที่ ……/……/……</small></div></div>`:''}<div class="prfl">KITBEEZ · LIVE BOOKING SYSTEM · เอกสารนี้สร้างจากระบบอัตโนมัติ</div></div>`}
 function vPay(){
   let from,to,cols,title;const pm=S.payMode||'week',wk=pm==='week',H=C().hours;
@@ -3423,7 +3457,7 @@ function vPay(){
   const grp=k=>allIds.filter(id=>(empOf(id)||'none')===k),gH=a=>a.reduce((x,id)=>x+rows[id].tot,0);
   if(pe!=='all')ids=grp(pe);
   const sumH=ids.reduce((a,id)=>a+rows[id].tot,0),sumN=ids.reduce((a,id)=>a+rows[id].n,0),avg=ids.length?Math.round(sumH/ids.length*10)/10:0;
-  const tr=isBrand()&&pe==='all'&&TR&&TR.tot?TR:null,trialH=tr?tr.tot:0,gH2=sumH+trialH,gN2=sumN+(tr?tr.n:0);
+  const tr=isBrand()&&pe==='all'&&TR&&TR.tot?TR:null,trG=tr?Object.values(tr.g).sort((a,b)=>b.tot-a.tot):[],tChip=n=>`<span class="namechip" style="background:${TRIAL_COL.bg};color:${TRIAL_COL.fg}">${esc(n)}</span><span class="emptag trial">ทดลองไลฟ์</span>`,trialH=tr?tr.tot:0,gH2=sumH+trialH,gN2=sumN+(tr?tr.n:0);
   const shorts=Object.entries(S.d.slots).filter(([,v])=>v.date>=from&&v.date<=to&&COUNTED.includes(v.status)&&!isTrial(v)&&isShort(v)&&(isBrand()||v.who===S.meId)).sort(([a],[b])=>a.localeCompare(b));
   const pendIds=Object.keys(pend).filter(id=>isBrand()||id===S.meId);
   let h=pageHd('clock','สรุปชั่วโมงไลฟ์','นับเฉพาะคิวที่ยืนยันแล้ว · รอบ จันทร์–อาทิตย์ · ชั่วโมงรายวัน / รายคน',
@@ -3445,10 +3479,10 @@ function vPay(){
     const pmob=()=>`<div class="pmob">${ids.map((id,i)=>`<div class="pmc" style="--i:${i}"><div class="pmh"><span class="rk">${i+1}</span>${nameChip(id)}${empTag(id)}<div class="pmt"><b>${fmtHMs(rows[id].tot)}</b><small>ชม. · ${rows[id].n} Slot</small></div></div>
       <div class="pmbar"><i style="width:${Math.round(rows[id].tot/mx*100)}%"></i></div>
       <div class="pmd" style="--c:${cols.length}">${rows[id].cols.map((x,ci)=>`<span class="${x?'':'z'}"><small>${ml(cols[ci])}</small>${md(cols[ci])?`<em>${md(cols[ci])}</em>`:''}<b>${x?fmtHMs(x):'–'}</b></span>`).join('')}</div></div>`).join('')||'<p class="muted" style="text-align:center;padding:24px">ยังไม่มีคิวในช่วงนี้</p>'}
-      ${tr?`<div class="pmc pmtr"><div class="pmh"><span class="namechip" style="background:${TRIAL_COL.bg};color:${TRIAL_COL.fg}">${ic('mic',11)} ทดลองไลฟ์</span><div class="pmt"><b>${fmtHMs(tr.tot)}</b><small>ชม. · ${tr.n} Slot</small></div></div><div class="pmd" style="--c:${cols.length}">${tr.cols.map((x,ci)=>`<span class="${x?'':'z'}"><small>${ml(cols[ci])}</small>${md(cols[ci])?`<em>${md(cols[ci])}</em>`:''}<b>${x?fmtHMs(x):'–'}</b></span>`).join('')}</div></div>`:''}
+      ${trG.map(g=>`<div class="pmc pmtr"><div class="pmh">${tChip(g.name)}<div class="pmt"><b>${fmtHMs(g.tot)}</b><small>ชม. · ${g.n} Slot</small></div></div><div class="pmbar"><i style="width:${Math.round(g.tot/mx*100)}%"></i></div><div class="pmd" style="--c:${cols.length}">${g.cols.map((x,ci)=>`<span class="${x?'':'z'}"><small>${ml(cols[ci])}</small>${md(cols[ci])?`<em>${md(cols[ci])}</em>`:''}<b>${x?fmtHMs(x):'–'}</b></span>`).join('')}</div></div>`).join('')}
       ${ids.length||tr?`<div class="pmc pmsumc"><div class="pmh"><b class="pmst">รวมทั้งหมด${tr?'<small> (รวมทดลองไลฟ์)</small>':''}</b><div class="pmt"><b>${fmtHMs(gH2)}</b><small>ชม. · ${gN2} Slot</small></div></div><div class="pmd" style="--c:${cols.length}">${cols.map((c,ci)=>{const v=ids.reduce((a,id)=>a+rows[id].cols[ci],0)+(tr?tr.cols[ci]:0);return`<span class="${v?'':'z'}"><small>${ml(c)}</small>${md(c)?`<em>${md(c)}</em>`:''}<b>${v?fmtHMs(v):'–'}</b></span>`}).join('')}</div></div>`:''}</div>`;
-    return`<div class="card scroll ptcard"><table class="tbl ptbl"><thead><tr><th class="pn">Live Streamer <small>${ids.length} คน</small></th>${cols.map(c=>`<th>${hd(c)}</th>`).join('')}<th class="ptot">รวม<small>ชม.:นาที</small></th><th class="pslot">Slot</th></tr></thead><tbody>
-  ${ids.map((id,i)=>`<tr style="--i:${i}"><td class="pn"><div class="nmc"><span class="rk">${i+1}</span>${nameChip(id)}${empTag(id)}</div></td>${rows[id].cols.map(x=>`<td class="pc2 ${x?'':'z'}">${x?`<span class="hv" style="--a:${(.08+.34*x/cmx).toFixed(2)}">${fmtHMs(x)}</span>`:'<i class="dot0"></i>'}</td>`).join('')}<td class="ptot"><div class="tw"><b>${fmtHMs(rows[id].tot)}</b>${rows[id].short?`<small class="shtag" title="มี ${rows[id].short} Slot ที่ไลฟ์ไม่ครบ">${ic('hour',10)}${rows[id].short}</small>`:''}</div></td><td class="pslot">${rows[id].n}</td></tr>`).join('')+(tr?`<tr class="trrow"><td class="pn"><div class="nmc"><span class="rk" style="visibility:hidden">0</span><span class="namechip" style="background:${TRIAL_COL.bg};color:${TRIAL_COL.fg}">${ic('mic',11)} ทดลองไลฟ์</span></div></td>${tr.cols.map(x=>`<td class="pc2 ${x?'':'z'}">${x?`<span class="hv">${fmtHMs(x)}</span>`:''}</td>`).join('')}<td class="ptot"><div class="tw"><b>${fmtHMs(tr.tot)}</b></div></td><td class="pslot">${tr.n}</td></tr>`:'')||`<tr><td colspan="${cols.length+3}" class="muted" style="text-align:center;padding:30px">ยังไม่มีคิวในช่วงนี้</td></tr>`}
+    return`<div class="card scroll ptcard ${ids.length+(tr?1:0)>18?'prxs':ids.length+(tr?1:0)>11?'prsm':'prlg'}"><table class="tbl ptbl"><thead><tr><th class="pn">Live Streamer <small>${ids.length} คน</small></th>${cols.map(c=>`<th>${hd(c)}</th>`).join('')}<th class="ptot">รวม<small>ชม.:นาที</small></th><th class="pslot">Slot</th></tr></thead><tbody>
+  ${ids.map((id,i)=>`<tr style="--i:${i}"><td class="pn"><div class="nmc"><span class="rk">${i+1}</span>${nameChip(id)}${empTag(id)}</div></td>${rows[id].cols.map(x=>`<td class="pc2 ${x?'':'z'}">${x?`<span class="hv" style="--a:${(.08+.34*x/cmx).toFixed(2)}">${fmtHMs(x)}</span>`:'<i class="dot0"></i>'}</td>`).join('')}<td class="ptot"><div class="tw"><b>${fmtHMs(rows[id].tot)}</b>${rows[id].short?`<small class="shtag" title="มี ${rows[id].short} Slot ที่ไลฟ์ไม่ครบ">${ic('hour',10)}${rows[id].short}</small>`:''}</div></td><td class="pslot">${rows[id].n}</td></tr>`).join('')+trG.map(g=>`<tr class="trrow"><td class="pn"><div class="nmc"><span class="rk" style="visibility:hidden">0</span>${tChip(g.name)}</div></td>${g.cols.map(x=>`<td class="pc2 ${x?'':'z'}">${x?`<span class="hv">${fmtHMs(x)}</span>`:''}</td>`).join('')}<td class="ptot"><div class="tw"><b>${fmtHMs(g.tot)}</b></div></td><td class="pslot">${g.n}</td></tr>`).join('')||`<tr><td colspan="${cols.length+3}" class="muted" style="text-align:center;padding:30px">ยังไม่มีคิวในช่วงนี้</td></tr>`}
   </tbody>${ids.length||tr?`<tfoot>${tr?`<tr class="sub"><td class="pn">รวม Live Streamer</td>${cols.map((_,ci)=>{const v=ids.reduce((a,id)=>a+rows[id].cols[ci],0);return`<td class="${v?'':'z'}">${v?fmtHMs(v):'–'}</td>`}).join('')}<td class="ptot"><b>${fmtHMs(sumH)}</b></td><td class="pslot">${sumN}</td></tr>`:''}<tr><td class="pn">${tr?'รวมทั้งหมด <small>(รวมทดลองไลฟ์)</small>':'รวมทั้งหมด'}</td>${cols.map((_,ci)=>{const v=ids.reduce((a,id)=>a+rows[id].cols[ci],0)+(tr?tr.cols[ci]:0);return`<td class="${v?'':'z'}">${v?fmtHMs(v):'–'}</td>`}).join('')}<td class="ptot"><b>${fmtHMs(gH2)}</b></td><td class="pslot">${gN2}</td></tr></tfoot>`:''}</table></div>${pmob()}`})()}
   <div class="expbar"><button class="expb ln" data-act="copyPay"><span class="ex">${LINEIC}</span><span>คัดลอกสรุปส่ง LINE</span></button>${isBrand()?`<button class="expb csv" data-act="csvPay"><span class="ex"><i class="ft">CSV</i></span><span>ส่งออก CSV</span></button><button class="expb pdf" data-act="print"><span class="ex"><i class="ft">PDF</i></span><span>พิมพ์ / PDF</span></button>`:''}</div>`;
   h+=`<div class="card shcard" style="margin-top:16px"><h3 style="margin:0 0 4px">${icb('hour','warn')}Slot ที่ไลฟ์ไม่ครบ ${shorts.length?`(${shorts.length})`:''}</h3><p class="muted" style="margin:0 0 10px;font-size:13px">ชั่วโมงในตารางด้านบนนับตามเวลาไลฟ์จริงแล้ว (เช่น 5:15 = 5 ชั่วโมง 15 นาที) · แตะรายการเพื่อแก้ไข</p>
@@ -4392,7 +4426,7 @@ const acts={
   seedEmpty:()=>write([['set','config','main',DEFAULT_CONFIG]],'เริ่มระบบใหม่'),
   resetDemo:()=>modal(`<div class="mhead">${icb('alert','bad')}<h3>ล้างข้อมูลโหมดทดลอง?</h3></div><p class="muted">จะกลับไปเป็นตารางตั้งต้น</p><div class="mact"><button class="btn bad" data-d="y">ล้างข้อมูล</button><button class="btn" data-d="close">ยกเลิก</button></div>`,a=>a==='y'?S.store.reset():closeM()),
   backup:()=>!(isOwnerMe()||S.store.demo)?toast('เฉพาะเจ้าของระบบเท่านั้น',1):download(`kitbeez-live-backup-${TODAY}.json`,JSON.stringify(S.d,null,1),'application/json'),
-  print:()=>{fitPrint();window.print()},
+  print:()=>window.print(),
   toggleDay:b=>{const d=+b.dataset.d,o=C().openDays;
     if(!o.includes(d))return saveCfg({openDays:[...o,d]},`เปิดวันไลฟ์: วัน${DOW_L[d]}`);
     const fut=Object.values(S.d.slots||{}).filter(v=>dow(v.date)===d&&!isPast(v.date,v.slot)),last=fut.map(v=>v.date).sort().pop();
@@ -4410,10 +4444,10 @@ const acts={
   pickColor:b=>colorDlg(b.dataset.id),
   copyMine:()=>{const t=myTickets().filter(([k])=>{const p=parseSid(k);return!isPast(p.d,p.s)});const byW={};t.forEach(([k,v])=>(byW[monday(v.date)]??=[]).push([k,v]));
     copyText(`คิวไลฟ์ของ ${M(S.meId).name}\n`+Object.keys(byW).sort().map(ws=>`\n— สัปดาห์ ${fmtRange(ws,add(ws,6))} —\n`+byW[ws].map(([k,v])=>{const p=parseSid(k);return`${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}${v.status!=='ok'?' '+STXT[v.status]+moveTxt(v):''}`}).join('\n')).join('\n'))},
-  copyPay:()=>{const P=S._pay;copyText(`สรุปชั่วโมงไลฟ์ ${P.title}${P.pe&&P.pe!=='all'?' · '+(EMP[P.pe]||'ยังไม่ระบุ'):''}\n`+P.ids.map(id=>`${M(id).name}${empOf(id)?' ['+EMP[empOf(id)]+']':''}: ${fmtHM(P.rows[id].tot)} (${P.rows[id].n} Slot${P.rows[id].short?` · ไม่ครบ ${P.rows[id].short}`:''})`).join('\n')+(P.tr?`\nทดลองไลฟ์: ${fmtHM(P.tr.tot)} (${P.tr.n} Slot)`:'')+`\nรวม Live Streamer ${fmtHM(P.ids.reduce((a,id)=>a+P.rows[id].tot,0))}`+(P.tr?`\nรวมทั้งหมด (รวมทดลองไลฟ์) ${fmtHM(P.ids.reduce((a,id)=>a+P.rows[id].tot,0)+P.tr.tot)}`:''))},
+  copyPay:()=>{const P=S._pay;copyText(`สรุปชั่วโมงไลฟ์ ${P.title}${P.pe&&P.pe!=='all'?' · '+(EMP[P.pe]||'ยังไม่ระบุ'):''}\n`+P.ids.map(id=>`${M(id).name}${empOf(id)?' ['+EMP[empOf(id)]+']':''}: ${fmtHM(P.rows[id].tot)} (${P.rows[id].n} Slot${P.rows[id].short?` · ไม่ครบ ${P.rows[id].short}`:''})`).join('\n')+(P.tr?Object.values(P.tr.g).map(g=>`\n${g.name} [ทดลองไลฟ์]: ${fmtHM(g.tot)} (${g.n} Slot)`).join(''):'')+`\nรวม Live Streamer ${fmtHM(P.ids.reduce((a,id)=>a+P.rows[id].tot,0))}`+(P.tr?`\nรวมทั้งหมด (รวมทดลองไลฟ์) ${fmtHM(P.ids.reduce((a,id)=>a+P.rows[id].tot,0)+P.tr.tot)}`:''))},
   csvPay:()=>{const P=S._pay;let t='\ufeffชื่อ,พนักงาน,'+P.cols.map(c=>c.from===c.to?c.from:`${c.from} ถึง ${c.to}`).join(',')+',รวมชั่วโมง,Slot\n';
     P.ids.forEach(id=>t+=`"${M(id).name}",${EMP[empOf(id)]||''},${P.rows[id].cols.map(fmtH).join(',')},${fmtH(P.rows[id].tot)},${P.rows[id].n}\n`);
-    if(P.tr)t+=`"ทดลองไลฟ์",,${P.tr.cols.map(fmtH).join(',')},${fmtH(P.tr.tot)},${P.tr.n}\n`;
+    if(P.tr)Object.values(P.tr.g).forEach(g=>t+=`"${g.name.replace(/"/g,'""')}",ทดลองไลฟ์,${g.cols.map(fmtH).join(',')},${fmtH(g.tot)},${g.n}\n`);
     if(P.shorts?.length){t+=`\nSlot ที่ไลฟ์ไม่ครบ\nชื่อ,วันที่,เวลา,ห้อง,ชั่วโมงจริง,เหตุผล,บันทึกโดย\n`;P.shorts.forEach(([k,v])=>{const p=parseSid(k);t+=`"${M(v.who).name}",${p.d},${C().slots[p.s]},${p.r},${fmtH(hrsOf(v))},"${(v.actReason||'').replace(/"/g,'""')}","${(v.actBy||'').replace(/"/g,'""')}"\n`})}
     t+='\nรายละเอียดรายคิว\nวันที่,เวลา,ห้อง,ชื่อ,สถานะ\n';Object.values(S.d.slots).filter(v=>v.date>=P.from&&v.date<=P.to).sort((a,b)=>(a.date+a.slot+a.room).localeCompare(b.date+b.slot+b.room)).forEach(v=>t+=`${v.date},${C().slots[v.slot]},${v.room},"${whoName(v)}",${STATUS[v.status]}\n`);
     download(`สรุปชั่วโมง-${P.from}_${P.to}.csv`,t,'text/csv')},
