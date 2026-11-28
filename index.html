@@ -2729,6 +2729,21 @@ body[data-v=pay] .stat:has(.icb[data-i=hour]) b{color:#9f1239!important}
 .rclg .ro{margin-left:auto;display:inline-flex;align-items:center;gap:4px;opacity:.8}
 #dlg:has(.rcal.multi){width:min(780px,94vw)!important;max-width:none!important}.rcd small{white-space:nowrap}
 @media(max-width:600px){.rcal.multi{grid-template-columns:1fr}.rcd{height:42px}.rclg .ro{margin-left:0}}
+/* closures card: pastel red */
+.clcard{background:linear-gradient(160deg,rgba(255,244,244,.92),rgba(255,228,230,.86))!important;border-color:rgba(255,255,255,.95)!important}
+.clcard .clhd h3{display:flex;align-items:center;gap:10px;color:#9f1239}
+.cllk{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;flex:none;color:#fff;background:linear-gradient(160deg,#fb7185,#e11d48);box-shadow:0 8px 16px -8px rgba(225,29,72,.75),inset 0 1px 0 rgba(255,255,255,.35)}
+.cllk svg{stroke-width:2.4}
+.clcard .clall{background:linear-gradient(160deg,#fb7185,#e11d48)!important;border-color:#e11d48!important;color:#fff!important;font-weight:600;padding:8px 14px!important;box-shadow:0 8px 18px -8px rgba(225,29,72,.7)!important}
+.clcard .clall:hover{filter:brightness(1.05);transform:translateY(-1px)}
+.clcard .rmt{background:rgba(255,255,255,.7)!important;border-color:rgba(255,215,218,.9)!important}
+.clcard .rmt .lb{color:#be123c}.clcard .rmt .lb svg{color:#e11d48}.clcard .rmt .big{color:#881337}
+.clcard .rmsh b{color:#9f1239}
+.clheat{display:flex!important;flex-wrap:nowrap;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:thin;background:rgba(255,255,255,.55)!important;border-color:rgba(255,215,218,.9)!important}
+.clheat .hc{flex:0 0 76px}
+.clheat .hc.more{position:sticky;right:0;z-index:2;box-shadow:-10px 0 14px -6px rgba(255,240,242,.95),0 6px 14px -8px rgba(225,29,72,.4)!important;flex:0 0 66px;background:#fff!important;color:#be123c;border:1.5px dashed #fda4af!important}
+.clheat .hc.more:hover{background:#fff1f2!important}
+@media(max-width:600px){.clheat .hc{flex:0 0 64px}.clheat .hc em{white-space:nowrap}.clcard .clhd{flex-wrap:wrap;gap:8px}}
 </style>
 </head>
 <body>
@@ -3992,15 +4007,15 @@ function closuresByDay(){const up=Object.entries(S.d.closures||{}).filter(([,c])
   const byDay={};up.forEach(([k,c])=>(byDay[c.date]??=[]).push([k,c]));return[up,byDay]}
 function clGrid(d,l){const m={};l.forEach(([k,c])=>m[c.slot+'_'+c.room]=[k,c]);const R=ROOMS();
   return`<div class="clg" style="--n:${R.length}"><span></span>${R.map(r=>`<span class="rh">ห้อง ${r}</span>`).join('')}${C().slots.map((t,s)=>`<span class="tl">${t.split('–')[0]}</span>${R.map(r=>{const x=m[s+'_'+r];return x?`<button class="cc x" data-d="ro:${x[0]}" title="แตะเพื่อเปิดคืน${x[1].reason?' · '+esc(x[1].reason):''}">${ic('lock',11)}</button>`:'<span class="cc"></span>'}).join('')}`).join('')}</div>`}
-function closuresDlg(){const [up,byDay]=closuresByDay(),days=Object.keys(byDay);
-  modal(`<div class="mhead">${icb('lock','bad')}<div><h3>ห้องที่ปิดเฉพาะวัน (ที่จะถึง)</h3><span class="muted">ปิดอยู่ ${up.length} ช่อง · ${days.length} วัน · แตะช่องแดงเพื่อเปิดคืน</span></div></div>
+function closuresDlg(only){const [up,byDay]=closuresByDay(),all=Object.keys(byDay);if(only&&!byDay[only])only=null;const days=only?[only]:all,re=()=>closuresDlg(only&&byDay[only]?only:null);
+  modal(`<div class="mhead"><span class="cllk">${ic('lock',20)}</span><div><h3>${only?`ห้องที่ปิด · ${fmtD(only)}`:'ห้องที่ปิดเฉพาะวัน (ที่จะถึง)'}</h3><span class="muted">${only?`ปิด ${byDay[only].length} ช่อง · แตะช่องแดงเพื่อเปิดคืน`:`ปิดอยู่ ${up.length} ช่อง · ${all.length} วัน · แตะช่องแดงเพื่อเปิดคืน`}</span></div></div>
    <div class="cllist">${days.map(d=>{const l=byDay[d],rs=[...new Set(l.map(([,c])=>c.reason).filter(Boolean))];return`<div class="clday2"><div class="cldh"><span class="cdt"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></span><div class="grow"><b>${fmtD(d)}</b><small>ปิด ${l.length}/${C().slots.length*ROOMS().length} ช่อง${rs.length?` · ${rs.map(esc).join(', ')}`:''}</small></div><button class="btn sm ghost" data-d="od:${d}">${ic('door',13)}เปิดทั้งวัน</button></div>${clGrid(d,l)}</div>`}).join('')||'<p class="muted">ยังไม่มีการปิดห้องเฉพาะวัน</p>'}</div>
-   <div class="mact"><button class="btn ghost" data-d="close">ปิด</button></div>`,a=>{if(a.startsWith('ro:'))return reopenDlg([a.slice(3)],closuresDlg);if(a.startsWith('od:'))return reopenDlg(Object.keys(S.d.closures||{}).filter(k=>k.startsWith(a.slice(3)+'_')).sort(),closuresDlg);closeM()})}
+   <div class="mact">${only&&all.length>1?`<button class="btn" data-d="all">${ic('eye',14)}ดูทั้งหมด ${all.length} วัน</button>`:''}<button class="btn ghost" data-d="close">ปิด</button></div>`,a=>{if(a==='all')return closuresDlg();if(a.startsWith('ro:'))return reopenDlg([a.slice(3)],re);if(a.startsWith('od:'))return reopenDlg(Object.keys(S.d.closures||{}).filter(k=>k.startsWith(a.slice(3)+'_')).sort(),re);closeM()})}
 function closuresCard(){const [up,byDay]=closuresByDay(),days=Object.keys(byDay),tot=C().slots.length*ROOMS().length;
-  return`<div class="card clcard"><div class="clhd"><h3 style="margin:0">${icb('lock','bad')}ห้องที่ปิดเฉพาะวัน (ที่จะถึง)</h3>${days.length?`<button class="btn sm" data-act="closuresAll">${ic('eye',14)}ดูทั้งหมด / เปิดคืน</button>`:''}</div>
+  return`<div class="card clcard"><div class="clhd"><h3 style="margin:0"><span class="cllk">${ic('lock',20)}</span>ห้องที่ปิดเฉพาะวัน (ที่จะถึง)</h3>${days.length?`<button class="btn sm clall" data-act="closuresAll">${ic('eye',15)}ดูทั้งหมด / เปิดคืน</button>`:''}</div>
    ${days.length?`<div class="rmtop cltop"><div class="rmt"><span class="lb">${ic('lock',14)}ปิดอยู่</span><b class="big">${up.length}<small>ช่อง</small></b></div><div class="rmt"><span class="lb">${ic('calendar',14)}จำนวนวัน</span><b class="big">${days.length}<small>วัน</small></b></div><div class="rmt"><span class="lb">${ic('calweek',14)}ช่วงวันที่</span><b class="big sm">${fmtRange(days[0],days[days.length-1],false)}</b></div></div>
-   <div class="rmsh"><div><b>วันที่มีห้องปิด</b><small>สีเข้ม = ปิดหลายช่อง · แตะวันเพื่อดูและเปิดคืน</small></div></div>
-   <div class="clheat">${days.slice(0,14).map(d=>{const n=byDay[d].length,lv=n>=tot?4:n/tot>.5?3:n/tot>.2?2:1;return`<button class="hc l${lv}" data-act="closuresAll" title="${fmtD(d)} · ปิด ${n} ช่อง"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b><em>${n===tot?'ทั้งวัน':n+' ช่อง'}</em></button>`}).join('')}${days.length>14?`<button class="hc more" data-act="closuresAll"><b>+${days.length-14}</b><em>วัน</em></button>`:''}</div>`
+   <div class="rmsh"><div><b>วันที่มีห้องปิด</b><small>สีเข้ม = ปิดหลายช่อง · แตะวันเพื่อดูและเปิดคืนเฉพาะวันนั้น</small></div></div>
+   <div class="clheat ${S._clMore?'open':''}">${(S._clMore?days:days.slice(0,14)).map(d=>{const n=byDay[d].length,lv=n>=tot?4:n/tot>.5?3:n/tot>.2?2:1;return`<button class="hc l${lv}" data-act="closureDay" data-d="${d}" title="${fmtD(d)} · ปิด ${n} ช่อง"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b><em>${n===tot?'ทั้งวัน':n+' ช่อง'}</em></button>`}).join('')}${days.length>14?`<button class="hc more" data-act="clMore">${S._clMore?`${ic('left',14)}<em>ย่อ</em>`:`<b>+${days.length-14}</b><em>วัน</em>`}</button>`:''}</div>`
    :`<p class="muted" style="font-size:13px;margin:8px 0 0">ยังไม่มีการปิดห้องเฉพาะวัน · เพิ่มได้ที่ “ปิดห้องตามวันที่” ในการ์ดวันไลฟ์และห้อง</p>`}</div>`;
 }
 /* ---------- จัดลำดับรายชื่อ ---------- */
@@ -4408,6 +4423,8 @@ const acts={
   openDay:b=>reopenDlg(Object.keys(S.d.closures||{}).filter(k=>k.startsWith(b.dataset.d+'_')).sort()),
   reopenOne:b=>reopenDlg([b.dataset.k]),
   closuresAll:()=>closuresDlg(),
+  closureDay:b=>closuresDlg(b.dataset.d),
+  clMore:()=>{S._clMore=!S._clMore;render();if(S._clMore)setTimeout(()=>{const h=document.querySelector('.clheat');h?.scrollTo({left:h.scrollWidth,behavior:'smooth'})},60)},
   cfgEdit:b=>cfgEditDlg(b.dataset.k),
   permStep:b=>{const o=C().perms.cancelBeforeH||0,v=Math.max(0,o+ +b.dataset.n);if(v===o)return;saveCfg({perms:{...C().perms,cancelBeforeH:v}},`ตั้งยกเลิกล่วงหน้า: ${o} → ${v} ชม.`)},
   mFilt:b=>{S.mFilt=b.dataset.f;render()},
