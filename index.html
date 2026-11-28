@@ -2769,6 +2769,15 @@ body[data-v=pay] .stat:has(.icb[data-i=hour]) b{color:#9f1239!important}
 #dlg:has(.crdw) .crhit b{background:none!important;color:#9f1239!important;padding:0 2px!important}#dlg:has(.crdw) .crhit.bad{background:#fff1f2!important;color:#be123c!important}
 #dlg:has(.crdw) .btn.bad{background:linear-gradient(160deg,#fb7185,#e11d48)!important;border-color:#e11d48!important;color:#fff!important;box-shadow:0 8px 18px -8px rgba(225,29,72,.7)!important;border-radius:999px!important}
 #dlg:has(.crdw) .btn.ghost{background:rgba(255,255,255,.8)!important;border-color:rgba(253,164,175,.55)!important;color:#9f1239!important;border-radius:999px!important}
+#dlg:has(.crdw) .clday2{background:rgba(255,255,255,.7)!important;border:1px solid rgba(253,164,175,.55)!important;border-radius:16px!important}
+#dlg:has(.crdw) .clday2 .cldh .grow b{color:#9f1239}
+#dlg:has(.crdw) .clday2 .cdt{background:linear-gradient(160deg,#fecdd3,#fda4af)!important;color:#881337!important}
+#dlg:has(.crdw) .clg .rh{color:#9f1239}#dlg:has(.crdw) .clg .tl{color:#9f6b74}
+#dlg:has(.crdw) .clg .cc{border-color:rgba(253,164,175,.35)!important;background:rgba(255,255,255,.85)}
+#dlg:has(.crdw) .clg .cc.x,#dlg:has(.crdw) .clg button.cc{background:linear-gradient(160deg,#fecdd3,#fda4af)!important;border-color:#fb7185!important;color:#9f1239!important}
+#dlg:has(.crdw) .clg button.cc:hover{filter:brightness(1.04);box-shadow:0 0 0 2px rgba(225,29,72,.25)}
+#dlg:has(.crdw) .btn:not(.bad):not(.ghost){background:linear-gradient(160deg,#fb7185,#e11d48)!important;border-color:#e11d48!important;color:#fff!important;border-radius:999px!important;box-shadow:0 8px 18px -8px rgba(225,29,72,.7)!important}
+#dlg:has(.crdw) .clday2 .btn.ghost{border-radius:12px!important}
 </style>
 </head>
 <body>
@@ -4033,7 +4042,7 @@ function closuresByDay(){const up=Object.entries(S.d.closures||{}).filter(([,c])
 function clGrid(d,l){const m={};l.forEach(([k,c])=>m[c.slot+'_'+c.room]=[k,c]);const R=ROOMS();
   return`<div class="clg" style="--n:${R.length}"><span></span>${R.map(r=>`<span class="rh">ห้อง ${r}</span>`).join('')}${C().slots.map((t,s)=>`<span class="tl">${t.split('–')[0]}</span>${R.map(r=>{const x=m[s+'_'+r];return x?`<button class="cc x" data-d="ro:${x[0]}" title="แตะเพื่อเปิดคืน${x[1].reason?' · '+esc(x[1].reason):''}">${ic('lock',11)}</button>`:'<span class="cc"></span>'}).join('')}`).join('')}</div>`}
 function closuresDlg(only){const [up,byDay]=closuresByDay(),all=Object.keys(byDay);if(only&&!byDay[only])only=null;const days=only?[only]:all,re=()=>closuresDlg(only&&byDay[only]?only:null);
-  modal(`<div class="mhead"><span class="cllk">${ic('lock',20)}</span><div><h3>${only?`ห้องที่ปิด · ${fmtD(only)}`:'ห้องที่ปิดเฉพาะวัน (ที่จะถึง)'}</h3><span class="muted">${only?`ปิด ${byDay[only].length} ช่อง · แตะช่องแดงเพื่อเปิดคืน`:`ปิดอยู่ ${up.length} ช่อง · ${all.length} วัน · แตะช่องแดงเพื่อเปิดคืน`}</span></div></div>
+  modal(`<i class="crdw" hidden></i><div class="mhead"><span class="cllk">${ic('lock',20)}</span><div><h3>${only?`ห้องที่ปิด · ${fmtD(only)}`:'ห้องที่ปิดเฉพาะวัน (ที่จะถึง)'}</h3><span class="muted">${only?`ปิด ${byDay[only].length} ช่อง · แตะช่องแดงเพื่อเปิดคืน`:`ปิดอยู่ ${up.length} ช่อง · ${all.length} วัน · แตะช่องแดงเพื่อเปิดคืน`}</span></div></div>
    <div class="cllist">${days.map(d=>{const l=byDay[d],rs=[...new Set(l.map(([,c])=>c.reason).filter(Boolean))];return`<div class="clday2"><div class="cldh"><span class="cdt"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></span><div class="grow"><b>${fmtD(d)}</b><small>ปิด ${l.length}/${C().slots.length*ROOMS().length} ช่อง${rs.length?` · ${rs.map(esc).join(', ')}`:''}</small></div><button class="btn sm ghost" data-d="od:${d}">${ic('door',13)}เปิดทั้งวัน</button></div>${clGrid(d,l)}</div>`}).join('')||'<p class="muted">ยังไม่มีการปิดห้องเฉพาะวัน</p>'}</div>
    <div class="mact">${only&&all.length>1?`<button class="btn" data-d="all">${ic('eye',14)}ดูทั้งหมด ${all.length} วัน</button>`:''}<button class="btn ghost" data-d="close">ปิด</button></div>`,a=>{if(a==='all')return closuresDlg();if(a.startsWith('ro:'))return reopenDlg([a.slice(3)],re);if(a.startsWith('od:'))return reopenDlg(Object.keys(S.d.closures||{}).filter(k=>k.startsWith(a.slice(3)+'_')).sort(),re);closeM()})}
 function closuresCard(){const [up,byDay]=closuresByDay(),days=Object.keys(byDay),tot=C().slots.length*ROOMS().length;
