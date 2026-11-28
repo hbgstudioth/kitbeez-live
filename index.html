@@ -2778,6 +2778,40 @@ body[data-v=pay] .stat:has(.icb[data-i=hour]) b{color:#9f1239!important}
 #dlg:has(.crdw) .clg button.cc:hover{filter:brightness(1.04);box-shadow:0 0 0 2px rgba(225,29,72,.25)}
 #dlg:has(.crdw) .btn:not(.bad):not(.ghost){background:linear-gradient(160deg,#fb7185,#e11d48)!important;border-color:#e11d48!important;color:#fff!important;border-radius:999px!important;box-shadow:0 8px 18px -8px rgba(225,29,72,.7)!important}
 #dlg:has(.crdw) .clday2 .btn.ghost{border-radius:12px!important}
+/* ===== settings tabs: per-tab accent, same feel as closures card ===== */
+body[data-st=room]{--a1:#22b8cf;--a2:#0e7490;--ak:#0b4f63;--at1:rgba(240,251,253,.94);--at2:rgba(208,240,247,.92);--ab:rgba(120,205,225,.55)}
+body[data-st=round]{--a1:#e879c6;--a2:#b0398f;--ak:#86195f;--at1:rgba(253,242,250,.94);--at2:rgba(246,222,240,.88);--ab:rgba(232,160,210,.55)}
+body[data-st=perm]{--a1:#818cf8;--a2:#4f46e5;--ak:#3730a3;--at1:rgba(245,245,255,.94);--at2:rgba(230,231,255,.88);--ab:rgba(165,170,250,.55)}
+body[data-st=member]{--a1:#34d399;--a2:#059669;--ak:#065f46;--at1:rgba(240,253,247,.94);--at2:rgba(214,245,230,.88);--ab:rgba(110,220,170,.5)}
+body[data-st=admin]{--a1:#3b6fd8;--a2:#1e3a8a;--ak:#172f6e;--at1:rgba(241,245,255,.94);--at2:rgba(222,231,252,.88);--ab:rgba(140,170,235,.55)}
+body[data-st=log]{--a1:#a78bfa;--a2:#7c3aed;--ak:#5b21b6;--at1:rgba(247,243,255,.94);--at2:rgba(234,226,255,.88);--ab:rgba(190,170,250,.55)}
+body[data-st=data]{--a1:#94a3b8;--a2:#475569;--ak:#334155;--at1:rgba(248,250,252,.94);--at2:rgba(233,237,243,.9);--ab:rgba(180,190,205,.6)}
+body[data-v=set] .setsec>.card:not(.clcard){background:linear-gradient(160deg,var(--at1),var(--at2))!important;border-color:rgba(255,255,255,.95)!important}
+body[data-v=set] .setsec>.card>h3,body[data-v=set] .setsec>.card h3:first-child,body[data-v=set] .setsec .pmhd h3,body[data-v=set] .setsec .tmhd h3{color:var(--ak)!important}
+body[data-v=set] .setsec h3 .icb{width:40px!important;height:40px!important;border-radius:13px!important;border:0!important;color:#fff!important;background:linear-gradient(160deg,var(--a1),var(--a2))!important;box-shadow:0 8px 16px -8px var(--a2),inset 0 1px 0 rgba(255,255,255,.35)!important}
+body[data-v=set] .setsec h3 .icb svg{stroke-width:2.3}
+body[data-v=set] .setsec .btn.primary,body[data-v=set] #dlg .btn.primary{background:linear-gradient(160deg,var(--a1),var(--a2))!important;border-color:var(--a2)!important;color:#fff!important;border-radius:999px!important;box-shadow:0 8px 18px -8px var(--a2)!important}
+body[data-v=set] .setsec .btn:not(.primary):not(.bad):not(.ok):not(.icon):not(.danger):not(.clall){border-color:var(--ab)!important;color:var(--ak)!important;background:rgba(255,255,255,.75)!important}
+body[data-v=set] .setsec .pmt,body[data-v=set] .setsec .tmlist,body[data-v=set] .setsec .wcard,body[data-v=set] .setsec .wlim,body[data-v=set] .setsec .wadd,body[data-v=set] .setsec .arow,body[data-v=set] .setsec .logday{border-color:var(--ab)!important}
+body[data-v=set] .setsec .pmi{background:rgba(255,255,255,.9)!important;color:var(--a2)!important;box-shadow:inset 0 0 0 1px var(--ab)}
+body[data-v=set] .setsec .pmgt{color:var(--ak)}
+body[data-v=set] .setsec .tmf,body[data-v=set] .setsec .lgcat{background:rgba(255,255,255,.55)!important}
+body[data-v=set] .setsec .tmf button.on{color:var(--ak)!important}body[data-v=set] .setsec .tmf button.on em{background:var(--a2)!important}
+body[data-v=set] .setsec .wchip:hover,body[data-v=set] .setsec .wchip.on{border-color:var(--a2)!important;color:var(--ak)!important}
+body[data-v=set] .setsec .inp:focus,body[data-v=set] #dlg .inp:focus{border-color:var(--a2)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--a2) 18%,transparent)!important}
+body[data-v=set] .setsec .tmrow{background:rgba(255,255,255,.8)}
+/* popups opened from these tabs */
+body[data-v=set] #dlg:not(:has(.crdw)){background:linear-gradient(165deg,var(--at1),var(--at2))!important;border:1px solid rgba(255,255,255,.95)!important}
+body[data-v=set] #dlg:not(:has(.crdw)) h3{color:var(--ak)}
+body[data-v=set] #dlg:not(:has(.crdw)) .mhead .icb{border:0!important;color:#fff!important;background:linear-gradient(160deg,var(--a1),var(--a2))!important;box-shadow:0 8px 16px -8px var(--a2)!important}
+body[data-v=set] #dlg .btn.ghost{border-radius:999px!important;background:rgba(255,255,255,.8)!important;border-color:var(--ab)!important;color:var(--ak)!important}
+body[data-v=set] .setnav button.on{background:linear-gradient(160deg,var(--a1),var(--a2))!important;box-shadow:0 8px 18px -8px var(--a2)!important}
+body[data-st=perm]{--at2:rgba(222,224,255,.92)}body[data-st=admin]{--at2:rgba(212,224,252,.92)}body[data-st=log]{--at2:rgba(228,218,255,.92)}body[data-st=member]{--at2:rgba(206,243,224,.92)}body[data-st=round]{--at2:rgba(244,212,236,.92)}
+body[data-v=set] .setsec .arow,body[data-v=set] .setsec .pmt{background:rgba(255,255,255,.8)!important}
+
+body[data-st=room] .setsec .clcard h3 .icb,body[data-st=room] .crbox .cllk{}
+body[data-st=room] .setsec .dseg button.on{background:linear-gradient(160deg,var(--a1),var(--a2))!important;color:#fff!important;border-color:var(--a2)!important;box-shadow:0 6px 14px -8px var(--a2)!important}
+body[data-st=room] .setsec .rmc.o{border-color:var(--ab)}
 </style>
 </head>
 <body>
@@ -3183,7 +3217,7 @@ function render(){
   if(S.sel?.size)[...S.sel].forEach(k=>{const p=parseSid(k);if(!S.d.slots[k]&&isClosed(p.d,p.r,p.s))S.sel.delete(k)});
   const NA=newAdds();
   const FOOT=`<footer class="mfoot"><b>LIVE BOOKING SYSTEM : HS DEVELOPMENT</b><span>SOFTWARE ENGINEERING &amp; DEVELOPMENT</span></footer>`;
-  document.body.dataset.v=S.view;const VL={book:'จองคิว',week:'ตารางไลฟ์',mine:'คิวของฉัน',track:'ติดตามคำขอ',pay:'สรุปชั่วโมง',req:'อนุมัติ',set:'ตั้งค่า'};
+  document.body.dataset.v=S.view;document.body.dataset.st=S.view==='set'?(S.setTab||'room'):'';const VL={book:'จองคิว',week:'ตารางไลฟ์',mine:'คิวของฉัน',track:'ติดตามคำขอ',pay:'สรุปชั่วโมง',req:'อนุมัติ',set:'ตั้งค่า'};
   main.innerHTML=(NA.length&&(S.view==='book'||S.view==='mine')?`<button class="newbar" data-act="newAdds"><span class="bl">${ic('bell',18)}</span><span class="tx"><b>แบรนด์เพิ่มคิวให้คุณ ${NA.length} Slot</b><small>${esc([...new Set(NA.map(([,v])=>v.addedBy||v.by).filter(Boolean))].join(', '))} · แตะเพื่อดูรายละเอียด</small></span>${ic('right',18)}</button>`:'')+views[S.view]()+FOOT;
   if(NA.length&&!S._newShown&&!$('#dlg').open){S._newShown=true;setTimeout(()=>{if(!$('#dlg').open)newAddsDlg()},500)}
   if(S.lastView!==S.view){main.classList.remove('enter');void main.offsetWidth;main.classList.add('enter');S.lastView=S.view}else{main.classList.remove('enter');window.scrollTo(0,y)}
