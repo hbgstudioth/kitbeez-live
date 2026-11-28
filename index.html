@@ -2457,6 +2457,86 @@ body .hbento .hlive .hrm.cl{opacity:.45}
  .bkdh .nt3{display:none!important}}
 @media(max-width:860px){body .hbento{grid-auto-rows:minmax(52px,auto)!important}body .hbento .hlive:has(.hann){grid-row:span 7!important}}
 @media(min-width:861px){body .hbento .hlive:has(.hann){grid-row:span 6!important}body .hbento .hbook:has(~.hlive .hann),body .hbento .htoday:has(~.hlive .hann){grid-row:span 6!important}}
+/* ===== booking page: mint CI (matches home book card) ===== */
+body[data-v=book]{--bk:#0f766e;--bk2:#0f5a4a;--bkl:#e6f7f1}
+body[data-v=book] .card,body[data-v=book] .winbar,body[data-v=book] .notebar{background:linear-gradient(160deg,rgba(240,252,247,.82),rgba(222,245,236,.78))!important;border-color:rgba(255,255,255,.9)!important}
+body[data-v=book] .studio .stbar{background:linear-gradient(160deg,rgba(146,214,190,.92),rgba(104,186,166,.88))!important;color:#0f2a26!important;border:1px solid rgba(255,255,255,.8)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 14px 30px -18px rgba(15,90,74,.55)!important}
+body[data-v=book] .studio .stbar *{color:#0f2a26}
+body[data-v=book] .studio .stbar .sk{background:rgba(255,255,255,.45)!important;border-color:rgba(255,255,255,.8)!important}
+body[data-v=book] .studio .stbar .spg{background:rgba(15,42,38,.15)!important}body[data-v=book] .studio .stbar .spg i{background:#0f2a26!important}
+body[data-v=book] .dchip.on{background:linear-gradient(160deg,#2aa58a,#0f766e)!important;border-color:#0f766e!important;color:#fff!important;box-shadow:0 8px 18px -8px rgba(15,118,110,.6)!important}
+body[data-v=book] .dchip.on *{color:#fff!important}
+body[data-v=book] .mbig{background:#0f766e!important}
+body[data-v=book] .wkb .btn,body[data-v=book] .dchip{border-color:rgba(255,255,255,.95)!important}
+body[data-v=book] .rhead{background:rgba(255,255,255,.65)!important;color:#0f5a4a!important}
+body[data-v=book] .rhead svg{color:#0f766e}
+body[data-v=book] .btn.primary,body[data-v=book] .gornd:not(.here){background:linear-gradient(160deg,#2aa58a,#0f766e)!important;border-color:#0f766e!important;box-shadow:0 8px 18px -8px rgba(15,118,110,.6)!important}
+body[data-v=book] .cart{background:linear-gradient(160deg,#0f5a4a,#0b3f35)!important;box-shadow:0 18px 44px rgba(15,90,74,.45)!important}
+body[data-v=book] .winbar{border-left:3px solid #16a34a!important}
+body[data-v=book] .stick::before{background:rgba(160,220,200,.35)!important}
+body[data-v=book] .lgd,body[data-v=book] .lgd *{color:#0f5a4a}
+body[data-v=book] .hall{background:linear-gradient(160deg,rgba(240,252,247,.88),rgba(222,245,236,.82))!important;border:1px solid rgba(255,255,255,.9)!important;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 18px 40px -24px rgba(15,90,74,.45)!important}
+body[data-v=book] .seat:not(.free):not(.occ){background:rgba(255,255,255,.6)}
+body[data-v=book] .admtool{background:rgba(240,252,247,.75)!important;border-color:rgba(15,118,110,.25)!important}
+body[data-v=book] .studio .onair{background:#0f2a26!important;color:#fff!important;border:0!important;box-shadow:0 6px 14px -8px rgba(15,42,38,.7)!important;border-radius:999px!important;font-weight:600!important;letter-spacing:.04em;padding:4px 11px 4px 9px!important;animation:none!important}
+body[data-v=book] .studio .onair,body[data-v=book] .studio .onair *{color:#fff!important}
+body[data-v=book] .studio .onair i{background:#22c55e!important;box-shadow:0 0 0 0 rgba(34,197,94,.7);animation:hgBlink 1.4s ease-out infinite!important}
+body[data-v=book] .studio .onair:not(.on){background:rgba(15,42,38,.55)!important}
+body[data-v=book] .studio .onair:not(.on) i{background:rgba(255,255,255,.7)!important;animation:none!important}
+/* ===== hours page: cream-gold CI (matches home hours card) ===== */
+body[data-v=pay] .card,body[data-v=pay] .stat,body[data-v=pay] .winbar{background:linear-gradient(160deg,rgba(253,250,238,.86),rgba(245,237,208,.8))!important;border-color:rgba(255,255,255,.92)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 18px 40px -24px rgba(150,110,20,.4)!important}
+body[data-v=pay] .card .card,body[data-v=pay] .rsc{background:rgba(255,255,255,.62)!important}
+body[data-v=pay] .rsc.best{background:linear-gradient(160deg,#fff,rgba(252,236,180,.75))!important}
+body[data-v=pay] .rsbar i,body[data-v=pay] .pbar i{background:linear-gradient(90deg,#e7c35a,#c99a2e)!important}
+body[data-v=pay] .rsbw span{color:#a8832d!important}
+body[data-v=pay] .card h3,body[data-v=pay] .card h3 *{color:#6b4f0e}
+body[data-v=pay] .card h3 svg,body[data-v=pay] .stat .icb{color:#a8832d!important}
+body[data-v=pay] .stat .icb{background:#fff7dc!important;border-color:#f3e3a8!important}
+body[data-v=pay] .stat b{color:#7a5c12!important}
+body[data-v=pay] .seg{background:rgba(245,234,196,.6)!important;border-color:rgba(255,255,255,.85)!important}
+body[data-v=pay] .seg button.on{color:#7a5c12!important}body[data-v=pay] .seg button.on svg{color:#a8832d}
+body[data-v=pay] .empf button.on{border-color:#c99a2e!important;background:#fff8e1!important;box-shadow:0 0 0 2px rgba(201,154,46,.25)!important}
+body[data-v=pay] .empf button.on b{color:#7a5c12}
+body[data-v=pay] .btn.primary{background:linear-gradient(160deg,#d6a93c,#a8832d)!important;border-color:#a8832d!important;box-shadow:0 8px 18px -8px rgba(168,131,45,.6)!important}
+body[data-v=pay] .mbig{background:#a8832d!important}
+body[data-v=pay] .tbl th,body[data-v=pay] table th{background:rgba(245,234,196,.55)!important;color:#6b4f0e!important}
+body[data-v=pay] .ptot,body[data-v=pay] td.ptot{background:rgba(252,236,180,.45)!important;color:#7a5c12!important}
+body[data-v=pay] .sumline .pill{background:rgba(255,250,235,.75)!important;color:#7a5c12!important}body[data-v=pay] .sumline .pill svg{color:#a8832d}
+body[data-v=pay] .stick::before{background:rgba(240,225,170,.35)!important}
+body[data-v=pay] .wkb .btn{border-color:rgba(255,255,255,.95)!important}
+body[data-v=pay] .ptbl .hv{background:rgba(201,154,46,calc(var(--a) * .9 + .08))!important;color:#4a3608!important}
+body[data-v=pay] .ptbl .ptot b,body[data-v=pay] .ptbl .ptot{color:#7a5c12!important}
+body[data-v=pay] .ptbl tfoot td{background:rgba(245,234,196,.55)!important;color:#6b4f0e!important}
+body[data-v=pay] .ptbl tfoot td.ptot{background:rgba(240,215,140,.55)!important}
+body[data-v=pay] .ptbl tbody tr:hover td{background:rgba(252,240,200,.35)}
+body[data-v=pay] .ptbl .rk{background:#fff4cf!important;color:#8a6d22!important}
+/* ===== approvals page: deep blue CI (matches home approvals card) ===== */
+body[data-v=req]{--nv:#1e3a8a;--nv2:#172f6e}
+body[data-v=req] main>.card{background:linear-gradient(160deg,rgba(40,70,140,.94),rgba(24,46,100,.96))!important;border:1px solid rgba(255,255,255,.25)!important;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 22px 48px -24px rgba(15,31,80,.7)!important}
+body[data-v=req] main>.card>h3,body[data-v=req] main>.card>.chd,body[data-v=req] main>.card>.chd *,body[data-v=req] main>.card>h3 *{color:#fff!important}
+body[data-v=req] main>.card .muted{color:rgba(255,255,255,.72)!important}
+body[data-v=req] .rqf .rqfrow>span,body[data-v=req] .rqf .rqfrow>b,body[data-v=req] .rqf .rqfsum,body[data-v=req] .rqf .rqfsum *{color:rgba(255,255,255,.88)!important}
+body[data-v=req] .rqf .seg{background:rgba(255,255,255,.12)!important;border-color:rgba(255,255,255,.22)!important}
+body[data-v=req] .rqf .seg button{color:rgba(255,255,255,.8)!important}
+body[data-v=req] .rqf .seg button.on{background:#fff!important;color:#1e3a8a!important}
+body[data-v=req] .req{background:rgba(255,255,255,.95)!important;border:1px solid rgba(255,255,255,.95)!important;color:#0f1f3d;box-shadow:0 10px 24px -14px rgba(0,0,0,.5)!important}
+body[data-v=req] .pagehd .hdact .seg{background:rgba(23,47,110,.55)!important;border-color:rgba(255,255,255,.3)!important}
+body[data-v=req] .pagehd .hdact .seg button{color:rgba(255,255,255,.85)!important}
+body[data-v=req] .pagehd .hdact .seg button.on{background:#fff!important;color:#1e3a8a!important}
+body[data-v=req] .btn.primary{background:linear-gradient(160deg,#2f56b8,#1e3a8a)!important;border-color:#1e3a8a!important}
+body[data-v=req] main>.card .btn:not(.primary):not(.ok):not(.bad):not(.danger){background:rgba(255,255,255,.14)!important;border-color:rgba(255,255,255,.3)!important;color:#fff!important}
+body[data-v=req] main>.card .req .btn:not(.primary):not(.ok):not(.bad):not(.danger){background:#fff!important;border-color:#e3e8f0!important;color:#0f1f3d!important}
+body[data-v=req] main>.card>div:first-child>h3,body[data-v=req] main>.card h3{color:#fff!important}
+body[data-v=req] main>.card>div:first-child>.icb{background:rgba(255,255,255,.95)!important;color:#1e3a8a!important;border:0!important}
+body[data-v=req] main>.card .req h3{color:#0f1f3d!important}
+body[data-v=req] .rqf .muted,body[data-v=req] .rqf small{color:rgba(255,255,255,.72)!important}
+body[data-v=req] .hdact .seg{background:rgba(23,47,110,.55)!important;border-color:rgba(255,255,255,.3)!important}
+body[data-v=req] .hdact .seg button{color:rgba(255,255,255,.88)!important}
+body[data-v=req] .hdact .seg button.on{background:#fff!important;color:#1e3a8a!important}
+body[data-v=req] .hdact .seg button.on *{color:#1e3a8a!important}
+body[data-v=req] .rqf button small,body[data-v=req] .rqf button em{color:#15803d!important}
+body[data-v=req] .rqf [class*=lbl],body[data-v=req] .rqf .dim{opacity:1!important;color:rgba(255,255,255,.75)!important}
+body[data-v=req] .rqf .lb{color:rgba(255,255,255,.8)!important;opacity:1!important}body[data-v=req] .rqf .lb svg{color:rgba(255,255,255,.8)}
 </style>
 </head>
 <body>
