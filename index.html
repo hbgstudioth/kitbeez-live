@@ -2537,6 +2537,53 @@ body[data-v=req] .hdact .seg button.on *{color:#1e3a8a!important}
 body[data-v=req] .rqf button small,body[data-v=req] .rqf button em{color:#15803d!important}
 body[data-v=req] .rqf [class*=lbl],body[data-v=req] .rqf .dim{opacity:1!important;color:rgba(255,255,255,.75)!important}
 body[data-v=req] .rqf .lb{color:rgba(255,255,255,.8)!important;opacity:1!important}body[data-v=req] .rqf .lb svg{color:rgba(255,255,255,.8)}
+/* ===== glass toast ===== */
+#toast{top:16px!important;gap:12px!important;padding:10px 12px 10px 10px!important;min-width:280px;border-radius:20px!important;color:#0f1f3d!important;font-weight:500;overflow:hidden;
+ background:rgba(255,255,255,.78)!important;backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border:1px solid rgba(255,255,255,.95);
+ box-shadow:inset 0 1px 0 #fff,0 22px 50px -18px rgba(15,31,61,.45),0 2px 6px rgba(15,31,61,.06)!important;transform:translate(-50%,-160%) scale(.96)!important;transition:transform .5s cubic-bezier(.2,.9,.25,1.15)!important}
+#toast.show{transform:translate(-50%,0) scale(1)!important}
+#toast .tic{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;flex:none;color:#fff;background:linear-gradient(160deg,#34d399,#059669);box-shadow:0 8px 16px -8px rgba(5,150,105,.7),inset 0 1px 0 rgba(255,255,255,.35)}
+#toast.err .tic{background:linear-gradient(160deg,#fb7185,#e11d48);box-shadow:0 8px 16px -8px rgba(225,29,72,.7),inset 0 1px 0 rgba(255,255,255,.35)}
+#toast.bell .tic{background:linear-gradient(160deg,#3b6fd8,#1e3a8a);box-shadow:0 8px 16px -8px rgba(30,58,138,.7),inset 0 1px 0 rgba(255,255,255,.3)}
+#toast.bell.show .tic svg{animation:bellRing 1s ease-in-out 2;transform-origin:50% 2px}
+#toast .ttx{display:flex;flex-direction:column;line-height:1.3;min-width:0;margin-right:auto}
+#toast .ttx b{font-size:14px;font-weight:600}#toast .ttx small{font-size:12px;color:#64748b}
+#toast .tgo{display:inline-flex;align-items:center;gap:2px;border:0;cursor:pointer;font:inherit;font-size:12.5px;font-weight:600;color:#fff;background:#1e3a8a;padding:7px 10px 7px 13px;border-radius:999px;white-space:nowrap;box-shadow:0 6px 14px -6px rgba(30,58,138,.7)}
+#toast .tgo:hover{background:#1d4ed8}
+#toast .tbar{position:absolute;left:0;bottom:0;height:3px;width:100%;transform-origin:left;background:linear-gradient(90deg,#34d399,#059669);opacity:.7}
+#toast.err .tbar{background:linear-gradient(90deg,#fb7185,#e11d48)}#toast.bell .tbar{background:linear-gradient(90deg,#60a5fa,#1e3a8a)}
+#toast.show .tbar{animation:tbar linear forwards}@keyframes tbar{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@media(max-width:600px){#toast{min-width:0;width:calc(100vw - 24px);top:12px!important}}
+/* ===== calmer hours table ===== */
+.ptbl .hv{background:none!important;color:#3b2a06!important;font-weight:600;padding:0!important;box-shadow:none!important;min-width:0!important}
+body[data-v=pay] .ptbl .hv{background:none!important}
+.ptbl td.pc2{position:relative}
+.ptbl td.pc2:not(.z)::before{content:"";position:absolute;left:50%;top:50%;width:34px;height:26px;transform:translate(-50%,-50%);border-radius:8px;background:rgba(201,154,46,.10);z-index:0}
+.ptbl td.pc2 .hv{position:relative;z-index:1}
+.ptbl .dot0{display:none!important}
+.ptbl tbody tr:nth-child(even) td{background:rgba(255,255,255,.35)}
+.ptbl tbody td{border-bottom:0!important;padding-top:10px!important;padding-bottom:10px!important}
+.ptbl td.ptot,.ptbl th.ptot{border-left:1px solid rgba(168,131,45,.18)}
+.ptbl .ptot b{font-size:16px}
+.ptbl .rk{background:none!important;color:#a8916a!important;font-weight:500;min-width:18px}
+.ptbl .emptag,.pmob .emptag{background:none!important;border:0!important;padding:0 0 0 2px!important;font-size:11px!important;font-weight:500!important;opacity:.75}
+.ptbl .pslot{color:#94a3b8!important;font-weight:500}
+/* mobile cards */
+.pmob{display:none}
+@media(max-width:600px){
+ .ptcard{display:none!important}
+ .pmob{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+ .pmc{background:linear-gradient(160deg,rgba(253,250,238,.9),rgba(245,237,208,.85));border:1px solid rgba(255,255,255,.95);border-radius:18px;padding:11px 12px;box-shadow:inset 0 1px 0 #fff,0 10px 24px -18px rgba(150,110,20,.5);animation:fadeUp .4s both;animation-delay:calc(var(--i)*30ms)}
+ .pmh{display:flex;align-items:center;gap:6px;min-width:0}.pmh .rk{font-size:11px;color:#a8916a;min-width:14px}
+ .pmh .namechip{font-size:13px}
+ .pmt{margin-left:auto;text-align:right;line-height:1.1;flex:none}.pmt b{font-size:20px;font-weight:700;color:#7a5c12}.pmt small{display:block;font-size:10.5px;color:#8a7650}
+ .pmbar{height:4px;border-radius:4px;background:rgba(168,131,45,.12);margin:8px 0 8px;overflow:hidden}.pmbar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#e7c35a,#c99a2e)}
+ .pmd{display:grid;grid-template-columns:repeat(min(var(--c),7),1fr);gap:4px}
+ .pmd span{display:flex;flex-direction:column;align-items:center;line-height:1.15;padding:4px 0;border-radius:9px;background:rgba(255,255,255,.7)}
+ .pmd span.z{background:transparent;opacity:.45}
+ .pmd small{font-size:10px;color:#8a7650}.pmd em{font-style:normal;font-size:9.5px;color:#b3a17c}.pmd b{font-size:13px;color:#3b2a06;font-weight:600}
+ .pmsum{background:linear-gradient(160deg,rgba(245,225,160,.9),rgba(236,210,140,.85))}.pmst{font-size:14px;color:#6b4f0e}
+}
 </style>
 </head>
 <body>
@@ -2763,7 +2810,7 @@ const myName=()=>S.meId?M(S.meId).name:(S.adminName||S.user?.name||S.user?.email
 const reqs=()=>S.store.demo?Object.fromEntries(Object.entries(S.d.slots).filter(([,v])=>v.status!=='ok')):S.d.reqs;
 const firstOpen=ws=>[...Array(7)].map((_,i)=>add(ws,i)).find(isOpen)||ws;
 function nameChip(id){const c=colOf(id);return`<span class="namechip" style="background:${c.bg};color:${c.fg}">${esc(M(id).name)}</span>`}
-function toast(m,err){const t=$('#toast');t.innerHTML=ic(err?'alert':'checkc',18)+`<span>${esc(m)}</span>`;t.className=err?'err show':'show';clearTimeout(toast.t);toast.t=setTimeout(()=>t.className=err?'err':'',2800)}
+function toast(m,err,o={}){const t=$('#toast');const k=err?'err':(o.cls||'ok');t.innerHTML=`<span class="tic">${ic(o.icon||(err?'alert':'checkc'),18)}</span><span class="ttx"><b>${esc(m)}</b>${o.sub?`<small>${esc(o.sub)}</small>`:''}</span>${o.act?`<button class="tgo" data-act="view" data-v="${o.act}">${esc(o.actL||'ดู')}${ic('right',13)}</button>`:''}<i class="tbar" style="animation-duration:${o.ms||2800}ms"></i>`;t.className=k;void t.offsetWidth;t.className=k+' show';clearTimeout(toast.t);toast.t=setTimeout(()=>t.className=k,o.ms||2800)}
 function download(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3000)}
 async function copyText(t){try{await navigator.clipboard.writeText(t);toast('คัดลอกแล้ว วางใน LINE ได้เลย')}catch{modal(`<div class="mhead">${icb('copy')}<h3>คัดลอกข้อความ</h3></div><textarea rows="10" readonly>${esc(t)}</textarea><div class="mact"><button class="btn" data-d="close">ปิด</button></div>`,()=>closeM())}}
 const inApp=()=>/Line\/|FBAN|FBAV|Instagram|; wv\)/i.test(navigator.userAgent);
@@ -2932,7 +2979,7 @@ function render(){
     requestAnimationFrame(()=>{ink.style.left=on.offsetLeft+'px';ink.style.width=on.offsetWidth+'px'})}
   const nm=myName();
   const rqB=isBrand()?(T.find(x=>x.id==='req')?.b||0):0,rqUp=isBrand()&&S._rqPrev!=null&&rqB>S._rqPrev;
-  if(isBrand()){if(rqUp)setTimeout(()=>toast(`🔔 มีคำขอใหม่เข้ามา · รอดำเนินการ ${rqB} รายการ`),300);S._rqPrev=rqB;document.title=(rqB?`(${rqB}) `:'')+document.title.replace(/^\(\d+\) /,'')}
+  if(isBrand()){if(rqUp)setTimeout(()=>toast('มีคำขอใหม่เข้ามา',0,{icon:'bell',cls:'bell',sub:`รอดำเนินการ ${rqB} รายการ`,act:'req',actL:'ไปอนุมัติ',ms:6000}),300);S._rqPrev=rqB;document.title=(rqB?`(${rqB}) `:'')+document.title.replace(/^\(\d+\) /,'')}
   $('#user').innerHTML=(isBrand()?`<button class="tbell ${rqB?'has':''} ${rqUp?'ring':''}" data-act="view" data-v="req" title="${rqB?`มีคำขอรอดำเนินการ ${rqB} รายการ`:'ไม่มีคำขอค้าง'}">${ic('bell',19)}${rqB?`<em>${rqB>99?'99+':rqB}</em>`:''}</button>`:'')+presWidget()+`<button class="ubtn" data-act="profile" title="ข้อมูลของฉัน"><div class="avatar" style="background:${c.bg};color:${c.fg}">${u.photo?`<img src="${esc(u.photo)}" alt="">`:(S.meId?esc(nm[0]):ic('tag',17))}</div><div class="uname"><b>${esc(nm)}</b><span class="role ${isBrand()?'brand':''}">${ic(isBrand()?'tag':'mic',11)}${isBrand()?'KITBEEZ_ADMIN':ROLE_L[S.role]}</span></div></button><button class="btn icon ghost" data-act="logout" title="ออกจากระบบ">${ic('logout',18)}</button>`;
   $('#demo').innerHTML=S.store.demo?`<div class="demo">${ic('flask',16)} <b>โหมดทดลอง</b> ข้อมูลเก็บในเครื่องนี้เท่านั้น · <button class="link" data-act="guide">วิธีเปิดใช้ Login Gmail ให้ทุกคนใช้ร่วมกัน</button></div>`:'';
   const main=$('#main');const views={home:vHome,book:vBook,week:vWeek,mine:vMine,track:vTrack,pay:vPay,req:vReq,set:vSet};
@@ -3311,9 +3358,14 @@ function vPay(){
   ${rsHtml}
   ${(()=>{const mx=Math.max(1,...ids.map(id=>rows[id].tot)),cmx=Math.max(1,...ids.flatMap(id=>rows[id].cols));
     const hd=c=>{if(c.from===c.to)return`<span class="ph"><small>${DOW_S[dow(c.from)]}</small><b>${dnum(c.from)} ${MON_S[D(c.from).getUTCMonth()]}</b></span>`;return`<span class="ph"><small>${nDays(c.from,c.to)} วัน</small><b>${dnum(c.from)}${c.from.slice(0,7)!==c.to.slice(0,7)?' '+MON_S[D(c.from).getUTCMonth()]:''}–${dnum(c.to)} ${MON_S[D(c.to).getUTCMonth()]}</b></span>`};
+    const ml=c=>c.from===c.to?DOW_S[dow(c.from)]:`${dnum(c.from)}–${dnum(c.to)}`,md=c=>c.from===c.to?dnum(c.from):'';
+    const pmob=()=>`<div class="pmob">${ids.map((id,i)=>`<div class="pmc" style="--i:${i}"><div class="pmh"><span class="rk">${i+1}</span>${nameChip(id)}${empTag(id)}<div class="pmt"><b>${fmtHMs(rows[id].tot)}</b><small>ชม. · ${rows[id].n} Slot</small></div></div>
+      <div class="pmbar"><i style="width:${Math.round(rows[id].tot/mx*100)}%"></i></div>
+      <div class="pmd" style="--c:${cols.length}">${rows[id].cols.map((x,ci)=>`<span class="${x?'':'z'}"><small>${ml(cols[ci])}</small>${md(cols[ci])?`<em>${md(cols[ci])}</em>`:''}<b>${x?fmtHMs(x):'–'}</b></span>`).join('')}</div></div>`).join('')||'<p class="muted" style="text-align:center;padding:24px">ยังไม่มีคิวในช่วงนี้</p>'}
+      ${ids.length?`<div class="pmc pmsum"><div class="pmh"><b class="pmst">รวมทั้งหมด</b><div class="pmt"><b>${fmtHMs(sumH)}</b><small>ชม. · ${sumN} Slot</small></div></div><div class="pmd" style="--c:${cols.length}">${cols.map((c,ci)=>{const v=ids.reduce((a,id)=>a+rows[id].cols[ci],0);return`<span class="${v?'':'z'}"><small>${ml(c)}</small>${md(c)?`<em>${md(c)}</em>`:''}<b>${v?fmtHMs(v):'–'}</b></span>`}).join('')}</div></div>`:''}</div>`;
     return`<div class="card scroll ptcard"><table class="tbl ptbl"><thead><tr><th class="pn">Live Streamer <small>${ids.length} คน</small></th>${cols.map(c=>`<th>${hd(c)}</th>`).join('')}<th class="ptot">รวม<small>ชม.:นาที</small></th><th class="pslot">Slot</th></tr></thead><tbody>
   ${ids.map((id,i)=>`<tr style="--i:${i}"><td class="pn"><div class="nmc"><span class="rk">${i+1}</span>${nameChip(id)}${empTag(id)}</div></td>${rows[id].cols.map(x=>`<td class="pc2 ${x?'':'z'}">${x?`<span class="hv" style="--a:${(.08+.34*x/cmx).toFixed(2)}">${fmtHMs(x)}</span>`:'<i class="dot0"></i>'}</td>`).join('')}<td class="ptot"><div class="tw"><b>${fmtHMs(rows[id].tot)}</b>${rows[id].short?`<small class="shtag" title="มี ${rows[id].short} Slot ที่ไลฟ์ไม่ครบ">${ic('hour',10)}${rows[id].short}</small>`:''}</div></td><td class="pslot">${rows[id].n}</td></tr>`).join('')||`<tr><td colspan="${cols.length+3}" class="muted" style="text-align:center;padding:30px">ยังไม่มีคิวในช่วงนี้</td></tr>`}
-  </tbody>${ids.length?`<tfoot><tr><td class="pn">รวมทั้งหมด</td>${cols.map((_,ci)=>{const v=ids.reduce((a,id)=>a+rows[id].cols[ci],0);return`<td class="${v?'':'z'}">${v?fmtHMs(v):'–'}</td>`}).join('')}<td class="ptot"><b>${fmtHMs(sumH)}</b></td><td class="pslot">${sumN}</td></tr></tfoot>`:''}</table></div>`})()}
+  </tbody>${ids.length?`<tfoot><tr><td class="pn">รวมทั้งหมด</td>${cols.map((_,ci)=>{const v=ids.reduce((a,id)=>a+rows[id].cols[ci],0);return`<td class="${v?'':'z'}">${v?fmtHMs(v):'–'}</td>`}).join('')}<td class="ptot"><b>${fmtHMs(sumH)}</b></td><td class="pslot">${sumN}</td></tr></tfoot>`:''}</table></div>${pmob()}`})()}
   <div class="expbar"><button class="expb ln" data-act="copyPay"><span class="ex">${LINEIC}</span><span>คัดลอกสรุปส่ง LINE</span></button>${isBrand()?`<button class="expb csv" data-act="csvPay"><span class="ex"><i class="ft">CSV</i></span><span>ส่งออก CSV</span></button><button class="expb pdf" data-act="print"><span class="ex"><i class="ft">PDF</i></span><span>พิมพ์ / PDF</span></button>`:''}</div>`;
   h+=`<div class="card shcard" style="margin-top:16px"><h3 style="margin:0 0 4px">${icb('hour','warn')}Slot ที่ไลฟ์ไม่ครบ ${shorts.length?`(${shorts.length})`:''}</h3><p class="muted" style="margin:0 0 10px;font-size:13px">ชั่วโมงในตารางด้านบนนับตามเวลาไลฟ์จริงแล้ว (เช่น 5:15 = 5 ชั่วโมง 15 นาที) · แตะรายการเพื่อแก้ไข</p>
    ${shorts.length?`<div class="shlist">${shorts.map(([k,v])=>{const p=parseSid(k);return`<button class="shrow" data-act="hrs" data-k="${k}">${nameChip(v.who)}<span class="sht">${ic('calendar',12)}${fmtD(p.d)} · ${C().slots[p.s]} · ห้อง ${p.r}</span><b class="shh">${fmtHM(hrsOf(v))}<small> / ${C().hours} ชม.</small></b><span class="shr">${actChip(v)}${ic('msg',12)}${esc(v.actReason||'ไม่ระบุเหตุผล')}${v.actBy?`<small> · แจ้งโดย ${esc(v.actBy)}</small>`:''}</span></button>`}).join('')}</div>`:`<div class="muted" style="font-size:13px;padding:6px 0">${ic('checkc',14)} ทุก Slot ในช่วงนี้ไลฟ์ครบ ${C().hours} ชั่วโมง</div>`}</div>`;
