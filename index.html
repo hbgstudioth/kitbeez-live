@@ -2752,6 +2752,23 @@ body[data-v=pay] .stat:has(.icb[data-i=hour]) b{color:#9f1239!important}
 .crbox.rmcr b{color:#9f1239!important}.crbox.rmcr small{color:#9f6b74!important}
 .crbox.rmcr .btn.bad{background:linear-gradient(160deg,#fb7185,#e11d48)!important;border-color:#e11d48!important;color:#fff!important;font-weight:600;padding:8px 14px!important;box-shadow:0 8px 18px -8px rgba(225,29,72,.7)!important}
 .crbox.rmcr .btn.bad:hover{filter:brightness(1.05);transform:translateY(-1px)}
+/* close-by-date popup: pastel red CI */
+#dlg:has(.crdw){background:linear-gradient(165deg,rgba(255,247,247,.97),rgba(255,233,235,.96))!important;border:1px solid rgba(255,255,255,.95)!important;box-shadow:inset 0 1px 0 #fff,0 40px 90px -20px rgba(159,18,57,.4)!important}
+#dlg:has(.crdw) h3{color:#9f1239}#dlg:has(.crdw) .mhead .muted{color:#9f6b74}
+#dlg:has(.crdw) .sec{border-color:rgba(253,164,175,.35)!important}
+#dlg:has(.crdw) .sec>b{color:#be123c}#dlg:has(.crdw) .sec>b svg{color:#e11d48}
+#dlg:has(.crdw) .crch button{background:rgba(255,255,255,.8)!important;border:1px solid rgba(253,164,175,.55)!important;color:#7f1d3a!important;border-radius:12px!important}
+#dlg:has(.crdw) .crch button.ghost{border-style:dashed!important;color:#be123c!important}
+#dlg:has(.crdw) .crch button.mo{background:rgba(255,241,242,.9)!important;color:#be123c!important}
+#dlg:has(.crdw) .crch button.on,#dlg:has(.crdw) .crch button.mon{background:linear-gradient(160deg,#fb7185,#e11d48)!important;border-color:#e11d48!important;color:#fff!important;box-shadow:0 6px 14px -8px rgba(225,29,72,.7)}
+#dlg:has(.crdw) .crch button:hover{background:#fff!important}#dlg:has(.crdw) .crch button.on:hover,#dlg:has(.crdw) .crch button.mon:hover{background:linear-gradient(160deg,#fb7185,#e11d48)!important;filter:brightness(1.05)}
+#dlg:has(.crdw) .crmo small{color:#be123c}
+#dlg:has(.crdw) .inp{background:rgba(255,255,255,.85)!important;border-color:rgba(253,164,175,.55)!important}
+#dlg:has(.crdw) .inp:focus{border-color:#e11d48!important;box-shadow:0 0 0 3px rgba(225,29,72,.15)!important}
+#dlg:has(.crdw) .crhit{background:rgba(255,255,255,.75)!important;border:1px solid rgba(253,164,175,.55)!important;color:#7f1d3a!important;border-radius:12px}
+#dlg:has(.crdw) .crhit b{background:none!important;color:#9f1239!important;padding:0 2px!important}#dlg:has(.crdw) .crhit.bad{background:#fff1f2!important;color:#be123c!important}
+#dlg:has(.crdw) .btn.bad{background:linear-gradient(160deg,#fb7185,#e11d48)!important;border-color:#e11d48!important;color:#fff!important;box-shadow:0 8px 18px -8px rgba(225,29,72,.7)!important;border-radius:999px!important}
+#dlg:has(.crdw) .btn.ghost{background:rgba(255,255,255,.8)!important;border-color:rgba(253,164,175,.55)!important;color:#9f1239!important;border-radius:999px!important}
 </style>
 </head>
 <body>
@@ -3993,7 +4010,7 @@ function closeRangeDlg(o){
    <div class="sec"><b>${ic('msg',14)}เหตุผล (ไม่บังคับ)</b><input class="inp" id="cr_w" placeholder="เช่น ซ่อมไฟ, ถ่ายโฆษณา" value="${esc(why)}"></div>
    ${!rooms.size?`<div class="crhit bad">${ic('alert',13)} เลือกห้องอย่างน้อย 1 ห้อง</div>`:!D.length?`<div class="crhit bad">${ic('alert',13)} ช่วงนี้ไม่มีวันที่ตรงกับที่เลือก (หรือเป็นวันที่ไม่มีไลฟ์)</div>`:
     `<div class="crhit">${ic('lock',13)} จะปิด <b>${K.length} ช่อง</b> · ห้อง ${[...rooms].sort().join(', ')} · ${D.length} วัน: ${D.slice(0,8).map(x=>`<b>${DOW_S[dow(x)]} ${fmtDs(x)}</b>`).join(' ')}${D.length>8?` และอีก ${D.length-8} วัน`:''}${bk?`<br>${ic('alert',13)} มีคิวที่จองไว้แล้ว ${bk} ช่อง (คิวเดิมยังอยู่ ตรวจสอบในตารางด้วย)`:''}</div>`}`};
-  modal(`<div class="mhead">${icb('lock','bad')}<div><h3>ปิดห้องตามวันที่</h3><span class="muted">ปิดชั่วคราว · พ้นวันที่กำหนดแล้วกลับมาเปิดให้จองเอง</span></div></div><div id="crbody">${body()}</div>
+  modal(`<i class="crdw" hidden></i><div class="mhead"><span class="cllk">${ic('lock',20)}</span><div><h3>ปิดห้องตามวันที่</h3><span class="muted">ปิดชั่วคราว · พ้นวันที่กำหนดแล้วกลับมาเปิดให้จองเอง</span></div></div><div id="crbody">${body()}</div>
    <div class="mact"><button class="btn bad" data-d="save">${ic('lock',16)}ปิดห้อง</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,
   async a=>{
     const cap=()=>{f=$('#cr_f')?.value||f;t=$('#cr_t')?.value||t;why=$('#cr_w')?.value??why};cap();
