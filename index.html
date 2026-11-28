@@ -2584,6 +2584,31 @@ body[data-v=pay] .ptbl .hv{background:none!important}
  .pmd small{font-size:10px;color:#8a7650}.pmd em{font-style:normal;font-size:9.5px;color:#b3a17c}.pmd b{font-size:13px;color:#3b2a06;font-weight:600}
  .pmsum{background:linear-gradient(160deg,rgba(245,225,160,.9),rgba(236,210,140,.85))}.pmst{font-size:14px;color:#6b4f0e}
 }
+/* approvals section header band */
+.rqsh{display:flex;align-items:center;gap:10px;margin:-4px -4px 12px;padding:8px 10px 8px 8px;border-radius:16px;background:var(--rb,#fff3d6);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 6px 16px -10px rgba(0,0,0,.45)}
+.rqsec.pending{--rb:linear-gradient(90deg,#fde68a,#fef3c7);--rt:#7a5200}
+.rqsec.cancelreq{--rb:linear-gradient(90deg,#fecaca,#ffe4e6);--rt:#9f1239}
+.rqsec.movereq{--rb:linear-gradient(90deg,#ddd6fe,#ede9fe);--rt:#5b21b6}
+.rqsec.timereq{--rb:linear-gradient(90deg,#bae6fd,#e0f2fe);--rt:#075985}
+body[data-v=req] main>.card.rqsec .rqsh h3,body[data-v=req] main>.card.rqsec .rqsh h3 *{color:var(--rt)!important}
+body[data-v=req] main>.card.rqsec .rqsh .icb{background:#fff!important;color:var(--rt)!important}
+body[data-v=req] main>.card.rqsec .rqsh .pill{background:#fff!important;color:var(--rt)!important}
+body[data-v=req] main>.card.rqsec .rqsh .btn.btn:not(.primary):not(.ok):not(.bad):not(.danger){font-weight:600;background:rgba(255,255,255,.75)!important;border-color:#fff!important;color:var(--rt)!important}
+/* hours stat cards: distinct tints */
+body[data-v=pay] .stat:has(.icb[data-i=clock]){background:linear-gradient(160deg,#fff8e1,#fbe7a8)!important}
+body[data-v=pay] .stat:has(.icb[data-i=ticket]){background:linear-gradient(160deg,#f5f1ff,#e2d8fd)!important}
+body[data-v=pay] .stat:has(.icb[data-i=users]){background:linear-gradient(160deg,#effcf4,#cdf1dc)!important}
+body[data-v=pay] .stat:has(.icb[data-i=mic]){background:linear-gradient(160deg,#fff4ec,#fdd9bf)!important}
+body[data-v=pay] .stat:has(.icb[data-i=hour]){background:linear-gradient(160deg,#fff1f2,#fdd0d6)!important}
+body[data-v=pay] .stat .icb[data-i=clock]{background:#d6a93c!important;color:#fff!important;border:0!important}
+body[data-v=pay] .stat .icb[data-i=ticket]{background:#7c5cd6!important;color:#fff!important;border:0!important}
+body[data-v=pay] .stat .icb[data-i=users]{background:#16a34a!important;color:#fff!important;border:0!important}
+body[data-v=pay] .stat .icb[data-i=mic]{background:#ea7a2e!important;color:#fff!important;border:0!important}
+body[data-v=pay] .stat .icb[data-i=hour]{background:#e11d48!important;color:#fff!important;border:0!important}
+body[data-v=pay] .stat:has(.icb[data-i=ticket]) b{color:#4c2fa8!important}
+body[data-v=pay] .stat:has(.icb[data-i=users]) b{color:#14683a!important}
+body[data-v=pay] .stat:has(.icb[data-i=mic]) b{color:#9a4a12!important}
+body[data-v=pay] .stat:has(.icb[data-i=hour]) b{color:#9f1239!important}
 </style>
 </head>
 <body>
@@ -3433,7 +3458,7 @@ function vReq(){
       <div class="shlist">${AQ.map(([k,v])=>{const p=parseSid(k);return`<button class="shrow" data-act="hrs" data-k="${k}">${nameChip(v.who)}<span class="sht">${ic('calendar',12)}${fmtD(p.d)} · ${C().slots[p.s]} · ห้อง ${p.r}</span><b class="shh">${v.actReq?(v.actReq.act==null?'ครบ':fmtHMc(v.actReq.act)):fmtHMc(hrsOf(v))}<small>/${C().hours} ชม.</small></b><span class="shr">${v.actReq?`<span class="achip req">${ic('edit',11)}ขอแก้ไข${isShort(v)?' จาก '+fmtHMc(hrsOf(v)):''}</span>`:`<span class="achip wait">${ic('hour',11)}แจ้งใหม่ รอรับทราบ</span>`} ${esc((v.actReq?v.actReq.reason:v.actReason)||'')}</span></button>`}).join('')}</div></div>`;
     const item=([k,v],i)=>{const p=parseSid(k);return`<div class="req" style="--i:${i}">${nameChip(v.who)}<div class="info"><b>${ic('calendar',14)}${fmtD(p.d)} · ${ic('clock',14)}${C().slots[p.s]} · ${ic('door',14)}ห้อง ${p.r}${v.moveTo?` <span style="color:${v.status==='timereq'?'#0e7490':'var(--violet)'};display:inline-flex;gap:3px;align-items:center">${ic('arrow',14)}${esc(moveTxt(v).replace(' → ',''))}</span>`:''}</b>${v.reason?`<div class="why ${v.status==='movereq'?'mv':v.status==='timereq'?'tm':''}">${ic('msg',14)}${esc(v.reason)}</div>`:''}<div class="meta">${ic('clock',12)}ส่งเมื่อ ${timeAgo(v.reqAt||v.at)}</div></div>
       <button class="btn ok sm" data-act="approve" data-k="${k}">${ic('check',14)}${v.status==='pending'?'ยืนยันจอง':v.status==='cancelreq'?'อนุมัติยกเลิก':v.status==='timereq'||v.status==='movereq'?'อนุมัติเปลี่ยนคิว':'อนุมัติ'}</button><button class="btn sm" data-act="rejectReq" data-k="${k}">${ic('x',14)}ไม่อนุมัติ</button></div>`};
-    const sec=(st,title,icon,cls)=>g[st].length?`<div class="card" style="margin-bottom:16px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">${icb(icon,cls)}<h3 style="margin:0">${title} <span class="pill ${st}">${g[st].length}</span></h3><button class="btn sm" style="margin-left:auto" data-act="approveAll" data-st="${st}">${ic('check',14)}อนุมัติทั้งหมด</button></div>${g[st].map(item).join('')}</div>`:'';
+    const sec=(st,title,icon,cls)=>g[st].length?`<div class="card rqsec ${st}" style="margin-bottom:16px"><div class="rqsh">${icb(icon,cls)}<h3 style="margin:0">${title} <span class="pill ${st}">${g[st].length}</span></h3><button class="btn sm" style="margin-left:auto" data-act="approveAll" data-st="${st}">${ic('check',14)}อนุมัติทั้งหมด</button></div>${g[st].map(item).join('')}</div>`:'';
     return h+(all.length?sec('pending','คำขอจองใหม่','hour','warn')+sec('cancelreq','คำขอยกเลิกคิว','undo','bad')+sec('movereq','คำขอย้ายห้อง (เวลาเดิม)','swap','violet')+sec('timereq','คำขอเปลี่ยนเวลา / วัน (+ ห้อง)','clock','teal'):(rqRange()||S.rqF?.who?`<div class="card empty">${icb('filter','',30)}<b>ไม่พบคำขอรออนุมัติตามตัวกรอง</b>ลองเปลี่ยนช่วงวันหรือเลือก “ทุกคน”</div>`:`<div class="card empty">${icb('checkc','ok',30)}<b>ไม่มีรายการค้าง</b>ทุกคำขอได้รับการจัดการแล้ว</div>`));
   }
   if(tab==='withdrawn')return h+`<div class="card" style="margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">${icb('info')}<div style="flex:1;min-width:200px"><b>คำขอที่ Live Streamer ถอนเอง ก่อนแบรนด์ตัดสิน</b><div class="muted" style="font-size:13px">ระบบบันทึกไว้ให้แบรนด์รับทราบ · รายการที่ยังไม่รับทราบมีป้าย “ใหม่”</div></div>${un?`<button class="btn primary sm" data-act="ackAll">${ic('check',14)}รับทราบทั้งหมด (${un})</button>`:''}</div>`+
