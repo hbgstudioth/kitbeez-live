@@ -2707,6 +2707,28 @@ body[data-v=pay] .stat:has(.icb[data-i=hour]) b{color:#9f1239!important}
 .empf .all{--ec:#a8832d}.empf .fulltime{--ec:#1d4ed8}.empf .freelance{--ec:#ea580c}.empf .none{--ec:#64748b}.empf .trial{--ec:#d97706}
 .empf .trial .efi{background:linear-gradient(160deg,#fbbf24,#d97706)}
 @media(max-width:600px){.empf .efi{width:28px;height:28px;border-radius:9px}.empf .efi svg{width:14px;height:14px}.empf button{gap:8px!important;justify-content:flex-start!important}.empf .eft span{font-size:10.5px!important}.empf .eft b{font-size:12.5px!important}}
+/* round calendar (home popup) */
+.rcal{display:grid;gap:14px;margin-top:6px}.rcal.multi{grid-template-columns:1fr 1fr}
+.rcm{background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.9);border-radius:16px;padding:10px 10px 12px;cursor:default;user-select:none}
+.rcmh{font-weight:700;color:#8a2b72;font-size:14px;text-align:center;margin-bottom:6px}
+.rcg{display:grid;grid-template-columns:repeat(7,1fr);row-gap:4px}
+.rcw{font-size:11px;color:#9a7a96;text-align:center;padding-bottom:3px}
+.rcx{display:block}
+.rcd{display:flex;flex-direction:column;align-items:center;justify-content:center;height:46px;color:#b8a6b6;position:relative}
+.rcd b{font-size:14px;font-weight:500;line-height:1.1}
+.rcd small{font-size:9.5px;font-weight:600;line-height:1.1;margin-top:1px}
+.rcd.in{background:rgba(176,57,143,.13);color:#5a1d4c}
+.rcd.in b{font-weight:700;color:#8a2b72}
+.rcd.in small{color:#0f7a4a}
+.rcd.rs{border-top-left-radius:12px;border-bottom-left-radius:12px}.rcd.re{border-top-right-radius:12px;border-bottom-right-radius:12px}
+.rcd.in.full small{color:#b42318}.rcd.in.cl{background:repeating-linear-gradient(135deg,rgba(176,57,143,.08) 0 5px,rgba(176,57,143,.03) 5px 10px)}.rcd.in.cl small,.rcd.in.cl b{color:#a48aa0}
+.rcd.past:not(.in){opacity:.55}.rcd.in.past small{color:#9a7a96}
+.rcd.td::after{content:"";position:absolute;inset:3px 6px;border:2px solid #b0398f;border-radius:10px;pointer-events:none}
+.rclg{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:11.5px;color:#7a5a78;margin-top:10px}
+.rclg .lg{display:inline-block;width:12px;height:12px;border-radius:4px;vertical-align:-2px;margin-right:5px}.rclg .lg.in{background:rgba(176,57,143,.22)}.rclg .lg.td{border:2px solid #b0398f}
+.rclg .ro{margin-left:auto;display:inline-flex;align-items:center;gap:4px;opacity:.8}
+#dlg:has(.rcal.multi){width:min(780px,94vw)!important;max-width:none!important}.rcd small{white-space:nowrap}
+@media(max-width:600px){.rcal.multi{grid-template-columns:1fr}.rcd{height:42px}.rclg .ro{margin-left:0}}
 </style>
 </head>
 <body>
@@ -3196,9 +3218,17 @@ function firstBookDay(){const c=C();if(!c.bookLimit)return null;const bd=new Set
 function roundDays(){const c=C();if(!c.bookLimit)return[];const bd=new Set(c.bookDates||[]);return(c.bookWindows||[]).filter(w=>w.to>=TODAY).sort((x,y)=>x.from.localeCompare(y.from)).map(w=>{const L=[];let x=w.from<TODAY?TODAY:w.from;while(x<=w.to){if(isOpen(x)&&(!bd.size||bd.has(x))&&C().slots.some((_,s)=>!isPast(x,s)))L.push(x);x=add(x,1)}return[w,L]}).filter(([,L])=>L.length)}
 function rdWeeks(L){const W={};L.forEach(x=>{(W[monday(x)]??=[]).push(x)});const cur=monday(S.date);
   return`<div class="rdwk">${Object.entries(W).map(([ws,ds])=>{const fr=ds.reduce((n,x)=>n+freeCount(x),0);return`<button data-d="g:${ds[0]}" class="${ws===cur?'on':''}">${ic('calweek',18)}<div><b>${fmtRange(ws,add(ws,6))}</b><small>ลงคิวได้ ${ds.length} วัน · ${fr?`ว่าง ${fr} ช่อง`:'เต็มแล้ว'}</small></div>${ic('right',16)}</button>`}).join('')}</div>`}
+function rdCal(w,L){const inL=new Set(L),ms=[];let m=w.from.slice(0,7);while(m<=w.to.slice(0,7)){ms.push(m);const[y,mm]=m.split('-').map(Number);m=mm===12?`${y+1}-01`:`${y}-${String(mm+1).padStart(2,'0')}`}
+  const one=mk=>{const[y,mm]=mk.split('-').map(Number),f=`${mk}-01`,last=isoOf(new Date(Date.UTC(y,mm,0))),lead=(dow(f)+6)%7,cells=[];
+    for(let i=0;i<lead;i++)cells.push('<i class="rcx"></i>');
+    for(let d=f;d<=last;d=add(d,1)){const inR=d>=w.from&&d<=w.to,ok=inL.has(d),fr=ok?freeCount(d):0,past=d<TODAY;
+      const cls=['rcd',inR?'in':'',inR&&(d===w.from||dow(d)===1)?'rs':'',inR&&(d===w.to||dow(d)===0)?'re':'',d===TODAY?'td':'',past?'past':'',inR&&!ok?'cl':'',ok&&!fr?'full':''].join(' ');
+      cells.push(`<div class="${cls}"><b>${dnum(d)}</b>${inR?`<small>${ok?(fr?`ว่าง ${fr}`:'เต็ม'):(past?'ผ่านแล้ว':'ปิด')}</small>`:''}</div>`)}
+    return`<div class="rcm"><div class="rcmh">${MON_L[mm-1]} ${y+543}</div><div class="rcg">${['จ','อ','พ','พฤ','ศ','ส','อา'].map(x=>`<span class="rcw">${x}</span>`).join('')}${cells.join('')}</div></div>`};
+  return`<div class="rcal ${ms.length>1?'multi':''}">${ms.map(one).join('')}</div><div class="rclg"><span><i class="lg in"></i>วันในรอบเปิดจอง</span><span><i class="lg td"></i>วันนี้</span><span>ว่าง = Slot ว่าง</span><span class="ro">${ic('eye',12)}ดูข้อมูลอย่างเดียว</span></div>`}
 function roundDlg(){const R=roundDays(),bk=S.view==='book'||S.view==='home',ro=S.view==='home';
   modal(`${ro?'<i class="hrdw" hidden></i>':''}<div class="mhead">${ro?`<span class="hrdic">${ic('calendar',22)}</span>`:icb('ticket','ok')}<div><h3>${ro?'รอบเปิดจอง':bk?'เลือกวันในรอบลงคิว':'เลือกสัปดาห์ในรอบลงคิว'}</h3><span class="muted">${ro?'จำนวนช่องว่างของแต่ละวันในรอบที่เปิดให้จอง':bk?'แตะวันที่ต้องการเพื่อไปหน้าจองวันนั้น':'แตะสัปดาห์ที่ต้องการเพื่อดูตาราง'}</span></div></div>
-   ${R.map(([w,L])=>`<div class="rdgrp"><b>${ic('calendar',14)}${esc(w.label||'รอบเปิดจอง')} · ${fmtRange(w.from,w.to,false)}</b>${!bk?rdWeeks(L):`<div class="rdgrid">${L.map(x=>{const fr=freeCount(x);const tg=ro?'div':'button';return`<${tg} ${ro?'':`data-d="g:${x}"`} class="${!ro&&x===S.date?'on':''} ${fr?'':'full'} ${ro?'ro':''}"><small>${DOW_S[dow(x)]}</small><b>${dnum(x)}</b><em>${MON_S[D(x).getUTCMonth()]}</em><span>${fr?'ว่าง '+fr:'เต็ม'}</span></${tg}>`}).join('')}</div>`}</div>`).join('')||'<p class="muted">ยังไม่มีรอบเปิดจอง</p>'}
+   ${R.map(([w,L])=>`<div class="rdgrp"><b>${ic('calendar',14)}${esc(w.label||'รอบเปิดจอง')} · ${fmtRange(w.from,w.to,false)}</b>${ro?rdCal(w,L):!bk?rdWeeks(L):`<div class="rdgrid">${L.map(x=>{const fr=freeCount(x);const tg=ro?'div':'button';return`<${tg} ${ro?'':`data-d="g:${x}"`} class="${!ro&&x===S.date?'on':''} ${fr?'':'full'} ${ro?'ro':''}"><small>${DOW_S[dow(x)]}</small><b>${dnum(x)}</b><em>${MON_S[D(x).getUTCMonth()]}</em><span>${fr?'ว่าง '+fr:'เต็ม'}</span></${tg}>`}).join('')}</div>`}</div>`).join('')||'<p class="muted">ยังไม่มีรอบเปิดจอง</p>'}
    ${R.length?'':'<p class="muted" style="text-align:center;padding:14px 0">ยังไม่มีรอบเปิดจอง</p>'}<div class="mact">${isBrand()&&S.view==='home'?`<button class="btn" data-d="manage">${ic('settings',15)}จัดการรอบเปิดจอง</button>`:''}<button class="btn ghost" data-d="close">ปิด</button></div>`,
   a=>{if(a==='manage'){closeM();S.setTab='round';S.view='set';render();window.scrollTo({top:0});return}if(a.startsWith('g:')){S.date=a.slice(2);S.sel.clear();if(S.view==='home'){S.view='book';S._keepRow=false};if(S.calMode==='month')S.calMode='room';closeM();render();window.scrollTo({top:0,behavior:'smooth'})}else closeM()})}
 function goRoundBtn(d,cls=''){const x=firstBookDay();if(!x)return'';return`<button class="btn ${cls} gornd ${(cls.includes('calgr')?monday(x)===monday(d):x===d)?'here':''}" data-act="goRound" data-d="${x}" title="เลือกวันในรอบที่เปิดให้ลงคิว">${ic('ticket',16)}<span>ไปรอบลงคิว</span></button>`}
