@@ -739,7 +739,7 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 @media print{.top,.tabs,.cart,.demo,.hdact,.btn,.sbtn,.wkslider{display:none!important}main{padding:0}body{background:#fff}.card,.wday,.wk{box-shadow:none}.wrow{flex-wrap:wrap;overflow:visible}}
 
-/* หน้าจองคิว: โมชั่นแบบเบา ไม่กระพริบ */
+/* หน้าลงคิว: โมชั่นแบบเบา ไม่กระพริบ */
 .seat,.seat.sel{animation:none!important}
 .seat{transition:transform .22s cubic-bezier(.25,.8,.35,1),box-shadow .22s ease,background-color .2s ease,border-color .2s ease,color .2s ease}
 .seat:hover:not(:disabled),.seat.x.dc[data-act]:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(16,60,140,.12)}
@@ -759,7 +759,7 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
   .mh{display:none}
   .card{padding:14px;border-radius:18px}
   .demo{font-size:12px;padding:8px 12px}
-  /* จองคิว */
+  /* ลงคิว */
   .dstrip{gap:6px;padding:2px 2px 10px}
   .dchip{flex:1 0 58px;padding:7px 2px;border-radius:14px}
   .dchip b{font-size:21px}
@@ -830,7 +830,7 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
   .lform{padding:20px 18px}
 }
 
-/* ===== หน้าจองคิว: มือถือ (พอดีจอ) ===== */
+/* ===== หน้าลงคิว: มือถือ (พอดีจอ) ===== */
 .bkbar,.dchip .sh,.admtool .ms{display:none}
 @media(max-width:600px){
   .pagehd.bkhd{display:none}
@@ -891,7 +891,7 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
   .cart.adm .btn:not(.light){flex:1 1 0;justify-content:center;padding:9px 12px}
 }
 
-/* ===== หน้าจองคิว มือถือ: หน้าตาเหมือนการ์ด 1 วันในหน้าตาราง ===== */
+/* ===== หน้าลงคิว มือถือ: หน้าตาเหมือนการ์ด 1 วันในหน้าตาราง ===== */
 .bkdh{display:none}
 @media(max-width:600px){
   .hall{background:#fff;border-radius:16px;border:1px solid #edf3fc;padding:10px}
@@ -963,7 +963,7 @@ em.old{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font-style
 @keyframes liveRing{0%{box-shadow:0 0 0 0 rgba(229,35,47,.55)}70%{box-shadow:0 0 0 7px rgba(229,35,47,0)}100%{box-shadow:0 0 0 0 rgba(229,35,47,0)}}
 @keyframes liveDot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.7)}}
 @media(prefers-reduced-motion:reduce){.brand .lv,.logo-card .lv,.brand .lv::before,.logo-card .lv::before{animation:none}}
-/* การ์ดจองคิว: เอาเส้นโค้งสีฟ้าเหนือวันที่ออก */
+/* การ์ดลงคิว: เอาเส้นโค้งสีฟ้าเหนือวันที่ออก */
 .screen{border-top:0;box-shadow:none;border-radius:0;padding-top:0;margin-bottom:16px;letter-spacing:.5px;font-size:15px;font-weight:600;color:var(--navy)}
 
 /* ชั่วโมงไลฟ์จริง */
@@ -1360,7 +1360,7 @@ main.enter{animation:softIn .28s ease-out both}
 .rb .t b{font-size:14px;color:var(--navy);font-variant-numeric:tabular-nums;letter-spacing:.2px}
 .rb .t small{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}.rb .t small i{font-style:normal}
 @media(max-width:600px){.rb .t small i{display:none}.rb .t small::before{content:'–'}.rb .t{padding-right:5px}}
-/* ปุ่มไปจองคิววันนี้: เรืองแสงเบาๆ + ลูกศรขยับชวนกด */
+/* ปุ่มไปลงคิววันนี้: เรืองแสงเบาๆ + ลูกศรขยับชวนกด */
 .btn.bkgo{gap:6px;animation:bkGlow 2.8s ease-in-out infinite}
 .btn.bkgo .bkar{display:inline-flex;animation:bkNudge 1.4s ease-in-out infinite}
 .btn.bkgo:hover{animation-play-state:paused}.btn.bkgo:hover .bkar{transform:translateX(3px);animation:none}
@@ -1402,7 +1402,7 @@ main.enter{animation:softIn .28s ease-out both}
 @media(min-width:861px){.stick .daytabs{display:none}}
 @media(max-width:860px){.stick .daytabs{gap:4px;margin-top:5px;padding:0 0 2px}.stick .daytabs .dt{display:flex;align-items:baseline;justify-content:center;gap:3px;padding:6px 0;border-radius:9px}.stick .daytabs .dt small{display:inline;font-size:10.5px}.stick .daytabs .dt b{font-size:13.5px}.stick .daytabs .dt span{display:none!important}}
 
-/* หน้าจองคิว (คอม): การ์ดวันกะทัดรัด */
+/* หน้าลงคิว (คอม): การ์ดวันกะทัดรัด */
 @media(min-width:861px){
   .stick .dstrip{gap:8px;padding:9px 2px 4px;margin:6px 0 0}
   .stick .dchip{flex:1 0 0;border-width:1.5px;border-radius:12px;padding:6px 4px;display:grid;grid-template-columns:auto auto;justify-content:center;align-items:baseline;column-gap:5px;row-gap:0}
@@ -1857,7 +1857,7 @@ main.enter{animation:softIn .28s ease-out both}
 .cfack{display:flex;gap:10px;align-items:flex-start;margin-top:12px;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;cursor:pointer;font-size:13.5px;color:var(--navy)}.cfack input{margin-top:3px;width:17px;height:17px;accent-color:#2563eb;flex:none}
 .cfack:has(input:checked){border-color:#2563eb;background:#f4f8ff}
 
-/* ===== หน้าจองคิว: สไตล์สตูดิโอไลฟ์ ===== */
+/* ===== หน้าลงคิว: สไตล์สตูดิโอไลฟ์ ===== */
 .hall.studio{padding-top:16px}
 .studio .stbar{position:relative;overflow:hidden;display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:0 0 18px;padding:14px 18px;border-radius:18px;color:#fff;background:linear-gradient(120deg,#0f1f4d 0%,#1d3c8f 55%,#2563eb 100%);box-shadow:0 10px 26px rgba(29,60,143,.25)}
 .stbar::before{content:'';position:absolute;right:-60px;top:-80px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.18),transparent 65%)}
@@ -1897,7 +1897,7 @@ main.enter{animation:softIn .28s ease-out both}
 @media(max-width:860px){.stfx::before{width:150px;height:40%;top:28%;left:auto;right:-10px;transform:none;animation:none;opacity:.06}}
 @media(prefers-reduced-motion:reduce){.stfx::before,.stfx::after{animation:none}}
 
-/* ===== ช่องที่มีคนจองแล้ว (สไตล์การ์ดไลฟ์) ===== */
+/* ===== ช่องที่มีคนลงคิวแล้ว (สไตล์การ์ดไลฟ์) ===== */
 .studio .seat.occ{flex-direction:row;justify-content:flex-start;gap:8px;padding:0 10px;text-align:left;border:1px solid rgba(15,23,42,.06);box-shadow:0 2px 6px rgba(16,60,140,.05)}
 .studio .seat.occ::after{display:none}
 .studio .seat.occ .av{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;box-shadow:0 0 0 2px rgba(255,255,255,.85)}
@@ -1944,7 +1944,7 @@ main.enter{animation:softIn .28s ease-out both}
 .studio .seat.occ.hid .av{grid-row:1/3}.studio .seat.occ.hid .n,.studio .seat.occ.hid .hs{text-align:left}
 @media(max-width:860px){.studio .seat.occ.hid{display:flex}.studio .seat.occ.hid .hs{display:none}}
 
-/* ===== หน้าตาราง: สไตล์เดียวกับหน้าจองคิว ===== */
+/* ===== หน้าตาราง: สไตล์เดียวกับหน้าลงคิว ===== */
 .rb .h{background:none!important;gap:5px!important}.rb .h .cam{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:7px;background:#eef4ff;color:var(--blue);flex:none}
 .cell{border-radius:11px}
 .cell.occ{justify-content:flex-start;gap:7px;padding:4px 8px;text-align:left;border:1px solid rgba(15,23,42,.06);box-shadow:0 2px 6px rgba(16,60,140,.05)}
@@ -2911,8 +2911,8 @@ const DEFAULT_CONFIG = {
   perms: { book:true, autoConfirm:false, requestCancel:true, requestMove:true, requestTime:true, seeOthers:true, seePay:true, reportHours:true, cancelBeforeH:0 }
 };
 const PERM_INFO = [
-  ['book','ticket','จองช่องว่างเองได้','Live Streamer เลือกช่องว่างแล้วกดจองได้เอง'],
-  ['autoConfirm','zap','จองแล้วยืนยันทันที','ปิด = ทุกการจองต้องรอแบรนด์อนุมัติ'],
+  ['book','ticket','ลงคิวช่องว่างเองได้','Live Streamer เลือกช่องว่างแล้วกดลงคิวได้เอง'],
+  ['autoConfirm','zap','ลงคิวแล้วยืนยันทันที','ปิด = ทุกการลงคิวต้องรอแบรนด์อนุมัติ'],
   ['requestCancel','undo','ส่งคำขอยกเลิกได้','ต้องใส่เหตุผล และรอแบรนด์อนุมัติ'],
   ['requestMove','swap','ส่งคำขอย้ายห้องได้','เลือกห้องว่างในเวลาเดียวกัน แล้วรอแบรนด์อนุมัติ'],
   ['requestTime','clock','ส่งคำขอเปลี่ยนเวลาได้','เลือกวัน เวลา และห้องใหม่ที่ว่าง แล้วรอแบรนด์อนุมัติ'],
@@ -2928,7 +2928,7 @@ const STXT = { ok:'[ยืนยัน]', pending:'[รอยืนยัน]', 
 const COUNTED = ['ok','cancelreq','movereq','timereq'];
 const CANCEL_REASONS = [['ป่วย / ไม่สบาย','alert'],['ติดธุระด่วน','clock'],['เดินทางไม่ทัน','arrow'],['ปัญหาอุปกรณ์/เน็ต','zap'],['สลับคิวกับเพื่อน','swap']];
 const ROLE_L = { brand:'แบรนด์', streamer:'Live Streamer' };
-const RT={book:{l:'ขอจองคิว',i:'ticket',c:''},cancel:{l:'ขอยกเลิก',i:'undo',c:'bad'},move:{l:'ขอย้ายห้อง',i:'swap',c:'violet'},time:{l:'ขอเปลี่ยนเวลา',i:'clock',c:'teal'}};
+const RT={book:{l:'ขอลงคิว',i:'ticket',c:''},cancel:{l:'ขอยกเลิก',i:'undo',c:'bad'},move:{l:'ขอย้ายห้อง',i:'swap',c:'violet'},time:{l:'ขอเปลี่ยนเวลา',i:'clock',c:'teal'}};
 const RS={pending:{l:'รอแบรนด์',i:'hour'},approved:{l:'อนุมัติแล้ว',i:'checkc'},rejected:{l:'ไม่อนุมัติ',i:'x'},withdrawn:{l:'ถอนคำขอแล้ว',i:'history'}};
 
 const _='';
@@ -3001,7 +3001,7 @@ const okEmail=e=>/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test((e||'').trim());
 const EMP={fulltime:'Full-Time',freelance:'Freelance'};
 const empOf=id=>S.d.members[id]?.emp||'';
 const empTag=id=>{const e=empOf(id);return e?`<span class="emptag ${e}">${EMP[e]}</span>`:''};
-const PRES_MS=150000,VIEW_L={home:'หน้าแรก',book:'จองคิว',week:'ตาราง',mine:'คิวของฉัน',track:'ติดตามคำขอ',pay:'สรุปชั่วโมง',req:'อนุมัติ',set:'ตั้งค่า'};
+const PRES_MS=150000,VIEW_L={home:'หน้าแรก',book:'ลงคิว',week:'ตาราง',mine:'คิวของฉัน',track:'ติดตามคำขอ',pay:'สรุปชั่วโมง',req:'อนุมัติ',set:'ตั้งค่า'};
 const presOn=p=>Date.now()-p.at<PRES_MS&&!p.out;
 function presAv(p){const mm=p.memberId&&S.d.members[p.memberId],c=mm&&!mm.deleted?colOf(p.memberId):p.role==='brand'?{bg:'#0b2e6b',fg:'#fff'}:{bg:'#fee2e2',fg:'#b42318'};const nm=mm&&!mm.deleted?mm.name:p.role==='brand'?p.name:p.email;return`<span class="pav" style="background:${c.bg};color:${c.fg}">${esc([...(nm||'?')][0].toUpperCase())}</span>`}
 const relT=t=>{const m=Math.round((Date.now()-t)/60000);return m<1?'เมื่อสักครู่':m<60?`${m} นาทีที่แล้ว`:`${Math.floor(m/60)} ชม.ที่แล้ว`};
@@ -3158,7 +3158,7 @@ async function write(ops,logText,cat){
    RENDER
    ===================================================================== */
 function tabs(){
-  const t=[{id:'home',i:'grid',l:'หน้าแรก'},{id:'book',i:'ticket',l:'จองคิว'},{id:'week',i:'calweek',l:'ตาราง'}];
+  const t=[{id:'home',i:'grid',l:'หน้าแรก'},{id:'book',i:'ticket',l:'ลงคิว'},{id:'week',i:'calweek',l:'ตาราง'}];
   if(S.meId)t.push({id:'mine',i:'queue',l:'คิวของฉัน',b:newAdds().length});
   if(S.meId&&!isBrand())t.push({id:'track',i:'inbox',l:'ติดตามคำขอ',b:Object.values(S.d.requests||{}).filter(q=>q.who===S.meId&&q.status==='pending').length});
   if(isBrand()||C().perms.seePay)t.push({id:'pay',i:'clock',l:'สรุปชั่วโมง'});
@@ -3217,7 +3217,7 @@ function render(){
   if(S.sel?.size)[...S.sel].forEach(k=>{const p=parseSid(k);if(!S.d.slots[k]&&isClosed(p.d,p.r,p.s))S.sel.delete(k)});
   const NA=newAdds();
   const FOOT=`<footer class="mfoot"><b>LIVE BOOKING SYSTEM : HS DEVELOPMENT</b><span>SOFTWARE ENGINEERING &amp; DEVELOPMENT</span></footer>`;
-  document.body.dataset.v=S.view;document.body.dataset.st=S.view==='set'?(S.setTab||'room'):'';const VL={book:'จองคิว',week:'ตารางไลฟ์',mine:'คิวของฉัน',track:'ติดตามคำขอ',pay:'สรุปชั่วโมง',req:'อนุมัติ',set:'ตั้งค่า'};
+  document.body.dataset.v=S.view;document.body.dataset.st=S.view==='set'?(S.setTab||'room'):'';const VL={book:'ลงคิว',week:'ตารางไลฟ์',mine:'คิวของฉัน',track:'ติดตามคำขอ',pay:'สรุปชั่วโมง',req:'อนุมัติ',set:'ตั้งค่า'};
   main.innerHTML=(NA.length&&(S.view==='book'||S.view==='mine')?`<button class="newbar" data-act="newAdds"><span class="bl">${ic('bell',18)}</span><span class="tx"><b>แบรนด์เพิ่มคิวให้คุณ ${NA.length} Slot</b><small>${esc([...new Set(NA.map(([,v])=>v.addedBy||v.by).filter(Boolean))].join(', '))} · แตะเพื่อดูรายละเอียด</small></span>${ic('right',18)}</button>`:'')+views[S.view]()+FOOT;
   if(NA.length&&!S._newShown&&!$('#dlg').open){S._newShown=true;setTimeout(()=>{if(!$('#dlg').open)newAddsDlg()},500)}
   if(S.lastView!==S.view){main.classList.remove('enter');void main.offsetWidth;main.classList.add('enter');S.lastView=S.view}else{main.classList.remove('enter');window.scrollTo(0,y)}
@@ -3310,15 +3310,15 @@ function rdCal(w,L){const inL=new Set(L),ms=[];let m=w.from.slice(0,7);while(m<=
     return`<div class="rcm"><div class="rcmh">${MON_L[mm-1]} ${y+543}</div><div class="rcg">${['จ','อ','พ','พฤ','ศ','ส','อา'].map(x=>`<span class="rcw">${x}</span>`).join('')}${cells.join('')}</div></div>`};
   return`<div class="rcal ${ms.length>1?'multi':''}">${ms.map(one).join('')}</div><div class="rclg"><span><i class="lg in"></i>วันในรอบเปิดจอง</span><span><i class="lg td"></i>วันนี้</span><span>ว่าง = Slot ว่าง</span><span class="ro">${ic('eye',12)}ดูข้อมูลอย่างเดียว</span></div>`}
 function roundDlg(){const R=roundDays(),bk=S.view==='book'||S.view==='home',ro=S.view==='home';
-  modal(`${ro?'<i class="hrdw" hidden></i>':''}<div class="mhead">${ro?`<span class="hrdic">${ic('calendar',22)}</span>`:icb('ticket','ok')}<div><h3>${ro?'รอบเปิดจอง':bk?'เลือกวันในรอบลงคิว':'เลือกสัปดาห์ในรอบลงคิว'}</h3><span class="muted">${ro?'จำนวนช่องว่างของแต่ละวันในรอบที่เปิดให้จอง':bk?'แตะวันที่ต้องการเพื่อไปหน้าจองวันนั้น':'แตะสัปดาห์ที่ต้องการเพื่อดูตาราง'}</span></div></div>
+  modal(`${ro?'<i class="hrdw" hidden></i>':''}<div class="mhead">${ro?`<span class="hrdic">${ic('calendar',22)}</span>`:icb('ticket','ok')}<div><h3>${ro?'รอบเปิดจอง':bk?'เลือกวันในรอบลงคิว':'เลือกสัปดาห์ในรอบลงคิว'}</h3><span class="muted">${ro?'จำนวนช่องว่างของแต่ละวันในรอบที่เปิดให้จอง':bk?'แตะวันที่ต้องการเพื่อไปหน้าลงคิววันนั้น':'แตะสัปดาห์ที่ต้องการเพื่อดูตาราง'}</span></div></div>
    ${R.map(([w,L])=>`<div class="rdgrp"><b>${ic('calendar',14)}${esc(w.label||'รอบเปิดจอง')} · ${fmtRange(w.from,w.to,false)}</b>${ro?rdCal(w,L):!bk?rdWeeks(L):`<div class="rdgrid">${L.map(x=>{const fr=freeCount(x);const tg=ro?'div':'button';return`<${tg} ${ro?'':`data-d="g:${x}"`} class="${!ro&&x===S.date?'on':''} ${fr?'':'full'} ${ro?'ro':''}"><small>${DOW_S[dow(x)]}</small><b>${dnum(x)}</b><em>${MON_S[D(x).getUTCMonth()]}</em><span>${fr?'ว่าง '+fr:'เต็ม'}</span></${tg}>`}).join('')}</div>`}</div>`).join('')||'<p class="muted">ยังไม่มีรอบเปิดจอง</p>'}
    ${R.length?'':'<p class="muted" style="text-align:center;padding:14px 0">ยังไม่มีรอบเปิดจอง</p>'}<div class="mact">${isBrand()&&S.view==='home'?`<button class="btn" data-d="manage">${ic('settings',15)}จัดการรอบเปิดจอง</button>`:''}<button class="btn ghost" data-d="close">ปิด</button></div>`,
   a=>{if(a==='manage'){closeM();S.setTab='round';S.view='set';render();window.scrollTo({top:0});return}if(a.startsWith('g:')){S.date=a.slice(2);S.sel.clear();if(S.view==='home'){S.view='book';S._keepRow=false};if(S.calMode==='month')S.calMode='room';closeM();render();window.scrollTo({top:0,behavior:'smooth'})}else closeM()})}
 function goRoundBtn(d,cls=''){const x=firstBookDay();if(!x)return'';return`<button class="btn ${cls} gornd ${(cls.includes('calgr')?monday(x)===monday(d):x===d)?'here':''}" data-act="goRound" data-d="${x}" title="เลือกวันในรอบที่เปิดให้ลงคิว">${ic('ticket',16)}<span>${S.view==='book'?'เลือกวันที่ลงคิว':'เลือกสัปดาห์ในรอบลงคิว'}</span></button>`}
 function winBar(d){const c=C();if(!c.bookLimit)return'';const ws=(c.bookWindows||[]).filter(w=>w.to>=TODAY);
   const list=ws.map(w=>`<span class="wtag">${esc(w.label||'รอบเปิดจอง')} · ${fmtRange(w.from,w.to,false)}</span>`).join('');
-  if(isBrand())return`<div class="winbar">${ic('calendar',16)}<span>Live Streamer จองได้เฉพาะรอบที่เปิด:</span>${list||'<b>ยังไม่มีรอบเปิด</b>'}</div>`;
-  return canBookDate(d)?`<div class="winbar">${ic('checkc',16)}<span>วันนี้เปิดให้จองแล้ว · รอบที่เปิด:</span>${list}</div>`:`<div class="winbar no">${ic('lock',16)}<span>วันนี้ยังไม่เปิดให้จอง</span>${list?`<span>· รอบที่เปิด:</span>${list}`:'<span>· รอแบรนด์ประกาศรอบถัดไป</span>'}</div>`}
+  if(isBrand())return`<div class="winbar">${ic('calendar',16)}<span>Live Streamer ลงคิวได้เฉพาะรอบที่เปิด:</span>${list||'<b>ยังไม่มีรอบเปิด</b>'}</div>`;
+  return canBookDate(d)?`<div class="winbar">${ic('checkc',16)}<span>วันนี้เปิดให้ลงคิวแล้ว · รอบที่เปิด:</span>${list}</div>`:`<div class="winbar no">${ic('lock',16)}<span>วันนี้ยังไม่เปิดให้ลงคิว</span>${list?`<span>· รอบที่เปิด:</span>${list}`:'<span>· รอแบรนด์ประกาศรอบถัดไป</span>'}</div>`}
 
 function inRound(d){const c=C();return!!c.bookLimit&&d>=TODAY&&(c.bookDates||[]).includes(d)}
 function weekBar(o){const A=D(o.md),B=D(o.me||o.md),m1=A.getUTCMonth(),m2=B.getUTCMonth(),y1=A.getUTCFullYear(),y2=B.getUTCFullYear();
@@ -3354,7 +3354,7 @@ function seat(d,r,s,i){
   if(!v){const sel=S.sel.has(k);return`<button class="seat free ${sel?'sel':''} ${past?'past':''}" data-act="seat" data-k="${k}" ${past&&!isBrand()?'disabled':''} ${st}">${sel?ic('check',15)+'<span class="sl">เลือกแล้ว</span>':past?'—':'<span class="rec"></span>ว่าง'}</button>`}
   const mine=v.who===S.meId,show=mine||isBrand()||C().perms.seeOthers,c=colOf(v.who);
   const cls=['seat',v.status!=='ok'?v.status:'',mine?'mine':'',show?'':'hid',past?'past':'',isTrial(v)&&show?'trial':'','occ',onAirNow(d,s)?'air':''].join(' ');
-  return`<button class="${cls}" data-act="seat" data-k="${k}" ${st};${show?`background-color:${c.bg};color:${c.fg}`:''}" title="${show?esc(whoName(v))+(v.note?' · '+esc(v.note):'')+' · ':''}${STATUS[v.status]}">${v.status!=='ok'?`<span class="st">${ic(SIC[v.status],11)}</span>`:''}${isTrial(v)&&show?'<small class="tg">ทดลองไลฟ์</small>':''}${isShort(v)&&show?`<i class="hb" title="ไลฟ์จริง ${fmtHM(hrsOf(v))}${v.actReason?' · '+esc(v.actReason):''}">${fmtHMc(hrsOf(v))}</i>`:''}${show?`<span class="av" style="background:${c.fg};color:${c.bg}">${esc([...(isTrial(v)?(v.guest||'?'):M(v.who).name)].find(ch=>!/[เแโใไ\s(]/.test(ch))||'?')}</span>`:`<span class="av lk">${ic('lock',12)}</span>`}<span class="n">${show?esc(isTrial(v)?(v.guest||'ไม่ระบุชื่อ'):M(v.who).name):'ไม่ว่าง'}</span>${show?'':'<small class="hs">มีคนจองแล้ว</small>'}${onAirNow(d,s)?'<small class="oa">● กำลังไลฟ์</small>':mine?'<small class="me">คิวของฉัน</small>':''}${isTrial(v)&&show&&v.note?`<small class="nt">${esc(v.note)}</small>`:''}</button>`;
+  return`<button class="${cls}" data-act="seat" data-k="${k}" ${st};${show?`background-color:${c.bg};color:${c.fg}`:''}" title="${show?esc(whoName(v))+(v.note?' · '+esc(v.note):'')+' · ':''}${STATUS[v.status]}">${v.status!=='ok'?`<span class="st">${ic(SIC[v.status],11)}</span>`:''}${isTrial(v)&&show?'<small class="tg">ทดลองไลฟ์</small>':''}${isShort(v)&&show?`<i class="hb" title="ไลฟ์จริง ${fmtHM(hrsOf(v))}${v.actReason?' · '+esc(v.actReason):''}">${fmtHMc(hrsOf(v))}</i>`:''}${show?`<span class="av" style="background:${c.fg};color:${c.bg}">${esc([...(isTrial(v)?(v.guest||'?'):M(v.who).name)].find(ch=>!/[เแโใไ\s(]/.test(ch))||'?')}</span>`:`<span class="av lk">${ic('lock',12)}</span>`}<span class="n">${show?esc(isTrial(v)?(v.guest||'ไม่ระบุชื่อ'):M(v.who).name):'ไม่ว่าง'}</span>${show?'':'<small class="hs">มีคนลงคิวแล้ว</small>'}${onAirNow(d,s)?'<small class="oa">● กำลังไลฟ์</small>':mine?'<small class="me">คิวของฉัน</small>':''}${isTrial(v)&&show&&v.note?`<small class="nt">${esc(v.note)}</small>`:''}</button>`;
 }
 function renderCart(){
   const el=$('#cart');if(!S.user||S.view!=='book'||!S.sel.size){el.classList.remove('show');return}
@@ -3362,7 +3362,7 @@ function renderCart(){
   const chips=keys.map(k=>{const p=parseSid(k);return`<span>${fmtD(p.d)} ${C().slots[p.s].split('–')[0]} · ห้อง ${p.r}</span>`}).join('');
   el.innerHTML=`<div class="cinfo"><b>${ic('ticket',20)}เลือก ${n} Slot · ${n*h} ชั่วโมง</b><div class="cchips">${chips}</div></div><button class="btn light" data-act="clearSel">${ic('x',16)}ล้าง</button>`+
     (isBrand()?`<button class="btn primary big" data-act="assign">${ic('users',18)}เลือกชื่อ</button><button class="btn bad big" data-act="closeSel">${ic('lock',18)}ปิดช่อง</button>`
-    :`<button class="btn primary big" data-act="book">${ic('check',18)}จองเลย</button>`);
+    :`<button class="btn primary big" data-act="book">${ic('check',18)}ลงคิวเลย</button>`);
   el.classList.toggle('adm',isBrand());el.classList.add('show');
 }
 
@@ -3399,8 +3399,8 @@ function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
   <div class="hhero">${homeSky()}<div class="hhi"><svg class="hspark" viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"><path d="M24 4v40M4 24h40M9.9 9.9l28.2 28.2M38.1 9.9 9.9 38.1"/></svg><span>${greet} ${esc(myName())} · ${fmtD(TODAY)}</span></div>
    <h1>Live <em>Booking</em></h1></div>
   <div class="hbento">
-   <button class="hc hbook" style="--i:0" data-act="view" data-v="book"><span class="htag tg">คลิกเพื่อจองคิว ${ic('right',13)}</span><div class="hled">ON AIR<br>BOOKING</div><div class="honair"><i></i>${RD.length?(free>0?`ว่าง ${free} Slot`:'เต็มแล้ว'):'ยังไม่มีรอบเปิดจอง'}</div>${RD.length?`<div class="hrnd">ตลอดรอบจอง ${rdLbl}</div>`:''}<div class="hcap">Slot ว่างที่ใกล้ที่สุด<span class="hm"> · แตะเพื่อไปจอง</span></div>
-    <div class="hslots">${nx.length?nx.map((x,i)=>`<span class="hslot ${i?'':'sel'}" data-act="homeSlot" data-k="${x.d}_${x.r}_${x.s}" title="ไปจอง ${fmtD(x.d)} ${SL[x.s]} ห้อง ${x.r}"><span class="ck">${i?'':ic('check',12)}</span><b>${SL[x.s].slice(0,5)}</b><small>${x.d===TODAY?'วันนี้':fmtD(x.d).replace(/^\S+ /,'')}<span class="hrmx"> · ห้อง ${x.r}</span></small></span>`).join(''):`<span class="hslot">ยังไม่มีช่องว่างในรอบนี้</span>`}</div>${mic}</button>
+   <button class="hc hbook" style="--i:0" data-act="view" data-v="book"><span class="htag tg">คลิกเพื่อลงคิว ${ic('right',13)}</span><div class="hled">ON AIR<br>BOOKING</div><div class="honair"><i></i>${RD.length?(free>0?`ว่าง ${free} Slot`:'เต็มแล้ว'):'ยังไม่มีรอบเปิดจอง'}</div>${RD.length?`<div class="hrnd">ตลอดรอบจอง ${rdLbl}</div>`:''}<div class="hcap">Slot ว่างที่ใกล้ที่สุด<span class="hm"> · แตะเพื่อไปลงคิว</span></div>
+    <div class="hslots">${nx.length?nx.map((x,i)=>`<span class="hslot ${i?'':'sel'}" data-act="homeSlot" data-k="${x.d}_${x.r}_${x.s}" title="ไปลงคิว ${fmtD(x.d)} ${SL[x.s]} ห้อง ${x.r}"><span class="ck">${i?'':ic('check',12)}</span><b>${SL[x.s].slice(0,5)}</b><small>${x.d===TODAY?'วันนี้':fmtD(x.d).replace(/^\S+ /,'')}<span class="hrmx"> · ห้อง ${x.r}</span></small></span>`).join(''):`<span class="hslot">ยังไม่มีช่องว่างในรอบนี้</span>`}</div>${mic}</button>
    <button class="hc htoday" style="--i:1" data-act="view" data-v="week"><span class="htag tb"><span><span class="hm">คลิกเพื่อ</span>ดูตารางรายสัปดาห์</span>${ic('right',13)}</span><div class="hbig">วันนี้<span>${fmtD(TODAY).replace(/^\S+ /,'')}</span></div>
     ${isBrand()?(()=>{const P=[...new Set(Object.values(S.d.slots).filter(v=>v.date===TODAY&&COUNTED.includes(v.status)).map(v=>v.who))];return`<div class="htags">${P.length?P.slice(0,8).map(id=>{const c=colOf(id);return`<span style="background:${c.bg};color:${c.fg}">${esc(id===TRIAL?'ทดลองไลฟ์':M(id).name)}</span>`}).join('')+(P.length>8?`<span class="more">+${P.length-8}</span>`:''):'<em>ไม่มีคนไลฟ์วันนี้</em>'}</div>`})():''}<div class="hmg" style="--c:${R.length*2}">${cells.map((c,k)=>`<i class="${c}" style="--d:${k}"></i>`).join('')}</div>
     <div class="hmeta"><div>ลงแล้ว <b>${ds.f}/${ds.a}</b><br>${R.length} ห้อง · ${SL.length} รอบ</div><svg class="hring" viewBox="0 0 46 46"><circle class="tr" cx="23" cy="23" r="18"/><circle class="pr" cx="23" cy="23" r="18" style="--p:${ds.a?ds.f/ds.a:0}"/></svg></div></button>
@@ -3431,7 +3431,7 @@ function vHome(){const SL=C().slots,R=ROOMS(),ds=dayStats(TODAY),nx=homeNext(3);
   </div>`}
 
 function dayStats(d){let f=0,a=0,me=0,pd=0,fh=0,meh=0;ROOMS().forEach(r=>{C().slots.forEach((_,s)=>{if(isClosed(d,r,s))return;a++;const v=slotOf(d,r,s);if(v){f++;fh+=hrsOf(v);if(v.who===S.meId&&COUNTED.includes(v.status)){me++;meh+=hrsOf(v)}if(v.status!=='ok')pd++}})});return{f,a,me,pd,fh,meh}}
-function calTop(){const sub={room:'ดูว่าห้องไหน ใครไลฟ์ เวลาไหน',person:'ดูว่าแต่ละคน ไลฟ์วันไหน ห้องไหน',month:'ภาพรวมทั้งเดือน · แตะ “รอบ” เพื่อดูรายสัปดาห์ · แตะวันที่เพื่อจองคิว'}[S.calMode];
+function calTop(){const sub={room:'ดูว่าห้องไหน ใครไลฟ์ เวลาไหน',person:'ดูว่าแต่ละคน ไลฟ์วันไหน ห้องไหน',month:'ภาพรวมทั้งเดือน · แตะ “รอบ” เพื่อดูรายสัปดาห์ · แตะวันที่เพื่อลงคิว'}[S.calMode];
   return pageHd('calweek','ตารางไลฟ์',sub,goRoundBtn(S.date,'calgr'))+`<div class="modebar">${calSeg()}</div>`}
 function vWeek(){return calTop()+(S.calMode==='month'?vMonth():vSchedule())}
 function focusOK(){if(!isBrand()&&S.focus&&S.focus!==S.meId)S.focus=null}
@@ -3467,11 +3467,11 @@ function vSchedule(){
 function dayTabs(days){return`<div class="daytabs">${days.map(d=>{const o=isOpen(d),st=o?dayStats(d):null;return`<button class="dt ${d===TODAY?'tdy':''} ${o&&inRound(d)?'rnd':''}" data-act="jumpDay" data-d="${d}" ${o?'':'disabled'}><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b><span class="${o&&!canBookDate(d)?'nb':''}">${o?(!canBookDate(d)?'ยังไม่เปิดจอง':`ว่าง ${st.a-st.f}`):'ไม่มีไลฟ์'}</span></button>`}).join('')}</div>`}
 function vRooms(ws,days,od){
   const R=roomF()?[roomF()]:ROOMS(),f=S.focus;
-  let h=`<details class="lgd"><summary>${ic('info',14)}คำอธิบายสัญลักษณ์</summary><div class="legend2"><span><i style="background:#ffd9d6"></i>ชื่อ = คนที่ไลฟ์ห้องนั้น</span><span><i style="box-shadow:inset 0 0 0 1.5px #d9e5f6;background:#fbfdff"></i>ว่าง (แตะเพื่อจอง)</span><span><i style="background:repeating-linear-gradient(45deg,#f2f5f9 0 4px,#fff 4px 8px)"></i>ห้องปิด</span>${S.meId?`<span><i style="box-shadow:inset 0 0 0 2.5px var(--blue)"></i>คิวของฉัน</span>`:''}<span>${ic('hour',13)}รอยืนยัน</span><span>${ic('undo',13)}ขอยกเลิก</span><span>${ic('swap',13)}ขอย้ายห้อง</span><span>${ic('clock',13)}ขอเปลี่ยนเวลา</span></div></details>`;
+  let h=`<details class="lgd"><summary>${ic('info',14)}คำอธิบายสัญลักษณ์</summary><div class="legend2"><span><i style="background:#ffd9d6"></i>ชื่อ = คนที่ไลฟ์ห้องนั้น</span><span><i style="box-shadow:inset 0 0 0 1.5px #d9e5f6;background:#fbfdff"></i>ว่าง (แตะเพื่อลงคิว)</span><span><i style="background:repeating-linear-gradient(45deg,#f2f5f9 0 4px,#fff 4px 8px)"></i>ห้องปิด</span>${S.meId?`<span><i style="box-shadow:inset 0 0 0 2.5px var(--blue)"></i>คิวของฉัน</span>`:''}<span>${ic('hour',13)}รอยืนยัน</span><span>${ic('undo',13)}ขอยกเลิก</span><span>${ic('swap',13)}ขอย้ายห้อง</span><span>${ic('clock',13)}ขอเปลี่ยนเวลา</span></div></details>`;
   h+=`<div class="boards ${roomF()?'one':''}">`;
   od.forEach((d,di)=>{
     const st=dayStats(d),note=S.d.notes[d]?.text;
-    h+=`<section class="dayb ${d===TODAY?'tdy':''}" id="day-${d}" style="--i:${di}"><header><div class="big"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></div><div class="ttl"><b>${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[D(d).getUTCMonth()]}</b><div>${ic('grid',12)}ลงแล้ว ${st.f}/${st.a}${canBookDate(d)?` · ว่าง ${st.a-st.f}`:''}${d===TODAY?' · <b style="color:var(--blue)">วันนี้</b>':''}${note?`<span class="nt3">${ic('pin',12)}${esc(note)}</span>`:''}</div></div>${canBookDate(d)?`<button class="btn sm bkgo" data-act="goDate" data-d="${d}">${ic('ticket',14)}<span>ไปจองคิว<span class="hm">วันนี้</span></span><span class="bkar">${ic('right',14)}</span></button>`:`<span class="nbtag">${ic('lock',13)}ยังไม่เปิดจอง</span>`}</header>
+    h+=`<section class="dayb ${d===TODAY?'tdy':''}" id="day-${d}" style="--i:${di}"><header><div class="big"><small>${DOW_S[dow(d)]}</small><b>${dnum(d)}</b></div><div class="ttl"><b>${DOW_L[dow(d)]} ${dnum(d)} ${MON_L[D(d).getUTCMonth()]}</b><div>${ic('grid',12)}ลงแล้ว ${st.f}/${st.a}${canBookDate(d)?` · ว่าง ${st.a-st.f}`:''}${d===TODAY?' · <b style="color:var(--blue)">วันนี้</b>':''}${note?`<span class="nt3">${ic('pin',12)}${esc(note)}</span>`:''}</div></div>${canBookDate(d)?`<button class="btn sm bkgo" data-act="goDate" data-d="${d}">${ic('ticket',14)}<span>ไปลงคิว<span class="hm">วันนี้</span></span><span class="bkar">${ic('right',14)}</span></button>`:`<span class="nbtag">${ic('lock',13)}ยังไม่เปิดจอง</span>`}</header>
     <div class="rb" style="--rooms:${R.length}"><div></div>${R.map(r=>`<div class="h"><span class="cam"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5 21 7.5v9l-5.5-3"/></svg></span>ห้อง ${r}</div>`).join('')}
     ${C().slots.map((t,s)=>`<div class="t"><b>${t.split('–')[0]}</b><small><i>ถึง </i>${t.split('–')[1]||''}</small></div>`+R.map(r=>{
       if(isClosed(d,r,s)&&!slotOf(d,r,s)){const dc=dayClosure(d,r,s);return dc?`<div class="cell x dc" title="ปิดเฉพาะวันนี้${dc.reason?' · '+esc(dc.reason):''}"><span class="lkc">${ic('lock',11)}</span><span class="ct"><b>ปิดวันนี้</b>${dc.reason?`<small>${esc(dc.reason)}</small>`:''}</span></div>`:`<div class="cell x" title="ปิดประจำ">${ic('lock',12)}</div>`}
@@ -3515,7 +3515,7 @@ function vMonth(){
     const cells=[...Array(7)].map((_,j)=>{const d=add(ws,j),out=d.slice(0,7)!==ym;
       if(!isOpen(d))return`<div class="mday off ${out?'out':''}" style="--i:${i++}"><div class="tp"><b>${dnum(d)}</b></div><small>ไม่มีไลฟ์</small></div>`;
       const st=dayStats(d),note=S.d.notes[d]?.text;if(!out){mf+=st.f;ma+=st.a;mm+=st.me;mfh+=st.fh;mmh+=st.meh}wh+=meView?st.meh:st.fh;
-      return`<div class="mday ${out?'out':''} ${inRound(d)?'rnd':''} ${d===TODAY?'tdy':''} ${ws===selW?'selw':''}" style="--i:${i++}" data-act="goDate" data-d="${d}" title="${note?esc(note):'แตะเพื่อจองคิววันนี้'}"><div class="tp"><b>${dnum(d)}</b>${note?ic('pin',13):''}</div><div class="bar"><i style="width:${st.a?Math.round(st.f/st.a*100):0}%"></i></div><small>${st.f}/${st.a} · ว่าง ${st.a-st.f}</small>${S.meId&&st.me?`<span class="tg me">${ic('user',11)}<span>ของฉัน ${st.me}</span></span>`:''}${isBrand()&&st.pd?`<span class="tg pd">${ic('hour',11)}<span>รอ ${st.pd}</span></span>`:''}${note?`<div class="nt">${esc(note)}</div>`:''}</div>`});
+      return`<div class="mday ${out?'out':''} ${inRound(d)?'rnd':''} ${d===TODAY?'tdy':''} ${ws===selW?'selw':''}" style="--i:${i++}" data-act="goDate" data-d="${d}" title="${note?esc(note):'แตะเพื่อลงคิววันนี้'}"><div class="tp"><b>${dnum(d)}</b>${note?ic('pin',13):''}</div><div class="bar"><i style="width:${st.a?Math.round(st.f/st.a*100):0}%"></i></div><small>${st.f}/${st.a} · ว่าง ${st.a-st.f}</small>${S.meId&&st.me?`<span class="tg me">${ic('user',11)}<span>ของฉัน ${st.me}</span></span>`:''}${isBrand()&&st.pd?`<span class="tg pd">${ic('hour',11)}<span>รอ ${st.pd}</span></span>`:''}${note?`<div class="nt">${esc(note)}</div>`:''}</div>`});
     cal+=`<button class="mwk ${ws===selW?'on':''}" data-act="pickWeek" data-d="${ws}" title="ดูรายสัปดาห์"><small>รอบ</small><b>${dnum(ws)}–${dnum(add(ws,6))}</b><span>${ic('clock',11)}${fmtHMc(wh)}</span></button>`+cells.join('');
   }
   return`<div class="stick">${weekBar({act:'calNav',today:'calToday',tl:'เดือนนี้',md:first,me:first,ws:first,rng:fmtRange(first,last),pick:null,pv:'เดือนก่อน',nx:'เดือนถัดไป',extra:calSeg()})}</div>`+
@@ -3533,7 +3533,7 @@ function vMine(){
   let h=pageHd('queue','คิวของฉัน','จัดกลุ่มเป็นสัปดาห์ (จ.–อา.) · แตะรายการเพื่อขอยกเลิก / ย้ายห้อง / เปลี่ยนเวลา',`<button class="btn lnbtn" data-act="copyMine"><span class="lnic">${LINEIC}</span>คัดลอกส่ง LINE</button>`);
   h+=`<div class="stats"><div class="stat" style="--i:0">${icb('calendar')}<div><span>สัปดาห์นี้</span><b>${wkH(ws0)} ชม.</b></div></div><div class="stat" style="--i:1">${icb('calweek','violet')}<div><span>สัปดาห์หน้า</span><b>${wkH(add(ws0,7))} ชม.</b></div></div><div class="stat" style="--i:2">${icb('hour','warn')}<div><span>คำขอที่รอแบรนด์</span><b>${reqN}</b></div></div></div>`;
   h+=`<div class="hdact" style="margin-bottom:14px"><div class="seg"><button class="${f==='up'?'on':''}" data-act="mineFilter" data-f="up">${ic('arrow',14)}ที่จะถึง</button><button class="${f==='req'?'on':''}" data-act="mineFilter" data-f="req">${ic('hour',14)}รอดำเนินการ ${reqN?`(${reqN})`:''}</button><button class="${f==='all'?'on':''}" data-act="mineFilter" data-f="all">${ic('list',14)}ทั้งหมด</button></div></div>`;
-  if(!list.length)return h+`<div class="card empty">${icb('ticket','',30)}<b>${f==='req'?'ไม่มีคำขอค้าง':'ยังไม่มีคิว'}</b>${f==='req'?'ทุกคิวยืนยันเรียบร้อย':'ไปที่ “จองคิว” เพื่อเลือกรอบไลฟ์'}</div>`;
+  if(!list.length)return h+`<div class="card empty">${icb('ticket','',30)}<b>${f==='req'?'ไม่มีคำขอค้าง':'ยังไม่มีคิว'}</b>${f==='req'?'ทุกคิวยืนยันเรียบร้อย':'ไปที่ “ลงคิว” เพื่อเลือกรอบไลฟ์'}</div>`;
   const byW={};list.forEach(([k,v])=>{const ws=monday(v.date);((byW[ws]??={})[v.date]??=[]).push([k,v])});
   Object.keys(byW).sort().forEach((ws,wi)=>{
     const items=Object.values(byW[ws]).flat(),cnt=items.filter(([,v])=>COUNTED.includes(v.status)).reduce((a,[,v])=>a+hrsOf(v),0);
@@ -3683,10 +3683,10 @@ function vReq(){
 function vTrack(){
   const f=S.trackF||'all',mine=Object.entries(S.d.requests||{}).filter(([,q])=>q.who===S.meId).sort(([,a],[,b])=>b.createdAt-a.createdAt);
   const n=s=>mine.filter(([,q])=>q.status===s).length,list=mine.filter(([,q])=>f==='all'||q.status===f);
-  return pageHd('inbox','ติดตามคำขอ','สถานะคำขอจอง / ขอยกเลิก / ขอย้ายห้อง / ขอเปลี่ยนเวลา ของฉัน · เห็นชื่อแอดมินที่อนุมัติ')+
+  return pageHd('inbox','ติดตามคำขอ','สถานะคำขอลงคิว / ขอยกเลิก / ขอย้ายห้อง / ขอเปลี่ยนเวลา ของฉัน · เห็นชื่อแอดมินที่อนุมัติ')+
   `<div class="stats"><div class="stat" style="--i:0">${icb('hour','warn')}<div><span>รอแบรนด์</span><b>${n('pending')}</b></div></div><div class="stat" style="--i:1">${icb('checkc','ok')}<div><span>อนุมัติแล้ว</span><b>${n('approved')}</b></div></div><div class="stat" style="--i:2">${icb('x','bad')}<div><span>ไม่อนุมัติ</span><b>${n('rejected')}</b></div></div><div class="stat" style="--i:3">${icb('history')}<div><span>ถอนคำขอแล้ว</span><b>${n('withdrawn')}</b></div></div></div>
   <div class="hdact" style="margin-bottom:14px"><div class="seg">${[['all','list','ทั้งหมด'],['pending','hour','รอแบรนด์'],['approved','checkc','อนุมัติ'],['rejected','x','ไม่อนุมัติ'],['withdrawn','history','ถอนแล้ว']].map(([k,i,l])=>`<button class="${f===k?'on':''}" data-act="trackF" data-f="${k}">${ic(i,14)}${l}</button>`).join('')}</div></div>`+
-  (list.map(([id,q],i)=>reqCard(id,q,false,i)).join('')||`<div class="card empty">${icb('inbox','',30)}<b>ยังไม่มีคำขอ</b>เมื่อจองคิว ขอยกเลิก หรือขอย้ายห้อง สถานะจะแสดงที่นี่</div>`);
+  (list.map(([id,q],i)=>reqCard(id,q,false,i)).join('')||`<div class="card empty">${icb('inbox','',30)}<b>ยังไม่มีคำขอ</b>เมื่อลงคิว ขอยกเลิก หรือขอย้ายห้อง สถานะจะแสดงที่นี่</div>`);
 }
 /* ---------------- SETTINGS ---------------- */
 function setNav(){const orph=Object.values(S.d.access||{}).filter(a=>a.memberId&&a.role!=='brand'&&(!S.d.members[a.memberId]||S.d.members[a.memberId].deleted)).length,cl=Object.values(S.d.closures||{}).filter(c=>c.date>=TODAY).length;
@@ -3698,7 +3698,7 @@ function vSet(){
   const emailOf=id=>Object.entries(S.d.access).find(([,a])=>a.memberId===id)?.[0]||'';
   const ms=membersList(true).sort((a,b)=>(b.active!==false)-(a.active!==false)||memberOrder(a,b));
   return pageHd('settings','ตั้งค่าระบบ','แบรนด์ทำได้ทุกอย่าง · กำหนดได้ว่า Live Streamer ทำอะไรได้บ้าง',`<button class="btn setlogb" data-act="setLog">${ic('history',16)}ประวัติการแก้ไขตั้งค่า</button>`)+setNav()+(()=>{switch(S.setTab||'room'){
-  case 'perm':{const G=[['การจองคิว','ticket',['book','autoConfirm']],['คำขอที่ส่งถึงแบรนด์','inbox',['requestCancel','requestMove','requestTime','reportHours']],['การมองเห็นข้อมูล','eye',['seeOthers','seePay']]],PI=Object.fromEntries(PERM_INFO.map(x=>[x[0],x])),on=PERM_INFO.filter(x=>p[x[0]]).length;
+  case 'perm':{const G=[['การลงคิว','ticket',['book','autoConfirm']],['คำขอที่ส่งถึงแบรนด์','inbox',['requestCancel','requestMove','requestTime','reportHours']],['การมองเห็นข้อมูล','eye',['seeOthers','seePay']]],PI=Object.fromEntries(PERM_INFO.map(x=>[x[0],x])),on=PERM_INFO.filter(x=>p[x[0]]).length;
    return`<div class="setsec"><div class="card pmcard"><div class="pmhd"><h3 style="margin:0">${icb('shield')}สิทธิ์ของ Live Streamer</h3><span class="pmsum"><b>${on}</b>/${PERM_INFO.length} สิทธิ์เปิดอยู่</span></div><p class="muted pmsub">กำหนดว่า Live Streamer ทำอะไรได้บ้าง · มีผลกับทุกคนทันที · แบรนด์ทำได้ทุกอย่างเสมอ</p>
     ${G.map(([gt,gi,ks])=>`<div class="pmg"><div class="pmgt">${ic(gi,14)}${gt}</div><div class="pmgrid">${ks.filter(k=>PI[k]).map(k=>{const[,i,t,d]=PI[k];return`<label class="pmt ${p[k]?'on':''}"><span class="pmi">${ic(i,18)}</span><div><b>${t}</b><small>${d}</small></div><span class="sw"><input type="checkbox" data-perm="${k}" ${p[k]?'checked':''}><span></span></span></label>`}).join('')}
      ${gt==='คำขอที่ส่งถึงแบรนด์'?`<div class="pmt num"><span class="pmi warn">${ic('clock',18)}</span><div><b>ต้องขอยกเลิกล่วงหน้า</b><small>อย่างน้อยกี่ชั่วโมงก่อนเวลาไลฟ์ · 0 = ไม่จำกัด</small></div><div class="step sm"><button data-act="permStep" data-n="-1" ${(p.cancelBeforeH||0)<=0?'disabled':''}>−</button><b>${p.cancelBeforeH||0}<small>ชม.</small></b><button data-act="permStep" data-n="1">+</button></div></div>`:''}</div></div>`).join('')}
@@ -3745,7 +3745,7 @@ function vSet(){
 
 
 /* ---------- ประวัติการใช้งาน ---------- */
-const LOGCAT={all:['ทั้งหมด','history',''],set:['ตั้งค่าระบบ','settings','#7c3aed'],mem:['สมาชิก / Admin','users','#0891b2'],book:['จองคิว','ticket','#2563eb'],req:['คำขอ / อนุมัติ','inbox','#d97706'],hrs:['ชั่วโมงไลฟ์','clock','#16a34a']};
+const LOGCAT={all:['ทั้งหมด','history',''],set:['ตั้งค่าระบบ','settings','#7c3aed'],mem:['สมาชิก / Admin','users','#0891b2'],book:['ลงคิว','ticket','#2563eb'],req:['คำขอ / อนุมัติ','inbox','#d97706'],hrs:['ชั่วโมงไลฟ์','clock','#16a34a']};
 function logCat(l){if(l.cat)return l.cat;const t=l.text||'';
   if(/^(ปิดห้อง|เปิดห้อง|ห้อง \d+ วัน|ปิดช่อง|เปิดช่อง|เพิ่มรอบเปิดจอง|เปิดรอบจอง|ลบรอบ|เปิดการจำกัด|ปิดการจำกัด|เปลี่ยนวันไลฟ์|เปิดวันไลฟ์|ปิดวันไลฟ์|เปิดสิทธิ์|ปิดสิทธิ์|ตั้งยกเลิก|ตั้ง rooms|ตั้ง hours|ตั้งจำนวนห้อง|ตั้งชั่วโมงต่อรอบ|โน้ต|ประกาศ|เริ่มระบบ)/.test(t))return'set';
   if(/ไลฟ์ไม่ครบ|ชั่วโมงไลฟ์|ชั่วโมงกลับ|รับทราบชั่วโมง|ล้างค่าชั่วโมง|ขอแก้ชั่วโมง/.test(t))return'hrs';
@@ -3827,9 +3827,9 @@ function orphanCard(){
 }
 function cfgEditDlg(k){const c=C(),o=c[k],R=k==='rooms';let v=o,ok=false;
   const impact=()=>{if(v===o)return`<div class="cfok">${ic('info',16)}ยังไม่ได้เปลี่ยนค่า</div>`;
-    if(R){if(v>o)return`<div class="cfok">${ic('checkc',16)}เพิ่มห้อง ${o+1}${v>o+1?'–'+v:''} · Live Streamer จองห้องใหม่ได้ทันที</div>`;
+    if(R){if(v>o)return`<div class="cfok">${ic('checkc',16)}เพิ่มห้อง ${o+1}${v>o+1?'–'+v:''} · Live Streamer ลงคิวห้องใหม่ได้ทันที</div>`;
       const gone=Object.values(S.d.slots||{}).filter(x=>x.room>v&&!isPast(x.date,x.slot)).length;
-      return`<div class="cfwarn">${ic('alert',16)}<div><b>ห้อง ${v+1}${o>v+1?'–'+o:''} จะหายจากตารางและหน้าจองคิว</b><small>${gone?`มีคิวที่จองไว้ล่วงหน้าในห้องเหล่านี้ <b>${gone} คิว</b> · จะไม่แสดง (ข้อมูลไม่หาย เพิ่มห้องคืนแล้วกลับมา)`:'ไม่มีคิวที่จองล่วงหน้าในห้องเหล่านี้'}</small></div></div>`}
+      return`<div class="cfwarn">${ic('alert',16)}<div><b>ห้อง ${v+1}${o>v+1?'–'+o:''} จะหายจากตารางและหน้าลงคิว</b><small>${gone?`มีคิวที่จองไว้ล่วงหน้าในห้องเหล่านี้ <b>${gone} คิว</b> · จะไม่แสดง (ข้อมูลไม่หาย เพิ่มห้องคืนแล้วกลับมา)`:'ไม่มีคิวที่จองล่วงหน้าในห้องเหล่านี้'}</small></div></div>`}
     return`<div class="cfwarn">${ic('alert',16)}<div><b>ชั่วโมงในหน้าสรุปจะคำนวณใหม่ทั้งหมด รวมย้อนหลัง</b><small>ทุก Slot ที่ไม่ได้แจ้งชั่วโมงจริงจะนับเป็น ${v} ชม. แทน ${o} ชม. · มีผลกับยอดที่สรุปจ่ายไปแล้วด้วย</small></div></div>`};
   const body=()=>`<div class="cfstep"><span class="old"><small>ค่าเดิม</small><b>${o}</b><em>${R?'ห้อง':'ชม.'}</em></span><span class="arr">${ic('right',18)}</span>
      <div class="step big"><button data-d="n:-1" ${(R?v<=1:v<=0.5)?'disabled':''}>−</button><b>${v}<small>${R?'ห้อง':'ชม.'}</small></b><button data-d="n:1" ${R&&v>=12?'disabled':''}>+</button></div></div>
@@ -3932,7 +3932,7 @@ function roomCloseDlg(d,r){
   const rg0=crng(d,r);let rmode=rg0?'range':'forever',rf=rg0?.from||TODAY,rt=rg0?.to||add(TODAY,6);
   const cap=()=>{const f=$('#crf'),t=$('#crt');if(f)rf=f.value;if(t)rt=t.value};
   const hits=()=>{const L=[];if(!rf||!rt)return L;let a=rf<=rt?rf:rt,b=rf<=rt?rt:rf;for(let x=a;x<=b&&L.length<60;x=add(x,1))if(dow(x)===d)L.push(x);return L};
-  const prev=()=>{const L=hits();return L.length?`<div class="crhit">${ic('lock',13)} จะปิดห้อง ${r} วันที่: ${L.slice(0,10).map(x=>`<b>${DOW_S[d]} ${fmtDs(x)}</b>`).join(' ')}${L.length>10?` และอีก ${L.length-10} วัน`:''}</div><p class="muted" style="font-size:12.5px;margin:6px 0 0">${ic('info',13)} พ้นวันสุดท้ายแล้ว ห้องจะกลับมาเปิดให้จองอัตโนมัติ</p>`:`<div class="crhit bad">${ic('alert',13)} ช่วงนี้ไม่มีวัน${DOW_L[d]}เลย จึงไม่มีผล · ถ้าจะปิดเฉพาะวันที่ ${rf?fmtDs(rf):''} ให้ไปที่หน้า “จองคิว” เลือกช่อง แล้วกด “ปิดช่อง”</div>`};
+  const prev=()=>{const L=hits();return L.length?`<div class="crhit">${ic('lock',13)} จะปิดห้อง ${r} วันที่: ${L.slice(0,10).map(x=>`<b>${DOW_S[d]} ${fmtDs(x)}</b>`).join(' ')}${L.length>10?` และอีก ${L.length-10} วัน`:''}</div><p class="muted" style="font-size:12.5px;margin:6px 0 0">${ic('info',13)} พ้นวันสุดท้ายแล้ว ห้องจะกลับมาเปิดให้จองอัตโนมัติ</p>`:`<div class="crhit bad">${ic('alert',13)} ช่วงนี้ไม่มีวัน${DOW_L[d]}เลย จึงไม่มีผล · ถ้าจะปิดเฉพาะวันที่ ${rf?fmtDs(rf):''} ให้ไปที่หน้า “ลงคิว” เลือกช่อง แล้วกด “ปิดช่อง”</div>`};
 
   const nexts=()=>{const L=[];let x=TODAY;while(dow(x)!==d)x=add(x,1);for(let k=0;k<4;k++){L.push(x);x=add(x,7)}return L};
   const booked=()=>Object.values(S.d.slots||{}).filter(v=>dow(v.date)===d&&v.room===r&&!isPast(v.date,v.slot)&&(mode==='all'||(mode==='some'&&sel.has(v.slot)))).length;
@@ -3970,7 +3970,7 @@ function roomCloseDlg(d,r){
 }
 function roomChip(d,r){const x=closedOf2(d,r),rg=x?crng(d,r):null,fut=rg?.from&&rg.from>TODAY;return`<button class="rcc ${x==='all'?'all':x?'some':'on'} ${rg?'rg':''}" data-act="roomClose" data-d="${d}" data-r="${r}">${ic(x==='all'?'lock':x?'clock':'door',13)}ห้อง ${r}<small>${x==='all'?'ปิดทั้งวัน':x?`ปิด ${x.length} Slot`:'เปิด'}</small>${rg?`<em>${fut?'เริ่ม '+fmtDs(rg.from):''}${rg.to?(fut?' · ':'')+'ถึง '+fmtDs(rg.to):''}</em>`:''}</button>`}
 const fmtDs=d=>`${dnum(d)} ${MON_S[D(d).getUTCMonth()]}`;
-/* ---------- รอบเปิดให้จองคิว ---------- */
+/* ---------- รอบเปิดให้ลงคิว ---------- */
 function expandDates(ws){const set=new Set();ws.forEach(w=>{for(let d=w.from;d<=w.to;d=add(d,1))set.add(d)});return[...set].sort()}
 function winStatus(w){return w.to<TODAY?['ผ่านแล้ว','pay-unpaid']:w.from<=TODAY?['กำลังเปิดจอง','ok']:['เปิดล่วงหน้า','room']}
 async function saveWindows(list,log){list=list.slice().sort((a,b)=>a.from.localeCompare(b.from));await saveCfg({bookWindows:list,bookDates:expandDates(list)},log)}
@@ -3993,8 +3993,8 @@ function windowsCard(){
     return`<div class="wcard ${cls} ${live?'live':''} ${w.to<TODAY?'past':''}"><div class="wcd"><small>${DOW_S[dow(w.from)]}</small><b>${dnum(w.from)}</b><em>${MON_S[a.getUTCMonth()]}</em></div><span class="wto">${ic('right',14)}</span><div class="wcd"><small>${DOW_S[dow(w.to)]}</small><b>${dnum(w.to)}</b><em>${MON_S[b.getUTCMonth()]}</em></div>
      <div class="wci"><b>${esc(w.label||'รอบเปิดจอง')}</b><small>${n} วัน${live?` · ผ่านไปแล้ว ${prog(w)}%`:TODAY<w.from?` · เริ่มอีก ${nDays(TODAY,w.from)-1} วัน`:''}</small>${live?`<i class="wbar"><i style="width:${prog(w)}%"></i></i>`:''}</div>
      <span class="wst"><i></i>${st}</span><button class="btn icon ghost" data-act="delWin" data-id="${w.id}" title="ลบรอบนี้">${ic('trash',16)}</button></div>`};
-  return`<div class="card wncard"><div class="rmhd"><h3 style="margin:0">${icb('calendar','ok')}รอบเปิดให้จองคิว</h3><span class="muted">กำหนดช่วงวันที่ Live Streamer จองได้ เพื่อเปิดลงคิวเป็นรอบ ๆ</span></div>
-   <div class="wlim ${c.bookLimit?'on':''}"><span class="pmi">${ic(c.bookLimit?'lock':'calendar',18)}</span><div><b>จำกัดวันที่ Live Streamer จองได้</b><small>${c.bookLimit?'เปิดอยู่ · จองได้เฉพาะวันในรอบด้านล่าง':'ปิดอยู่ · จองได้ทุกวันที่มีไลฟ์ (รอบด้านล่างจะยังไม่มีผล)'}</small></div><span class="sw"><input type="checkbox" data-booklimit="1" ${c.bookLimit?'checked':''}><span></span></span></div>
+  return`<div class="card wncard"><div class="rmhd"><h3 style="margin:0">${icb('calendar','ok')}รอบเปิดให้ลงคิว</h3><span class="muted">กำหนดช่วงวันที่ Live Streamer ลงคิวได้ เพื่อเปิดลงคิวเป็นรอบ ๆ</span></div>
+   <div class="wlim ${c.bookLimit?'on':''}"><span class="pmi">${ic(c.bookLimit?'lock':'calendar',18)}</span><div><b>จำกัดวันที่ Live Streamer ลงคิวได้</b><small>${c.bookLimit?'เปิดอยู่ · ลงคิวได้เฉพาะวันในรอบด้านล่าง':'ปิดอยู่ · จองได้ทุกวันที่มีไลฟ์ (รอบด้านล่างจะยังไม่มีผล)'}</small></div><span class="sw"><input type="checkbox" data-booklimit="1" ${c.bookLimit?'checked':''}><span></span></span></div>
    <div class="wgrid">
     <div class="wcol"><div class="rmsh"><div><b>รอบที่เปิด / กำลังจะมาถึง</b><small>${cur.length} รอบ</small></div></div>
      <div class="wlist">${cur.map(wc).join('')||`<div class="wempty">${ic('calendar',22)}<b>ยังไม่มีรอบที่เปิดอยู่</b><small>เพิ่มรอบใหม่จากแผงด้านขวา</small></div>`}</div>
@@ -4012,7 +4012,7 @@ function windowsCard(){
    </div></div>`;
 }
 
-/* ---------- ปิดห้องเฉพาะวัน (จากหน้าจองคิว) ---------- */
+/* ---------- ปิดห้องเฉพาะวัน (จากหน้าลงคิว) ---------- */
 function selectMany(d,keys){const ok=keys.filter(k=>{const p=parseSid(k);return!S.d.slots[k]&&!isClosed(p.d,p.r,p.s)&&!isPast(p.d,p.s)});
   if(!ok.length)return toast('ไม่มีช่องว่างให้เลือกในแถวนี้',1);const all=ok.every(k=>S.sel.has(k));ok.forEach(k=>all?S.sel.delete(k):S.sel.add(k));render()}
 const CLOSE_REASONS=[['ซ่อม / ตั้งค่าอุปกรณ์','settings'],['แม่บ้านทำความสะอาด','grid'],['ถ่ายทำงานอื่น','mic'],['ใช้ห้องประชุม / อบรม','users'],['วันหยุด','calendar']];
@@ -4032,7 +4032,7 @@ function closeDlg(keys){
 }
 function reopenDlg(keys,back){
   keys=keys.filter(k=>S.d.closures?.[k]);if(!keys.length)return;const c=S.d.closures[keys[0]];
-  modal(`<div class="mhead">${icb('door','ok')}<div><h3>เปิดช่องที่ปิดไว้ · ${keys.length} ช่อง</h3><span class="muted">ช่องจะกลับมาว่าง ให้จองได้ตามปกติ</span></div></div>
+  modal(`<div class="mhead">${icb('door','ok')}<div><h3>เปิดช่องที่ปิดไว้ · ${keys.length} ช่อง</h3><span class="muted">ช่องจะกลับมาว่าง ให้ลงคิวได้ตามปกติ</span></div></div>
    ${keys.length===1?`${miniTicket(keys[0],null)}<div class="byline">${ic('lock',12)}ปิดโดย <b>${esc(c.by||'')}</b> · ${timeAgo(c.at)}${c.reason?` · ${esc(c.reason)}`:''}</div>`:`<div class="cldy"><div>${keys.map(k=>{const p=parseSid(k);return`<span class="pill room">${fmtD(p.d)} ${C().slots[p.s].split('–')[0]} · ห้อง ${p.r}</span>`}).join('')}</div></div>`}
    <div class="mact"><button class="btn ok" data-d="go">${ic('door',16)}เปิดช่อง</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,
   async a=>{if(a!=='go')return back?back():closeM();if(await write(keys.map(k=>['del','closures',k]),`เปิดช่องที่ปิด ${keys.length} ช่อง: `+keys.map(k=>{const p=parseSid(k);return`${fmtD(p.d)} ${C().slots[p.s].split('–')[0]} ห้อง ${p.r}`}).join(', '))){back?back():closeM();toast('เปิดช่องแล้ว')}});
@@ -4124,7 +4124,7 @@ function ticketDlg(k){
   let act='';
   if(past)act=`<p class="muted" style="margin-top:12px;width:100%">รอบนี้ผ่านไปแล้ว</p>`;
   else if(v.status==='ok')act=`${can('requestCancel')?`<button class="btn bad" data-d="cancelForm">${ic('undo',16)}ขอยกเลิก</button>`:''}${can('requestMove')||can('requestTime')?`<button class="btn violet" data-d="chgForm">${ic('swap',16)}ขอเปลี่ยนคิว (ห้อง / เวลา)</button>`:''}${!can('requestCancel')&&!can('requestMove')&&!can('requestTime')?'<p class="muted">ถ้าต้องการเปลี่ยนแปลง กรุณาติดต่อแบรนด์</p>':''}`;
-  else if(v.status==='pending')act=`<button class="btn bad" data-d="delPending">${ic('trash',16)}ถอนคำขอจองนี้</button>`;
+  else if(v.status==='pending')act=`<button class="btn bad" data-d="delPending">${ic('trash',16)}ถอนคำขอลงคิวนี้</button>`;
   else act=`<button class="btn" data-d="withdraw">${ic('history',16)}ถอนคำขอ (ไลฟ์ตามเดิม)</button>`;
   const info=v.status==='pending'?'แบรนด์ยังไม่ยืนยัน · ถอนคำขอได้ทันที (แบรนด์จะเห็นในประวัติ)':v.status==='cancelreq'?'ส่งคำขอยกเลิกแล้ว รอแบรนด์อนุมัติ · ระหว่างรอ คิวยังเป็นของคุณ':v.status==='movereq'?`ขอย้ายไปห้อง ${v.moveTo?.room} รอแบรนด์อนุมัติ`:v.status==='timereq'?`ขอเปลี่ยนเป็น${moveTxt(v).replace(' →','')} รอแบรนด์อนุมัติ`:'คิวยืนยันแล้ว';
   if(canHrs(v))act+=`<button class="btn warn" data-d="hrs">${ic('hour',16)}${isShort(v)?(v.actReq?'ดู / แก้คำขอแก้ไข':'ขอแก้ไขชั่วโมง'):'แจ้งไลฟ์ไม่ครบ'}</button>`;
@@ -4134,7 +4134,7 @@ function ticketDlg(k){
     if(a==='hrs')return hoursDlg(k,()=>ticketDlg(k));
     if(a==='cancelForm')return cancelForm(k);
     if(a==='chgForm'||a==='moveForm'||a==='timeForm')return chgForm(k);
-    if(a==='delPending'){if(await write([['del','slots',k],...reqOp(v,WD())],`ถอนคำขอจอง ${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}`)){closeM();toast('ถอนคำขอจองแล้ว')}}
+    if(a==='delPending'){if(await write([['del','slots',k],...reqOp(v,WD())],`ถอนคำขอลงคิว ${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}`)){closeM();toast('ถอนคำขอลงคิวแล้ว')}}
     if(a==='withdraw'){if(await write([['patch','slots',k,{status:'ok',reason:null,moveTo:null,reqAt:null,reqId:null}],...reqOp(v,WD())],`ถอนคำขอ ${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}`)){closeM();toast('ถอนคำขอแล้ว คิวกลับเป็นปกติ')}}
   });
 }
@@ -4257,7 +4257,7 @@ function adminDlg(k){
   const v=S.d.slots[k],p=parseSid(k);
   const busy=new Set(ROOMS().filter(r=>r!==p.r).map(r=>slotOf(p.d,r,p.s)?.who).filter(x=>x&&x!==TRIAL));
   let top='';
-  if(v?.status==='pending')top=`<div class="mact"><button class="btn ok" data-d="approve">${ic('check',16)}ยืนยันการจอง</button><button class="btn" data-d="reject">${ic('x',16)}ไม่อนุมัติ</button></div>`;
+  if(v?.status==='pending')top=`<div class="mact"><button class="btn ok" data-d="approve">${ic('check',16)}ยืนยันการลงคิว</button><button class="btn" data-d="reject">${ic('x',16)}ไม่อนุมัติ</button></div>`;
   if(v?.status==='cancelreq')top=`<div class="why">${ic('undo',15)}<b>ขอยกเลิก:</b> ${esc(v.reason)}</div><div class="mact"><button class="btn bad" data-d="approve">${ic('check',16)}อนุมัติยกเลิก</button><button class="btn" data-d="reject">${ic('x',16)}ไม่อนุมัติ</button></div>`;
   if(v?.status==='movereq')top=`<div class="why mv">${ic('swap',15)}<b>ขอย้ายไปห้อง ${v.moveTo?.room}:</b> ${esc(v.reason)}</div><div class="mact"><button class="btn violet" data-d="approve">${ic('check',16)}อนุมัติย้าย</button><button class="btn" data-d="reject">${ic('x',16)}ไม่อนุมัติ</button></div>`;
   if(v?.status==='timereq')top=`<div class="why tm">${ic('clock',15)}<b>ขอเปลี่ยนเป็น${esc(moveTxt(v).replace(' →',''))}:</b> ${esc(v.reason)}</div><div class="mact"><button class="btn teal" data-d="approve">${ic('check',16)}อนุมัติเปลี่ยนเวลา</button><button class="btn" data-d="reject">${ic('x',16)}ไม่อนุมัติ</button></div>`;
@@ -4333,7 +4333,7 @@ function colorDlg(id){
      <div class="seg">${[['auto','อัตโนมัติ'],['#10233f','ตัวหนังสือเข้ม'],['#ffffff','ตัวหนังสือขาว']].map(([v,l])=>`<button data-d="fg:${v}" class="${fg===v?'on':''}">${l}</button>`).join('')}</div></div></div>`;
   const redraw=()=>{$('#cbody').innerHTML=body();bind()};
   const bind=()=>{const el=$('#cbg');if(!el)return;el.oninput=e=>{bg=e.target.value;$('#cprev').innerHTML=prev();$('#chex').textContent=bg};el.onchange=e=>{bg=e.target.value;redraw()}};
-  modal(`<div class="mhead">${icb('palette')}<div><h3>สีพื้นหลังชื่อ · ${esc(m.name)}</h3><span class="muted">ใช้ทุกหน้า: จองคิว ตาราง สรุปชั่วโมง และหน้า Login</span></div></div><div id="cbody">${body()}</div>
+  modal(`<div class="mhead">${icb('palette')}<div><h3>สีพื้นหลังชื่อ · ${esc(m.name)}</h3><span class="muted">ใช้ทุกหน้า: ลงคิว ตาราง สรุปชั่วโมง และหน้า Login</span></div></div><div id="cbody">${body()}</div>
    <div class="mact"><button class="btn primary" data-d="save">${ic('save',16)}บันทึกสี</button><button class="btn ghost" data-d="close">ยกเลิก</button></div>`,
   async a=>{
     if(a==='close')return closeM();
@@ -4354,7 +4354,7 @@ async function doBook(){
   for(const k of keys){const p=parseSid(k),t=p.d+'_'+p.s;
     if(S.d.slots[k]){errs.push(`${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}: มีคนจองไปแล้ว`);continue}
     if(isPast(p.d,p.s)){errs.push(`${fmtD(p.d)} ${C().slots[p.s]}: เลยเวลาแล้ว`);continue}
-    if(!canBookDate(p.d)){errs.push(`${fmtD(p.d)}: ยังไม่เปิดให้จอง`);continue}
+    if(!canBookDate(p.d)){errs.push(`${fmtD(p.d)}: ยังไม่เปิดให้ลงคิว`);continue}
     if(isClosed(p.d,p.r,p.s)){errs.push(`${fmtD(p.d)} ${C().slots[p.s]} ห้อง ${p.r}: ห้องปิด`);continue}
     if(taken.has(t)||ROOMS().some(r=>slotOf(p.d,r,p.s)?.who===S.meId)){errs.push(`${fmtD(p.d)} ${C().slots[p.s]}: คุณมีคิวเวลานี้แล้ว`);continue}
     taken.add(t);const id=rid()+ops.length;
@@ -4363,8 +4363,8 @@ async function doBook(){
   const slotOps=ops.filter(o=>o[1]==='slots');
   if(slotOps.length&&!(await write(ops,`จอง ${slotOps.length} Slot: `+slotOps.map(o=>{const p=parseSid(o[2]);return`${fmtD(p.d)} ${C().slots[p.s].split('–')[0]} ห้อง ${p.r}`}).join(', '))))return;
   S.sel.clear();render();
-  modal(`${slotOps.length?`${stamp(st==='ok'?'checkc':'ticket',st==='ok'?'ok':'')}<h3 style="text-align:center;display:block">${st==='ok'?'จองสำเร็จ!':'ส่งคำขอจองแล้ว!'}</h3><p class="muted" style="text-align:center;margin-bottom:12px">${st==='ok'?'คิวยืนยันแล้ว':'รอแบรนด์ยืนยัน · ดูสถานะได้ที่ “ติดตามคำขอ”'}</p>${slotOps.map(o=>miniTicket(o[2],o[3])).join('<div style="height:8px"></div>')}`:''}
-   ${errs.length?`<div class="req" style="margin-top:12px;border-color:#f6c4c6"><div class="info"><b style="color:var(--bad)">${ic('alert',15)}จองไม่ได้ ${errs.length} รายการ</b>${errs.map(e=>`<div style="font-size:13px">• ${esc(e)}</div>`).join('')}</div></div>`:''}
+  modal(`${slotOps.length?`${stamp(st==='ok'?'checkc':'ticket',st==='ok'?'ok':'')}<h3 style="text-align:center;display:block">${st==='ok'?'ลงคิวสำเร็จ!':'ส่งคำขอลงคิวแล้ว!'}</h3><p class="muted" style="text-align:center;margin-bottom:12px">${st==='ok'?'คิวยืนยันแล้ว':'รอแบรนด์ยืนยัน · ดูสถานะได้ที่ “ติดตามคำขอ”'}</p>${slotOps.map(o=>miniTicket(o[2],o[3])).join('<div style="height:8px"></div>')}`:''}
+   ${errs.length?`<div class="req" style="margin-top:12px;border-color:#f6c4c6"><div class="info"><b style="color:var(--bad)">${ic('alert',15)}ลงคิวไม่ได้ ${errs.length} รายการ</b>${errs.map(e=>`<div style="font-size:13px">• ${esc(e)}</div>`).join('')}</div></div>`:''}
    <div class="mact"><button class="btn primary" data-d="close">ตกลง</button></div>`,()=>closeM());
 }
 function trialDlg(keys,back){
@@ -4451,7 +4451,7 @@ const acts={
   rowScroll:b=>{const r=$('#wrow');r.scrollBy({left:+b.dataset.n*(r.clientWidth*.8)})},
   seat:b=>{const k=b.dataset.k,v=S.d.slots[k],p=parseSid(k);
     if(isBrand()){if(v)return adminDlg(k);S.sel.has(k)?S.sel.delete(k):S.sel.add(k);return render()}
-    if(!v){if(!S.meId)return toast('บัญชีนี้ไม่ได้ผูกกับชื่อ Live Streamer',1);if(!can('book'))return toast('ปิดการจองเอง กรุณาติดต่อแบรนด์',1);if(isPast(p.d,p.s))return toast('รอบนี้เลยเวลาแล้ว',1);
+    if(!v){if(!S.meId)return toast('บัญชีนี้ไม่ได้ผูกกับชื่อ Live Streamer',1);if(!can('book'))return toast('ปิดการลงคิวเอง กรุณาติดต่อแบรนด์',1);if(isPast(p.d,p.s))return toast('รอบนี้เลยเวลาแล้ว',1);
       if(!S.sel.has(k)&&ROOMS().some(r=>slotOf(p.d,r,p.s)?.who===S.meId||S.sel.has(sid(p.d,r,p.s))))return toast('คุณมีคิว/เลือกเวลานี้ไว้แล้ว (อยู่ได้ทีละห้อง)',1);
       S.sel.has(k)?S.sel.delete(k):S.sel.add(k);return render()}
     if(v.who===S.meId)return ticketDlg(k);
@@ -4554,7 +4554,7 @@ const acts={
     const fut=Object.values(S.d.slots||{}).filter(v=>dow(v.date)===d&&!isPast(v.date,v.slot)),last=fut.map(v=>v.date).sort().pop();
     modal(`<div class="mhead">${icb('calendar','bad')}<div><h3>ปิดวันไลฟ์วัน${DOW_L[d]}?</h3><span class="muted">มีผลทุกสัปดาห์จนกว่าจะเปิดคืน</span></div></div>
      ${fut.length?`<div class="cfwarn">${ic('alert',16)}<div><b>มีคิวที่จองไว้ล่วงหน้า ${fut.length} คิว</b>${last?` (ถึง ${fmtD(last)})`:''}<small>ปิดแล้วคิวเหล่านี้จะไม่แสดงในตาราง · ข้อมูลไม่หาย เปิดคืนแล้วกลับมาครบ</small></div></div>`:`<div class="cfok">${ic('checkc',16)}ยังไม่มีคิวที่จองล่วงหน้าในวัน${DOW_L[d]}</div>`}
-     <ul class="cflist"><li>${ic('lock',13)}Live Streamer และแอดมินจองวัน${DOW_L[d]}เพิ่มไม่ได้</li><li>${ic('calweek',13)}หน้าตารางจะซ่อนวัน${DOW_L[d]}</li><li>${ic('info',13)}ถ้าปิดแค่บางช่วง (เช่น วันหยุดยาว) ใช้ “ปิดห้องตามวันที่” แทน</li></ul>
+     <ul class="cflist"><li>${ic('lock',13)}Live Streamer และแอดมินลงคิววัน${DOW_L[d]}เพิ่มไม่ได้</li><li>${ic('calweek',13)}หน้าตารางจะซ่อนวัน${DOW_L[d]}</li><li>${ic('info',13)}ถ้าปิดแค่บางช่วง (เช่น วันหยุดยาว) ใช้ “ปิดห้องตามวันที่” แทน</li></ul>
      <div class="mact"><button class="btn bad" data-d="go">${ic('lock',15)}ปิดวัน${DOW_L[d]}</button><button class="btn ghost" data-d="no">ยกเลิก</button></div>`,
      async a=>{if(a!=='go')return closeM();await saveCfg({openDays:o.filter(x=>x!==d)},`ปิดวันไลฟ์: วัน${DOW_L[d]}${fut.length?` (มีคิวล่วงหน้า ${fut.length} คิว)`:''}`);closeM();toast(`ปิดวัน${DOW_L[d]}แล้ว`)})},
   toggleRoom:b=>{const d=b.dataset.d,r=+b.dataset.r,cl={...C().closed},cur=cl[d]||[];cl[d]=cur.includes(r)?cur.filter(x=>x!==r):[...cur,r];saveCfg({closed:cl},`${cur.includes(r)?'เปิด':'ปิด'}ห้อง ${r} วัน${DOW_L[d]}`)},
